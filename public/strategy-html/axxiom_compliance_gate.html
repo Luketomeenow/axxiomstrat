@@ -1,0 +1,247 @@
+
+<style>
+  *{box-sizing:border-box}
+  .wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+  .gate-row{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+  .gate{
+    background:var(--color-background-primary);
+    border:0.5px solid var(--color-border-tertiary);
+    border-radius:var(--border-radius-lg);
+    overflow:hidden;cursor:pointer;transition:border-color .15s
+  }
+  .gate:hover{border-color:var(--color-border-secondary)}
+  .gate-header{
+    display:flex;align-items:center;gap:12px;
+    padding:12px 16px;
+  }
+  .gate-num{
+    width:28px;height:28px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:500;flex-shrink:0
+  }
+  .gate-title{font-size:13px;font-weight:500;color:var(--color-text-primary);flex:1}
+  .gate-status{font-size:10px;font-weight:500;padding:3px 8px;border-radius:20px}
+  .gate-body{
+    border-top:0.5px solid var(--color-border-tertiary);
+    padding:12px 16px;background:var(--color-background-secondary);
+    display:none
+  }
+  .gate.open .gate-body{display:block}
+  .gate.open .chevron{transform:rotate(90deg)}
+  .chevron{transition:transform .2s;color:var(--color-text-tertiary);font-size:14px}
+  .check-row{
+    display:flex;align-items:flex-start;gap:10px;
+    padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px
+  }
+  .check-row:last-child{border-bottom:none;padding-bottom:0}
+  .check-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+  .check-label{font-weight:500;color:var(--color-text-primary);margin:0 0 2px}
+  .check-detail{color:var(--color-text-secondary);margin:0;line-height:1.5}
+  .pass{color:var(--color-text-success)}
+  .fail{color:var(--color-text-danger)}
+  .warn{color:var(--color-text-warning)}
+  .result-box{
+    border-radius:var(--border-radius-md);padding:10px 14px;margin-top:12px;
+    display:flex;align-items:center;gap:10px;font-size:12px;font-weight:500
+  }
+  .result-pass{background:var(--color-background-success);color:var(--color-text-success)}
+  .result-fail{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .result-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+  .divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:16px 0}
+  .flow-strip{
+    display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+    background:var(--color-background-secondary);border-radius:var(--border-radius-md);
+    padding:10px 14px;margin-bottom:20px
+  }
+  .fs-box{font-size:11px;font-weight:500;color:var(--color-text-secondary);white-space:nowrap}
+  .fs-arr{font-size:13px;color:var(--color-text-tertiary)}
+  .fs-box.active{color:var(--color-text-info)}
+  .override-card{
+    background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);
+    border-left:3px solid var(--color-border-warning);border-radius:var(--border-radius-md);
+    padding:12px 14px;margin-bottom:10px
+  }
+  .override-title{font-size:12px;font-weight:500;color:var(--color-text-warning);margin:0 0 6px}
+  .override-body{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+  .section-label{font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 10px}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Compliance gate checks in the Axxiom Elevator dispatch agent — four sequential checks before technician assignment</h2>
+
+  <div class="flow-strip">
+    <span class="fs-box">Work order created</span>
+    <span class="fs-arr">→</span>
+    <span class="fs-box active">Compliance gate</span>
+    <span class="fs-arr">→</span>
+    <span class="fs-box">Smart dispatch engine</span>
+    <span class="fs-arr">→</span>
+    <span class="fs-box">Tech assigned</span>
+  </div>
+
+  <p class="section-label">Four sequential checks — all must pass</p>
+
+  <div class="gate-row">
+
+    <div class="gate open" onclick="toggle(this)">
+      <div class="gate-header">
+        <span class="gate-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">1</span>
+        <span class="gate-title">Elevator mechanic license — active & valid</span>
+        <span class="gate-status" style="background:var(--color-background-danger);color:var(--color-text-danger)">Hard block</span>
+        <i class="ti ti-chevron-right chevron" aria-hidden="true"></i>
+      </div>
+      <div class="gate-body">
+        <div class="check-row">
+          <i class="ti ti-certificate check-icon pass" aria-hidden="true"></i>
+          <div>
+            <p class="check-label">License number on file in Dataverse</p>
+            <p class="check-detail">Each technician profile in Dynamics stores their state elevator mechanic license number, issue date, and expiry date. This is mandatory to onboard any tech.</p>
+          </div>
+        </div>
+        <div class="check-row">
+          <i class="ti ti-calendar-x check-icon fail" aria-hidden="true"></i>
+          <div>
+            <p class="check-label">Expiry check against today's date</p>
+            <p class="check-detail">The gate compares expiry date against the current date. If expired — or expiring within 14 days — the tech is flagged and excluded from dispatch candidates.</p>
+          </div>
+        </div>
+        <div class="check-row">
+          <i class="ti ti-map-pin check-icon pass" aria-hidden="true"></i>
+          <div>
+            <p class="check-label">License valid in job's state</p>
+            <p class="check-detail">Some states require a state-specific license in addition to a general mechanic cert. The check maps the job site's state against the tech's licensed states list — not just "has a license" but "licensed here."</p>
+          </div>
+        </div>
+        <div class="result-box result-fail">
+          <i class="ti ti-ban" aria-hidden="true"></i>
+          If license expired or not valid for this state — tech is hard-blocked. No override. Escalates to compliance officer.
+        </div>
+      </div>
+    </div>
+
+    <div class="gate" onclick="toggle(this)">
+      <div class="gate-header">
+        <span class="gate-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">2</span>
+        <span class="gate-title">AHJ jurisdiction match</span>
+        <span class="gate-status" style="background:var(--color-background-danger);color:var(--color-text-danger)">Hard block</span>
+        <i class="ti ti-chevron-right chevron" aria-hidden="true"></i>
+      </div>
+      <div class="gate-body">
+        <div class="check-row">
+          <i class="ti ti-building-community check-icon pass" aria-hidden="true"></i>
+          <div>
+            <p class="check-label">AHJ lookup from job site address</p>
+            <p class="check-detail">The work order's site address is resolved to its Authority Having Jurisdiction — could be a state board, county, or city depending on location. This is pulled from a curated AHJ reference table in Dataverse, not assumed from the state alone.</p>
+          </div>
+        </div>
+        <div class="check-row">
+          <i class="ti ti-id-badge check-icon pass" aria-hidden="true"></i>
+          <div>
+            <p class="check-label">Tech's AHJ approvals checked</p>
+            <p class="check-detail">Each tech profile stores which AHJs they are registered or approved under. Miami-Dade County, NYC Dept of Buildings, Chicago DOB — all different. Tech must be listed as approved for the specific AHJ of the job site.</p>
+          </div>
+        </div>
+        <div class="check-row">
+          <i class="ti ti-refresh check-icon warn" aria-hidden="true"></i>
+          <div>
+            <p class="check-label">AHJ registration renewal tracking</p>
+            <p class="check-detail">AHJ registrations expire independently of mechanic licenses. The gate flags any registration expiring within 30 days and alerts the compliance team — but does not block dispatch unless already expired.</p>
+          </div>
+        </div>
+        <div class="result-box result-fail">
+          <i class="ti ti-ban" aria-hidden="true"></i>
+          Tech not registered under job's AHJ — hard block. Next eligible tech in queue is evaluated instead.
+        </div>
+      </div>
+    </div>
+
+    <div class="gate" onclick="toggle(this)">
+      <div class="gate-header">
+        <span class="gate-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">3</span>
+        <span class="gate-title">Site-specific clearance</span>
+        <span class="gate-status" style="background:var(--color-background-warning);color:var(--color-text-warning)">Soft block</span>
+        <i class="ti ti-chevron-right chevron" aria-hidden="true"></i>
+      </div>
+      <div class="gate-body">
+        <div class="check-row">
+          <i class="ti ti-heart-rate-monitor check-icon pass" aria-hidden="true"></i>
+          <div>
+            <p class="check-label">Healthcare — background check required</p>
+            <p class="check-detail">Hospitals and healthcare facilities often require a criminal background check on file. The tech profile stores background check status and date. If the site is tagged as healthcare and the tech has no cleared background check, the gate flags this for dispatcher review.</p>
+          </div>
+        </div>
+        <div class="check-row">
+          <i class="ti ti-plane check-icon pass" aria-hidden="true"></i>
+          <div>
+            <p class="check-label">Transportation hubs — SIDA / security badge</p>
+            <p class="check-detail">Airport and transit sites require a SIDA or security access badge. The tech profile stores badge numbers and expiry. Gate checks badge validity against site type tag on the work order.</p>
+          </div>
+        </div>
+        <div class="check-row">
+          <i class="ti ti-building check-icon pass" aria-hidden="true"></i>
+          <div>
+            <p class="check-label">Government / federal sites — clearance level</p>
+            <p class="check-detail">Some government buildings require security clearance levels. The gate checks the site's required clearance tier against the tech's stored clearance level before allowing dispatch.</p>
+          </div>
+        </div>
+        <div class="result-box result-warn">
+          <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+          Soft block — dispatcher is alerted and must manually approve or reassign. Does not auto-reject.
+        </div>
+      </div>
+    </div>
+
+    <div class="gate" onclick="toggle(this)">
+      <div class="gate-header">
+        <span class="gate-num" style="background:var(--color-background-info);color:var(--color-text-info)">4</span>
+        <span class="gate-title">Insurance & indemnity coverage</span>
+        <span class="gate-status" style="background:var(--color-background-info);color:var(--color-text-info)">Advisory</span>
+        <i class="ti ti-chevron-right chevron" aria-hidden="true"></i>
+      </div>
+      <div class="gate-body">
+        <div class="check-row">
+          <i class="ti ti-shield check-icon pass" aria-hidden="true"></i>
+          <div>
+            <p class="check-label">General liability coverage active</p>
+            <p class="check-detail">The gate checks that Axxiom's general liability policy covers the job site's state. Relevant when entering a new market where coverage may not yet be extended.</p>
+          </div>
+        </div>
+        <div class="check-row">
+          <i class="ti ti-file-text check-icon pass" aria-hidden="true"></i>
+          <div>
+            <p class="check-label">Client contract on file</p>
+            <p class="check-detail">Checks that the client has a signed service agreement in Dynamics before dispatching. Prevents sending a tech to an uncontracted site — a billing and liability risk.</p>
+          </div>
+        </div>
+        <div class="result-box result-pass">
+          <i class="ti ti-info-circle" aria-hidden="true"></i>
+          Advisory only — flags appear on the work order for dispatcher awareness but do not block dispatch.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+  <p class="section-label">Override policy</p>
+
+  <div class="override-card">
+    <p class="override-title"><i class="ti ti-ban" aria-hidden="true"></i> Gates 1 & 2 — zero override</p>
+    <p class="override-body">License expiry and AHJ mismatch are regulatory requirements. No dispatcher, manager, or system condition can override these blocks. If no eligible tech exists, the system escalates to the compliance officer to source a qualified sub-contractor.</p>
+  </div>
+  <div class="override-card">
+    <p class="override-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> Gate 3 — manager override only</p>
+    <p class="override-body">Site-specific clearance blocks require a named manager to approve in Dynamics before the work order proceeds. The approval is logged with timestamp and reason — creating a full audit trail.</p>
+  </div>
+  <div class="override-card" style="border-left-color:var(--color-border-info)">
+    <p class="override-title" style="color:var(--color-text-info)"><i class="ti ti-info-circle" aria-hidden="true"></i> Gate 4 — dispatcher discretion</p>
+    <p class="override-body">Insurance and contract flags are informational. Dispatchers see them and can proceed. The flags are logged on the work order for billing and legal reference.</p>
+  </div>
+
+</div>
+
+<script>
+function toggle(el){
+  el.classList.toggle('open');
+}
+</script>

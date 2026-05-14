@@ -1,0 +1,542 @@
+
+<style>
+  *{box-sizing:border-box}
+  .wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+  .tab-row{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+  .tab{font-size:11px;font-weight:500;padding:5px 13px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+  .tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .panel{display:none}.panel.active{display:block}
+  .lbl{font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 3px}
+  .ttl{font-size:17px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .sub{font-size:13px;color:var(--color-text-secondary);margin:0 0 14px;line-height:1.6}
+  .gap-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-left:3px solid;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:8px}
+  .gap-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .gap-body{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+  .divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:14px 0}
+  .badge{font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px}
+  .b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+  .b-green{background:var(--color-background-success);color:var(--color-text-success)}
+  .b-amber{background:var(--color-background-warning);color:var(--color-text-warning)}
+  .b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+  .b-purple{background:#EDE9FE;color:#5B21B6}
+  .b-teal{background:#CCFBF1;color:#0F766E}
+  .oc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:10px}
+  .ol{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
+  .fr{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px;gap:8px}
+  .fr:last-child{border-bottom:none}
+  .fk{color:var(--color-text-secondary);flex:1}
+  .fv{font-weight:500;color:var(--color-text-primary);text-align:right;flex-shrink:0}
+  .engine-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:12px;overflow:hidden}
+  .ec-head{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;cursor:pointer}
+  .ec-head:hover,.engine-card.open .ec-head{background:var(--color-background-secondary)}
+  .ec-icon{font-size:22px;flex-shrink:0;margin-top:2px}
+  .ec-meta{flex:1}
+  .ec-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 2px}
+  .ec-sub{font-size:11px;color:var(--color-text-tertiary);margin:0}
+  .ec-body{display:none;border-top:0.5px solid var(--color-border-tertiary);padding:12px 14px}
+  .engine-card.open .ec-body{display:block}
+  .step-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+  .step-row:last-child{border-bottom:none}
+  .si{font-size:14px;flex-shrink:0;margin-top:1px}
+  .st{flex:1;color:var(--color-text-primary);line-height:1.5}
+  .sn{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+  .stag{font-size:10px;font-weight:500;padding:2px 6px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+  .nav-btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .info-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+  .ii{font-size:14px;color:var(--color-text-tertiary);flex-shrink:0;margin-top:1px}
+  .it{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+  .content-ex{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:6px}
+  .ce-label{font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin:0 0 4px}
+  .ce-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin:0 0 2px}
+  .ce-body{font-size:11px;color:var(--color-text-secondary);margin:0}
+  .flow-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+  .fb{font-size:11px;font-weight:500;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:5px 10px;white-space:nowrap}
+  .fa{font-size:13px;color:var(--color-text-tertiary)}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-bottom:12px}
+  .mini{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px}
+  .mt{font-size:12px;font-weight:500;color:var(--color-text-primary);margin:0 0 3px}
+  .mb{font-size:11px;color:var(--color-text-secondary);margin:0;line-height:1.5}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Axxiom Elevator marketing strategy audit and AI-powered marketing playbook</h2>
+
+  <div class="tab-row">
+    <button class="tab active" onclick="go(0)">Current audit</button>
+    <button class="tab" onclick="go(1)">The strategy</button>
+    <button class="tab" onclick="go(2)">Content engine</button>
+    <button class="tab" onclick="go(3)">Lead gen AI</button>
+    <button class="tab" onclick="go(4)">SEO & local</button>
+    <button class="tab" onclick="go(5)">Execution plan</button>
+  </div>
+
+  <!-- AUDIT -->
+  <div id="p0" class="panel active">
+    <p class="lbl">Current marketing audit</p>
+    <p class="ttl">What Axxiom is doing now — and the honest assessment</p>
+    <p class="sub">Based on their website and news page, Axxiom's current marketing strategy can be summarised in one sentence: acquisition press releases and a static brochure website. That's it. For a $120M PE-backed company with 8 acquisitions in 2 years, this is a significant gap — and a significant opportunity.</p>
+
+    <div class="oc">
+      <p class="ol">What we found on the website — May 2026</p>
+      <div class="fr"><span class="fk">Website platform</span><span class="fv">WordPress / Elementor — static brochure</span></div>
+      <div class="fr"><span class="fk">News page content (7 articles)</span><span class="fv"><span class="badge b-red">100% acquisition announcements</span></span></div>
+      <div class="fr"><span class="fk">Blog / thought leadership posts</span><span class="fv"><span class="badge b-red">Zero</span></span></div>
+      <div class="fr"><span class="fk">Safety content published publicly</span><span class="fv"><span class="badge b-red">One basic Safety page</span></span></div>
+      <div class="fr"><span class="fk">Social media presence</span><span class="fv">LinkedIn company page only</span></div>
+      <div class="fr"><span class="fk">CEO / leadership personal brand</span><span class="fv"><span class="badge b-red">Not visible externally</span></span></div>
+      <div class="fr"><span class="fk">Local SEO pages (city-specific)</span><span class="fv"><span class="badge b-red">None found</span></span></div>
+      <div class="fr"><span class="fk">Client case studies or testimonials</span><span class="fv"><span class="badge b-red">None visible</span></span></div>
+      <div class="fr"><span class="fk">Email newsletter / list building</span><span class="fv">"Stay Up To Date" signup — no visible content</span></div>
+      <div class="fr"><span class="fk">Google reviews / reputation management</span><span class="fv"><span class="badge b-gray">Unknown / likely unmanaged</span></span></div>
+    </div>
+
+    <div class="gap-card" style="border-left-color:var(--color-text-danger)">
+      <p class="gap-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> &nbsp;Gap 1 — Invisible to their buyers online</p>
+      <p class="gap-body">A facility director in Miami searching "elevator maintenance service Miami hospital" will not find Axxiom. No local SEO, no city pages, no content — just an acquisition press release from 2024. The OEMs and even small independents with basic SEO will outrank them for the searches that matter.</p>
+    </div>
+    <div class="gap-card" style="border-left-color:var(--color-text-danger)">
+      <p class="gap-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> &nbsp;Gap 2 — Marketing like a startup, not a $120M platform</p>
+      <p class="gap-body">Their entire public narrative is acquisition announcements. That's investor-facing content, not buyer-facing content. The building manager deciding which elevator company to hire doesn't care about Axxiom's PE backing — they care about whether Axxiom knows their specific vertical and won't miss an inspection.</p>
+    </div>
+    <div class="gap-card" style="border-left-color:var(--color-text-warning)">
+      <p class="gap-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> &nbsp;Gap 3 — Not using AI or data as a marketing asset yet</p>
+      <p class="gap-body">Their "Safety" page exists but says nothing differentiating. The AI systems being built, the compliance intelligence, the predictive data — none of this is visible externally. Competitors can't counter what Axxiom hasn't announced yet, but Axxiom also can't win deals with capabilities buyers don't know exist.</p>
+    </div>
+    <div class="gap-card" style="border-left-color:var(--color-text-warning)">
+      <p class="gap-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> &nbsp;Gap 4 — No founder / CEO brand driving awareness</p>
+      <p class="gap-body">Jeremy Metzger is the CEO of a fast-moving, PE-backed elevator platform executing 8 acquisitions in 2 years. That story is genuinely compelling to facility managers, building owners, and potential acquisition targets. None of it is being told publicly — his LinkedIn is not a marketing asset for the company right now.</p>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">See the strategy ↗</button>
+    </div>
+  </div>
+
+  <!-- STRATEGY -->
+  <div id="p1" class="panel">
+    <p class="lbl">The recommended strategy</p>
+    <p class="ttl">3-channel AI-powered marketing system</p>
+    <p class="sub">Axxiom doesn't need to be everywhere. They need to own the 3 channels where facility directors, property managers, and building owners actually make elevator vendor decisions — LinkedIn, local search, and outbound. AI automation makes each channel run at scale with minimal headcount.</p>
+
+    <div class="oc">
+      <p class="ol">The 3-channel system</p>
+      <div class="fr">
+        <span class="fk"><span class="badge b-blue">Channel 1</span> &nbsp;LinkedIn authority engine — CEO + company brand</span>
+        <span class="fv">Trust + inbound</span>
+      </div>
+      <div class="fr">
+        <span class="fk"><span class="badge b-green">Channel 2</span> &nbsp;Local SEO + content engine — own every market they enter</span>
+        <span class="fv">Discovery + intent</span>
+      </div>
+      <div class="fr">
+        <span class="fk"><span class="badge b-amber">Channel 3</span> &nbsp;AI outbound — targeted B2B lead gen per vertical per market</span>
+        <span class="fv">Pipeline creation</span>
+      </div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">How the 3 channels work together</p>
+      <div class="fr"><span class="fk">LinkedIn content</span><span class="fv">Builds brand recognition before the outbound arrives</span></div>
+      <div class="fr"><span class="fk">Local SEO</span><span class="fv">Captures buyers already searching for a vendor</span></div>
+      <div class="fr"><span class="fk">AI outbound</span><span class="fv">Reaches buyers before they start searching</span></div>
+      <div class="fr"><span class="fk">All three together</span><span class="fv">Prospect has seen Axxiom 3× before picking up the phone</span></div>
+    </div>
+
+    <div class="info-row">
+      <i class="ti ti-bulb ii" aria-hidden="true"></i>
+      <p class="it">The single biggest leverage point right now is the <strong style="color:var(--color-text-primary)">CEO LinkedIn brand</strong>. Jeremy Metzger has a story that writes itself — building a national elevator platform through 8 acquisitions in 2 years, backed by $120M, with AI-powered compliance intelligence that no competitor has. That story, told consistently on LinkedIn in first-person, will generate more qualified inbound than any ad campaign Axxiom could run. Facility directors and property managers follow people, not company pages.</p>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(0)">← Audit</button>
+      <button onclick="go(2)">Content engine ↗</button>
+    </div>
+  </div>
+
+  <!-- CONTENT ENGINE -->
+  <div id="p2" class="panel">
+    <p class="lbl">Channel 1 — LinkedIn authority engine</p>
+    <p class="ttl">CEO-led content + company amplification</p>
+    <p class="sub">LinkedIn generates 80% of all B2B leads from social media. For Axxiom's buyers — facility directors, property managers, VP of Operations at hotel chains and hospital systems — LinkedIn is the primary professional channel. The AI content engine keeps it running without requiring leadership to write every post manually.</p>
+
+    <div class="engine-card open">
+      <div class="ec-head" onclick="tog(this)">
+        <span class="ec-icon"><i class="ti ti-user" aria-hidden="true"></i></span>
+        <div class="ec-meta">
+          <p class="ec-title">Track 1 — CEO personal brand (Jeremy Metzger)</p>
+          <p class="ec-sub">3 posts/week · first-person voice · thought leadership + company story</p>
+        </div>
+        <span class="badge b-blue">Highest impact</span>
+      </div>
+      <div class="ec-body">
+        <div class="step-row">
+          <i class="ti ti-messages si" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="st">Content pillars for CEO: (1) The acquisition story — what it's like to build a national elevator platform (2) Elevator safety intelligence — data-driven insights from the fleet (3) Industry opinion — takes on AHJ policy, OEM consolidation, compliance gaps (4) Behind the scenes — how Axxiom onboards an acquisition in 30 days
+            <p class="sn">LinkedIn 2025 algorithm rewards authenticity and first-hand perspective — exactly what a CEO building something real can provide</p>
+          </div>
+          <span class="stag b-blue">Pillars</span>
+        </div>
+        <div class="step-row">
+          <i class="ti ti-robot si" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="st">AI content workflow: CEO does a 10-minute voice memo per week → AI transcribes + extracts 3 post ideas → drafts 3 posts in CEO's voice → CEO reviews and edits → scheduled via Buffer or Taplio → performance logged weekly
+            <p class="sn">10 minutes of the CEO's time per week produces a full week of authentic LinkedIn content</p>
+          </div>
+          <span class="stag b-blue">AI process</span>
+        </div>
+        <div class="content-ex">
+          <p class="ce-label">Example post — CEO voice</p>
+          <p class="ce-title">"We just acquired our 8th elevator company. Here's the one thing every founder asks me before signing."</p>
+          <p class="ce-body">First-person story about the acquisition process, what Axxiom looks for, what the founders worry about. Tags the acquired company founder. Gets shared by both networks.</p>
+        </div>
+        <div class="content-ex">
+          <p class="ce-label">Example post — safety intelligence</p>
+          <p class="ce-title">"We analysed 10,000 elevator service events. The #1 cause of emergency call-outs in hospitals? It's not what you think."</p>
+          <p class="ce-body">Data-backed post from the safety dataset. Facility directors in healthcare tag colleagues. Drives inbound DMs asking "how do I work with Axxiom?"</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="engine-card">
+      <div class="ec-head" onclick="tog(this)">
+        <span class="ec-icon"><i class="ti ti-building" aria-hidden="true"></i></span>
+        <div class="ec-meta">
+          <p class="ec-title">Track 2 — Company page (Axxiom brand)</p>
+          <p class="ec-sub">4–5 posts/week · vertical-specific content · safety reports + data assets</p>
+        </div>
+        <span class="badge b-gray">Amplifier</span>
+      </div>
+      <div class="ec-body">
+        <div class="step-row">
+          <i class="ti ti-layout-grid si" style="color:var(--color-text-secondary)" aria-hidden="true"></i>
+          <div class="st">Company page content mix: (1) Carousel — "5 elevator compliance mistakes hotel facilities teams make" (2) Short video — tech on a job, 60 seconds, showing what a PM visit looks like (3) Safety stat from the dataset — "Did you know 31% of elevator emergency calls could be prevented with quarterly PM?" (4) Acquisition welcome posts (5) Job postings amplified with company context
+          </div>
+          <span class="stag b-gray">Mix</span>
+        </div>
+        <div class="step-row">
+          <i class="ti ti-robot si" style="color:var(--color-text-secondary)" aria-hidden="true"></i>
+          <div class="st">AI repurposing: every CEO post gets reformatted for the company page as a carousel or graphic. One piece of content → 3 formats. AI does the reformatting, human approves.
+          </div>
+          <span class="stag b-gray">Repurpose</span>
+        </div>
+        <div class="content-ex">
+          <p class="ce-label">Monthly anchor content</p>
+          <p class="ce-title">AI-generated "Elevator Safety Insight" — one data point from the fleet, visualised, published every 1st of the month</p>
+          <p class="ce-body">Consistent, data-backed, shareable. Creates the expectation of intelligence output from Axxiom every month — builds the "trusted data company" positioning publicly before the annual report is ready.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="engine-card">
+      <div class="ec-head" onclick="tog(this)">
+        <span class="ec-icon"><i class="ti ti-video" aria-hidden="true"></i></span>
+        <div class="ec-meta">
+          <p class="ec-title">Track 3 — Short-form video (fastest growing LinkedIn format 2025)</p>
+          <p class="ec-sub">2 videos/week · 60–90 seconds vertical · field + executive content</p>
+        </div>
+        <span class="badge b-purple">5× engagement</span>
+      </div>
+      <div class="ec-body">
+        <div class="step-row">
+          <i class="ti ti-movie si" style="color:#5B21B6" aria-hidden="true"></i>
+          <div class="st">Native LinkedIn videos get 5× more engagement than static posts. For Axxiom this means: CEO camera-facing 60-second takes ("Here's what we found in the data this week"), field tech job walkthroughs ("What a PM visit on a hospital elevator actually looks like"), and client testimonial clips.
+            <p class="sn">Vertical format (9:16), shot on iPhone, authentic — the algorithm rewards self-shot over polished corporate video</p>
+          </div>
+          <span class="stag b-purple">Format</span>
+        </div>
+        <div class="step-row">
+          <i class="ti ti-robot si" style="color:#5B21B6" aria-hidden="true"></i>
+          <div class="st">AI auto-generates captions, suggested hooks, and LinkedIn description copy for every video. Tech shoots on phone → AI adds captions + hook suggestion → posted same day. Zero post-production bottleneck.
+          </div>
+          <span class="stag b-purple">AI workflow</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">← Strategy</button>
+      <button onclick="go(3)">Lead gen AI ↗</button>
+    </div>
+  </div>
+
+  <!-- LEAD GEN -->
+  <div id="p3" class="panel">
+    <p class="lbl">Channel 3 — AI outbound lead generation</p>
+    <p class="ttl">Targeted B2B outreach at scale — every market, every vertical</p>
+    <p class="sub">Axxiom's buyers are identifiable: facility directors, property managers, VP Operations at hotels and hospitals. They can be found, enriched, and reached with personalised outreach — at scale, per market, per vertical — using Clay and Apollo. No manual list-building. No generic cold email blasts.</p>
+
+    <div class="engine-card open">
+      <div class="ec-head" onclick="tog(this)">
+        <span class="ec-icon"><i class="ti ti-target" aria-hidden="true"></i></span>
+        <div class="ec-meta">
+          <p class="ec-title">Who to target — ICP by vertical</p>
+          <p class="ec-sub">Different message for each vertical — not one-size-fits-all</p>
+        </div>
+        <span class="badge b-amber">ICP definition</span>
+      </div>
+      <div class="ec-body">
+        <div class="oc" style="margin:0">
+          <p class="ol">Target personas by Axxiom vertical</p>
+          <div class="fr"><span class="fk">Hotels</span><span class="fv">Director of Engineering · VP Facilities · Chief Engineer</span></div>
+          <div class="fr"><span class="fk">Hospitals / healthcare</span><span class="fv">Facilities Director · Plant Operations Manager · Safety Officer</span></div>
+          <div class="fr"><span class="fk">Office buildings</span><span class="fv">Property Manager · Building Engineer · Asset Manager</span></div>
+          <div class="fr"><span class="fk">Residential (high-rise)</span><span class="fv">Building Manager · HOA Board · Property Management Company</span></div>
+          <div class="fr"><span class="fk">Transportation hubs</span><span class="fk2">Facilities Manager · Capital Projects Director</span></div>
+          <div class="fr"><span class="fk">Education</span><span class="fv">Facilities Director · VP Campus Operations</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="engine-card">
+      <div class="ec-head" onclick="tog(this)">
+        <span class="ec-icon"><i class="ti ti-database" aria-hidden="true"></i></span>
+        <div class="ec-meta">
+          <p class="ec-title">The AI outbound system — Clay + Apollo</p>
+          <p class="ec-sub">Find → enrich → personalise → sequence → route to CRM</p>
+        </div>
+        <span class="badge b-amber">Core system</span>
+      </div>
+      <div class="ec-body">
+        <div class="flow-row">
+          <span class="fb">Apollo: find contacts</span>
+          <span class="fa">→</span>
+          <span class="fb">Clay: enrich + research</span>
+          <span class="fa">→</span>
+          <span class="fb">AI: write personalised email</span>
+          <span class="fa">→</span>
+          <span class="fb">Sequence → CRM</span>
+        </div>
+        <div class="step-row">
+          <i class="ti ti-search si" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="st">Step 1 — Apollo finds: "Facilities Director at hotels with 100+ rooms in Miami FL" — returns 200+ contacts with title, company, LinkedIn, email
+          </div>
+          <span class="stag b-amber">Find</span>
+        </div>
+        <div class="step-row">
+          <i class="ti ti-sparkles si" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="st">Step 2 — Clay enriches each contact: property address, number of floors, building age (indicator of elevator age), current elevator vendor (if findable), recent permit activity, LinkedIn recent posts
+            <p class="sn">Building age is gold — a 1990s hotel with the original elevators is a modernisation lead. Clay finds this from public property records.</p>
+          </div>
+          <span class="stag b-amber">Enrich</span>
+        </div>
+        <div class="step-row">
+          <i class="ti ti-robot si" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="st">Step 3 — AI writes a personalised first line for every email: "Your Hyatt on Brickell was built in 1997 — if the elevators haven't been modernised, you're likely spending 40% more on repairs than you need to. Worth 15 minutes?"
+            <p class="sn">Building-specific personalisation has 3× the reply rate of generic cold email. The AI does this for every contact automatically.</p>
+          </div>
+          <span class="stag b-amber">Personalise</span>
+        </div>
+        <div class="step-row">
+          <i class="ti ti-send si" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="st">Step 4 — 4-touch sequence: Email (personalised) → LinkedIn connection request (CEO sends) → LinkedIn voice note → Final email "closing the loop". All automated, all tracked.
+          </div>
+          <span class="stag b-amber">Sequence</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="engine-card">
+      <div class="ec-head" onclick="tog(this)">
+        <span class="ec-icon"><i class="ti ti-stars" aria-hidden="true"></i></span>
+        <div class="ec-meta">
+          <p class="ec-title">Review & reputation AI — Google reviews at scale</p>
+          <p class="ec-sub">Auto-request after every job · AI-drafted response to every review</p>
+        </div>
+        <span class="badge b-green">Quick win</span>
+      </div>
+      <div class="ec-body">
+        <div class="step-row">
+          <i class="ti ti-send si" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="st">24 hours after job marked complete in Dynamics → AI sends personalised review request SMS/email to client contact: "Hi [Name], your Hyatt's elevator 3 service is complete. If we did a good job, a quick Google review means the world — [link]." Response rate: 15–25% vs. 2% for generic requests.
+          </div>
+          <span class="stag b-green">Automate</span>
+        </div>
+        <div class="step-row">
+          <i class="ti ti-message-dots si" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="st">AI drafts a personalised response to every Google review within 2 hours — references the specific job, the building, the tech's name. Human approves in 30 seconds or posts as-is.
+            <p class="sn">Google rewards frequent, responded-to reviews with higher local search ranking. This is free SEO.</p>
+          </div>
+          <span class="stag b-green">Respond</span>
+        </div>
+        <div class="step-row">
+          <i class="ti ti-alert-triangle si" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="st">Negative review detection: if a 1–2 star review is posted, AI flags it immediately to account manager with draft response + escalation recommendation. Never let a negative review sit unanswered for more than 2 hours.
+          </div>
+          <span class="stag b-amber">Protect</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(2)">← Content engine</button>
+      <button onclick="go(4)">Local SEO ↗</button>
+    </div>
+  </div>
+
+  <!-- SEO -->
+  <div id="p4" class="panel">
+    <p class="lbl">Channel 2 — Local SEO + content</p>
+    <p class="ttl">Own every market Axxiom enters — before a competitor does</p>
+    <p class="sub">Elevator service is local intent. "Elevator maintenance Miami" gets searched hundreds of times a month by building owners and facility directors with active need. Axxiom is invisible for these searches right now. AI content generation makes local SEO scalable across every new market without a content team.</p>
+
+    <div class="engine-card open">
+      <div class="ec-head" onclick="tog(this)">
+        <span class="ec-icon"><i class="ti ti-map-pin" aria-hidden="true"></i></span>
+        <div class="ec-meta">
+          <p class="ec-title">City + vertical landing pages — AI generated at scale</p>
+          <p class="ec-sub">One page per city × vertical combination · targets exact buyer searches</p>
+        </div>
+        <span class="badge b-green">Highest SEO ROI</span>
+      </div>
+      <div class="ec-body">
+        <div class="step-row">
+          <i class="ti ti-layout-grid si" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="st">Page formula: "Elevator [Service Type] for [Vertical] in [City]" — e.g. "Hospital Elevator Maintenance in Miami FL", "Hotel Elevator Repair in Los Angeles", "Office Building Elevator Modernisation in Washington DC"
+            <p class="sn">Each page answers the exact search query. Each page targets a different buyer persona. AI generates a unique, non-duplicate 800-word page per combination in under 2 minutes.</p>
+          </div>
+          <span class="stag b-green">Template</span>
+        </div>
+        <div class="step-row">
+          <i class="ti ti-robot si" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="st">AI page generation workflow: input city + vertical + Axxiom service data → GPT-4o generates page with: local compliance context (AHJ name), vertical-specific pain points, Axxiom's services, local contact info, FAQ section. Human reviews → publishes. 30 minutes per page vs. 3 hours manual.
+          </div>
+          <span class="stag b-green">AI generate</span>
+        </div>
+        <div class="step-row">
+          <i class="ti ti-chart-bar si" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="st">Priority markets first: Miami, Los Angeles, Washington DC, Phoenix, San Antonio, San Francisco, New York/NJ. 7 markets × 9 verticals = 63 landing pages. At 30 mins per page = 3 days of work. Measurable SEO results within 90 days.
+          </div>
+          <span class="stag b-green">Scale</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="engine-card">
+      <div class="ec-head" onclick="tog(this)">
+        <span class="ec-icon"><i class="ti ti-file-text" aria-hidden="true"></i></span>
+        <div class="ec-meta">
+          <p class="ec-title">Safety content blog — positions Axxiom as the expert</p>
+          <p class="ec-sub">2 posts/week · AI-assisted · targets long-tail search intent</p>
+        </div>
+        <span class="badge b-blue">Authority content</span>
+      </div>
+      <div class="ec-body">
+        <div class="content-ex">
+          <p class="ce-label">Blog post example 1 — compliance intent</p>
+          <p class="ce-title">"Florida Elevator Inspection Requirements: What Building Owners Need to Know in 2026"</p>
+          <p class="ce-body">Targets facility managers searching for compliance guidance. Establishes Axxiom as the authority. Ends with: "Need help managing your inspection schedule? Axxiom tracks this automatically."</p>
+        </div>
+        <div class="content-ex">
+          <p class="ce-label">Blog post example 2 — buyer pain intent</p>
+          <p class="ce-title">"Why Your Hotel Elevator Breaks Down More Than It Should: The 3 Maintenance Mistakes Most Operators Make"</p>
+          <p class="ce-body">Directly addresses the pain of hotel facilities directors. Data-backed. Links to Axxiom's predictive maintenance service page.</p>
+        </div>
+        <div class="content-ex">
+          <p class="ce-label">Blog post example 3 — data-driven authority</p>
+          <p class="ce-title">"The Most Common Elevator Fault Codes in Southern California — And What They Actually Cost You"</p>
+          <p class="ce-body">Uses anonymised data from the Axxiom fleet. No competitor can write this article. Positions Axxiom as the only company with the data to know this.</p>
+        </div>
+        <div class="step-row" style="margin-top:8px">
+          <i class="ti ti-robot si" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="st">AI workflow: compliance officer + ops manager do a 15-min briefing call once a week → AI converts to a 1,200-word blog post → SEO team reviews → publishes. 2 posts/week sustainable with zero content writer needed.
+          </div>
+          <span class="stag b-blue">Process</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="engine-card">
+      <div class="ec-head" onclick="tog(this)">
+        <span class="ec-icon"><i class="ti ti-map" aria-hidden="true"></i></span>
+        <div class="ec-meta">
+          <p class="ec-title">Google Business Profile strategy — per market</p>
+          <p class="ec-sub">One GBP per market area · AI-generated weekly posts · review response</p>
+        </div>
+        <span class="badge b-teal">Local pack</span>
+      </div>
+      <div class="ec-body">
+        <div class="step-row">
+          <i class="ti ti-map-pin si" style="color:#0F766E" aria-hidden="true"></i>
+          <div class="st">Set up / claim a Google Business Profile for each acquired company and the Axxiom brand in each market. Optimise for "elevator maintenance [city]" — the local 3-pack is prime real estate for service searches.
+          </div>
+          <span class="stag b-teal">Setup</span>
+        </div>
+        <div class="step-row">
+          <i class="ti ti-robot si" style="color:#0F766E" aria-hidden="true"></i>
+          <div class="st">AI posts 2× per week to each GBP — short posts about local compliance updates, safety tips, job completions. Google rewards active profiles with higher local ranking. At 7 markets × 2 posts/week = 14 posts — AI does all 14 in 20 minutes.
+          </div>
+          <span class="stag b-teal">AI manage</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(3)">← Lead gen AI</button>
+      <button onclick="go(5)">Execution plan ↗</button>
+    </div>
+  </div>
+
+  <!-- EXECUTION -->
+  <div id="p5" class="panel">
+    <p class="lbl">Execution plan</p>
+    <p class="ttl">What gets built when — and who owns it</p>
+    <p class="sub">Marketing AI automation is built in the same 10-week phased approach as the operations systems. Start with the highest-impact, lowest-effort initiatives first. Each phase creates assets the next phase amplifies.</p>
+
+    <div class="oc">
+      <p class="ol">Phase 1 — Weeks 1–3: Foundation (zero-cost quick wins)</p>
+      <div class="fr"><span class="fk">Claim & optimise Google Business Profiles (all markets)</span><span class="fv"><span class="badge b-green">Week 1</span></span></div>
+      <div class="fr"><span class="fk">Optimise CEO LinkedIn profile for buyer intent keywords</span><span class="fv"><span class="badge b-green">Week 1</span></span></div>
+      <div class="fr"><span class="fk">Set up AI review request automation (post-job trigger)</span><span class="fv"><span class="badge b-green">Week 2</span></span></div>
+      <div class="fr"><span class="fk">First CEO LinkedIn post published (acquisition story)</span><span class="fv"><span class="badge b-green">Week 1</span></span></div>
+      <div class="fr"><span class="fk">Set up Clay + Apollo for one pilot vertical (hotels)</span><span class="fv"><span class="badge b-blue">Week 2–3</span></span></div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">Phase 2 — Weeks 4–7: Content engine live</p>
+      <div class="fr"><span class="fk">CEO voice memo → AI content workflow operational</span><span class="fv"><span class="badge b-blue">Week 4</span></span></div>
+      <div class="fr"><span class="fk">First 20 city + vertical landing pages published</span><span class="fv"><span class="badge b-blue">Week 5</span></span></div>
+      <div class="fr"><span class="fk">Blog content calendar set (2 posts/week, AI-assisted)</span><span class="fv"><span class="badge b-blue">Week 4</span></span></div>
+      <div class="fr"><span class="fk">First LinkedIn short video published (CEO or tech)</span><span class="fv"><span class="badge b-blue">Week 5</span></span></div>
+      <div class="fr"><span class="fk">AI outbound running for hotels + healthcare verticals</span><span class="fv"><span class="badge b-blue">Week 6–7</span></span></div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">Phase 3 — Weeks 8–12: Scale and measure</p>
+      <div class="fr"><span class="fk">All 63 city × vertical landing pages live</span><span class="fv"><span class="badge b-amber">Week 8–10</span></span></div>
+      <div class="fr"><span class="fk">AI outbound expanded to all 6 verticals</span><span class="fv"><span class="badge b-amber">Week 8</span></span></div>
+      <div class="fr"><span class="fk">First monthly "Elevator Safety Insight" post (data-backed)</span><span class="fv"><span class="badge b-amber">Week 9</span></span></div>
+      <div class="fr"><span class="fk">Marketing dashboard live (leads, rankings, content performance)</span><span class="fv"><span class="badge b-amber">Week 10</span></span></div>
+      <div class="fr"><span class="fk">Review count target: 50+ across all markets</span><span class="fv"><span class="badge b-amber">Week 12</span></span></div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">The AI tools stack</p>
+      <div class="fr"><span class="fk">Lead finding + enrichment</span><span class="fv">Clay + Apollo.io</span></div>
+      <div class="fr"><span class="fk">Email personalisation + sequences</span><span class="fv">Instantly.ai or Smartlead</span></div>
+      <div class="fr"><span class="fk">LinkedIn scheduling + analytics</span><span class="fv">Taplio (CEO) + Buffer (company)</span></div>
+      <div class="fr"><span class="fk">Content generation</span><span class="fv">Claude / GPT-4o + Notion AI</span></div>
+      <div class="fr"><span class="fk">SEO + keyword tracking</span><span class="fv">Ahrefs or Semrush</span></div>
+      <div class="fr"><span class="fk">Review management</span><span class="fv">Birdeye or GatherUp</span></div>
+      <div class="fr"><span class="fk">Video captions + editing</span><span class="fv">Descript or CapCut</span></div>
+      <div class="fr"><span class="fk">All connected to</span><span class="fv">Dynamics 365 CRM (existing)</span></div>
+    </div>
+
+    <div class="info-row">
+      <i class="ti ti-rocket ii" style="color:var(--color-text-info)" aria-hidden="true"></i>
+      <p class="it"><strong style="color:var(--color-text-primary)">The 90-day marketing outcome:</strong> Axxiom goes from invisible online to the most visible independent elevator company in every market they operate. The CEO has a growing LinkedIn following of facility managers and property professionals. Local searches for elevator service in Miami, LA, DC, Phoenix surface Axxiom on page one. And the outbound system is putting personalised messages in front of 500+ qualified prospects every month without anyone manually writing a single email.</p>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(4)">← Local SEO</button>
+      <button onclick="go(0)">← Back to audit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+function tog(h){h.closest('.engine-card').classList.toggle('open')}
+</script>

@@ -1,0 +1,381 @@
+
+<style>
+  *{box-sizing:border-box}
+  .wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+  .tab-row{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+  .tab{font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+  .tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .panel{display:none}.panel.active{display:block}
+  .section-label{font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 4px}
+  .section-title{font-size:16px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .section-sub{font-size:13px;color:var(--color-text-secondary);margin:0 0 14px;line-height:1.6}
+  .card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:10px}
+  .card-header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .card-icon{font-size:18px;color:var(--color-text-secondary);flex-shrink:0}
+  .card-title{font-size:13px;font-weight:500;color:var(--color-text-primary);flex:1}
+  .card-body{font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin:0}
+  .card-action{font-size:11px;font-weight:500;margin-top:8px;padding-top:8px;border-top:0.5px solid var(--color-border-tertiary)}
+  .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:14px}
+  .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-bottom:14px}
+  .mini-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px}
+  .mini-icon{font-size:18px;margin-bottom:6px;display:block;color:var(--color-text-secondary)}
+  .mini-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin:0 0 3px}
+  .mini-desc{font-size:11px;color:var(--color-text-secondary);margin:0;line-height:1.5}
+  .divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:14px 0}
+  .badge{font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px}
+  .badge-blue{background:var(--color-background-info);color:var(--color-text-info)}
+  .badge-green{background:var(--color-background-success);color:var(--color-text-success)}
+  .badge-amber{background:var(--color-background-warning);color:var(--color-text-warning)}
+  .badge-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .badge-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+  .phase-strip{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  .phase-box{flex:1;min-width:130px;border-radius:var(--border-radius-md);padding:10px 12px;border:0.5px solid var(--color-border-tertiary)}
+  .phase-num{font-size:10px;font-weight:500;margin:0 0 3px}
+  .phase-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin:0 0 3px}
+  .phase-time{font-size:10px;color:var(--color-text-tertiary)}
+  .field-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+  .field-row:last-child{border-bottom:none}
+  .field-key{color:var(--color-text-secondary)}
+  .field-val{font-weight:500;color:var(--color-text-primary);text-align:right}
+  .output-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:10px}
+  .output-label{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
+  .pillar{border-left:3px solid;border-radius:0;padding:10px 14px;margin-bottom:8px;background:var(--color-background-secondary);border-radius:var(--border-radius-md)}
+  .pillar-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .pillar-body{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+  .nav-btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .info-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+  .info-icon{font-size:15px;color:var(--color-text-tertiary);flex-shrink:0;margin-top:1px}
+  .info-text{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+  .accent-box{border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:8px;border:0.5px solid var(--color-border-tertiary)}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Strategic roadmap for positioning Axxiom Elevator as a trusted elevator safety data company — five pillars across brand, product, data, partnerships, and market presence</h2>
+
+  <div class="tab-row">
+    <button class="tab active" onclick="go(0)">Overview</button>
+    <button class="tab" onclick="go(1)">Data foundation</button>
+    <button class="tab" onclick="go(2)">Trusted brand</button>
+    <button class="tab" onclick="go(3)">Safety products</button>
+    <button class="tab" onclick="go(4)">Partnerships</button>
+    <button class="tab" onclick="go(5)">Roadmap</button>
+  </div>
+
+  <!-- TAB 0: OVERVIEW -->
+  <div id="p0" class="panel active">
+    <p class="section-label">The positioning shift</p>
+    <p class="section-title">From elevator company to elevator safety intelligence company</p>
+    <p class="section-sub">This is a 3-year brand and business model transformation. Axxiom stops being a company that services elevators and becomes the company that knows more about elevator safety than anyone else — and shares that knowledge in structured, verifiable ways.</p>
+
+    <div class="phase-strip">
+      <div class="phase-box" style="border-color:var(--color-border-info)">
+        <p class="phase-num" style="color:var(--color-text-info)">Phase 1</p>
+        <p class="phase-title">Build the data asset</p>
+        <p class="phase-time">Months 1–6</p>
+      </div>
+      <div class="phase-box" style="border-color:var(--color-border-success)">
+        <p class="phase-num" style="color:var(--color-text-success)">Phase 2</p>
+        <p class="phase-title">Publish the intelligence</p>
+        <p class="phase-time">Months 6–12</p>
+      </div>
+      <div class="phase-box" style="border-color:var(--color-border-warning)">
+        <p class="phase-num" style="color:var(--color-text-warning)">Phase 3</p>
+        <p class="phase-title">Monetise the trust</p>
+        <p class="phase-time">Months 12–24</p>
+      </div>
+      <div class="phase-box" style="border-color:var(--color-border-tertiary)">
+        <p class="phase-num" style="color:var(--color-text-tertiary)">Phase 4</p>
+        <p class="phase-title">Own the standard</p>
+        <p class="phase-time">Year 3+</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <p class="section-label" style="margin-bottom:8px">Five strategic pillars</p>
+
+    <div class="pillar" style="border-left-color:var(--color-text-info)">
+      <p class="pillar-title"><span class="badge badge-blue">01</span> &nbsp;Data foundation — own the most complete elevator safety dataset in their markets</p>
+      <p class="pillar-body">Structured asset records, inspection history, failure patterns, AHJ compliance data — all unified in Dynamics and cleaned to publishable quality.</p>
+    </div>
+    <div class="pillar" style="border-left-color:var(--color-text-success)">
+      <p class="pillar-title"><span class="badge badge-green">02</span> &nbsp;Trusted brand — become the public voice on elevator safety intelligence</p>
+      <p class="pillar-body">Annual safety report, industry benchmarks, safety alerts — Axxiom becomes the source journalists, regulators, and building owners cite.</p>
+    </div>
+    <div class="pillar" style="border-left-color:var(--color-text-warning)">
+      <p class="pillar-title"><span class="badge badge-amber">03</span> &nbsp;Safety products — turn data into premium client-facing products</p>
+      <p class="pillar-body">Safety scorecards, portfolio risk dashboards, predictive failure benchmarks — clients pay for visibility into their own fleet's safety posture.</p>
+    </div>
+    <div class="pillar" style="border-left-color:var(--color-text-danger)">
+      <p class="pillar-title"><span class="badge badge-red">04</span> &nbsp;Regulatory partnerships — work with AHJs to shape safety standards</p>
+      <p class="pillar-body">Share anonymised safety trend data with state elevator boards and AHJs. Position Axxiom as a partner in policy, not just a compliance subject.</p>
+    </div>
+    <div class="pillar" style="border-left-color:var(--color-text-tertiary)">
+      <p class="pillar-title"><span class="badge badge-gray">05</span> &nbsp;Market presence — build the external signals that prove the positioning</p>
+      <p class="pillar-body">Industry conference presence, safety certification program, thought leadership from leadership team — all anchored to verifiable data.</p>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">Start with data foundation ↗</button>
+    </div>
+  </div>
+
+  <!-- TAB 1: DATA FOUNDATION -->
+  <div id="p1" class="panel">
+    <p class="section-label">Pillar 01</p>
+    <p class="section-title">Build the data asset — the foundation everything else rests on</p>
+    <p class="section-sub">You cannot claim to be a trusted data company without a data asset worth trusting. This is the internal work that happens before any public positioning move.</p>
+
+    <div class="card">
+      <div class="card-header">
+        <i class="ti ti-database card-icon" aria-hidden="true"></i>
+        <span class="card-title">Step 1 — Unify and clean all historical asset data</span>
+      </div>
+      <p class="card-body">Every elevator Axxiom has ever serviced needs a clean, complete record in Dynamics: install date, equipment type, manufacturer, all service history, all inspection outcomes, all fault codes. Right now this data likely has gaps, inconsistencies, and legacy formats. Cleaning it is unglamorous but it's what makes everything downstream credible.</p>
+      <div class="card-action" style="color:var(--color-text-info)">→ Deliverable: unified asset master in Dataverse with data quality score per record</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <i class="ti ti-chart-bar card-icon" aria-hidden="true"></i>
+        <span class="card-title">Step 2 — Define the safety metrics Axxiom will own</span>
+      </div>
+      <p class="card-body">Pick 5–8 specific safety metrics that Axxiom will track, define publicly, and report on. Examples: mean time between failures by equipment type, inspection pass rate by building vertical, PM compliance rate by market, emergency call-out frequency per unit-age cohort. These become the vocabulary of Axxiom's safety authority.</p>
+      <div class="card-action" style="color:var(--color-text-info)">→ Deliverable: Axxiom Safety Metrics Framework v1.0 — internal document, then published</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <i class="ti ti-lock card-icon" aria-hidden="true"></i>
+        <span class="card-title">Step 3 — Establish data governance and anonymisation policy</span>
+      </div>
+      <p class="card-body">To publish data externally, Axxiom needs a clear policy on what gets published, at what aggregation level, with what client consent. Benchmark data is always anonymised at the building or fleet level — never unit-identifiable. This policy also protects Axxiom legally and builds client confidence that their data won't be exposed.</p>
+      <div class="card-action" style="color:var(--color-text-info)">→ Deliverable: Data Governance Policy + client consent clause added to new contracts</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <i class="ti ti-refresh card-icon" aria-hidden="true"></i>
+        <span class="card-title">Step 4 — Build the data flywheel</span>
+      </div>
+      <p class="card-body">Every job completed → data point added. Every inspection → outcome logged. Every fault code → pattern updated. The system must be designed so that doing the work automatically enriches the data asset. This is what makes the data compound over time rather than requiring manual curation effort indefinitely.</p>
+      <div class="card-action" style="color:var(--color-text-info)">→ Deliverable: automated data capture pipeline — no manual data entry for standard events</div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(0)">← Overview</button>
+      <button onclick="go(2)">Next — Trusted brand ↗</button>
+    </div>
+  </div>
+
+  <!-- TAB 2: TRUSTED BRAND -->
+  <div id="p2" class="panel">
+    <p class="section-label">Pillar 02</p>
+    <p class="section-title">Become the public voice on elevator safety</p>
+    <p class="section-sub">Trust is built in public. The data asset is internal. The trust positioning requires external signals that other people can point to — reports, benchmarks, safety alerts, media coverage. These are the things that make a journalist write "according to Axxiom's annual safety report" instead of "according to the company."</p>
+
+    <div class="card">
+      <div class="card-header">
+        <i class="ti ti-file-report card-icon" aria-hidden="true"></i>
+        <span class="card-title">Annual Elevator Safety Report</span>
+        <span class="badge badge-green">Flagship asset</span>
+      </div>
+      <p class="card-body">Published every January. 10–15 page report covering: fleet-wide inspection pass rates, most common failure modes by equipment type, PM compliance rates by vertical, notable safety trends vs. prior year. Fully anonymised, data-backed, designed for PR distribution. This becomes the thing Axxiom is known for.</p>
+      <div class="card-action" style="color:var(--color-text-success)">→ Pitched to: trade publications, facility management press, state elevator boards, insurance carriers</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <i class="ti ti-alert-triangle card-icon" aria-hidden="true"></i>
+        <span class="card-title">Safety alert bulletins</span>
+      </div>
+      <p class="card-body">When the data shows an emerging pattern — a specific component failing at abnormal rates, a manufacturer defect trend, a seasonal issue in coastal markets — Axxiom publishes a safety alert. Sent to clients first (they feel protected), then publicly. This is how you build the "early warning system" reputation.</p>
+      <div class="card-action" style="color:var(--color-text-info)">→ Distributed via: email to clients, LinkedIn, press release to trade media, AHJ notification</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <i class="ti ti-chart-line card-icon" aria-hidden="true"></i>
+        <span class="card-title">Elevator Safety Index — a public benchmark</span>
+      </div>
+      <p class="card-body">A quarterly published score or index that rates elevator safety performance across markets, building types, or equipment cohorts. Think: a simple, repeatable metric that media can track over time. "The Axxiom Elevator Safety Index rose 4 points this quarter, driven by improved PM compliance in hospitality." This creates a recurring news hook.</p>
+      <div class="card-action" style="color:var(--color-text-info)">→ Requires: enough data volume across markets + consistent methodology + PR support to launch</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <i class="ti ti-microphone card-icon" aria-hidden="true"></i>
+        <span class="card-title">Thought leadership from the leadership team</span>
+      </div>
+      <p class="card-body">The CEO and technical leadership need to be visible as named safety experts — not just the company brand. LinkedIn articles, industry conference panels, trade press interviews, podcast appearances on facility management shows. When a journalist calls about elevator safety, they should think of Axxiom's leadership first.</p>
+      <div class="card-action" style="color:var(--color-text-info)">→ Target: 2 industry conference speaking slots/year + quarterly bylined article in trade press</div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">← Data foundation</button>
+      <button onclick="go(3)">Next — Safety products ↗</button>
+    </div>
+  </div>
+
+  <!-- TAB 3: SAFETY PRODUCTS -->
+  <div id="p3" class="panel">
+    <p class="section-label">Pillar 03</p>
+    <p class="section-title">Turn data into premium client products</p>
+    <p class="section-sub">This is where the data positioning generates direct revenue. Clients who trust Axxiom's data want to see their own fleet benchmarked against it. These products make the trust tangible and tie clients to Axxiom's platform, not just their service contracts.</p>
+
+    <div class="grid-2">
+      <div class="card" style="margin-bottom:0">
+        <div class="card-header">
+          <i class="ti ti-shield-check card-icon" aria-hidden="true"></i>
+          <span class="card-title">Fleet Safety Scorecard</span>
+          <span class="badge badge-amber">Upsell</span>
+        </div>
+        <p class="card-body">Monthly one-page report per client showing their fleet's safety score vs. Axxiom's anonymised industry benchmark. "Your 12 units scored 87/100 — the hospitality industry average is 74." Makes the client feel ahead and want to stay ahead.</p>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <div class="card-header">
+          <i class="ti ti-layout-dashboard card-icon" aria-hidden="true"></i>
+          <span class="card-title">Real-time safety portal</span>
+          <span class="badge badge-amber">Premium tier</span>
+        </div>
+        <p class="card-body">Client-facing dashboard in their own portal: live compliance status, risk scores, upcoming inspections, and benchmark comparison. Replaces the "call Axxiom to check status" behaviour with self-serve visibility — clients love this.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="grid-2">
+      <div class="card" style="margin-bottom:0">
+        <div class="card-header">
+          <i class="ti ti-certificate card-icon" aria-hidden="true"></i>
+          <span class="card-title">Axxiom Safety Certification</span>
+          <span class="badge badge-green">Brand anchor</span>
+        </div>
+        <p class="card-body">A formal certification program for buildings that meet Axxiom's published safety standards — full PM compliance, zero lapsed inspections, risk score above threshold. The certificate is displayed in the building lobby. Becomes a differentiator for hotel brands and healthcare systems.</p>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <div class="card-header">
+          <i class="ti ti-file-analytics card-icon" aria-hidden="true"></i>
+          <span class="card-title">Insurance-grade safety report</span>
+          <span class="badge badge-blue">New market</span>
+        </div>
+        <p class="card-body">Structured safety report formatted for insurance carrier review — designed to support property owners seeking lower premiums on buildings with documented elevator safety programs. Opens a direct relationship with commercial insurers as a data partner.</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="info-row">
+      <i class="ti ti-trending-up info-icon" aria-hidden="true"></i>
+      <p class="info-text">The certification program is the highest-leverage play long-term. Once "Axxiom Certified" becomes a recognised signal in the market — appearing in hotel RFPs, hospital procurement criteria, and insurance assessments — Axxiom owns a standard that competitors cannot simply replicate. The data is what makes the certification credible.</p>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(2)">← Trusted brand</button>
+      <button onclick="go(4)">Next — Partnerships ↗</button>
+    </div>
+  </div>
+
+  <!-- TAB 4: PARTNERSHIPS -->
+  <div id="p4" class="panel">
+    <p class="section-label">Pillar 04</p>
+    <p class="section-title">Build the partnerships that validate the positioning</p>
+    <p class="section-sub">Third-party validation is what separates a company that claims to be a data authority from one that actually is. These partnerships give Axxiom's data credibility that no amount of self-promotion can create.</p>
+
+    <div class="card">
+      <div class="card-header">
+        <i class="ti ti-building-community card-icon" aria-hidden="true"></i>
+        <span class="card-title">Regulatory partnerships — AHJs and state elevator boards</span>
+        <span class="badge badge-green">Highest credibility</span>
+      </div>
+      <p class="card-body">Proactively share anonymised safety trend data with state elevator boards and key AHJs. Offer to be a data source for their annual safety statistics. When a regulator cites Axxiom's data in a public report, the credibility transfer is permanent. This also opens early access to regulatory changes — Axxiom becomes a partner in shaping inspection standards rather than just complying with them.</p>
+      <div class="card-action" style="color:var(--color-text-success)">→ Start with: Florida DBPR, NYC DOB, and whichever state has the largest Axxiom market share</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <i class="ti ti-shield card-icon" aria-hidden="true"></i>
+        <span class="card-title">Insurance carrier partnerships</span>
+        <span class="badge badge-blue">Revenue opportunity</span>
+      </div>
+      <p class="card-body">Commercial property insurers need verifiable elevator safety data to price risk. Axxiom can offer a structured data feed or safety report standard that carriers can accept for underwriting decisions. In exchange, Axxiom gets endorsed as the preferred safety data provider for that carrier's policyholders — which is a direct channel to every building they insure.</p>
+      <div class="card-action" style="color:var(--color-text-info)">→ Targets: FM Global, Zurich, Liberty Mutual commercial property divisions</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <i class="ti ti-school card-icon" aria-hidden="true"></i>
+        <span class="card-title">Industry association partnerships — NAEC and vertical associations</span>
+      </div>
+      <p class="card-body">The National Association of Elevator Contractors (NAEC) and vertical-specific groups (American Hospital Association, AHLA for hotels) are natural distribution channels for Axxiom's safety reports. Contributing data to industry benchmarks and sponsoring safety research positions Axxiom as a contributor to the field, not just a commercial operator.</p>
+      <div class="card-action" style="color:var(--color-text-info)">→ Path: join NAEC safety committee → contribute data → co-publish benchmark → keynote session</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <i class="ti ti-building-skyscraper card-icon" aria-hidden="true"></i>
+        <span class="card-title">Real estate and facility management platform integrations</span>
+      </div>
+      <p class="card-body">Large property managers use platforms like Yardi, MRI, and Planon for facilities management. An API integration that feeds Axxiom's safety data into these platforms turns Axxiom into an embedded data provider — the safety layer inside tools the client already uses daily. This is a long-term moat that is very hard to displace.</p>
+      <div class="card-action" style="color:var(--color-text-info)">→ Phase 3 play — requires clean data API and partnership BD capacity</div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(3)">← Safety products</button>
+      <button onclick="go(5)">Next — Full roadmap ↗</button>
+    </div>
+  </div>
+
+  <!-- TAB 5: ROADMAP -->
+  <div id="p5" class="panel">
+    <p class="section-label">Execution roadmap</p>
+    <p class="section-title">What happens in what order — and why sequence matters</p>
+    <p class="section-sub">Everything flows from the data foundation. Do not attempt public positioning moves before the internal data is clean and the governance policy is in place. Credibility built on messy data collapses under scrutiny.</p>
+
+    <div class="output-card">
+      <p class="output-label">Phase 1 — Months 1–6: Build the foundation quietly</p>
+      <div class="field-row"><span class="field-key">Unify asset and service history data in Dynamics</span><span class="field-val"><span class="badge badge-blue">Internal</span></span></div>
+      <div class="field-row"><span class="field-key">Define the 5–8 safety metrics Axxiom will own</span><span class="field-val"><span class="badge badge-blue">Internal</span></span></div>
+      <div class="field-row"><span class="field-key">Write and adopt data governance & anonymisation policy</span><span class="field-val"><span class="badge badge-blue">Internal</span></span></div>
+      <div class="field-row"><span class="field-key">Add data consent clause to new client contracts</span><span class="field-val"><span class="badge badge-blue">Internal</span></span></div>
+      <div class="field-row"><span class="field-key">Build automated data capture pipeline (AI + Dynamics)</span><span class="field-val"><span class="badge badge-blue">Internal</span></span></div>
+      <div class="field-row"><span class="field-key">Deploy AI dispatch + predictive maintenance (existing plan)</span><span class="field-val"><span class="badge badge-blue">Internal</span></span></div>
+    </div>
+
+    <div class="output-card">
+      <p class="output-label">Phase 2 — Months 6–12: Publish the first signals</p>
+      <div class="field-row"><span class="field-key">Publish Year 1 Elevator Safety Report</span><span class="field-val"><span class="badge badge-green">External</span></span></div>
+      <div class="field-row"><span class="field-key">Launch Fleet Safety Scorecard for all clients</span><span class="field-val"><span class="badge badge-amber">Client-facing</span></span></div>
+      <div class="field-row"><span class="field-key">First AHJ data-sharing conversation (2 jurisdictions)</span><span class="field-val"><span class="badge badge-green">External</span></span></div>
+      <div class="field-row"><span class="field-key">CEO LinkedIn thought leadership programme begins</span><span class="field-val"><span class="badge badge-green">External</span></span></div>
+      <div class="field-row"><span class="field-key">Submit to speak at NAEC annual conference</span><span class="field-val"><span class="badge badge-green">External</span></span></div>
+      <div class="field-row"><span class="field-key">First safety alert bulletin (if data pattern warrants)</span><span class="field-val"><span class="badge badge-green">External</span></span></div>
+    </div>
+
+    <div class="output-card">
+      <p class="output-label">Phase 3 — Months 12–24: Monetise and formalise the trust</p>
+      <div class="field-row"><span class="field-key">Launch Axxiom Safety Certification program</span><span class="field-val"><span class="badge badge-amber">Client-facing</span></span></div>
+      <div class="field-row"><span class="field-key">Launch Elevator Safety Index (quarterly public benchmark)</span><span class="field-val"><span class="badge badge-green">External</span></span></div>
+      <div class="field-row"><span class="field-key">Insurance carrier data partnership — first signed</span><span class="field-val"><span class="badge badge-green">External</span></span></div>
+      <div class="field-row"><span class="field-key">Client safety portal (self-serve dashboard) live</span><span class="field-val"><span class="badge badge-amber">Client-facing</span></span></div>
+      <div class="field-row"><span class="field-key">NAEC or AHA joint safety research publication</span><span class="field-val"><span class="badge badge-green">External</span></span></div>
+      <div class="field-row"><span class="field-key">Insurance-grade safety report product launched</span><span class="field-val"><span class="badge badge-amber">Client-facing</span></span></div>
+    </div>
+
+    <div class="output-card">
+      <p class="output-label">Phase 4 — Year 3+: Own the standard</p>
+      <div class="field-row"><span class="field-key">Facility management platform API integrations (Yardi, MRI)</span><span class="field-val"><span class="badge badge-blue">Platform</span></span></div>
+      <div class="field-row"><span class="field-key">Axxiom Safety Certification adopted in hotel/hospital RFPs</span><span class="field-val"><span class="badge badge-green">Market</span></span></div>
+      <div class="field-row"><span class="field-key">State elevator board cites Axxiom data in public report</span><span class="field-val"><span class="badge badge-green">Market</span></span></div>
+      <div class="field-row"><span class="field-key">Data licensing or white-label product for other operators</span><span class="field-val"><span class="badge badge-blue">Platform</span></span></div>
+      <div class="field-row"><span class="field-key">"Axxiom Certified" recognised as the industry safety mark</span><span class="field-val"><span class="badge badge-green">Market</span></span></div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(4)">← Partnerships</button>
+      <button onclick="sendPrompt('Build me a content strategy for Axxiom Elevator to establish thought leadership in elevator safety — what to publish, where, and how often')">Build the content strategy ↗</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+</script>

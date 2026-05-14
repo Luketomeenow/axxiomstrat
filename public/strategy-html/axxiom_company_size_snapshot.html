@@ -1,0 +1,226 @@
+
+<style>
+  *{box-sizing:border-box}
+  .wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+  .lbl{font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 3px}
+  .ttl{font-size:17px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .sub{font-size:13px;color:var(--color-text-secondary);margin:0 0 16px;line-height:1.6}
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:20px}
+  .stat{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px;text-align:center}
+  .stat-top{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--color-text-tertiary);margin:0 0 5px}
+  .stat-num{font-size:26px;font-weight:500;color:var(--color-text-primary);margin:0 0 2px;line-height:1}
+  .stat-note{font-size:10px;color:var(--color-text-tertiary);margin:0}
+  .divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:14px 0}
+  .section-label{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 10px}
+  .acq-list{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+  .acq-row{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:9px 12px;display:flex;align-items:center;gap:10px}
+  .acq-num{width:22px;height:22px;border-radius:50%;background:var(--color-background-info);color:var(--color-text-info);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+  .acq-name{font-size:12px;font-weight:500;color:var(--color-text-primary);flex:1}
+  .acq-meta{font-size:11px;color:var(--color-text-secondary)}
+  .badge{font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px}
+  .b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+  .b-green{background:var(--color-background-success);color:var(--color-text-success)}
+  .b-amber{background:var(--color-background-warning);color:var(--color-text-warning)}
+  .b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+  .oc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:10px}
+  .ol{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
+  .fr{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px;gap:8px}
+  .fr:last-child{border-bottom:none}
+  .fk{color:var(--color-text-secondary)}
+  .fv{font-weight:500;color:var(--color-text-primary)}
+  .info-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+  .ii{font-size:14px;color:var(--color-text-tertiary);flex-shrink:0;margin-top:1px}
+  .it{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+  .market-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-bottom:16px}
+  .market-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px}
+  .market-state{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 3px}
+  .market-detail{font-size:11px;color:var(--color-text-secondary);margin:0;line-height:1.5}
+  .timeline-bar{display:flex;align-items:center;gap:0;margin-bottom:16px;position:relative}
+  .t-dot{width:10px;height:10px;border-radius:50%;background:var(--color-text-info);flex-shrink:0;position:relative;z-index:1}
+  .t-line{flex:1;height:2px;background:var(--color-border-secondary)}
+  .t-year{font-size:10px;color:var(--color-text-tertiary);white-space:nowrap;margin:0 4px}
+  .insight{margin-bottom:10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);padding:12px 14px}
+  .insight-h{font-size:12px;font-weight:500;color:var(--color-text-primary);margin:0 0 6px}
+  .insight-p{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.65}
+  .src-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+  .src{font-size:9px;font-weight:500;padding:2px 7px;border-radius:20px;background:var(--color-background-primary);color:var(--color-text-tertiary);border:0.5px solid var(--color-border-tertiary)}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Axxiom Elevator company size snapshot — founded 2023, 8 acquisitions, Gauge Capital backed, multi-state footprint</h2>
+
+  <p class="lbl">Company snapshot — May 2026</p>
+  <p class="ttl">Axxiom Elevator at a glance</p>
+  <p class="sub">Founded in 2023. Backed by Gauge Capital with $120M raised. 8 acquisitions in under 3 years across 6 states. One of the fastest-moving independent elevator consolidators in the US market right now.</p>
+
+  <div class="stat-grid">
+    <div class="stat">
+      <p class="stat-top">Founded</p>
+      <p class="stat-num">2023</p>
+      <p class="stat-note">~2 years old</p>
+    </div>
+    <div class="stat">
+      <p class="stat-top">Acquisitions</p>
+      <p class="stat-num" style="color:var(--color-text-info)">8</p>
+      <p class="stat-note">as of Sept 2025</p>
+    </div>
+    <div class="stat">
+      <p class="stat-top">Capital raised</p>
+      <p class="stat-num" style="color:var(--color-text-success)">$120M</p>
+      <p class="stat-note">Gauge Capital (PE)</p>
+    </div>
+    <div class="stat">
+      <p class="stat-top">States active</p>
+      <p class="stat-num" style="color:var(--color-text-warning)">7</p>
+      <p class="stat-note">AZ CA FL TX DC NY NJ</p>
+    </div>
+    <div class="stat">
+      <p class="stat-top">Est. headcount</p>
+      <p class="stat-num" style="color:var(--color-text-secondary)">300+</p>
+      <p class="stat-note">field + corporate</p>
+    </div>
+    <div class="stat">
+      <p class="stat-top">PE backer</p>
+      <p class="stat-num" style="font-size:16px;color:var(--color-text-primary)">Gauge</p>
+      <p class="stat-note">$3B AUM · Southlake TX</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <p class="section-label">All 8 acquisitions — chronological</p>
+  <div class="acq-list">
+    <div class="acq-row">
+      <span class="acq-num">1</span>
+      <span class="acq-name">Motion Elevator + Urban Elevator FL Division</span>
+      <span class="acq-meta">SE Florida · platform foundation</span>
+      <span class="badge b-gray">2023</span>
+    </div>
+    <div class="acq-row">
+      <span class="acq-num">2</span>
+      <span class="acq-name">Arizona Elevator Services</span>
+      <span class="acq-meta">Arizona market entry</span>
+      <span class="badge b-gray">Early 2024</span>
+    </div>
+    <div class="acq-row">
+      <span class="acq-num">3</span>
+      <span class="acq-name">IronHawk Elevator</span>
+      <span class="acq-meta">Arizona / SW expansion · Dec 2023</span>
+      <span class="badge b-gray">Dec 2023</span>
+    </div>
+    <div class="acq-row">
+      <span class="acq-num">4</span>
+      <span class="acq-name">Liftech Elevator Service</span>
+      <span class="acq-meta">Southern California · 90+ employees added</span>
+      <span class="badge b-blue">Nov 2024</span>
+    </div>
+    <div class="acq-row">
+      <span class="acq-num">5</span>
+      <span class="acq-name">Quality Elevator</span>
+      <span class="acq-meta">DC / Maryland / Virginia · 43 years established</span>
+      <span class="badge b-blue">Mar 2025</span>
+    </div>
+    <div class="acq-row">
+      <span class="acq-num">6</span>
+      <span class="acq-name">Evolution Elevator & Escalator Corp.</span>
+      <span class="acq-meta">Staten Island NY + Fort Lauderdale FL · NY/NJ entry</span>
+      <span class="badge b-blue">Apr 2025</span>
+    </div>
+    <div class="acq-row">
+      <span class="acq-num">7</span>
+      <span class="acq-name">Ameritex Elevator, Inc.</span>
+      <span class="acq-meta">SW Texas (San Antonio) + SF Bay Area · 8th acquisition</span>
+      <span class="badge b-green">Sep 2025</span>
+    </div>
+    <div class="acq-row">
+      <span class="acq-num">8</span>
+      <span class="acq-name">+ prior AZ / FL transactions</span>
+      <span class="acq-meta">Full list partially undisclosed</span>
+      <span class="badge b-gray">2023–24</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <p class="section-label">Current geographic footprint</p>
+  <div class="market-grid">
+    <div class="market-card">
+      <p class="market-state">🌴 Florida</p>
+      <p class="market-detail">SE Florida (Miami, Fort Lauderdale) + West Coast FL. Platform origin market.</p>
+    </div>
+    <div class="market-card">
+      <p class="market-state">☀️ California</p>
+      <p class="market-detail">Southern California (Signal Hill) + SF Bay Area via Ameritex.</p>
+    </div>
+    <div class="market-card">
+      <p class="market-state">🏜️ Arizona</p>
+      <p class="market-detail">Arizona Elevator Services + IronHawk. SW anchor market.</p>
+    </div>
+    <div class="market-card">
+      <p class="market-state">⭐ Texas</p>
+      <p class="market-detail">SW Texas / San Antonio via Ameritex. Newest territory.</p>
+    </div>
+    <div class="market-card">
+      <p class="market-state">🏛️ DC / MD / VA</p>
+      <p class="market-detail">Quality Elevator — 43-yr established DC corridor operator.</p>
+    </div>
+    <div class="market-card">
+      <p class="market-state">🗽 New York / NJ</p>
+      <p class="market-detail">Evolution Elevator — Staten Island HQ, Fort Lauderdale office.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <p class="section-label">What the data tells us</p>
+  <p class="sub" style="margin-top:-6px">Where Axxiom actually stands — synthesis from filings, M&amp;A databases, and market data.</p>
+
+  <div class="insight">
+    <p class="insight-h">Very young, very fast-moving</p>
+    <p class="insight-p">Axxiom Elevator was formed in 2023 and is based in Fort Lauderdale, Florida, when private equity firm Gauge Capital acquired the business as a platform investment. Two years old with 8 acquisitions is exceptional velocity for a PE-backed rollup in any sector.</p>
+    <div class="src-row"><span class="src">SEC filings</span></div>
+  </div>
+
+  <div class="insight">
+    <p class="insight-h">Substantial capital backing</p>
+    <p class="insight-p">Axxiom Elevator has raised $120M, backed by Gauge Capital. Gauge Capital is a leading middle-market private equity firm based in Southlake, Texas, managing more than $3.0 billion in capital. This is not a small regional operator — this is a well-capitalised growth platform with institutional resources.</p>
+    <div class="src-row"><span class="src">Maven Group, LLC</span><span class="src">PrivSource</span></div>
+  </div>
+
+  <div class="insight">
+    <p class="insight-h">The latest acquisition signals ambition</p>
+    <p class="insight-p">The Ameritex acquisition is Axxiom&apos;s 8th acquisition and brings expansion opportunities in two new growing markets — Southwest Texas and the San Francisco Bay Area. They are simultaneously entering opposite coasts of the country, which tells you the acquisition pace is not slowing down.</p>
+    <div class="src-row"><span class="src">ZoomInfo</span></div>
+  </div>
+
+  <div class="insight">
+    <p class="insight-h">Headcount — the honest answer</p>
+    <p class="insight-p">It is hard to pin down precisely. Official databases show small corporate headcount because most staff sit inside the acquired entities. The Liftech acquisition alone added over 90 new employees to the Axxiom family. Quality Elevator has operated for 43 years and carries significant headcount. Across 8 acquisitions in 7 states, a conservative estimate is 300–600 field technicians and support staff — but the real number is likely known only internally.</p>
+    <div class="src-row"><span class="src">Bloomberg</span></div>
+  </div>
+
+  <div class="insight">
+    <p class="insight-h">Competitive context</p>
+    <p class="insight-p">Axxiom at 7 states in 2 years compares to American Elevator Group at 21 states in 5 years. Axxiom is moving faster per year of existence, but AEG has a significant head start in geographic coverage. The window to close that gap — while also building the AI and data foundation that AEG has not — is exactly what the strategy we&apos;ve mapped out is designed to exploit.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="oc">
+    <p class="ol">Leadership & ownership</p>
+    <div class="fr"><span class="fk">CEO</span><span class="fv">Jeremy Metzger</span></div>
+    <div class="fr"><span class="fk">CFO</span><span class="fv">Cody McCracken (appointed Dec 2024)</span></div>
+    <div class="fr"><span class="fk">Private equity backer</span><span class="fv">Gauge Capital · $3B+ AUM · Southlake, TX</span></div>
+    <div class="fr"><span class="fk">Gauge sector focus</span><span class="fv">Business services, healthcare, industrial services</span></div>
+    <div class="fr"><span class="fk">Gauge target EBITDA</span><span class="fv">$5–40M per platform investment</span></div>
+    <div class="fr"><span class="fk">Total capital raised</span><span class="fv">$120M (PitchBook)</span></div>
+    <div class="fr"><span class="fk">Legal counsel</span><span class="fv">Ropes & Gray · Massumi + Consoli LLP</span></div>
+    <div class="fr"><span class="fk">M&A advisor</span><span class="fv">Lift Business Advisors (Maven Group)</span></div>
+  </div>
+
+  <div class="info-row">
+    <i class="ti ti-bulb ii" aria-hidden="true"></i>
+    <p class="it"><strong style="color:var(--color-text-primary)">The pace is the story.</strong> Axxiom went from founding to 8 acquisitions across 7 states in under 2 years. That is an unusually fast rollup even by PE-backed standards. Gauge Capital targets $5–40M EBITDA platforms — Axxiom is clearly performing well within that range or they would not have continued backing 8 deals in rapid succession.</p>
+  </div>
+</div>

@@ -1,0 +1,302 @@
+
+<style>
+  *{box-sizing:border-box}
+  .wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+  .steps-nav{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+  .step-pill{font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+  .step-pill.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .panel{display:none}
+  .panel.active{display:block}
+  .panel-step{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.07em;margin:0 0 4px}
+  .panel-title{font-size:16px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .panel-sub{font-size:13px;color:var(--color-text-secondary);margin:0 0 16px;line-height:1.6}
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-bottom:16px}
+  .card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
+  .card-icon{font-size:20px;margin-bottom:6px;display:block}
+  .card-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin:0 0 3px}
+  .card-desc{font-size:11px;color:var(--color-text-secondary);margin:0;line-height:1.5}
+  .divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:14px 0}
+  .field-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+  .field-row:last-child{border-bottom:none}
+  .field-key{color:var(--color-text-secondary)}
+  .field-val{font-weight:500;color:var(--color-text-primary);text-align:right}
+  .output-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:10px}
+  .output-label{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
+  .badge{font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px}
+  .badge-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .badge-amber{background:var(--color-background-warning);color:var(--color-text-warning)}
+  .badge-blue{background:var(--color-background-info);color:var(--color-text-info)}
+  .badge-green{background:var(--color-background-success);color:var(--color-text-success)}
+  .badge-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+  .alert-card{border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:8px;border:0.5px solid var(--color-border-tertiary)}
+  .alert-header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+  .alert-title{font-size:12px;font-weight:500;color:var(--color-text-primary);flex:1}
+  .alert-body{font-size:11px;color:var(--color-text-secondary);margin:0;line-height:1.5}
+  .alert-action{font-size:11px;font-weight:500;margin-top:6px;padding-top:6px;border-top:0.5px solid var(--color-border-tertiary)}
+  .risk-bar-wrap{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+  .risk-label{font-size:12px;color:var(--color-text-secondary);width:140px;flex-shrink:0}
+  .risk-track{flex:1;height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden}
+  .risk-fill{height:100%;border-radius:3px}
+  .risk-pct{font-size:11px;font-weight:500;width:32px;text-align:right;flex-shrink:0}
+  .info-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+  .info-icon{font-size:15px;color:var(--color-text-tertiary);flex-shrink:0;margin-top:1px}
+  .info-text{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+  .workflow-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+  .wb{font-size:11px;font-weight:500;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:5px 10px;white-space:nowrap}
+  .wa{font-size:13px;color:var(--color-text-tertiary)}
+  .nav-btns{display:flex;gap:8px;margin-top:14px}
+  .upsell-card{background:var(--color-background-success);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:8px}
+  .upsell-title{font-size:12px;font-weight:500;color:var(--color-text-success);margin:0 0 3px}
+  .upsell-body{font-size:11px;color:var(--color-text-secondary);margin:0;line-height:1.5}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Predictive Maintenance AI system for Axxiom Elevator — data sources, risk scoring, alerts, and workflow integration</h2>
+
+  <div class="steps-nav">
+    <button class="step-pill active" onclick="go(0)">1 — Data sources</button>
+    <button class="step-pill" onclick="go(1)">2 — Risk model</button>
+    <button class="step-pill" onclick="go(2)">3 — Alert tiers</button>
+    <button class="step-pill" onclick="go(3)">4 — Workflow integration</button>
+    <button class="step-pill" onclick="go(4)">5 — Revenue upsell</button>
+  </div>
+
+  <div id="p0" class="panel active">
+    <p class="panel-step">Step 1 of 5</p>
+    <p class="panel-title">Where does the prediction data come from?</p>
+    <p class="panel-sub">The model is only as good as its inputs. Six data sources feed the risk score — all already available in Axxiom's Dynamics environment or IoT layer.</p>
+    <div class="card-grid">
+      <div class="card">
+        <span class="card-icon"><i class="ti ti-clipboard-list" aria-hidden="true"></i></span>
+        <p class="card-title">Service history log</p>
+        <p class="card-desc">Every past work order per asset — repair type, fault codes, parts replaced, time-to-fix. Stored in Dataverse already.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon"><i class="ti ti-calendar" aria-hidden="true"></i></span>
+        <p class="card-title">PM interval tracking</p>
+        <p class="card-desc">Days since last preventive maintenance vs. manufacturer-recommended interval. Drift beyond interval = rising risk.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon"><i class="ti ti-tool" aria-hidden="true"></i></span>
+        <p class="card-title">Parts & component age</p>
+        <p class="card-desc">Installation dates and expected lifespans for motors, cables, door operators, buffers. Flags components near end-of-life.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon"><i class="ti ti-activity" aria-hidden="true"></i></span>
+        <p class="card-title">IoT sensor data</p>
+        <p class="card-desc">Optional: vibration, door cycle count, motor temperature, current draw. Feeds real-time anomaly detection on top of the baseline model.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon"><i class="ti ti-building" aria-hidden="true"></i></span>
+        <p class="card-title">Usage intensity</p>
+        <p class="card-desc">Trips-per-day by building type — a hospital elevator runs 10× harder than a residential one. Model weights risk by actual load, not just age.</p>
+      </div>
+      <div class="card">
+        <span class="card-icon"><i class="ti ti-cloud-rain" aria-hidden="true"></i></span>
+        <p class="card-title">Environment & age</p>
+        <p class="card-desc">Install year, coastal/humid environment exposure, building type. Older units in coastal FL degrade faster than newer inland units.</p>
+      </div>
+    </div>
+    <div class="info-row">
+      <i class="ti ti-info-circle info-icon" aria-hidden="true"></i>
+      <p class="info-text">Phase 1 runs on Dynamics data only — no IoT needed. IoT sensors are added in Phase 2 for clients willing to pay for real-time monitoring as a premium tier.</p>
+    </div>
+    <div class="nav-btns"><button onclick="go(1)">Next — Risk model ↗</button></div>
+  </div>
+
+  <div id="p1" class="panel">
+    <p class="panel-step">Step 2 of 5</p>
+    <p class="panel-title">How the risk score is calculated</p>
+    <p class="panel-sub">Azure Machine Learning runs a weighted scoring model against each elevator asset. The output is a 0–100 failure risk score, recalculated every 24 hours.</p>
+    <div class="output-card">
+      <p class="output-label">Risk score — example asset EL-0091, Hyatt Regency Miami</p>
+      <div class="risk-bar-wrap">
+        <span class="risk-label">PM interval overdue</span>
+        <div class="risk-track"><div class="risk-fill" style="width:85%;background:var(--color-background-danger)"></div></div>
+        <span class="risk-pct" style="color:var(--color-text-danger)">85</span>
+      </div>
+      <div class="risk-bar-wrap">
+        <span class="risk-label">Door operator age</span>
+        <div class="risk-track"><div class="risk-fill" style="width:72%;background:var(--color-background-warning)"></div></div>
+        <span class="risk-pct" style="color:var(--color-text-warning)">72</span>
+      </div>
+      <div class="risk-bar-wrap">
+        <span class="risk-label">Motor hours</span>
+        <div class="risk-track"><div class="risk-fill" style="width:61%;background:var(--color-background-warning)"></div></div>
+        <span class="risk-pct" style="color:var(--color-text-warning)">61</span>
+      </div>
+      <div class="risk-bar-wrap">
+        <span class="risk-label">Repeat fault history</span>
+        <div class="risk-track"><div class="risk-fill" style="width:78%;background:var(--color-background-danger)"></div></div>
+        <span class="risk-pct" style="color:var(--color-text-danger)">78</span>
+      </div>
+      <div class="risk-bar-wrap">
+        <span class="risk-label">Usage intensity (hotel)</span>
+        <div class="risk-track"><div class="risk-fill" style="width:90%;background:var(--color-background-danger)"></div></div>
+        <span class="risk-pct" style="color:var(--color-text-danger)">90</span>
+      </div>
+      <div class="divider"></div>
+      <div class="field-row">
+        <span class="field-key">Composite risk score</span>
+        <span class="field-val"><span class="badge badge-red">79 / 100 — High</span></span>
+      </div>
+      <div class="field-row">
+        <span class="field-key">Predicted failure window</span>
+        <span class="field-val">18–25 days</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key">Recommended action</span>
+        <span class="field-val">Schedule PM within 7 days</span>
+      </div>
+    </div>
+    <div class="info-row">
+      <i class="ti ti-brain info-icon" aria-hidden="true"></i>
+      <p class="info-text">The model is trained on Axxiom's own historical work order data — units that had emergency breakdowns vs. those that didn't. It gets more accurate over time as more outcome data accumulates.</p>
+    </div>
+    <div class="nav-btns">
+      <button onclick="go(0)">← Back</button>
+      <button onclick="go(2)">Next — Alert tiers ↗</button>
+    </div>
+  </div>
+
+  <div id="p2" class="panel">
+    <p class="panel-step">Step 3 of 5</p>
+    <p class="panel-title">Three alert tiers — different actions, different audiences</p>
+    <p class="panel-sub">Not every risk signal warrants the same response. The system routes alerts to the right person at the right urgency level automatically.</p>
+
+    <div class="alert-card">
+      <div class="alert-header">
+        <span class="badge badge-red">Critical — score 75–100</span>
+      </div>
+      <p class="alert-title">Imminent failure risk — act within 7 days</p>
+      <p class="alert-body">Triggered when the composite score exceeds 75 or when a single factor (e.g. PM overdue by 60+ days on a high-usage site) hits a hard threshold. Sent to the operations manager and account manager simultaneously.</p>
+      <div class="alert-action" style="color:var(--color-text-danger)">
+        <i class="ti ti-arrow-right" aria-hidden="true"></i> Auto-creates a draft PM work order in Dynamics + sends Teams alert + notifies account manager to contact client
+      </div>
+    </div>
+
+    <div class="alert-card">
+      <div class="alert-header">
+        <span class="badge badge-amber">Watch — score 50–74</span>
+      </div>
+      <p class="alert-title">Elevated risk — schedule within 30 days</p>
+      <p class="alert-body">Unit is trending toward failure but not immediately critical. Added to the "at-risk" dashboard in Dynamics for the ops team to review weekly. No automatic work order — requires human decision.</p>
+      <div class="alert-action" style="color:var(--color-text-warning)">
+        <i class="ti ti-arrow-right" aria-hidden="true"></i> Flags unit on risk dashboard + queues account manager to include in next client check-in call
+      </div>
+    </div>
+
+    <div class="alert-card">
+      <div class="alert-header">
+        <span class="badge badge-blue">Monitor — score 25–49</span>
+      </div>
+      <p class="alert-title">Normal wear — routine PM on schedule</p>
+      <p class="alert-body">Unit is aging normally. No action needed beyond scheduled PM. Score is visible on the asset record in Dynamics for reference during any site visit.</p>
+      <div class="alert-action" style="color:var(--color-text-info)">
+        <i class="ti ti-arrow-right" aria-hidden="true"></i> Visible on asset dashboard only — no notification generated
+      </div>
+    </div>
+
+    <div class="alert-card">
+      <div class="alert-header">
+        <span class="badge badge-gray">Healthy — score 0–24</span>
+      </div>
+      <p class="alert-title">Low risk — no action required</p>
+      <p class="alert-body">Recently serviced unit with no fault history and low usage intensity. Score recalculates daily and will rise as time-since-PM increases.</p>
+      <div class="alert-action" style="color:var(--color-text-secondary)">
+        <i class="ti ti-arrow-right" aria-hidden="true"></i> No action — logged silently on asset record
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">← Back</button>
+      <button onclick="go(3)">Next — Workflow integration ↗</button>
+    </div>
+  </div>
+
+  <div id="p3" class="panel">
+    <p class="panel-step">Step 4 of 5</p>
+    <p class="panel-title">How it plugs into Dynamics 365 Field Service</p>
+    <p class="panel-sub">The predictive layer sits on top of the existing Dynamics infrastructure — it generates work orders and updates asset records automatically, with no new interface for the ops team to learn.</p>
+
+    <div class="output-card">
+      <p class="output-label">Daily automated workflow — Power Automate</p>
+      <div class="workflow-row">
+        <span class="wb">Score recalculates (6am daily)</span>
+        <span class="wa">→</span>
+        <span class="wb">Critical assets flagged</span>
+        <span class="wa">→</span>
+        <span class="wb">Draft WO created</span>
+        <span class="wa">→</span>
+        <span class="wb">Ops manager notified</span>
+      </div>
+      <div class="workflow-row">
+        <span class="wb">Manager approves WO</span>
+        <span class="wa">→</span>
+        <span class="wb">Enters dispatch queue</span>
+        <span class="wa">→</span>
+        <span class="wb">Compliance gate</span>
+        <span class="wa">→</span>
+        <span class="wb">Tech assigned</span>
+      </div>
+    </div>
+
+    <div class="output-card">
+      <p class="output-label">What the tech sees on the job brief</p>
+      <div class="field-row"><span class="field-key">Job type</span><span class="field-val">Predictive PM</span></div>
+      <div class="field-row"><span class="field-key">Risk score at dispatch</span><span class="field-val"><span class="badge badge-red">79 — High</span></span></div>
+      <div class="field-row"><span class="field-key">Flagged components</span><span class="field-val">Door operator, motor brushes</span></div>
+      <div class="field-row"><span class="field-key">Last 3 fault codes</span><span class="field-val">E14, E14, E07</span></div>
+      <div class="field-row"><span class="field-key">Suggested parts to bring</span><span class="field-val">Door operator kit, lubricant set</span></div>
+      <div class="field-row"><span class="field-key">Asset age</span><span class="field-val">8 years — modernisation candidate</span></div>
+    </div>
+
+    <div class="info-row">
+      <i class="ti ti-bulb info-icon" aria-hidden="true"></i>
+      <p class="info-text">The "suggested parts to bring" is generated by Azure OpenAI looking at the flagged components and the unit's fault history — it reduces the need for a return visit because the tech arrives prepared for the most likely fix.</p>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(2)">← Back</button>
+      <button onclick="go(4)">Next — Revenue upsell ↗</button>
+    </div>
+  </div>
+
+  <div id="p4" class="panel">
+    <p class="panel-step">Step 5 of 5</p>
+    <p class="panel-title">How this system generates revenue, not just efficiency</p>
+    <p class="panel-sub">Predictive maintenance isn't just an ops tool — it's a client-facing product and a natural trigger for Axxiom's highest-value service lines.</p>
+
+    <div class="upsell-card">
+      <p class="upsell-title"><i class="ti ti-trending-up" aria-hidden="true"></i> Modernisation pipeline</p>
+      <p class="upsell-body">Any asset scoring above 70 for 90+ consecutive days gets flagged as a modernisation candidate. The account manager receives a templated recommendation to present to the client — moving from a repair conversation to a capital project conversation.</p>
+    </div>
+
+    <div class="upsell-card">
+      <p class="upsell-title"><i class="ti ti-shield-check" aria-hidden="true"></i> Premium monitoring tier</p>
+      <p class="upsell-body">IoT sensor data (real-time vibration, temperature, door cycles) is packaged as an add-on to maintenance contracts. Clients pay a monthly fee for a live risk dashboard and real-time alerts — recurring revenue on top of the service contract.</p>
+    </div>
+
+    <div class="upsell-card">
+      <p class="upsell-title"><i class="ti ti-file-report" aria-hidden="true"></i> Quarterly asset health report</p>
+      <p class="upsell-body">AI-generated report per client showing risk scores, trend over time, completed PMs, and upcoming recommendations. Sent automatically each quarter — positions Axxiom as a proactive partner, not just a reactive vendor. Strong retention tool.</p>
+    </div>
+
+    <div class="upsell-card">
+      <p class="upsell-title"><i class="ti ti-clock" aria-hidden="true"></i> Emergency reduction as a KPI</p>
+      <p class="upsell-body">Track emergency call volume per client before and after predictive maintenance is active. Present the reduction as a dollar-value savings — every emergency avoided is roughly $2,000–$5,000 in avoided repair costs plus downtime losses. This is the renewal conversation.</p>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(3)">← Back</button>
+      <button onclick="sendPrompt('Build me the pitch deck structure for presenting the full AI dispatch and predictive maintenance system to Axxiom Elevator as a proposal')">Build the proposal pitch ↗</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.step-pill').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+</script>

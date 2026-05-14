@@ -1,0 +1,297 @@
+
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .wrap { padding: 1.5rem 0; font-family: var(--font-sans); }
+  .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-tertiary); margin: 0 0 10px; }
+  .section-title { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 4px; }
+  .section-sub { font-size: 13px; color: var(--color-text-secondary); margin: 0 0 16px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 24px; }
+  .card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+  }
+  .card:hover { border-color: var(--color-border-secondary); background: var(--color-background-secondary); }
+  .card-icon { font-size: 20px; margin-bottom: 8px; }
+  .card-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 4px; }
+  .card-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; margin: 0; }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+  }
+  .badge-ops { background: var(--color-background-info); color: var(--color-text-info); }
+  .badge-mkt { background: var(--color-background-success); color: var(--color-text-success); }
+  .badge-high { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 24px 0; }
+  .impact-row { display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+  .metric-card {
+    flex: 1; min-width: 120px;
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .metric-num { font-size: 22px; font-weight: 500; color: var(--color-text-primary); }
+  .metric-label { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+  .priority-bar { height: 3px; border-radius: 2px; margin-top: 10px; }
+  .p-high { background: var(--color-background-warning); width: 100%; }
+  .p-med { background: var(--color-border-secondary); width: 65%; }
+  .detail-section { margin-bottom: 22px; }
+  .detail-section-title { font-size: 13px; font-weight: 600; color: var(--color-text-primary); margin: 0 0 12px; letter-spacing: 0.02em; }
+  .detail-item {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 12px 14px;
+    margin-bottom: 8px;
+  }
+  .detail-item-top { display: flex; gap: 12px; align-items: flex-start; }
+  .detail-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--color-background-info); color: var(--color-text-info);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600; flex-shrink: 0;
+  }
+  .detail-num.mkt { background: var(--color-background-success); color: var(--color-text-success); }
+  .detail-head-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .detail-head { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin: 0; }
+  .detail-body { font-size: 12px; color: var(--color-text-secondary); line-height: 1.65; margin: 0; }
+  .badge-build { font-size: 9px; font-weight: 600; padding: 2px 8px; border-radius: 20px; background: var(--color-background-warning); color: var(--color-text-warning); text-transform: uppercase; letter-spacing: 0.04em; }
+  .phase-box {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-left: 3px solid var(--color-text-info);
+    border-radius: var(--border-radius-md);
+    padding: 12px 14px;
+    margin-top: 4px;
+  }
+  .phase-box-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--color-text-info); margin: 0 0 8px; }
+  .phase-box p { font-size: 12px; color: var(--color-text-secondary); line-height: 1.65; margin: 0; }
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">AI Automation Strategy for Axxiom Elevator — Internal Operations and Marketing Systems</h2>
+
+  <p class="section-label">Xenoz × Axxiom Elevator</p>
+  <p class="section-title">AI Automation Strategy</p>
+  <p class="section-sub">8 high-impact systems across internal ops and marketing — designed for a multi-market elevator service company.</p>
+
+  <div class="impact-row">
+    <div class="metric-card">
+      <div class="metric-num">8</div>
+      <div class="metric-label">AI Systems</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-num">5</div>
+      <div class="metric-label">Internal Ops</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-num">3</div>
+      <div class="metric-label">Marketing</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-num">~30%</div>
+      <div class="metric-label">Est. Admin Reduction</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- INTERNAL OPS -->
+  <p class="section-label">Internal Operations</p>
+
+  <div class="grid">
+
+    <div class="card" onclick="sendPrompt('Tell me more about the AI Dispatch & Work Order Agent for Axxiom Elevator — how would this be built and what tools are needed?')">
+      <span class="badge badge-ops">Ops</span>
+      <span class="badge badge-high" style="margin-left:4px">High Priority</span>
+      <i class="ti ti-tool card-icon" aria-hidden="true"></i>
+      <p class="card-title">Dispatch & Work Order Agent</p>
+      <p class="card-desc">Auto-assigns field technicians to service calls based on location, skill, and schedule. Generates work orders and sends job briefs via SMS/email.</p>
+      <div class="priority-bar p-high"></div>
+    </div>
+
+    <div class="card" onclick="sendPrompt('Tell me more about the Predictive Maintenance AI system for Axxiom Elevator — data sources, alerts, and workflow integration.')">
+      <span class="badge badge-ops">Ops</span>
+      <span class="badge badge-high" style="margin-left:4px">High Priority</span>
+      <i class="ti ti-activity card-icon" aria-hidden="true"></i>
+      <p class="card-title">Predictive Maintenance AI</p>
+      <p class="card-desc">Tracks service history per unit, flags at-risk elevators before failure, and auto-schedules preventive visits. Reduces emergency call volume.</p>
+      <div class="priority-bar p-high"></div>
+    </div>
+
+    <div class="card" onclick="sendPrompt('How would a Compliance & Inspection Tracker AI work for Axxiom Elevator — integrating local code databases and auto-generating reports?')">
+      <span class="badge badge-ops">Ops</span>
+      <i class="ti ti-clipboard-check card-icon" aria-hidden="true"></i>
+      <p class="card-title">Compliance & Inspection Tracker</p>
+      <p class="card-desc">Monitors inspection due dates by jurisdiction, auto-preps code compliance checklists, and drafts post-inspection reports using AI.</p>
+      <div class="priority-bar p-med"></div>
+    </div>
+
+    <div class="card" onclick="sendPrompt('Tell me more about a Client Communication AI for Axxiom — automated updates, service summaries, and follow-ups.')">
+      <span class="badge badge-ops">Ops</span>
+      <span class="badge badge-high" style="margin-left:4px">High Priority</span>
+      <i class="ti ti-message-dots card-icon" aria-hidden="true"></i>
+      <p class="card-title">Client Communication AI</p>
+      <p class="card-desc">Sends automated job status updates, repair summaries, and post-service follow-up messages. Reduces inbound "where is my tech?" calls.</p>
+      <div class="priority-bar p-high"></div>
+    </div>
+
+    <div class="card" onclick="sendPrompt('How would a Proposal & Quoting AI work for Axxiom Elevator — modernization quotes, new installations, and pricing intelligence?')">
+      <span class="badge badge-ops">Ops</span>
+      <i class="ti ti-file-dollar card-icon" aria-hidden="true"></i>
+      <p class="card-title">Proposal & Quoting AI</p>
+      <p class="card-desc">Generates tailored modernization, repair, and installation quotes from a few inputs. Pulls from past pricing data to stay consistent and competitive.</p>
+      <div class="priority-bar p-med"></div>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+  <!-- MARKETING -->
+  <p class="section-label">Marketing & Growth</p>
+
+  <div class="grid">
+
+    <div class="card" onclick="sendPrompt('Build me an AI-powered lead generation and outreach strategy for Axxiom Elevator — targeting building managers, property owners, and facility directors.')">
+      <span class="badge badge-mkt">Marketing</span>
+      <span class="badge badge-high" style="margin-left:4px">High Priority</span>
+      <i class="ti ti-target card-icon" aria-hidden="true"></i>
+      <p class="card-title">B2B Lead Gen & Outreach AI</p>
+      <p class="card-desc">Scrapes and enriches property manager, HOA, and facility director contacts per market. Runs personalized cold email sequences with AI-written copy per vertical.</p>
+      <div class="priority-bar p-high"></div>
+    </div>
+
+    <div class="card" onclick="sendPrompt('What would an AI Content & SEO Engine look like for Axxiom Elevator — local SEO, LinkedIn content, and thought leadership for building managers?')">
+      <span class="badge badge-mkt">Marketing</span>
+      <i class="ti ti-brand-linkedin card-icon" aria-hidden="true"></i>
+      <p class="card-title">Content & SEO Engine</p>
+      <p class="card-desc">Auto-generates local SEO blog posts per city/state, LinkedIn authority content, and safety tips — positioned for building managers and facility ops audiences.</p>
+      <div class="priority-bar p-med"></div>
+    </div>
+
+    <div class="card" onclick="sendPrompt('How would a Review and Reputation Management AI system work for Axxiom Elevator across multiple markets?')">
+      <span class="badge badge-mkt">Marketing</span>
+      <i class="ti ti-star card-icon" aria-hidden="true"></i>
+      <p class="card-title">Reputation & Review AI</p>
+      <p class="card-desc">Sends post-job review requests automatically, drafts personalized responses to Google reviews, and flags negative sentiment for quick escalation.</p>
+      <div class="priority-bar p-med"></div>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+  <p class="section-label">System detail — what each layer does</p>
+  <p class="section-sub" style="margin-top:-8px">Internal operations (five) and marketing (three), aligned to Axxiom&apos;s multi-market model, brand promise, and expansion motion.</p>
+
+  <div class="detail-section">
+    <p class="detail-section-title">Internal operations — 5 systems</p>
+
+    <div class="detail-item">
+      <div class="detail-item-top">
+        <span class="detail-num">1</span>
+        <div style="flex:1;min-width:0">
+          <div class="detail-head-row">
+            <p class="detail-head">Dispatch &amp; Work Order Agent</p>
+            <span class="badge-build">Build this first</span>
+          </div>
+          <p class="detail-body">Axxiom operates across multiple markets with local technicians. Right now, assigning the right tech to the right job likely happens manually. An AI agent can intake a service request, match it to the closest available tech with the right local code knowledge, generate the work order, and push the job brief to the tech&apos;s phone — all without a dispatcher touching it.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-item">
+      <div class="detail-item-top">
+        <span class="detail-num">2</span>
+        <div style="flex:1;min-width:0">
+          <p class="detail-head" style="margin-bottom:6px">Predictive Maintenance AI</p>
+          <p class="detail-body"><strong style="color:var(--color-text-primary)">Highest client retention impact.</strong> Their entire value prop is preventing elevator downtime. An AI system that tracks service history per unit, calculates failure probability, and auto-schedules preventive visits before a breakdown happens is literally their brand promise (&quot;Reliability In Motion&quot;) in software form. This also creates upsell opportunities for modernization.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-item">
+      <div class="detail-item-top">
+        <span class="detail-num">3</span>
+        <div style="flex:1;min-width:0">
+          <p class="detail-head" style="margin-bottom:6px">Compliance &amp; Inspection Tracker</p>
+          <p class="detail-body">They serve 9 different verticals — hospitals, hotels, schools, transportation hubs — each with different inspection timelines and AHJ (Authority Having Jurisdiction) requirements. An AI that monitors due dates per client per jurisdiction and auto-drafts compliance reports saves significant admin time and protects them from liability gaps.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-item">
+      <div class="detail-item-top">
+        <span class="detail-num">4</span>
+        <div style="flex:1;min-width:0">
+          <p class="detail-head" style="margin-bottom:6px">Client Communication AI</p>
+          <p class="detail-body"><strong style="color:var(--color-text-primary)">Quick win for responsiveness.</strong> Their core value pillar is &quot;Responsiveness.&quot; An AI that auto-sends job confirmations, tech ETA updates, and post-service summaries removes the most common friction point in field service businesses — clients calling in to ask where their tech is.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-item">
+      <div class="detail-item-top">
+        <span class="detail-num">5</span>
+        <div style="flex:1;min-width:0">
+          <p class="detail-head" style="margin-bottom:6px">Proposal &amp; Quoting AI</p>
+          <p class="detail-body">Modernization and new installation are high-ticket deals. An AI that takes basic project inputs and spits out a polished quote — pulling from historical pricing across verticals — accelerates their sales cycle and enables expansion without adding sales headcount.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-section">
+    <p class="detail-section-title">Marketing — 3 systems</p>
+
+    <div class="detail-item">
+      <div class="detail-item-top">
+        <span class="detail-num mkt">6</span>
+        <div style="flex:1;min-width:0">
+          <p class="detail-head" style="margin-bottom:6px">B2B Lead Gen &amp; Outreach AI</p>
+          <p class="detail-body"><strong style="color:var(--color-text-primary)">Fastest revenue lever.</strong> They&apos;re expanding nationally. The ideal buyer is a property manager, facility director, or HOA board member. Using Clay + Apollo or similar, an AI system can identify contacts in each new market, enrich them with property size/type data, and run hyper-personalized cold email sequences — one campaign for hotels, a different angle for healthcare, another for education.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-item">
+      <div class="detail-item-top">
+        <span class="detail-num mkt">7</span>
+        <div style="flex:1;min-width:0">
+          <p class="detail-head" style="margin-bottom:6px">Content &amp; SEO Engine</p>
+          <p class="detail-body">Elevator service is heavily local-intent-driven. &quot;Elevator repair Pompano Beach&quot; type searches. An AI content pipeline that produces city-specific blog posts, maintenance guides, and safety articles at scale builds organic inbound in every new market they enter — without paying per click forever.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-item">
+      <div class="detail-item-top">
+        <span class="detail-num mkt">8</span>
+        <div style="flex:1;min-width:0">
+          <p class="detail-head" style="margin-bottom:6px">Reputation &amp; Review AI</p>
+          <p class="detail-body">For a service company, Google reviews are the closing tool. An automated system that fires a review request 24 hours after job completion, drafts responses to existing reviews in their brand voice, and escalates negative reviews to a human before they sit unanswered — this directly protects conversions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-box">
+    <p class="phase-box-title">Recommended phase order</p>
+    <p>Start with <strong style="color:var(--color-text-primary)">Client Communication AI</strong> and <strong style="color:var(--color-text-primary)">Dispatch Agent</strong> (immediate ops relief), then layer in <strong style="color:var(--color-text-primary)">Lead Gen AI</strong> for their expansion markets, then <strong style="color:var(--color-text-primary)">Predictive Maintenance</strong> as a differentiator. Click any card above to go deeper on any system — we can spec out the full build for whichever ones you want to pitch.</p>
+  </div>
+
+  <hr class="divider">
+
+  <p style="font-size:12px; color:var(--color-text-tertiary); margin:0">Click any system card above to explore implementation details →</p>
+</div>

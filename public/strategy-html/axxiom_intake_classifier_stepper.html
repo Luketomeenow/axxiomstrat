@@ -1,0 +1,265 @@
+
+<style>
+  *{box-sizing:border-box}
+  .wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+  .steps-nav{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+  .step-pill{
+    font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;
+    border:0.5px solid var(--color-border-tertiary);
+    background:var(--color-background-primary);
+    color:var(--color-text-secondary);cursor:pointer;transition:all .15s
+  }
+  .step-pill.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .panel{display:none}
+  .panel.active{display:block}
+  .panel-header{margin-bottom:14px}
+  .panel-step{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.07em;margin:0 0 4px}
+  .panel-title{font-size:16px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .panel-sub{font-size:13px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+  .channel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:16px}
+  .channel-card{
+    background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);
+    border-radius:var(--border-radius-md);padding:12px;text-align:center
+  }
+  .channel-icon{font-size:22px;color:var(--color-text-secondary);margin-bottom:6px}
+  .channel-name{font-size:12px;font-weight:500;color:var(--color-text-primary);margin:0 0 2px}
+  .channel-note{font-size:11px;color:var(--color-text-secondary);margin:0}
+  .flow-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .flow-box{
+    background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);
+    border-radius:var(--border-radius-md);padding:8px 12px;font-size:12px;
+    color:var(--color-text-primary);font-weight:500;white-space:nowrap
+  }
+  .flow-arr{font-size:14px;color:var(--color-text-tertiary)}
+  .tag-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:16px}
+  .tag-card{
+    border-radius:var(--border-radius-md);padding:10px 12px;
+    border:0.5px solid var(--color-border-tertiary)
+  }
+  .tag-type{font-size:11px;font-weight:500;margin:0 0 4px}
+  .tag-examples{font-size:11px;color:var(--color-text-secondary);margin:0;line-height:1.5}
+  .prompt-box{
+    background:var(--color-background-secondary);border-radius:var(--border-radius-md);
+    border:0.5px solid var(--color-border-tertiary);padding:12px 14px;margin-bottom:14px;
+    font-size:12px;font-family:var(--font-mono);color:var(--color-text-secondary);line-height:1.7
+  }
+  .output-card{
+    background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);
+    border-radius:var(--border-radius-lg);padding:14px 16px;margin-bottom:10px
+  }
+  .output-label{font-size:11px;color:var(--color-text-tertiary);margin:0 0 10px;text-transform:uppercase;letter-spacing:.06em}
+  .field-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+  .field-row:last-child{border-bottom:none}
+  .field-key{color:var(--color-text-secondary)}
+  .field-val{font-weight:500;color:var(--color-text-primary)}
+  .badge{font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px}
+  .badge-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .badge-amber{background:var(--color-background-warning);color:var(--color-text-warning)}
+  .badge-blue{background:var(--color-background-info);color:var(--color-text-info)}
+  .badge-green{background:var(--color-background-success);color:var(--color-text-success)}
+  .nav-btns{display:flex;gap:8px;margin-top:16px}
+  .divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:16px 0}
+  .info-row{display:flex;gap:8px;margin-bottom:10px;align-items:flex-start}
+  .info-icon{font-size:16px;color:var(--color-text-tertiary);margin-top:1px;flex-shrink:0}
+  .info-text{font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin:0}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Service request intake and AI classification flow for Axxiom Elevator dispatch agent — step by step walkthrough</h2>
+
+  <div class="steps-nav">
+    <button class="step-pill active" onclick="show(0)">1 — Channels</button>
+    <button class="step-pill" onclick="show(1)">2 — Normalisation</button>
+    <button class="step-pill" onclick="show(2)">3 — AI classifier</button>
+    <button class="step-pill" onclick="show(3)">4 — Work order output</button>
+    <button class="step-pill" onclick="show(4)">5 — Edge cases</button>
+  </div>
+
+  <div id="p0" class="panel active">
+    <div class="panel-header">
+      <p class="panel-step">Step 1 of 5</p>
+      <p class="panel-title">Where do requests come in?</p>
+      <p class="panel-sub">Axxiom receives service requests across four channels. All four funnel into a single Power Automate queue before any AI logic runs.</p>
+    </div>
+    <div class="channel-grid">
+      <div class="channel-card">
+        <div class="channel-icon"><i class="ti ti-phone" aria-hidden="true"></i></div>
+        <p class="channel-name">Phone call</p>
+        <p class="channel-note">Transcribed via Azure Speech → text</p>
+      </div>
+      <div class="channel-card">
+        <div class="channel-icon"><i class="ti ti-mail" aria-hidden="true"></i></div>
+        <p class="channel-name">Email</p>
+        <p class="channel-note">Parsed by Power Automate connector</p>
+      </div>
+      <div class="channel-card">
+        <div class="channel-icon"><i class="ti ti-browser" aria-hidden="true"></i></div>
+        <p class="channel-name">Web / portal</p>
+        <p class="channel-note">Structured form → direct API call</p>
+      </div>
+      <div class="channel-card">
+        <div class="channel-icon"><i class="ti ti-brand-teams" aria-hidden="true"></i></div>
+        <p class="channel-name">Teams / SMS</p>
+        <p class="channel-note">Internal escalations from field techs</p>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="info-row">
+      <i class="ti ti-info-circle info-icon" aria-hidden="true"></i>
+      <p class="info-text">Phone calls are the trickiest channel. Azure Cognitive Services transcribes the call, then the transcript is treated identically to a written request from that point forward. No special-casing needed downstream.</p>
+    </div>
+    <div class="nav-btns">
+      <button onclick="show(1)">Next — Normalisation ↗</button>
+    </div>
+  </div>
+
+  <div id="p1" class="panel">
+    <div class="panel-header">
+      <p class="panel-step">Step 2 of 5</p>
+      <p class="panel-title">Normalisation before the AI sees anything</p>
+      <p class="panel-sub">Before Azure OpenAI classifies the request, Power Automate standardises the raw input into a clean JSON payload. This is the most important step — garbage in, garbage out.</p>
+    </div>
+    <div class="flow-row">
+      <span class="flow-box">Raw input (any channel)</span>
+      <span class="flow-arr">→</span>
+      <span class="flow-box">Strip PII flags</span>
+      <span class="flow-arr">→</span>
+      <span class="flow-box">Lookup client record</span>
+      <span class="flow-arr">→</span>
+      <span class="flow-box">Attach asset history</span>
+      <span class="flow-arr">→</span>
+      <span class="flow-box">JSON payload</span>
+    </div>
+    <div class="output-card">
+      <p class="output-label">Normalised payload sent to classifier</p>
+      <div class="field-row"><span class="field-key">client_id</span><span class="field-val">CL-00482</span></div>
+      <div class="field-row"><span class="field-key">site_name</span><span class="field-val">Hyatt Regency – Miami FL</span></div>
+      <div class="field-row"><span class="field-key">asset_id</span><span class="field-val">EL-0091 (Otis Gen2, installed 2018)</span></div>
+      <div class="field-row"><span class="field-key">last_service</span><span class="field-val">43 days ago — routine PM</span></div>
+      <div class="field-row"><span class="field-key">raw_text</span><span class="field-val">"Elevator 3 stuck between floors, guests trapped"</span></div>
+      <div class="field-row"><span class="field-key">channel</span><span class="field-val">phone</span></div>
+      <div class="field-row"><span class="field-key">timestamp</span><span class="field-val">2026-05-12 09:14 EST</span></div>
+    </div>
+    <div class="info-row">
+      <i class="ti ti-database info-icon" aria-hidden="true"></i>
+      <p class="info-text">Client and asset lookup pulls from Dynamics Dataverse — the AI never needs to ask "which elevator?" because the context is already attached to the payload.</p>
+    </div>
+    <div class="nav-btns">
+      <button onclick="show(0)">← Back</button>
+      <button onclick="show(2)">Next — AI classifier ↗</button>
+    </div>
+  </div>
+
+  <div id="p2" class="panel">
+    <div class="panel-header">
+      <p class="panel-step">Step 3 of 5</p>
+      <p class="panel-title">What the AI classifier actually does</p>
+      <p class="panel-sub">Azure OpenAI reads the normalised payload and returns four structured tags. The prompt is tightly constrained — it outputs JSON only, no prose.</p>
+    </div>
+    <div class="prompt-box">
+      SYSTEM: You are a field service classifier for an elevator company.<br>
+      Given the payload, return ONLY valid JSON with these fields:<br>
+      job_type, urgency_score (1–10), sla_tier, keywords[]<br><br>
+      job_type options: Emergency | Repair | Maintenance | Inspection | Modernisation<br>
+      urgency_score: 9–10 = life safety, 7–8 = out of service, 1–6 = routine<br>
+      sla_tier: P1 (2hr) | P2 (4hr) | P3 (next-day) | P4 (scheduled)
+    </div>
+    <div class="tag-grid">
+      <div class="tag-card">
+        <p class="tag-type" style="color:var(--color-text-danger)">Emergency</p>
+        <p class="tag-examples">"stuck between floors", "trapped passengers", "door won't open", "burning smell"</p>
+      </div>
+      <div class="tag-card">
+        <p class="tag-type" style="color:var(--color-text-warning)">Repair</p>
+        <p class="tag-examples">"out of service", "won't move", "error code", "grinding noise", "door misaligned"</p>
+      </div>
+      <div class="tag-card">
+        <p class="tag-type" style="color:var(--color-text-info)">Maintenance</p>
+        <p class="tag-examples">"scheduled PM", "quarterly service", "lubrication due", "routine check"</p>
+      </div>
+      <div class="tag-card">
+        <p class="tag-type" style="color:var(--color-text-success)">Inspection</p>
+        <p class="tag-examples">"annual inspection", "AHJ cert renewal", "state compliance test", "load test"</p>
+      </div>
+    </div>
+    <div class="output-card">
+      <p class="output-label">Classifier output — example (trapped passengers case)</p>
+      <div class="field-row"><span class="field-key">job_type</span><span class="field-val"><span class="badge badge-red">Emergency</span></span></div>
+      <div class="field-row"><span class="field-key">urgency_score</span><span class="field-val">10 / 10</span></div>
+      <div class="field-row"><span class="field-key">sla_tier</span><span class="field-val"><span class="badge badge-red">P1 — 2hr response</span></span></div>
+      <div class="field-row"><span class="field-key">keywords</span><span class="field-val">stuck, trapped, guests, between floors</span></div>
+    </div>
+    <div class="nav-btns">
+      <button onclick="show(1)">← Back</button>
+      <button onclick="show(3)">Next — Work order output ↗</button>
+    </div>
+  </div>
+
+  <div id="p3" class="panel">
+    <div class="panel-header">
+      <p class="panel-step">Step 4 of 5</p>
+      <p class="panel-title">Work order created in Dynamics</p>
+      <p class="panel-sub">Power Automate takes the classifier output and creates a fully pre-filled Dynamics 365 Field Service work order. No dispatcher typing required.</p>
+    </div>
+    <div class="output-card">
+      <p class="output-label">Work order — auto-created in Dynamics 365</p>
+      <div class="field-row"><span class="field-key">WO number</span><span class="field-val">WO-20260512-0047</span></div>
+      <div class="field-row"><span class="field-key">Service type</span><span class="field-val"><span class="badge badge-red">Emergency</span></span></div>
+      <div class="field-row"><span class="field-key">Priority</span><span class="field-val"><span class="badge badge-red">P1 — 2hr SLA</span></span></div>
+      <div class="field-row"><span class="field-key">Client</span><span class="field-val">Hyatt Regency Miami</span></div>
+      <div class="field-row"><span class="field-key">Asset</span><span class="field-val">EL-0091 — Elevator 3, Lobby</span></div>
+      <div class="field-row"><span class="field-key">AHJ jurisdiction</span><span class="field-val">Miami-Dade County FL</span></div>
+      <div class="field-row"><span class="field-key">Required cert</span><span class="field-val">FL Elevator Mechanic License</span></div>
+      <div class="field-row"><span class="field-key">Status</span><span class="field-val"><span class="badge badge-amber">Pending dispatch</span></span></div>
+    </div>
+    <div class="info-row">
+      <i class="ti ti-arrow-right info-icon" aria-hidden="true"></i>
+      <p class="info-text">From here, the work order enters the compliance gate and dispatch engine — the AHJ jurisdiction and required cert are already populated, so the matching logic runs immediately without any manual lookup.</p>
+    </div>
+    <div class="nav-btns">
+      <button onclick="show(2)">← Back</button>
+      <button onclick="show(4)">Next — Edge cases ↗</button>
+    </div>
+  </div>
+
+  <div id="p4" class="panel">
+    <div class="panel-header">
+      <p class="panel-step">Step 5 of 5</p>
+      <p class="panel-title">Edge cases the system must handle</p>
+      <p class="panel-sub">Three failure modes that need to be designed for explicitly — not left to the AI to figure out on its own.</p>
+    </div>
+    <div class="output-card">
+      <p class="output-label">Edge case 1 — low confidence classification</p>
+      <div class="field-row"><span class="field-key">Trigger</span><span class="field-val">AI confidence below 70%</span></div>
+      <div class="field-row"><span class="field-key">Action</span><span class="field-val">Route to dispatcher queue with AI's best guess pre-filled</span></div>
+      <div class="field-row"><span class="field-key">Why</span><span class="field-val">Ambiguous requests ("it's making a noise") need human judgement</span></div>
+    </div>
+    <div class="output-card">
+      <p class="output-label">Edge case 2 — unknown client or asset</p>
+      <div class="field-row"><span class="field-key">Trigger</span><span class="field-val">No Dynamics record found for caller</span></div>
+      <div class="field-row"><span class="field-key">Action</span><span class="field-val">Create draft WO, flag as "unverified client" — hold before dispatch</span></div>
+      <div class="field-row"><span class="field-key">Why</span><span class="field-val">Prevents dispatching to a non-contracted site</span></div>
+    </div>
+    <div class="output-card">
+      <p class="output-label">Edge case 3 — P1 emergency after hours</p>
+      <div class="field-row"><span class="field-key">Trigger</span><span class="field-val">Urgency score 9–10 + timestamp outside business hours</span></div>
+      <div class="field-row"><span class="field-key">Action</span><span class="field-val">Immediate Teams alert + SMS to on-call dispatcher — bypass queue</span></div>
+      <div class="field-row"><span class="field-key">Why</span><span class="field-val">Axxiom's 24/7 promise requires guaranteed escalation path</span></div>
+    </div>
+    <div class="nav-btns">
+      <button onclick="show(3)">← Back</button>
+      <button onclick="sendPrompt('How does the compliance gate work in the Axxiom dispatch agent — what checks happen before a technician is assigned?')">Explore compliance gate ↗</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>{
+    p.classList.toggle('active',i===n)
+  });
+  document.querySelectorAll('.step-pill').forEach((p,i)=>{
+    p.classList.toggle('active',i===n)
+  });
+}
+</script>

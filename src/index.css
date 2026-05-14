@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans:
+    "DM Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-display:
+    "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-axxiom-ink: #0a0f1a;
+  --color-axxiom-panel: #0f172a;
+  --color-axxiom-brass: #d4af37;
+  --color-axxiom-brass-muted: #a68b2d;
+  --color-axxiom-line: #1e293b;
+}
+
+html {
+  @apply antialiased;
+}
+
+body {
+  @apply m-0 min-h-screen bg-slate-100 text-slate-900 font-sans;
+}

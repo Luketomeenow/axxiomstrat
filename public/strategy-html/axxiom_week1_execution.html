@@ -1,0 +1,687 @@
+
+<style>
+  *{box-sizing:border-box}
+  .wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+  .day-row{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+  .day-pill{font-size:11px;font-weight:500;padding:5px 14px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+  .day-pill.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .panel{display:none}.panel.active{display:block}
+  .day-label{font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 2px}
+  .day-title{font-size:17px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .day-theme{font-size:13px;color:var(--color-text-secondary);margin:0 0 16px;line-height:1.6}
+  .task-block{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:10px;overflow:hidden}
+  .task-header{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;cursor:pointer}
+  .task-header:hover{background:var(--color-background-secondary)}
+  .task-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;margin-top:1px}
+  .task-meta{flex:1}
+  .task-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 2px}
+  .task-sub{font-size:11px;color:var(--color-text-tertiary);margin:0}
+  .task-badge{font-size:10px;font-weight:500;padding:3px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+  .task-body{display:none;border-top:0.5px solid var(--color-border-tertiary);padding:10px 14px 12px 46px}
+  .task-block.open .task-body{display:block}
+  .task-block.open .task-header{background:var(--color-background-secondary)}
+  .step{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+  .step:last-child{border-bottom:none}
+  .step-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+  .step-text{color:var(--color-text-primary);flex:1;line-height:1.5}
+  .step-note{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+  .step-tag{font-size:10px;font-weight:500;padding:2px 6px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+  .output-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 12px;margin-top:8px;font-size:12px;color:var(--color-text-secondary)}
+  .output-box strong{color:var(--color-text-primary)}
+  .divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:12px 0}
+  .badge{font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px}
+  .b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+  .b-green{background:var(--color-background-success);color:var(--color-text-success)}
+  .b-amber{background:var(--color-background-warning);color:var(--color-text-warning)}
+  .b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+  .b-purple{background:#EEEDFE;color:#3C3489}
+  .field-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px;gap:8px}
+  .field-row:last-child{border-bottom:none}
+  .field-key{color:var(--color-text-secondary);flex:1}
+  .field-val{font-weight:500;color:var(--color-text-primary);text-align:right}
+  .output-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:10px}
+  .output-label{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
+  .info-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px}
+  .info-icon{font-size:14px;color:var(--color-text-tertiary);flex-shrink:0;margin-top:1px}
+  .info-text{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+  .nav-btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .win-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+  .win-row:last-child{border-bottom:none}
+  .win-icon{font-size:16px;flex-shrink:0}
+  .win-text{flex:1;color:var(--color-text-primary);font-weight:500}
+  .win-day{font-size:11px;color:var(--color-text-tertiary)}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Week 1 execution plan for Axxiom Elevator engagement — day by day tasks and deliverables</h2>
+
+  <div class="day-row">
+    <button class="day-pill active" onclick="go(0)">Overview</button>
+    <button class="day-pill" onclick="go(1)">Mon</button>
+    <button class="day-pill" onclick="go(2)">Tue</button>
+    <button class="day-pill" onclick="go(3)">Wed</button>
+    <button class="day-pill" onclick="go(4)">Thu</button>
+    <button class="day-pill" onclick="go(5)">Fri</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div id="p0" class="panel active">
+    <p class="day-label">Week 1 war plan</p>
+    <p class="day-title">Five days. One goal: earn the right to build.</p>
+    <p class="day-theme">Week 1 is not about building anything. It's about showing up with the right questions, getting the right access, and ending the week with a signed scope and a discovery report that proves you understand their business better than their last vendor did.</p>
+
+    <div class="output-card">
+      <p class="output-label">Day-by-day focus</p>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-blue">Mon</span> &nbsp;Discovery meeting — understand the business and the pain</span>
+        <span class="field-val">AM + PM</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-amber">Tue</span> &nbsp;Systems audit — get inside Dynamics and map what exists</span>
+        <span class="field-val">Full day</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-amber">Wed</span> &nbsp;Field interviews — talk to dispatchers and 2 field techs</span>
+        <span class="field-val">Full day</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-green">Thu</span> &nbsp;Synthesis — build the gap analysis and priority matrix</span>
+        <span class="field-val">Full day</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-green">Fri</span> &nbsp;Readout — present findings, agree scope, get sign-off</span>
+        <span class="field-val">AM readout</span>
+      </div>
+    </div>
+
+    <div class="output-card">
+      <p class="output-label">What you must walk away with by Friday 5pm</p>
+      <div class="win-row">
+        <span class="win-icon"><i class="ti ti-circle-check" style="color:var(--color-text-success)" aria-hidden="true"></i></span>
+        <span class="win-text">Dynamics 365 read access confirmed</span>
+        <span class="win-day">By Mon EOD</span>
+      </div>
+      <div class="win-row">
+        <span class="win-icon"><i class="ti ti-circle-check" style="color:var(--color-text-success)" aria-hidden="true"></i></span>
+        <span class="win-text">Data completeness score on asset records (sample of 100)</span>
+        <span class="win-day">By Wed EOD</span>
+      </div>
+      <div class="win-row">
+        <span class="win-icon"><i class="ti ti-circle-check" style="color:var(--color-text-success)" aria-hidden="true"></i></span>
+        <span class="win-text">List of all data sources outside Dynamics (spreadsheets, paper, portals)</span>
+        <span class="win-day">By Wed EOD</span>
+      </div>
+      <div class="win-row">
+        <span class="win-icon"><i class="ti ti-circle-check" style="color:var(--color-text-success)" aria-hidden="true"></i></span>
+        <span class="win-text">Top 3 operational pain points ranked by Axxiom leadership</span>
+        <span class="win-day">By Mon EOD</span>
+      </div>
+      <div class="win-row">
+        <span class="win-icon"><i class="ti ti-circle-check" style="color:var(--color-text-success)" aria-hidden="true"></i></span>
+        <span class="win-text">Signed Phase 1 scope document</span>
+        <span class="win-day">By Fri EOD</span>
+      </div>
+      <div class="win-row">
+        <span class="win-icon"><i class="ti ti-circle-check" style="color:var(--color-text-success)" aria-hidden="true"></i></span>
+        <span class="win-text">Week 1 discovery report sent to client</span>
+        <span class="win-day">Fri EOD</span>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">Start Monday ↗</button>
+    </div>
+  </div>
+
+  <!-- MONDAY -->
+  <div id="p1" class="panel">
+    <p class="day-label">Monday</p>
+    <p class="day-title">Discovery — understand the business and the pain</p>
+    <p class="day-theme">Two meetings. One with leadership to get strategic context. One with the ops team to understand day-to-day friction. Come in with prepared questions, not a sales pitch. Your job today is to listen and take precise notes.</p>
+
+    <div class="task-block open">
+      <div class="task-header" onclick="tog(this)">
+        <span class="task-num" style="background:var(--color-background-info);color:var(--color-text-info)">AM</span>
+        <div class="task-meta">
+          <p class="task-title">Leadership discovery session (90 mins)</p>
+          <p class="task-sub">CEO / COO / VP Operations · in person or Zoom</p>
+        </div>
+        <span class="task-badge b-red">Do not skip</span>
+      </div>
+      <div class="task-body">
+        <div class="step">
+          <i class="ti ti-message-question step-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="step-text">"Walk me through a day in the life of your dispatch team right now — from when a call comes in to when the tech is on site."
+            <p class="step-note">Listen for: where it breaks down, what they do manually, where they lose time</p>
+          </div>
+          <span class="step-tag b-blue">Q1</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-message-question step-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="step-text">"When a client calls angry about an elevator, what's the most common reason? What do you have to do to fix it?"
+            <p class="step-note">This reveals the ops gaps that cost the most in client relationships</p>
+          </div>
+          <span class="step-tag b-blue">Q2</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-message-question step-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="step-text">"How do you currently track which technicians are certified for which jurisdictions? Where does that live?"
+            <p class="step-note">The answer to this will tell you exactly how much compliance risk they're carrying</p>
+          </div>
+          <span class="step-tag b-blue">Q3</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-message-question step-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="step-text">"You're expanding into new markets. What's the biggest operational headache when you go into a new city?"
+            <p class="step-note">This surfaces the scaling pain — the thing AI can directly solve</p>
+          </div>
+          <span class="step-tag b-blue">Q4</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-message-question step-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="step-text">"If you could fix one thing in operations in the next 90 days that would have the biggest impact — what is it?"
+            <p class="step-note">This is your Phase 1 priority. Whatever they say becomes the first deliverable.</p>
+          </div>
+          <span class="step-tag b-red">Most important</span>
+        </div>
+        <div class="output-box"><strong>Note:</strong> Record the session (with permission). You will reference these exact words in the Friday readout.</div>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-header" onclick="tog(this)">
+        <span class="task-num" style="background:var(--color-background-info);color:var(--color-text-info)">PM</span>
+        <div class="task-meta">
+          <p class="task-title">Ops team deep dive (2 hrs)</p>
+          <p class="task-sub">Dispatch manager + 1 account manager · informal, their workspace</p>
+        </div>
+        <span class="task-badge b-amber">Operational gold</span>
+      </div>
+      <div class="task-body">
+        <div class="step">
+          <i class="ti ti-eye step-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="step-text">Watch them process a live service request from start to dispatch. Don't interrupt — just observe. Count the number of screens they switch between and the number of manual decisions they make.
+            <p class="step-note">Target number to note: how many minutes from intake call to tech assigned?</p>
+          </div>
+          <span class="step-tag b-red">Observe first</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-message-question step-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="step-text">"What's the thing you do every day that you wish you never had to do again?" — ask the dispatcher, not management
+          </div>
+          <span class="step-tag b-blue">Key question</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-message-question step-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="step-text">"When a tech goes to the wrong job or doesn't have the right cert, how does that get caught?" — listen for where the compliance process actually lives vs. where leadership thinks it lives
+          </div>
+          <span class="step-tag b-blue">Key question</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-list-search step-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="step-text">Ask to see any spreadsheets or tools they use outside of Dynamics — "Is there anything you track in Excel or somewhere else that isn't in the system?"
+            <p class="step-note">Write down every external tool or file they mention. This is the shadow data inventory starting.</p>
+          </div>
+          <span class="step-tag b-amber">Data audit start</span>
+        </div>
+        <div class="output-box"><strong>End of day:</strong> You should have 2–3 pages of notes and a clear answer to "what is the single most painful thing in their ops right now."</div>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-header" onclick="tog(this)">
+        <span class="task-num" style="background:var(--color-background-info);color:var(--color-text-info)">EOD</span>
+        <div class="task-meta">
+          <p class="task-title">Monday wrap — access requests and prep for Tuesday</p>
+          <p class="task-sub">Solo · 30 mins</p>
+        </div>
+        <span class="task-badge b-gray">Admin</span>
+      </div>
+      <div class="task-body">
+        <div class="step">
+          <i class="ti ti-send step-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="step-text">Send a follow-up email to your Axxiom contact confirming: Dynamics 365 read-only access needed by Tuesday 8am, contact names for Wednesday field tech interviews, any reporting exports or spreadsheets the ops team mentioned
+          </div>
+          <span class="step-tag b-red">Send tonight</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-notes step-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="step-text">Spend 20 mins organising your notes into 3 buckets: Things that confirm the plan, Things that surprised you, Questions that need answering Tuesday/Wednesday
+          </div>
+          <span class="step-tag b-blue">Prep</span>
+        </div>
+        <div class="output-box"><strong>Output:</strong> Access request sent · Shadow data list started · Top 3 pain points identified and ranked</div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(0)">← Overview</button>
+      <button onclick="go(2)">Tuesday ↗</button>
+    </div>
+  </div>
+
+  <!-- TUESDAY -->
+  <div id="p2" class="panel">
+    <p class="day-label">Tuesday</p>
+    <p class="day-title">Systems audit — get inside Dynamics</p>
+    <p class="day-theme">Full day in the system. You're not building anything — you're measuring. Run the completeness scripts, map the data structure, and document every gap. This is the most technical day of the week.</p>
+
+    <div class="task-block open">
+      <div class="task-header" onclick="tog(this)">
+        <span class="task-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">1</span>
+        <div class="task-meta">
+          <p class="task-title">Map the Dynamics 365 Field Service setup</p>
+          <p class="task-sub">Solo · 2–3 hrs · read-only access</p>
+        </div>
+        <span class="task-badge b-amber">First thing</span>
+      </div>
+      <div class="task-body">
+        <div class="step">
+          <i class="ti ti-search step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">Check what modules are active: Field Service, Customer Service, Sales? Which ones are actually being used vs. licensed but idle?
+          </div>
+          <span class="step-tag b-amber">Map</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-search step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">Look at the work order structure: what fields exist, which are mandatory vs. optional, what's consistently filled in vs. mostly blank
+          </div>
+          <span class="step-tag b-amber">Map</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-search step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">Look at technician profiles: do they store certification details? Licence expiry dates? AHJ registrations? Or is it just name and phone number?
+            <p class="step-note">This is the compliance gate readiness check. If certs aren't in Dynamics, that's a P1 gap.</p>
+          </div>
+          <span class="step-tag b-red">Critical check</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-search step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">Check asset records: how many exist, what fields are populated, is there a field for AHJ jurisdiction, install date, equipment type?
+          </div>
+          <span class="step-tag b-red">Critical check</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-search step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">Check what Power Automate flows already exist — sometimes there are half-built automations from previous attempts. Don't rebuild what's already there.
+          </div>
+          <span class="step-tag b-blue">Quick win check</span>
+        </div>
+        <div class="output-box"><strong>Output:</strong> Dynamics capability map — a simple table: feature, current state, gap, priority</div>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-header" onclick="tog(this)">
+        <span class="task-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">2</span>
+        <div class="task-meta">
+          <p class="task-title">Run completeness score on 100 asset records</p>
+          <p class="task-sub">Xenoz · export to Excel, score manually or with script · 2 hrs</p>
+        </div>
+        <span class="task-badge b-red">Key data point</span>
+      </div>
+      <div class="task-body">
+        <div class="step">
+          <i class="ti ti-table-export step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">Export a random sample of 100 asset records to Excel. Pick across markets and building types — not just one region.
+          </div>
+          <span class="step-tag b-amber">Sample</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-calculator step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">Score each record against 10 critical fields: install date, equipment type, manufacturer, serial number, AHJ jurisdiction, last PM date, last inspection date, inspection outcome, technician cert data linked, client site address complete
+            <p class="step-note">1 point per field present and populated = max 10. Calculate average across 100 records.</p>
+          </div>
+          <span class="step-tag b-red">Key metric</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-chart-bar step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">Identify the 3 fields with the highest absence rate. These become the cleaning priorities in Step 3.
+          </div>
+          <span class="step-tag b-amber">Finding</span>
+        </div>
+        <div class="output-box"><strong>Output:</strong> Average completeness score (e.g. "6.2/10") + top 3 missing fields. This number goes on slide 1 of Friday's readout.</div>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-header" onclick="tog(this)">
+        <span class="task-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">3</span>
+        <div class="task-meta">
+          <p class="task-title">Check the tech notes field — assess fault code chaos</p>
+          <p class="task-sub">Solo · 1 hr · export last 200 work orders</p>
+        </div>
+        <span class="task-badge b-amber">Revealing</span>
+      </div>
+      <div class="task-body">
+        <div class="step">
+          <i class="ti ti-file-export step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">Export the notes/description field from the last 200 completed work orders. Paste into a word cloud tool or just scan manually.
+            <p class="step-note">What you're looking for: are there patterns ("door", "stuck", "motor") or is it truly random free text?</p>
+          </div>
+          <span class="step-tag b-amber">Quick analysis</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-search step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">Check: does Axxiom have any existing fault code or job type taxonomy? Even informal categories? If yes, this simplifies the cleaning step significantly.
+          </div>
+          <span class="step-tag b-blue">Check</span>
+        </div>
+        <div class="output-box"><strong>Output:</strong> Single finding: "Tech notes are [structured/semi-structured/completely free text]" — this determines how much AI extraction work is needed in Step 3.</div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">← Monday</button>
+      <button onclick="go(3)">Wednesday ↗</button>
+    </div>
+  </div>
+
+  <!-- WEDNESDAY -->
+  <div id="p3" class="panel">
+    <p class="day-label">Wednesday</p>
+    <p class="day-title">Field interviews — the truth lives in the field</p>
+    <p class="day-theme">The system tells you what was recorded. The techs tell you what actually happens. These conversations will surface the shadow data, the workarounds, and the real compliance gaps that no dashboard shows.</p>
+
+    <div class="task-block open">
+      <div class="task-header" onclick="tog(this)">
+        <span class="task-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">1</span>
+        <div class="task-meta">
+          <p class="task-title">Interview 2 field technicians (45 mins each)</p>
+          <p class="task-sub">Pick 1 senior tech + 1 tech with under 2 years at Axxiom · informal</p>
+        </div>
+        <span class="task-badge b-red">Do not skip</span>
+      </div>
+      <div class="task-body">
+        <div class="step">
+          <i class="ti ti-message-question step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">"When you finish a job, what do you actually write in the system — and what do you leave out because it takes too long?"
+            <p class="step-note">This is the data loss question. The answer tells you what the pipeline is currently missing.</p>
+          </div>
+          <span class="step-tag b-red">Key question</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-message-question step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">"Has there ever been a job where you showed up and something was wrong — wrong parts, wrong site, wrong elevator — that could have been avoided if you'd been told something different before you left?"
+            <p class="step-note">This surfaces the dispatch quality gap and the case for AI job briefs</p>
+          </div>
+          <span class="step-tag b-amber">Key question</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-message-question step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">"When you service a unit you've worked on before, do you remember details about it — or do you have to figure it out again on site?"
+            <p class="step-note">This reveals whether the asset familiarity score would actually be used and valued</p>
+          </div>
+          <span class="step-tag b-blue">Question</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-message-question step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">"What's the one thing that would make your job easier that nobody has fixed yet?"
+            <p class="step-note">Techs give the most honest answers to this. What they say often becomes the best UX feature in the job close form.</p>
+          </div>
+          <span class="step-tag b-green">Gold</span>
+        </div>
+        <div class="output-box"><strong>Output:</strong> Direct quotes from 2 techs. Use their exact words in the Friday readout — clients respond to hearing their team's actual voice reflected back.</div>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-header" onclick="tog(this)">
+        <span class="task-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">2</span>
+        <div class="task-meta">
+          <p class="task-title">Interview the compliance / office coordinator (45 mins)</p>
+          <p class="task-sub">The person who handles inspection scheduling and certificate renewals</p>
+        </div>
+        <span class="task-badge b-amber">High value</span>
+      </div>
+      <div class="task-body">
+        <div class="step">
+          <i class="ti ti-message-question step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">"How do you currently track inspection due dates and certificate renewals? Show me."
+            <p class="step-note">The answer is almost always a spreadsheet. Get a copy. That spreadsheet is P1 data that needs to be in Dynamics.</p>
+          </div>
+          <span class="step-tag b-red">Show me</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-message-question step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">"Has Axxiom ever had an elevator with a lapsed certificate operate — even briefly — because it wasn't caught in time?"
+            <p class="step-note">This is a sensitive question. Ask it gently. The answer justifies the entire compliance tracker system.</p>
+          </div>
+          <span class="step-tag b-red">Important</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-message-question step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">"How much time per week do you spend on compliance-related admin — chasing inspectors, filing certificates, tracking renewals?"
+            <p class="step-note">Get a number. Even a rough estimate. This becomes the ROI calculation in the scope document.</p>
+          </div>
+          <span class="step-tag b-blue">ROI data</span>
+        </div>
+        <div class="output-box"><strong>Output:</strong> Compliance spreadsheet copy · hours/week estimate on compliance admin · any recent compliance near-misses documented</div>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-header" onclick="tog(this)">
+        <span class="task-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">3</span>
+        <div class="task-meta">
+          <p class="task-title">Complete the shadow data inventory</p>
+          <p class="task-sub">Based on all interviews · 1 hr · compile and close gaps</p>
+        </div>
+        <span class="task-badge b-gray">Compile</span>
+      </div>
+      <div class="task-body">
+        <div class="step">
+          <i class="ti ti-list step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">List every data source mentioned across all interviews: Dynamics, compliance spreadsheet, any regional Excel files, paper binders, email certificate attachments, third-party inspection portals, tech personal notes
+          </div>
+          <span class="step-tag b-amber">Document all</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-arrow-right step-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="step-text">For each source: what data, how many records, date range, who owns it, format (digital/paper), can it be migrated to Dynamics?
+          </div>
+          <span class="step-tag b-blue">Detail</span>
+        </div>
+        <div class="output-box"><strong>Output:</strong> Complete shadow data source list — this feeds directly into the data audit report and cleaning plan</div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(2)">← Tuesday</button>
+      <button onclick="go(4)">Thursday ↗</button>
+    </div>
+  </div>
+
+  <!-- THURSDAY -->
+  <div id="p4" class="panel">
+    <p class="day-label">Thursday</p>
+    <p class="day-title">Synthesis — build the gap analysis</p>
+    <p class="day-theme">Desk day. No meetings. Take everything from Monday–Wednesday and turn it into the two documents that matter: the gap analysis and the Phase 1 scope. This is the work that makes Friday's readout land.</p>
+
+    <div class="task-block open">
+      <div class="task-header" onclick="tog(this)">
+        <span class="task-num" style="background:var(--color-background-success);color:var(--color-text-success)">1</span>
+        <div class="task-meta">
+          <p class="task-title">Write the gap analysis — 1 page, sharp</p>
+          <p class="task-sub">Solo · 2 hrs · this becomes the core of Friday's readout</p>
+        </div>
+        <span class="task-badge b-green">Core deliverable</span>
+      </div>
+      <div class="task-body">
+        <div class="step">
+          <i class="ti ti-file-text step-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="step-text">Structure: 3 columns — Gap, Business impact (use their words from interviews), Recommended fix. Max 8–10 rows. One page.
+            <p class="step-note">Gaps should map directly to the systems in the pitch deck: dispatch, compliance, predictive maintenance, data foundation</p>
+          </div>
+          <span class="step-tag b-green">Format</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-star step-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="step-text">Highlight the top 3 gaps that have the highest impact AND are fastest to fix. These are the Phase 1 scope.
+            <p class="step-note">The rule: Phase 1 must show visible results in 10 weeks. Do not scope anything that takes longer than that to show an outcome.</p>
+          </div>
+          <span class="step-tag b-red">Key decision</span>
+        </div>
+        <div class="output-box"><strong>Output:</strong> 1-page gap analysis table — clean, no jargon, uses Axxiom's own language from the interviews</div>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-header" onclick="tog(this)">
+        <span class="task-num" style="background:var(--color-background-success);color:var(--color-text-success)">2</span>
+        <div class="task-meta">
+          <p class="task-title">Draft the Phase 1 scope document</p>
+          <p class="task-sub">Solo · 2 hrs · this gets signed Friday</p>
+        </div>
+        <span class="task-badge b-green">Gets signed Friday</span>
+      </div>
+      <div class="task-body">
+        <div class="step">
+          <i class="ti ti-list-check step-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="step-text">Scope document structure: Problem statement (1 paragraph using their words) · Deliverables (3–5 specific, measurable outputs) · Timeline (10 weeks, phased) · What Axxiom provides (Dynamics access, key contacts, interview time) · Investment
+          </div>
+          <span class="step-tag b-green">Structure</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-target step-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="step-text">Phase 1 recommended scope based on this week: Dispatch agent (intake → compliance gate → dispatch) + Data foundation (audit + schema + cleaning sprint). These two are the highest impact and the most visible.
+            <p class="step-note">Do not scope everything in Week 1. Scope what you can deliver excellently in 10 weeks. Expand later.</p>
+          </div>
+          <span class="step-tag b-red">Discipline</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-currency-dollar step-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="step-text">Include a ROI line: "Based on interviews, your team spends X hrs/week on manual dispatch and Y hrs/week on compliance admin. Phase 1 is designed to reduce both by 60%+ within 10 weeks."
+          </div>
+          <span class="step-tag b-green">ROI anchor</span>
+        </div>
+        <div class="output-box"><strong>Output:</strong> Phase 1 scope document — 1–2 pages, ready to review Friday morning and sign Friday afternoon</div>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-header" onclick="tog(this)">
+        <span class="task-num" style="background:var(--color-background-success);color:var(--color-text-success)">3</span>
+        <div class="task-meta">
+          <p class="task-title">Build the Friday readout — 10 slides max</p>
+          <p class="task-sub">Solo · 2 hrs · use the pitch deck as a template</p>
+        </div>
+        <span class="task-badge b-gray">Presentation</span>
+      </div>
+      <div class="task-body">
+        <div class="step">
+          <i class="ti ti-presentation step-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="step-text">Slide structure: What we learned (3 key findings from interviews) → What the data shows (completeness score, top gaps) → What we recommend (Phase 1 scope) → What happens next (timeline + sign-off)
+          </div>
+          <span class="step-tag b-green">Structure</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-quote step-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="step-text">Use direct quotes from the interviews — put them on slides with the person's role (not name if sensitive). "One of your senior techs told us: '...'" is more powerful than any data point.
+          </div>
+          <span class="step-tag b-red">Powerful move</span>
+        </div>
+        <div class="output-box"><strong>Output:</strong> Readout deck ready to present · scope document attached as an appendix</div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(3)">← Wednesday</button>
+      <button onclick="go(5)">Friday ↗</button>
+    </div>
+  </div>
+
+  <!-- FRIDAY -->
+  <div id="p5" class="panel">
+    <p class="day-label">Friday</p>
+    <p class="day-title">Readout — present findings and get sign-off</p>
+    <p class="day-theme">This is the meeting that converts the engagement. You're not selling — you're presenting back what you learned and showing that you understand their business well enough to fix it. The scope document should feel like a natural conclusion, not a pitch.</p>
+
+    <div class="task-block open">
+      <div class="task-header" onclick="tog(this)">
+        <span class="task-num" style="background:var(--color-background-success);color:var(--color-text-success)">AM</span>
+        <div class="task-meta">
+          <p class="task-title">Week 1 readout presentation (60 mins)</p>
+          <p class="task-sub">Leadership + ops manager · same group as Monday AM</p>
+        </div>
+        <span class="task-badge b-red">Critical meeting</span>
+      </div>
+      <div class="task-body">
+        <div class="step">
+          <i class="ti ti-player-play step-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="step-text">Open with: "Here's what we found this week." NOT "Here's what we want to build." Frame everything as findings, not proposals.
+          </div>
+          <span class="step-tag b-red">Framing</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-chart-bar step-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="step-text">Lead with the completeness score: "Your asset records average X/10 completeness. The 3 fields most commonly missing are [X], [Y], [Z]. This is why [specific problem they mentioned Monday] keeps happening."
+            <p class="step-note">Connect the data gap directly to the pain they described. This is the moment they go from "interesting" to "we need to fix this."</p>
+          </div>
+          <span class="step-tag b-red">Key moment</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-quote step-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="step-text">Play back the tech and ops team quotes. "Your dispatcher told us [exact quote]. Your senior tech told us [exact quote]." Leadership often doesn't know what their team experiences daily.
+          </div>
+          <span class="step-tag b-green">Resonates</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-file-check step-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="step-text">Present the Phase 1 scope as the logical conclusion: "Based on what we found, here's the specific work we recommend for the next 10 weeks, with these deliverables and this investment." Walk through it line by line.
+          </div>
+          <span class="step-tag b-green">Close</span>
+        </div>
+        <div class="output-box"><strong>The close line:</strong> "We'd like to start Week 1 of the build on Monday. Are there any questions before we confirm the scope?"</div>
+      </div>
+    </div>
+
+    <div class="task-block">
+      <div class="task-header" onclick="tog(this)">
+        <span class="task-num" style="background:var(--color-background-success);color:var(--color-text-success)">PM</span>
+        <div class="task-meta">
+          <p class="task-title">Scope sign-off and Week 2 kick-off planning</p>
+          <p class="task-sub">Solo / with Axxiom contact · 1 hr</p>
+        </div>
+        <span class="task-badge b-green">Objective</span>
+      </div>
+      <div class="task-body">
+        <div class="step">
+          <i class="ti ti-signature step-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="step-text">Get the scope document signed or verbal confirmation with email confirmation if a full signature isn't possible Friday. Do not leave without clarity on whether you're proceeding.
+          </div>
+          <span class="step-tag b-red">Must-have</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-calendar step-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="step-text">Book the Week 2 kick-off call: confirm Dynamics full access, schedule the compliance officer for the governance session, confirm which market starts the data cleaning pilot
+          </div>
+          <span class="step-tag b-green">Next step</span>
+        </div>
+        <div class="step">
+          <i class="ti ti-send step-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="step-text">Send the Week 1 discovery report by Friday 6pm: 2-page document covering key findings, completeness score, shadow data inventory, and Phase 1 scope summary. This becomes the reference document for the entire engagement.
+          </div>
+          <span class="step-tag b-red">Send today</span>
+        </div>
+        <div class="output-box"><strong>End of Week 1:</strong> Scope signed · discovery report sent · Week 2 kick-off booked · Axxiom trusts that you know their business. Build starts Monday.</div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(4)">← Thursday</button>
+      <button onclick="go(0)">← Back to overview</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.day-pill').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+function tog(header){
+  header.closest('.task-block').classList.toggle('open');
+}
+</script>

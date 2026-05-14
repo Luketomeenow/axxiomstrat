@@ -1,0 +1,590 @@
+
+<style>
+  *{box-sizing:border-box}
+  .wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+  .tab-row{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+  .tab{font-size:11px;font-weight:500;padding:5px 13px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+  .tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .panel{display:none}.panel.active{display:block}
+  .lbl{font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 3px}
+  .ttl{font-size:17px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .sub{font-size:13px;color:var(--color-text-secondary);margin:0 0 14px;line-height:1.6}
+  .card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:10px;overflow:hidden}
+  .card-head{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;cursor:pointer}
+  .card-head:hover{background:var(--color-background-secondary)}
+  .card.open .card-head{background:var(--color-background-secondary)}
+  .card-icon{font-size:22px;flex-shrink:0;margin-top:2px}
+  .card-meta{flex:1}
+  .card-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 2px}
+  .card-sub{font-size:11px;color:var(--color-text-tertiary);margin:0}
+  .card-body{display:none;border-top:0.5px solid var(--color-border-tertiary);padding:10px 14px 12px 48px}
+  .card.open .card-body{display:block}
+  .pill{font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;flex-shrink:0}
+  .row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+  .row:last-child{border-bottom:none}
+  .ri{font-size:14px;flex-shrink:0;margin-top:1px}
+  .rt{flex:1;color:var(--color-text-primary);line-height:1.5}
+  .rn{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+  .rt2{font-size:10px;font-weight:500;padding:2px 6px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+  .divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:12px 0}
+  .oc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:10px}
+  .ol{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
+  .fr{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px;gap:8px}
+  .fr:last-child{border-bottom:none}
+  .fk{color:var(--color-text-secondary);flex:1}
+  .fv{font-weight:500;color:var(--color-text-primary);text-align:right;flex-shrink:0}
+  .badge{font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px}
+  .b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+  .b-green{background:var(--color-background-success);color:var(--color-text-success)}
+  .b-amber{background:var(--color-background-warning);color:var(--color-text-warning)}
+  .b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+  .b-purple{background:#EDE9FE;color:#5B21B6}
+  .b-teal{background:#CCFBF1;color:#0F766E}
+  .timeline{display:flex;gap:0;margin-bottom:20px;border-radius:var(--border-radius-md);overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
+  .t-block{flex:1;padding:10px 12px;cursor:pointer;transition:background .15s;border-right:0.5px solid var(--color-border-tertiary)}
+  .t-block:last-child{border-right:none}
+  .t-block:hover{background:var(--color-background-secondary)}
+  .t-block.active{background:var(--color-background-info)}
+  .t-yr{font-size:10px;font-weight:500;margin:0 0 2px}
+  .t-name{font-size:12px;font-weight:500;margin:0 0 1px}
+  .t-tag{font-size:10px;margin:0}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin-bottom:12px}
+  .mini{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px}
+  .mi{font-size:18px;margin-bottom:5px;display:block}
+  .mt{font-size:12px;font-weight:500;color:var(--color-text-primary);margin:0 0 3px}
+  .md{font-size:11px;color:var(--color-text-secondary);margin:0;line-height:1.5}
+  .nav-btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .info-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+  .ii{font-size:14px;color:var(--color-text-tertiary);flex-shrink:0;margin-top:1px}
+  .it{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+  .accent{border-left:3px solid;padding:9px 12px;border-radius:var(--border-radius-md);margin-bottom:8px;background:var(--color-background-secondary)}
+  .accent-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .accent-body{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+  .moat{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+  .moat-rank{font-size:22px;font-weight:700;color:var(--color-text-tertiary);width:28px;flex-shrink:0}
+  .moat-body{flex:1}
+  .moat-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 2px}
+  .moat-desc{font-size:11px;color:var(--color-text-secondary);margin:0;line-height:1.5}
+  .moat-badge{flex-shrink:0}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Strategic 3-year positioning roadmap for Axxiom Elevator in AI and data</h2>
+
+  <div class="tab-row">
+    <button class="tab active" onclick="go(0)">The big picture</button>
+    <button class="tab" onclick="go(1)">Year 1 — Operate</button>
+    <button class="tab" onclick="go(2)">Year 2 — Intelligence</button>
+    <button class="tab" onclick="go(3)">Year 3 — Platform</button>
+    <button class="tab" onclick="go(4)">Competitive moats</button>
+    <button class="tab" onclick="go(5)">The risks</button>
+  </div>
+
+  <!-- BIG PICTURE -->
+  <div id="p0" class="panel active">
+    <p class="lbl">3-year strategic arc</p>
+    <p class="ttl">From service company → intelligence company → platform company</p>
+    <p class="sub">AI and data aren't just tools Axxiom uses internally. Over 3 years, they become the product — the thing clients pay for, regulators rely on, and competitors can't replicate. Each year builds on the last. The sequence is the strategy.</p>
+
+    <div class="timeline">
+      <div class="t-block active" onclick="go(1)">
+        <p class="t-yr" style="color:var(--color-text-info)">Year 1 — 2025</p>
+        <p class="t-name" style="color:var(--color-text-primary)">The Operator</p>
+        <p class="t-tag" style="color:var(--color-text-tertiary)">AI runs the business</p>
+      </div>
+      <div class="t-block" onclick="go(2)">
+        <p class="t-yr" style="color:var(--color-text-success)">Year 2 — 2026</p>
+        <p class="t-name" style="color:var(--color-text-primary)">The Intelligence Layer</p>
+        <p class="t-tag" style="color:var(--color-text-tertiary)">Data becomes product</p>
+      </div>
+      <div class="t-block" onclick="go(3)">
+        <p class="t-yr" style="color:var(--color-text-warning)">Year 3 — 2027</p>
+        <p class="t-name" style="color:var(--color-text-primary)">The Platform</p>
+        <p class="t-tag" style="color:var(--color-text-tertiary)">Others plug into Axxiom</p>
+      </div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">What Axxiom looks like at the end of Year 3</p>
+      <div class="fr"><span class="fk">Primary identity</span><span class="fv">Elevator safety intelligence platform</span></div>
+      <div class="fr"><span class="fk">Revenue mix</span><span class="fv">Service contracts + data products + platform licensing</span></div>
+      <div class="fr"><span class="fk">Competitive position</span><span class="fv">The only elevator company that owns a published safety standard</span></div>
+      <div class="fr"><span class="fk">Data asset</span><span class="fv">Largest independently verified elevator safety dataset in their markets</span></div>
+      <div class="fr"><span class="fk">Regulatory relationship</span><span class="fv">Named data partner to 3+ state elevator boards</span></div>
+      <div class="fr"><span class="fk">Insurance position</span><span class="fv">Preferred safety data provider for 1+ commercial carrier</span></div>
+      <div class="fr"><span class="fk">Expansion model</span><span class="fv">New markets entered in weeks, not months — AHJ data pre-loaded</span></div>
+    </div>
+
+    <div class="info-row">
+      <i class="ti ti-bulb ii" aria-hidden="true"></i>
+      <p class="it">The companies that win in the next decade of AI are not the ones that use AI the most — they're the ones that use AI to build something a competitor would need 5 years to replicate. For Axxiom, that thing is the safety data asset combined with the regulatory and insurance relationships built around it. Those take time. That's why the sequence matters more than the speed.</p>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">Explore Year 1 ↗</button>
+    </div>
+  </div>
+
+  <!-- YEAR 1 -->
+  <div id="p1" class="panel">
+    <p class="lbl">Year 1 — 2025</p>
+    <p class="ttl">The Operator — AI runs the business</p>
+    <p class="sub">Year 1 is about operational excellence at a level competitors can't match. Every internal process runs faster, smarter, and with less human error. The external world doesn't see most of this yet — but Axxiom feels it immediately, and clients start to notice.</p>
+
+    <div class="card open">
+      <div class="card-head" onclick="tog(this)">
+        <span class="card-icon"><i class="ti ti-robot" aria-hidden="true"></i></span>
+        <div class="card-meta">
+          <p class="card-title">Position 1 — The AI-native field service operator</p>
+          <p class="card-sub">Internal · no competitor can match the ops speed or compliance reliability</p>
+        </div>
+        <span class="pill b-blue">Year 1 anchor</span>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="rt">Dispatch agent live — intake to tech assigned in under 8 minutes, compliance gate never missed
+            <p class="rn">KPI: average time-to-dispatch; target 70% reduction vs. baseline</p>
+          </div>
+          <span class="rt2 b-blue">Build</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="rt">Predictive maintenance AI running — zero emergency call-outs on AI-monitored units that weren't flagged first
+            <p class="rn">KPI: emergency call rate per 100 units; target 40% reduction in Year 1</p>
+          </div>
+          <span class="rt2 b-blue">Build</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="rt">Compliance tracker active — no lapsed certificates across the portfolio, ever
+            <p class="rn">KPI: certificate compliance rate; target 100% for all active contracts</p>
+          </div>
+          <span class="rt2 b-blue">Build</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="rt">Data foundation clean — 90%+ asset record completeness, automated capture pipeline live
+            <p class="rn">KPI: data completeness score per market; target 90%+ Green tier</p>
+          </div>
+          <span class="rt2 b-blue">Build</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head" onclick="tog(this)">
+        <span class="card-icon"><i class="ti ti-trending-up" aria-hidden="true"></i></span>
+        <div class="card-meta">
+          <p class="card-title">Position 2 — The fastest-scaling elevator company in new markets</p>
+          <p class="card-sub">Market · AHJ data pre-loaded means new cities in weeks, not months</p>
+        </div>
+        <span class="pill b-green">Year 1 growth</span>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="rt">AHJ rules database covers all target expansion markets — any new city Axxiom enters is compliance-ready from day one
+          </div>
+          <span class="rt2 b-green">Moat</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="rt">Market acquisition playbook — when Axxiom acquires a local elevator company, the AI system absorbs their asset data within 2 weeks and their techs are on the dispatch platform immediately
+          </div>
+          <span class="rt2 b-green">Scale</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="rt">Pitch to enterprise clients (hotel chains, hospital systems): "We can take over your 47-unit portfolio in 3 states and be fully compliant and operational in 30 days." No competitor can match that timeline.
+          </div>
+          <span class="rt2 b-green">Revenue</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head" onclick="tog(this)">
+        <span class="card-icon"><i class="ti ti-file-report" aria-hidden="true"></i></span>
+        <div class="card-meta">
+          <p class="card-title">Position 3 — First annual elevator safety report published</p>
+          <p class="card-sub">External · first public signal of the trusted data company positioning</p>
+        </div>
+        <span class="pill b-amber">Year 1 launch</span>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="rt">Published at end of Year 1 with 12 months of clean pipeline data — inspection pass rates, MTBF by equipment type, PM compliance rates, top fault codes
+          </div>
+          <span class="rt2 b-amber">Launch</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="rt">Pitched to: Elevator World magazine, Facilities Management Journal, Building Operating Management, and submitted to NAEC for recognition
+          </div>
+          <span class="rt2 b-amber">PR</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="rt">Sent to every current client as a value-add — "Here's what we know about elevator safety across the industry, and here's how your fleet compares"
+          </div>
+          <span class="rt2 b-amber">Retention</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(0)">← Big picture</button>
+      <button onclick="go(2)">Year 2 ↗</button>
+    </div>
+  </div>
+
+  <!-- YEAR 2 -->
+  <div id="p2" class="panel">
+    <p class="lbl">Year 2 — 2026</p>
+    <p class="ttl">The Intelligence Layer — data becomes the product</p>
+    <p class="sub">Year 2 is when Axxiom's internal data asset becomes a client-facing product and an external authority signal. The ops AI from Year 1 is the engine. Year 2 is about building what that engine produces into things clients pay for and regulators rely on.</p>
+
+    <div class="card open">
+      <div class="card-head" onclick="tog(this)">
+        <span class="card-icon"><i class="ti ti-shield-check" aria-hidden="true"></i></span>
+        <div class="card-meta">
+          <p class="card-title">Position 4 — Elevator safety certification authority</p>
+          <p class="card-sub">Market-defining · "Axxiom Certified" becomes a procurement signal</p>
+        </div>
+        <span class="pill b-purple">Year 2 flagship</span>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <i class="ti ti-check ri" style="color:#5B21B6" aria-hidden="true"></i>
+          <div class="rt">Launch the Axxiom Safety Certification — buildings with full PM compliance, zero lapsed certs, and risk score above threshold earn the certificate. Displayed in lobby, included in marketing materials.
+            <p class="rn">Positioned for: premium hotel brands, JCI-accredited hospitals, Class A commercial real estate</p>
+          </div>
+          <span class="rt2 b-purple">Launch</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:#5B21B6" aria-hidden="true"></i>
+          <div class="rt">Work with NAEC and vertical associations to get the certification recognised in procurement RFPs and vendor qualification documents
+            <p class="rn">Once 3+ hotel brands include "Axxiom Certified preferred" in their elevator vendor specs, the certification drives Axxiom's sales without Axxiom doing the selling</p>
+          </div>
+          <span class="rt2 b-purple">Moat</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:#5B21B6" aria-hidden="true"></i>
+          <div class="rt">Annual recertification model — clients pay a fee to maintain the certification, which requires staying on Axxiom's service contract. Converts from a one-time credential to a recurring revenue anchor.
+          </div>
+          <span class="rt2 b-purple">Revenue</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head" onclick="tog(this)">
+        <span class="card-icon"><i class="ti ti-building-community" aria-hidden="true"></i></span>
+        <div class="card-meta">
+          <p class="card-title">Position 5 — Regulatory data partner</p>
+          <p class="card-sub">Government-level credibility · shapes standards rather than just complying with them</p>
+        </div>
+        <span class="pill b-green">Year 2 authority</span>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="rt">Formalise data-sharing agreements with 2–3 state elevator boards — Axxiom provides anonymised quarterly safety trend data, boards get better statistics for policy-making
+            <p class="rn">Target states: FL (largest market), NY (highest profile), TX (fastest growth)</p>
+          </div>
+          <span class="rt2 b-green">Partner</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="rt">When a state elevator board publishes its annual statistics and cites "data provided by Axxiom Elevator" — that citation is worth more than any advertising spend. It is permanent third-party validation.
+          </div>
+          <span class="rt2 b-green">Credibility</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="rt">Position Axxiom's technical leadership on ASME A17 or state elevator code revision committees — the company that helps write the inspection standard has an insurmountable advantage in complying with it
+          </div>
+          <span class="rt2 b-green">Standard-setter</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head" onclick="tog(this)">
+        <span class="card-icon"><i class="ti ti-shield" aria-hidden="true"></i></span>
+        <div class="card-meta">
+          <p class="card-title">Position 6 — Insurance industry data partner</p>
+          <p class="card-sub">New revenue channel · turns safety data into underwriting intelligence</p>
+        </div>
+        <span class="pill b-amber">Year 2 revenue</span>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="rt">Sign the first insurance carrier data partnership — Axxiom provides a structured safety report format that the carrier accepts for underwriting purposes. Buildings with Axxiom safety reports qualify for expedited review or preferred pricing.
+          </div>
+          <span class="rt2 b-amber">Deal</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="rt">Axxiom becomes the carrier's preferred elevator safety data provider for their commercial property book — carrier promotes Axxiom to their 50,000+ policyholders as a recommended vendor
+            <p class="rn">This is a distribution channel that costs nothing to maintain once the partnership is signed</p>
+          </div>
+          <span class="rt2 b-amber">Distribution</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="rt">Insurance-grade safety report becomes a paid product — property owners pay for it to support their insurance application or claims process. Axxiom earns from clients who aren't even on a service contract.
+          </div>
+          <span class="rt2 b-amber">New revenue</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head" onclick="tog(this)">
+        <span class="card-icon"><i class="ti ti-activity" aria-hidden="true"></i></span>
+        <div class="card-meta">
+          <p class="card-title">Position 7 — Real-time IoT safety network</p>
+          <p class="card-sub">Technology · moves from periodic to continuous safety monitoring</p>
+        </div>
+        <span class="pill b-teal">Year 2 tech</span>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <i class="ti ti-check ri" style="color:#0F766E" aria-hidden="true"></i>
+          <div class="rt">Deploy IoT sensors (vibration, door cycles, motor current, temperature) on premium-tier clients — creates a real-time safety monitoring network across the fleet
+            <p class="rn">Start with 20% of fleet — hospital and hotel verticals where downtime cost is highest</p>
+          </div>
+          <span class="rt2 b-teal">Deploy</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:#0F766E" aria-hidden="true"></i>
+          <div class="rt">IoT data feeds directly into the predictive model — failure prediction accuracy improves from 70% to 90%+ with real-time sensor input vs. service history alone
+          </div>
+          <span class="rt2 b-teal">Accuracy</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:#0F766E" aria-hidden="true"></i>
+          <div class="rt">Packaged as "Axxiom LiveSafe" — monthly per-unit subscription. Clients see their elevator's real-time health status from a mobile app. Stickiest product Axxiom will ever build — once clients see it, they never want to go back to not knowing.
+          </div>
+          <span class="rt2 b-teal">Product</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">← Year 1</button>
+      <button onclick="go(3)">Year 3 ↗</button>
+    </div>
+  </div>
+
+  <!-- YEAR 3 -->
+  <div id="p3" class="panel">
+    <p class="lbl">Year 3 — 2027</p>
+    <p class="ttl">The Platform — others plug into Axxiom</p>
+    <p class="sub">Year 3 is the shift from a company that uses a platform to a company that is a platform. Axxiom's data, standards, and AI infrastructure become something other operators, property managers, and technology companies integrate with — generating revenue that scales without adding service headcount.</p>
+
+    <div class="card open">
+      <div class="card-head" onclick="tog(this)">
+        <span class="card-icon"><i class="ti ti-layout-grid" aria-hidden="true"></i></span>
+        <div class="card-meta">
+          <p class="card-title">Position 8 — Elevator safety data API</p>
+          <p class="card-sub">Platform play · facility management systems embed Axxiom data natively</p>
+        </div>
+        <span class="pill b-red">Year 3 platform</span>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+          <div class="rt">Launch a public API for facility management platforms (Yardi, MRI, Planon, IBM Maximo) — Axxiom's safety scores, compliance status, and maintenance data feed directly into the CMMS tools property managers already use daily
+            <p class="rn">When Axxiom's data is inside Yardi, every Yardi customer who owns elevators becomes a potential Axxiom client</p>
+          </div>
+          <span class="rt2 b-red">Launch</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+          <div class="rt">API pricing: tiered subscription per property or per data call — creates a recurring revenue stream from organisations that aren't Axxiom service clients but want the safety intelligence
+          </div>
+          <span class="rt2 b-red">Revenue</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+          <div class="rt">Every integration partner becomes a sales channel — facility managers who see their elevator's Axxiom safety score in their CMMS dashboard and it shows "unmonitored" are a warm lead for the service contract
+          </div>
+          <span class="rt2 b-red">Flywheel</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head" onclick="tog(this)">
+        <span class="card-icon"><i class="ti ti-users" aria-hidden="true"></i></span>
+        <div class="card-meta">
+          <p class="card-title">Position 9 — White-label platform for independent elevator operators</p>
+          <p class="card-sub">B2B SaaS · smaller operators pay to run on Axxiom's AI infrastructure</p>
+        </div>
+        <span class="pill b-purple">Year 3 SaaS</span>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <i class="ti ti-check ri" style="color:#5B21B6" aria-hidden="true"></i>
+          <div class="rt">Small and mid-sized elevator companies (1–10 techs) cannot afford to build what Axxiom built. License the dispatch agent, compliance tracker, and predictive maintenance system to them under a white-label SaaS model.
+            <p class="rn">Pricing: $X per technician per month. At 500 techs across 50 small operators = significant recurring revenue with zero service delivery cost</p>
+          </div>
+          <span class="rt2 b-purple">SaaS</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:#5B21B6" aria-hidden="true"></i>
+          <div class="rt">Every SaaS client contributes anonymised data back to the Axxiom safety dataset — the platform grows the data asset even from operators Axxiom doesn't directly service
+            <p class="rn">This is how the dataset becomes genuinely industry-wide rather than just Axxiom's own portfolio</p>
+          </div>
+          <span class="rt2 b-purple">Data moat</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:#5B21B6" aria-hidden="true"></i>
+          <div class="rt">Strategic optionality: at Year 3, Axxiom can choose to acquire the best-performing SaaS clients (regional operators with strong local market share) using their own platform data to evaluate the acquisition target
+          </div>
+          <span class="rt2 b-purple">M&A</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head" onclick="tog(this)">
+        <span class="card-icon"><i class="ti ti-building-skyscraper" aria-hidden="true"></i></span>
+        <div class="card-meta">
+          <p class="card-title">Position 10 — The Axxiom Safety Standard</p>
+          <p class="card-sub">Industry-defining · the certification becomes the market benchmark</p>
+        </div>
+        <span class="pill b-amber">Year 3 legacy</span>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="rt">By Year 3, "Axxiom Certified" appears in hotel brand standards, hospital procurement requirements, and commercial real estate lease agreements as a preferred or required elevator safety credential
+          </div>
+          <span class="rt2 b-amber">Standard</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="rt">The Elevator Safety Index (quarterly benchmark) is cited by trade press, referenced by state regulators, and used by insurance actuaries — Axxiom is the source, not a contributor
+          </div>
+          <span class="rt2 b-amber">Authority</span>
+        </div>
+        <div class="row">
+          <i class="ti ti-check ri" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="rt">Strategic endgame: Axxiom is acquired by a major elevator OEM (Otis, KONE, Schindler, TK Elevator) or private equity at a platform multiple — not a service company multiple. The difference is 3–5× in valuation.
+          </div>
+          <span class="rt2 b-amber">Exit</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(2)">← Year 2</button>
+      <button onclick="go(4)">Competitive moats ↗</button>
+    </div>
+  </div>
+
+  <!-- MOATS -->
+  <div id="p4" class="panel">
+    <p class="lbl">Competitive moats</p>
+    <p class="ttl">What makes this impossible to copy by Year 3</p>
+    <p class="sub">A competitor can copy a product feature in 6 months. They cannot copy these five things without starting 3 years ago. Each moat compounds — the longer Axxiom holds the position, the harder it gets for anyone else to close the gap.</p>
+
+    <div class="moat">
+      <span class="moat-rank" style="color:var(--color-text-danger)">01</span>
+      <div class="moat-body">
+        <p class="moat-title">The proprietary safety dataset</p>
+        <p class="moat-desc">3 years of structured, validated, fault-coded service data across thousands of units in multiple markets and verticals. A new entrant can build the system in 6 months — they cannot build 3 years of clean historical data. The dataset IS the moat.</p>
+      </div>
+      <span class="moat-badge"><span class="badge b-red">Uncopiable</span></span>
+    </div>
+
+    <div class="moat">
+      <span class="moat-rank" style="color:var(--color-text-warning)">02</span>
+      <div class="moat-body">
+        <p class="moat-title">Regulatory relationships and citation</p>
+        <p class="moat-desc">Being named in a state elevator board's annual report as a data source takes years of relationship building. Once Axxiom is cited, no competitor can cite the same AHJ. The first mover owns the relationship.</p>
+      </div>
+      <span class="moat-badge"><span class="badge b-amber">First mover</span></span>
+    </div>
+
+    <div class="moat">
+      <span class="moat-rank" style="color:var(--color-text-success)">03</span>
+      <div class="moat-body">
+        <p class="moat-title">The Axxiom Safety Certification standard</p>
+        <p class="moat-desc">A certification that appears in procurement documents is a lock-in mechanism. Buildings won't switch elevator companies if switching means losing the certification. And competitors can't offer the same certification — it's Axxiom's IP.</p>
+      </div>
+      <span class="moat-badge"><span class="badge b-green">Lock-in</span></span>
+    </div>
+
+    <div class="moat">
+      <span class="moat-rank" style="color:var(--color-text-info)">04</span>
+      <div class="moat-body">
+        <p class="moat-title">AHJ rules database</p>
+        <p class="moat-desc">Every AHJ jurisdiction mapped, maintained, and embedded in the dispatch compliance gate. Axxiom can enter a new market in days. A competitor starting from zero needs 6–12 months to build the same coverage. This accelerates market expansion at a rate no competitor can match.</p>
+      </div>
+      <span class="moat-badge"><span class="badge b-blue">Speed moat</span></span>
+    </div>
+
+    <div class="moat">
+      <span class="moat-rank" style="color:#5B21B6">05</span>
+      <div class="moat-body">
+        <p class="moat-title">Platform network effects</p>
+        <p class="moat-desc">Once SaaS operators and facility management platforms integrate with Axxiom's data API, every new unit added to the network improves the dataset for everyone. This is a classic network effect — more data makes the product better, which attracts more users, which generates more data.</p>
+      </div>
+      <span class="moat-badge"><span class="badge b-purple">Network effect</span></span>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(3)">← Year 3</button>
+      <button onclick="go(5)">The risks ↗</button>
+    </div>
+  </div>
+
+  <!-- RISKS -->
+  <div id="p5" class="panel">
+    <p class="lbl">Honest assessment</p>
+    <p class="ttl">The risks that could derail this — and how to hedge them</p>
+    <p class="sub">Every strategic plan looks clean on paper. These are the three scenarios most likely to slow or stop Axxiom's 3-year arc — and what to do about each one.</p>
+
+    <div class="accent" style="border-left-color:var(--color-text-danger)">
+      <p class="accent-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> &nbsp;Risk 1 — An elevator OEM (Otis, KONE, Schindler) launches their own AI platform first</p>
+      <p class="accent-body">The OEMs have the scale, the install base, and the capital. If Otis launches a safety data platform in 2025, Axxiom's platform play is much harder. The hedge: move fast on the regulatory and insurance partnerships in Year 1–2. OEMs are slow to work with regulators and will avoid insurance partnerships (conflicts with their OEM liability interests). Axxiom can own those relationships before any OEM gets there.</p>
+    </div>
+
+    <div class="accent" style="border-left-color:var(--color-text-warning)">
+      <p class="accent-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> &nbsp;Risk 2 — Internal adoption failure — techs and dispatchers don't use the system</p>
+      <p class="accent-body">The most common reason AI systems fail in field service is not technology — it's adoption. If techs find workarounds to avoid the structured job close form, the data pipeline breaks and the entire strategy collapses. The hedge: involve techs in the design from Week 1, make the form faster than free text, and tie performance reviews to data quality metrics (not just job completion). Make compliance the path of least resistance.</p>
+    </div>
+
+    <div class="accent" style="border-left-color:var(--color-text-info)">
+      <p class="accent-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> &nbsp;Risk 3 — Scaling operations faster than the data quality can keep up</p>
+      <p class="accent-body">If Axxiom enters 5 new markets in Year 2 and the data foundation isn't solid, the safety report becomes unreliable and the regulatory partnerships become embarrassing rather than credibility-building. The hedge: market expansion in Year 1–2 is limited to markets where the AHJ database is already complete and the data pipeline is already running. Never enter a market where you can't immediately capture clean data from day one.</p>
+    </div>
+
+    <div class="oc" style="margin-top:14px">
+      <p class="ol">The one thing that guarantees failure</p>
+      <div class="fr"><span class="fk" style="font-size:13px;color:var(--color-text-primary)">Treating the AI as a cost-reduction tool rather than a competitive positioning tool.</span></div>
+      <div class="fr"><span class="fk">If Axxiom's leadership sees "dispatch automation" as a way to reduce dispatcher headcount and nothing more, they will capture 10% of the value and miss the 90% that comes from using the same system to build a data asset, earn regulatory relationships, and own an industry standard. The technology is the same. The ambition is the difference.</span></div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(4)">← Moats</button>
+      <button onclick="go(0)">← Back to overview</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+function tog(h){h.closest('.card').classList.toggle('open')}
+</script>

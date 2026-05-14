@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Axxiom Elevator — Brand Guidelines</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Barlow+Condensed:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-950: #070F1E;
+    --navy-900: #0B1628;
+    --navy-800: #0F1E38;
+    --navy-700: #152645;
+    --navy-600: #1B3264;
+    --navy-primary: #1C3F8A;
+    --cyan-primary: #00B4D8;
+    --cyan-light: #26CCE8;
+    --cyan-dark: #0090B0;
+    --mid-blue: #2A6DB5;
+    --slate: #4B6899;
+    --text-white: #FFFFFF;
+    --text-light: #C8D8F0;
+    --text-muted: #7A9BBC;
+    --border: rgba(255,255,255,0.1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--navy-950);
+    color: var(--text-white);
+    line-height: 1.6;
+  }
+
+  .page-break { page-break-after: always; }
+
+  /* ── SECTION SYSTEM ── */
+  section {
+    min-height: 100vh;
+    padding: 80px 80px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .section-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cyan-primary);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 56px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+  }
+
+  .section-title span { color: var(--cyan-primary); }
+
+  /* ── COVER ── */
+  #cover {
+    background: var(--navy-900);
+    position: relative;
+    overflow: hidden;
+    justify-content: space-between;
+    padding: 60px 80px;
+  }
+
+  .cover-bg-mark {
+    position: absolute;
+    right: -120px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 700px;
+    height: 700px;
+    opacity: 0.04;
+  }
+
+  .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .cover-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--cyan-primary);
+  }
+
+  .cover-version {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  .cover-main { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 80px 0; }
+
+  .cover-logo-area {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin-bottom: 48px;
+  }
+
+  .logo-mark-svg { flex-shrink: 0; }
+
+  .cover-wordmark {
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+
+  .cover-wordmark-top {
+    font-size: 72px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    color: var(--text-white);
+    text-transform: uppercase;
+  }
+
+  .cover-wordmark-top span { color: var(--cyan-primary); }
+
+  .cover-wordmark-bottom {
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .cover-tagline {
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .cover-tagline em { color: var(--cyan-primary); font-style: normal; font-weight: 500; }
+
+  .cover-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+  }
+
+  .cover-meta { font-size: 12px; color: var(--text-muted); }
+
+  /* ── DIVIDER LINE ── */
+  .rule { height: 1px; background: var(--border); margin: 40px 0; }
+  .rule-cyan { height: 2px; background: var(--cyan-primary); width: 60px; margin: 0 0 32px; }
+
+  /* ── LOGO SECTION ── */
+  .logo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .logo-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .logo-card-bg-dark { background: var(--navy-800); padding: 60px 40px; display: flex; align-items: center; justify-content: center; min-height: 200px; }
+  .logo-card-bg-light { background: #FFFFFF; padding: 60px 40px; display: flex; align-items: center; justify-content: center; min-height: 200px; }
+  .logo-card-bg-cyan { background: var(--cyan-primary); padding: 60px 40px; display: flex; align-items: center; justify-content: center; min-height: 200px; }
+  .logo-card-bg-navy { background: var(--navy-primary); padding: 60px 40px; display: flex; align-items: center; justify-content: center; min-height: 200px; }
+
+  .logo-card-label {
+    padding: 12px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    background: var(--navy-900);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo-card-tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: rgba(0,180,216,0.15);
+    color: var(--cyan-primary);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── COLOR SYSTEM ── */
+  .color-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 40px; }
+
+  .color-swatch {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .swatch-color { height: 100px; }
+  .swatch-info { padding: 12px 14px; background: var(--navy-800); }
+  .swatch-name { font-size: 12px; font-weight: 600; color: var(--text-white); margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .swatch-hex { font-size: 11px; color: var(--text-muted); font-family: monospace; letter-spacing: 0.05em; }
+  .swatch-usage { font-size: 10px; color: var(--slate); margin-top: 4px; }
+
+  /* ── TYPOGRAPHY ── */
+  .type-specimen { margin-bottom: 32px; border-bottom: 1px solid var(--border); padding-bottom: 32px; }
+  .type-label { font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+  .type-meta { font-size: 11px; color: var(--slate); margin-top: 8px; }
+
+  .t-h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 64px; font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; line-height: 1; }
+  .t-h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 44px; font-weight: 700; text-transform: uppercase; letter-spacing: 0; line-height: 1.1; }
+  .t-h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; line-height: 1.2; }
+  .t-eyebrow { font-family: 'Barlow', sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.22em; color: var(--cyan-primary); }
+  .t-body { font-family: 'Barlow', sans-serif; font-size: 16px; font-weight: 400; line-height: 1.7; color: var(--text-light); max-width: 560px; }
+  .t-caption { font-family: 'Barlow', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.06em; color: var(--text-muted); text-transform: uppercase; }
+
+  /* ── CLEAR SPACE ── */
+  .clearspace-demo {
+    background: var(--navy-800);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .clearspace-inner {
+    border: 2px dashed rgba(0,180,216,0.3);
+    padding: 40px;
+    position: relative;
+  }
+
+  .clearspace-label {
+    position: absolute;
+    font-size: 10px;
+    color: var(--cyan-primary);
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .cs-top { top: -20px; left: 50%; transform: translateX(-50%); }
+  .cs-left { left: -40px; top: 50%; transform: translateY(-50%) rotate(-90deg); }
+  .cs-right { right: -44px; top: 50%; transform: translateY(-50%) rotate(90deg); }
+  .cs-bottom { bottom: -20px; left: 50%; transform: translateX(-50%); }
+
+  /* ── SIZING TABLE ── */
+  .size-table { width: 100%; border-collapse: collapse; margin-bottom: 32px; }
+  .size-table th { text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); padding: 10px 16px; border-bottom: 1px solid var(--border); }
+  .size-table td { padding: 12px 16px; font-size: 13px; color: var(--text-light); border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .size-table tr:last-child td { border-bottom: none; }
+
+  /* ── DO / DON'T ── */
+  .dos-donts { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px; }
+
+  .do-card, .dont-card {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .do-card-top { background: rgba(0,184,124,0.08); border-bottom: 2px solid #00B87C; padding: 40px; display: flex; align-items: center; justify-content: center; min-height: 160px; }
+  .dont-card-top { background: rgba(239,68,68,0.08); border-bottom: 2px solid #EF4444; padding: 40px; display: flex; align-items: center; justify-content: center; min-height: 160px; }
+
+  .do-label { padding: 12px 16px; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; background: var(--navy-800); }
+  .do-label span { color: #00B87C; margin-right: 8px; }
+  .dont-label { padding: 12px 16px; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; background: var(--navy-800); }
+  .dont-label span { color: #EF4444; margin-right: 8px; }
+
+  .do-desc, .dont-desc { padding: 12px 16px; font-size: 12px; color: var(--text-muted); background: var(--navy-900); line-height: 1.5; }
+
+  /* ── VOICE SECTION ── */
+  .voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px; }
+
+  .voice-card {
+    background: var(--navy-800);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+  }
+
+  .voice-card h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--cyan-primary);
+    margin-bottom: 12px;
+  }
+
+  .voice-card p { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; }
+
+  .voice-example {
+    background: var(--navy-700);
+    border-left: 3px solid var(--cyan-primary);
+    padding: 12px 14px;
+    border-radius: 0 4px 4px 0;
+    font-size: 13px;
+    color: var(--text-light);
+    font-style: italic;
+  }
+
+  /* ── GRADIENT MARK SVG ── */
+  .gradient-fill { background: linear-gradient(135deg, var(--cyan-primary) 0%, var(--navy-primary) 100%); }
+
+  /* ── APPLICATIONS ── */
+  .app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+  .app-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .app-preview { padding: 32px; min-height: 180px; display: flex; flex-direction: column; justify-content: space-between; }
+  .app-card-label { padding: 12px 16px; background: var(--navy-800); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); border-top: 1px solid var(--border); }
+
+  /* Email signature mockup */
+  .email-sig { background: #FFFFFF; padding: 24px 32px; }
+  .sig-name { font-family: 'Barlow', sans-serif; font-size: 16px; font-weight: 700; color: #1C3F8A; }
+  .sig-title { font-size: 12px; color: #4B6899; margin: 2px 0 12px; }
+  .sig-divider { height: 2px; width: 100%; background: linear-gradient(90deg, #00B4D8, #1C3F8A); margin: 12px 0; }
+  .sig-contact { font-size: 11px; color: #4B6899; }
+  .sig-company { font-size: 12px; font-weight: 700; color: #1C3F8A; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 8px; }
+
+  /* Business card mockup */
+  .biz-front { background: var(--navy-primary); padding: 28px; min-height: 160px; display: flex; flex-direction: column; justify-content: space-between; }
+  .biz-name { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; text-transform: uppercase; color: white; }
+  .biz-title { font-size: 11px; color: var(--cyan-primary); text-transform: uppercase; letter-spacing: 0.1em; }
+  .biz-contact { font-size: 10px; color: rgba(255,255,255,0.6); line-height: 1.7; }
+  .biz-back { background: var(--cyan-primary); padding: 28px; min-height: 120px; display: flex; align-items: center; justify-content: center; }
+
+  /* Social post mockup */
+  .social-post { background: var(--navy-800); padding: 24px; }
+  .social-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .social-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--navy-primary); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--cyan-primary); }
+  .social-name { font-size: 13px; font-weight: 600; color: white; }
+  .social-handle { font-size: 11px; color: var(--text-muted); }
+  .social-text { font-size: 13px; color: var(--text-light); line-height: 1.6; }
+  .social-hashtag { color: var(--cyan-primary); }
+
+  /* ── PRINT OVERRIDE ── */
+  @media print {
+    section { page-break-inside: avoid; min-height: auto; }
+    body { background: white; color: black; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    section { padding: 60px 32px; }
+    .logo-grid, .dos-donts, .voice-grid, .app-grid { grid-template-columns: 1fr; }
+    .color-row { grid-template-columns: repeat(3, 1fr); }
+    .section-title { font-size: 36px; }
+    .cover-wordmark-top { font-size: 48px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- COVER -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="cover">
+
+  <!-- Background mark -->
+  <svg class="cover-bg-mark" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M40 10 L100 90 L60 140 L10 60 Z M160 10 L100 90 L140 140 L190 60 Z M70 150 L100 90 L130 150 L100 195 Z M100 5 L100 90 L100 5Z" stroke="white" stroke-width="8" fill="none"/>
+  </svg>
+
+  <div class="cover-top">
+    <div class="cover-eyebrow">Brand Guidelines</div>
+    <div class="cover-version">Version 1.0 · 2026</div>
+  </div>
+
+  <div class="cover-main">
+    <div class="cover-logo-area">
+      <!-- Axxiom X mark SVG (reproduced from logo analysis) -->
+      <svg class="logo-mark-svg" width="80" height="80" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="120" x2="120" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#00B4D8"/>
+            <stop offset="100%" stop-color="#1C3F8A"/>
+          </linearGradient>
+        </defs>
+        <path d="M15 10 L45 55 L35 75 L5 30 Z" fill="url(#logoGrad)"/>
+        <path d="M50 10 L80 55 L95 30 L65 10 Z" fill="url(#logoGrad)"/>
+        <path d="M35 75 L55 105 L65 90 L45 55 Z" fill="url(#logoGrad)"/>
+        <path d="M80 55 L65 90 L75 110 L105 65 Z" fill="url(#logoGrad)"/>
+        <path d="M45 55 L60 75 L75 55 L60 35 Z" fill="url(#logoGrad)" opacity="0.6"/>
+        <path d="M95 30 L115 10 L105 10 L80 55 Z" fill="url(#logoGrad)" opacity="0.8"/>
+        <path d="M5 30 L15 10 L5 10 Z" fill="url(#logoGrad)" opacity="0.6"/>
+      </svg>
+
+      <div class="cover-wordmark">
+        <div class="cover-wordmark-top">AXXIOM <span>ELEVATOR</span></div>
+        <div class="cover-wordmark-bottom">Reliability In Motion™</div>
+      </div>
+    </div>
+
+    <div class="rule-cyan"></div>
+
+    <div class="cover-tagline">
+      These guidelines define how the <em>Axxiom Elevator</em> brand appears across all<br>
+      communications — internal and external, digital and print.
+    </div>
+  </div>
+
+  <div class="cover-bottom">
+    <div class="cover-meta">Axxiom Elevator, LLC · Pompano Beach, FL · axxiomelevator.com</div>
+    <div class="cover-meta">Confidential — Internal Use</div>
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 01 BRAND ESSENCE -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="essence">
+  <div class="section-num">01 — Brand Essence</div>
+  <h2 class="section-title">Who We <span>Are</span></h2>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start;">
+
+    <div>
+      <div class="rule-cyan"></div>
+      <div style="margin-bottom: 40px;">
+        <div class="t-eyebrow" style="margin-bottom: 12px;">Mission</div>
+        <p class="t-body">To deliver uncompromising elevator reliability and safety intelligence to the buildings and communities that depend on vertical transportation — every day, in every market we serve.</p>
+      </div>
+      <div style="margin-bottom: 40px;">
+        <div class="t-eyebrow" style="margin-bottom: 12px;">Vision</div>
+        <p class="t-body">To become the most trusted elevator safety intelligence company in the United States — setting the standard that the industry follows.</p>
+      </div>
+      <div>
+        <div class="t-eyebrow" style="margin-bottom: 12px;">Tagline</div>
+        <p style="font-family: 'Barlow Condensed', sans-serif; font-size: 36px; font-weight: 700; text-transform: uppercase; color: var(--cyan-primary); letter-spacing: 0.02em;">Reliability In Motion™</p>
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: 10px;">Not a slogan — a promise. Every job, every technician, every market.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="t-eyebrow" style="margin-bottom: 20px;">Brand Pillars</div>
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+
+        <div style="background: var(--navy-800); border: 1px solid var(--border); border-left: 3px solid var(--cyan-primary); border-radius: 0 8px 8px 0; padding: 20px 24px;">
+          <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: white; margin-bottom: 6px;">Reliability</div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">We show up, on time, every time. Our systems, our people, and our data are built around keeping elevators running — before problems happen.</p>
+        </div>
+
+        <div style="background: var(--navy-800); border: 1px solid var(--border); border-left: 3px solid var(--mid-blue); border-radius: 0 8px 8px 0; padding: 20px 24px;">
+          <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: white; margin-bottom: 6px;">Intelligence</div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">We know more about elevator safety than any independent operator in our markets. That knowledge protects our clients and sets our standard apart.</p>
+        </div>
+
+        <div style="background: var(--navy-800); border: 1px solid var(--border); border-left: 3px solid var(--navy-primary); border-radius: 0 8px 8px 0; padding: 20px 24px;">
+          <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: white; margin-bottom: 6px;">Partnership</div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">We don't just service buildings — we partner with the people responsible for them. Their problems are our problems, and we solve them proactively.</p>
+        </div>
+
+        <div style="background: var(--navy-800); border: 1px solid var(--border); border-left: 3px solid rgba(0,180,216,0.4); border-radius: 0 8px 8px 0; padding: 20px 24px;">
+          <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: white; margin-bottom: 6px;">Compliance</div>
+          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">We take the complexity of regulatory compliance off our clients' plates entirely. Every jurisdiction. Every certification. Every renewal. Handled.</p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 02 LOGO SYSTEM -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="logo">
+  <div class="section-num">02 — Logo System</div>
+  <h2 class="section-title">The <span>Mark</span></h2>
+
+  <p class="t-body" style="margin-bottom: 40px;">The Axxiom mark is a geometric double-X formed by two interlocking arrow shapes — representing forward motion, precision, and dual strength. The gradient from cyan to deep navy embodies the transition from energy to trust. Never alter, rotate, or distort the mark.</p>
+
+  <div class="logo-grid">
+
+    <div class="logo-card">
+      <div class="logo-card-bg-dark">
+        <img src="/mnt/user-data/uploads/Logo_2.png" style="max-width: 260px; max-height: 130px; object-fit: contain;" alt="Axxiom Elevator primary logo on dark background">
+      </div>
+      <div class="logo-card-label">
+        Primary — Dark Backgrounds
+        <span class="logo-card-tag">Preferred</span>
+      </div>
+    </div>
+
+    <div class="logo-card">
+      <div class="logo-card-bg-light">
+        <img src="/mnt/user-data/uploads/Logo_2.png" style="max-width: 260px; max-height: 130px; object-fit: contain;" alt="Axxiom Elevator primary logo on white background">
+      </div>
+      <div class="logo-card-label">
+        Primary — Light Backgrounds
+        <span class="logo-card-tag">Approved</span>
+      </div>
+    </div>
+
+    <div class="logo-card">
+      <div class="logo-card-bg-dark">
+        <img src="/mnt/user-data/uploads/Logo.png" style="max-width: 110px; max-height: 110px; object-fit: contain;" alt="Axxiom icon mark">
+      </div>
+      <div class="logo-card-label">
+        Icon Mark — Dark Backgrounds
+        <span class="logo-card-tag">App Icons · Avatars</span>
+      </div>
+    </div>
+
+    <div class="logo-card">
+      <div class="logo-card-bg-navy">
+        <img src="/mnt/user-data/uploads/Logo.png" style="max-width: 110px; max-height: 110px; object-fit: contain;" alt="Axxiom icon mark on navy">
+      </div>
+      <div class="logo-card-label">
+        Icon Mark — Navy Backgrounds
+        <span class="logo-card-tag">Branded Materials</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Clear space -->
+  <div class="t-eyebrow" style="margin-bottom: 20px;">Clear Space</div>
+  <div class="clearspace-demo">
+    <div class="clearspace-inner">
+      <span class="clearspace-label cs-top">1× X-height</span>
+      <span class="clearspace-label cs-left">1× X-height</span>
+      <span class="clearspace-label cs-right">1× X-height</span>
+      <span class="clearspace-label cs-bottom">1× X-height</span>
+      <img src="/mnt/user-data/uploads/Logo_2.png" style="max-width: 220px; max-height: 110px; object-fit: contain; display: block;" alt="Logo with clear space indicator">
+    </div>
+  </div>
+  <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 40px;">Always maintain a minimum clear space equal to the height of the "X" in the wordmark on all sides of the logo. No text, graphics, or other logos may appear within this zone.</p>
+
+  <!-- Minimum sizes -->
+  <div class="t-eyebrow" style="margin-bottom: 16px;">Minimum Sizes</div>
+  <table class="size-table">
+    <thead>
+      <tr>
+        <th>Logo Version</th>
+        <th>Digital (px)</th>
+        <th>Print (mm)</th>
+        <th>Use Case</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Primary (horizontal)</td><td>180px wide</td><td>45mm wide</td><td>Documents, presentations, marketing</td></tr>
+      <tr><td>Primary (stacked)</td><td>140px wide</td><td>35mm wide</td><td>Square-format placements</td></tr>
+      <tr><td>Icon mark only</td><td>32px wide</td><td>8mm wide</td><td>App icons, favicons, social avatars</td></tr>
+    </tbody>
+  </table>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 03 COLOR PALETTE -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="colors">
+  <div class="section-num">03 — Color System</div>
+  <h2 class="section-title">Color <span>Palette</span></h2>
+
+  <div class="t-eyebrow" style="margin-bottom: 20px;">Primary Colors</div>
+  <div class="color-row" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 40px;">
+
+    <div class="color-swatch">
+      <div class="swatch-color" style="background: #00B4D8;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Axxiom Cyan</div>
+        <div class="swatch-hex">#00B4D8</div>
+        <div class="swatch-usage">Brand accent · Key numbers · CTAs · Icon mark left</div>
+      </div>
+    </div>
+
+    <div class="color-swatch">
+      <div class="swatch-color" style="background: #1C3F8A;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Axxiom Navy</div>
+        <div class="swatch-hex">#1C3F8A</div>
+        <div class="swatch-usage">Wordmark · Headlines · Primary surfaces · Icon mark right</div>
+      </div>
+    </div>
+
+    <div class="color-swatch">
+      <div class="swatch-color" style="background: linear-gradient(135deg, #00B4D8, #1C3F8A);"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Brand Gradient</div>
+        <div class="swatch-hex">#00B4D8 → #1C3F8A</div>
+        <div class="swatch-usage">Logo mark only · Not used on type or UI elements</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="t-eyebrow" style="margin-bottom: 20px;">Dark Background Scale</div>
+  <div class="color-row">
+
+    <div class="color-swatch">
+      <div class="swatch-color" style="background: #070F1E;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Ink</div>
+        <div class="swatch-hex">#070F1E</div>
+        <div class="swatch-usage">Deepest bg · Print black</div>
+      </div>
+    </div>
+
+    <div class="color-swatch">
+      <div class="swatch-color" style="background: #0B1628;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Abyss</div>
+        <div class="swatch-hex">#0B1628</div>
+        <div class="swatch-usage">Primary dark bg · Dashboard shell</div>
+      </div>
+    </div>
+
+    <div class="color-swatch">
+      <div class="swatch-color" style="background: #0F1E38;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Deep Navy</div>
+        <div class="swatch-hex">#0F1E38</div>
+        <div class="swatch-usage">Card backgrounds · Sections</div>
+      </div>
+    </div>
+
+    <div class="color-swatch">
+      <div class="swatch-color" style="background: #152645;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Midnight</div>
+        <div class="swatch-hex">#152645</div>
+        <div class="swatch-usage">Hover states · Dividers</div>
+      </div>
+    </div>
+
+    <div class="color-swatch">
+      <div class="swatch-color" style="background: #4B6899;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Slate</div>
+        <div class="swatch-hex">#4B6899</div>
+        <div class="swatch-usage">Tagline color · Secondary text</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="t-eyebrow" style="margin-bottom: 20px;">Status & Semantic Colors</div>
+  <div class="color-row">
+
+    <div class="color-swatch">
+      <div class="swatch-color" style="background: #00B87C;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Success</div>
+        <div class="swatch-hex">#00B87C</div>
+        <div class="swatch-usage">Positive metrics · Compliant</div>
+      </div>
+    </div>
+
+    <div class="color-swatch">
+      <div class="swatch-color" style="background: #F59E0B;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Warning</div>
+        <div class="swatch-hex">#F59E0B</div>
+        <div class="swatch-usage">Upcoming · Needs attention</div>
+      </div>
+    </div>
+
+    <div class="color-swatch">
+      <div class="swatch-color" style="background: #EF4444;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Critical</div>
+        <div class="swatch-hex">#EF4444</div>
+        <div class="swatch-usage">Expired · Emergency · Overdue</div>
+      </div>
+    </div>
+
+    <div class="color-swatch">
+      <div class="swatch-color" style="background: #FFFFFF;"></div>
+      <div class="swatch-info" style="border-top: 1px solid rgba(0,0,0,0.1);">
+        <div class="swatch-name" style="color: #0B1628;">Pure White</div>
+        <div class="swatch-hex" style="color: #4B6899;">#FFFFFF</div>
+        <div class="swatch-usage" style="color: #7A9BBC;">Light bg · Print · Clean surfaces</div>
+      </div>
+    </div>
+
+    <div class="color-swatch">
+      <div class="swatch-color" style="background: #C8D8F0;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Ice</div>
+        <div class="swatch-hex">#C8D8F0</div>
+        <div class="swatch-usage">Body text on dark · Light labels</div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 04 TYPOGRAPHY -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="typography">
+  <div class="section-num">04 — Typography</div>
+  <h2 class="section-title">Type <span>System</span></h2>
+
+  <p class="t-body" style="margin-bottom: 48px;">Axxiom uses <strong style="color: white;">Barlow Condensed</strong> for all headlines, titles, and display text — reflecting the precision and power of industrial engineering. <strong style="color: white;">Barlow</strong> (regular width) is used for body copy, captions, and UI elements. Never substitute these fonts.</p>
+
+  <div class="rule" style="margin-top: 0;"></div>
+
+  <div class="type-specimen">
+    <div class="type-label">Display / Hero — Barlow Condensed 800</div>
+    <div class="t-h1">Reliability In Motion</div>
+    <div class="type-meta">Barlow Condensed · Weight 800 · Uppercase · Letter spacing -0.01em · Use: Hero headlines, cover titles</div>
+  </div>
+
+  <div class="type-specimen">
+    <div class="type-label">Heading 1 — Barlow Condensed 700</div>
+    <div class="t-h2">Elevator Safety Intelligence</div>
+    <div class="type-meta">Barlow Condensed · Weight 700 · Uppercase · Letter spacing 0 · Use: Section headers, slide titles</div>
+  </div>
+
+  <div class="type-specimen">
+    <div class="type-label">Heading 2 — Barlow Condensed 600</div>
+    <div class="t-h3">Predictive Maintenance System</div>
+    <div class="type-meta">Barlow Condensed · Weight 600 · Uppercase · Letter spacing +0.04em · Use: Card titles, sub-sections</div>
+  </div>
+
+  <div class="type-specimen">
+    <div class="type-label">Eyebrow / Label — Barlow 600</div>
+    <div class="t-eyebrow" style="font-size: 13px;">System 01 — Dispatch Agent</div>
+    <div class="type-meta">Barlow · Weight 600 · Uppercase · Letter spacing +0.22em · Color: Axxiom Cyan · Use: Section labels, overlines, tags</div>
+  </div>
+
+  <div class="type-specimen">
+    <div class="type-label">Body — Barlow 400</div>
+    <div class="t-body">Axxiom Elevator provides uncompromising maintenance, repair, modernization, and installation services for all types of vertical transportation equipment. Our AI-powered systems keep your building compliant and your elevators running — before issues arise.</div>
+    <div class="type-meta">Barlow · Weight 400 · Size 16px · Line height 1.7 · Color: Ice (#C8D8F0) · Use: All body copy</div>
+  </div>
+
+  <div class="type-specimen" style="border-bottom: none; padding-bottom: 0; margin-bottom: 0;">
+    <div class="type-label">Caption / Meta — Barlow 500</div>
+    <div class="t-caption">WO-20260512-0047 · Miami-Dade County FL · Compliance Gate: Passed</div>
+    <div class="type-meta">Barlow · Weight 500 · Uppercase · Letter spacing +0.06em · Color: Slate · Use: Metadata, data labels, captions</div>
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 05 LOGO DO's AND DON'Ts -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="dodonts">
+  <div class="section-num">05 — Logo Usage</div>
+  <h2 class="section-title">Do's & <span>Don'ts</span></h2>
+
+  <div class="dos-donts">
+
+    <div class="do-card">
+      <div class="do-card-top">
+        <img src="/mnt/user-data/uploads/Logo_2.png" style="max-width: 220px; max-height: 100px; object-fit: contain;" alt="Correct logo usage on dark">
+      </div>
+      <div class="do-label"><span>✓</span> Use on dark navy backgrounds</div>
+      <div class="do-desc">The full-color logo works best on Axxiom dark navy (#0B1628 or similar). This is the primary use case.</div>
+    </div>
+
+    <div class="dont-card">
+      <div class="dont-card-top">
+        <img src="/mnt/user-data/uploads/Logo_2.png" style="max-width: 220px; max-height: 100px; object-fit: contain; filter: hue-rotate(90deg);" alt="Wrong - don't recolor the logo">
+      </div>
+      <div class="dont-label"><span>✗</span> Never recolor or alter the mark</div>
+      <div class="dont-desc">Never change the logo colors, apply a single-color tint, or use the mark in any color other than the approved versions.</div>
+    </div>
+
+    <div class="do-card">
+      <div class="do-card-top" style="background: #FFFFFF;">
+        <img src="/mnt/user-data/uploads/Logo_2.png" style="max-width: 220px; max-height: 100px; object-fit: contain;" alt="Correct logo on white">
+      </div>
+      <div class="do-label"><span>✓</span> Use on white/light backgrounds</div>
+      <div class="do-desc">The full-color logo also works on pure white or very light neutral backgrounds. Ensure sufficient contrast with surrounding content.</div>
+    </div>
+
+    <div class="dont-card">
+      <div class="dont-card-top">
+        <img src="/mnt/user-data/uploads/Logo_2.png" style="max-width: 160px; max-height: 80px; object-fit: contain; transform: scaleX(1.4);" alt="Wrong - stretched logo">
+      </div>
+      <div class="dont-label"><span>✗</span> Never stretch or distort</div>
+      <div class="dont-desc">Always scale the logo proportionally from a corner handle. Never stretch, compress, or skew in any direction.</div>
+    </div>
+
+    <div class="do-card">
+      <div class="do-card-top">
+        <img src="/mnt/user-data/uploads/Logo.png" style="max-width: 80px; max-height: 80px; object-fit: contain;" alt="Correct icon mark usage">
+      </div>
+      <div class="do-label"><span>✓</span> Use icon mark at small sizes</div>
+      <div class="do-desc">When the full logo would be too small to read clearly, the icon mark alone is appropriate — app icons, profile photos, embroidery.</div>
+    </div>
+
+    <div class="dont-card">
+      <div class="dont-card-top" style="background: linear-gradient(135deg, #FF6B35, #F7931E, #FFD700);">
+        <img src="/mnt/user-data/uploads/Logo_2.png" style="max-width: 220px; max-height: 100px; object-fit: contain;" alt="Wrong - logo on colorful background">
+      </div>
+      <div class="dont-label"><span>✗</span> Never place on busy/colorful backgrounds</div>
+      <div class="dont-desc">Never place the logo on photographic backgrounds, colorful gradients, or patterns that reduce legibility.</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 06 BRAND VOICE -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="voice">
+  <div class="section-num">06 — Brand Voice</div>
+  <h2 class="section-title">How We <span>Speak</span></h2>
+
+  <p class="t-body" style="margin-bottom: 40px;">Axxiom's voice is that of a trusted expert — confident without arrogance, direct without being cold, technically knowledgeable without being inaccessible. We speak to building professionals as peers, not clients.</p>
+
+  <div class="voice-grid">
+
+    <div class="voice-card">
+      <h3>Confident</h3>
+      <p>We make clear statements backed by data. We don't hedge unnecessarily. When we say a problem is solved, it is.</p>
+      <div class="voice-example">"Your certification is current. Your next inspection is scheduled for March 14. Everything is handled."</div>
+    </div>
+
+    <div class="voice-card">
+      <h3>Expert</h3>
+      <p>We use precise technical language when appropriate and translate complexity into clear implications for non-technical audiences.</p>
+      <div class="voice-example">"Your elevator's door operator fault (DOOR-OP-CLOSE) has triggered 3 times in 90 days — we're scheduling a targeted repair before it escalates."</div>
+    </div>
+
+    <div class="voice-card">
+      <h3>Proactive</h3>
+      <p>We bring information to clients before they need to ask. We anticipate, flag, and act — rather than react.</p>
+      <div class="voice-example">"We noticed your hydraulic unit is approaching its 5-year load test window. We've already contacted the AHJ to schedule it — you'll receive confirmation this week."</div>
+    </div>
+
+    <div class="voice-card">
+      <h3>Human</h3>
+      <p>Behind every system is a team of people who care. We acknowledge complexity, speak plainly, and never hide behind jargon.</p>
+      <div class="voice-example">"That's a fair concern. Let me walk you through exactly what happened and what we're doing to make sure it doesn't happen again."</div>
+    </div>
+
+  </div>
+
+  <div class="t-eyebrow" style="margin-bottom: 20px;">We Are / We Are Not</div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+    <div style="background: var(--navy-800); border: 1px solid rgba(0,184,124,0.2); border-radius: 8px; padding: 24px;">
+      <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #00B87C; margin-bottom: 16px;">We Are</div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-light);">
+          <span style="color: #00B87C; font-size: 16px;">→</span> Precise and data-driven
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-light);">
+          <span style="color: #00B87C; font-size: 16px;">→</span> Proactive and forward-looking
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-light);">
+          <span style="color: #00B87C; font-size: 16px;">→</span> Clear and direct
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-light);">
+          <span style="color: #00B87C; font-size: 16px;">→</span> Technically credible
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-light);">
+          <span style="color: #00B87C; font-size: 16px;">→</span> Responsive and accountable
+        </div>
+      </div>
+    </div>
+    <div style="background: var(--navy-800); border: 1px solid rgba(239,68,68,0.2); border-radius: 8px; padding: 24px;">
+      <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #EF4444; margin-bottom: 16px;">We Are Not</div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-light);">
+          <span style="color: #EF4444; font-size: 16px;">→</span> Corporate or bureaucratic
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-light);">
+          <span style="color: #EF4444; font-size: 16px;">→</span> Reactive or excuse-driven
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-light);">
+          <span style="color: #EF4444; font-size: 16px;">→</span> Vague or hedge-heavy
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-light);">
+          <span style="color: #EF4444; font-size: 16px;">→</span> Casual or flippant
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-light);">
+          <span style="color: #EF4444; font-size: 16px;">→</span> Sales-first or pushy
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- 07 APPLICATIONS -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="applications">
+  <div class="section-num">07 — Brand Applications</div>
+  <h2 class="section-title">In <span>Practice</span></h2>
+
+  <div class="app-grid">
+
+    <!-- Business card front -->
+    <div class="app-card">
+      <div class="biz-front">
+        <div>
+          <div style="margin-bottom: 20px;">
+            <img src="/mnt/user-data/uploads/Logo.png" style="width: 40px; height: 40px; object-fit: contain;" alt="Axxiom icon">
+          </div>
+          <div class="biz-name">Jeremy Metzger</div>
+          <div class="biz-title">Chief Executive Officer</div>
+        </div>
+        <div class="biz-contact">
+          jeremy.metzger@axxiomelevator.com<br>
+          +1 (954) 555-0100<br>
+          axxiomelevator.com
+        </div>
+      </div>
+      <div style="background: linear-gradient(135deg, #00B4D8, #1C3F8A); padding: 20px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: white;">AXXIOM ELEVATOR</div>
+        <div style="font-size: 11px; color: rgba(255,255,255,0.7); letter-spacing: 0.1em; font-style: italic;">Reliability In Motion™</div>
+      </div>
+      <div class="app-card-label">Business Card · 3.5 × 2 in</div>
+    </div>
+
+    <!-- Email signature -->
+    <div class="app-card">
+      <div style="background: #F0F4F8; padding: 24px;">
+        <div class="email-sig">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <img src="/mnt/user-data/uploads/Logo.png" style="width: 36px; height: 36px; object-fit: contain;" alt="Axxiom icon">
+            <div>
+              <div class="sig-name">Sarah Chen</div>
+              <div class="sig-title">Account Manager — Southeast Florida</div>
+            </div>
+          </div>
+          <div class="sig-divider"></div>
+          <div class="sig-contact">
+            📞 +1 (954) 555-0142 &nbsp;·&nbsp; 📧 s.chen@axxiomelevator.com<br>
+            2101 W Atlantic Blvd, Unit 104, Pompano Beach, FL 33069
+          </div>
+          <div class="sig-company" style="margin-top: 12px; display: flex; align-items: center; gap: 8px;">
+            AXXIOM ELEVATOR
+            <span style="font-size: 10px; font-weight: 400; color: #4B6899; text-transform: none; letter-spacing: 0;">Reliability In Motion™</span>
+          </div>
+        </div>
+      </div>
+      <div class="app-card-label">Email Signature</div>
+    </div>
+
+    <!-- LinkedIn post -->
+    <div class="app-card">
+      <div class="social-post">
+        <div class="social-header">
+          <div class="social-avatar">AE</div>
+          <div>
+            <div class="social-name">Axxiom Elevator</div>
+            <div class="social-handle">@AxxiomElevator · Just now</div>
+          </div>
+        </div>
+        <div class="social-text">
+          We analysed 10,000 service events across our fleet.<br><br>
+          The #1 cause of emergency elevator call-outs in hotels? <strong style="color: white;">Door operator faults — 31% of all emergency events.</strong><br><br>
+          The fix? A properly scheduled PM visit catches 78% of door issues before they cause an outage.<br><br>
+          Full breakdown in our 2026 Elevator Safety Report — link in bio.<br><br>
+          <span class="social-hashtag">#ElevatorSafety #FacilitiesManagement #PredictiveMaintenance #AxxiomElevator</span>
+        </div>
+      </div>
+      <div class="app-card-label">LinkedIn Company Post</div>
+    </div>
+
+    <!-- Report cover -->
+    <div class="app-card">
+      <div style="background: var(--navy-primary); padding: 32px; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <img src="/mnt/user-data/uploads/Logo.png" style="width: 32px; height: 32px; object-fit: contain;" alt="Axxiom icon">
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cyan-primary);">Axxiom Elevator · 2026</div>
+        </div>
+        <div>
+          <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cyan-primary); margin-bottom: 8px;">Annual Report</div>
+          <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 800; text-transform: uppercase; line-height: 1; color: white; margin-bottom: 8px;">Elevator Safety<br><span style="color: var(--cyan-primary);">Intelligence</span></div>
+          <div style="font-size: 12px; color: rgba(255,255,255,0.5); letter-spacing: 0.06em;">US Market · 7 States · 2,847 Units Monitored</div>
+        </div>
+        <div style="height: 3px; background: linear-gradient(90deg, var(--cyan-primary), var(--navy-primary)); border-radius: 2px;"></div>
+      </div>
+      <div class="app-card-label">Annual Safety Report Cover</div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- BACK COVER -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="backcover" style="background: var(--navy-primary); border-bottom: none; align-items: center; text-align: center;">
+
+  <div>
+    <img src="/mnt/user-data/uploads/Logo_2.png" style="max-width: 320px; max-height: 160px; object-fit: contain; margin-bottom: 48px;" alt="Axxiom Elevator logo">
+  </div>
+
+  <div style="font-family: 'Barlow Condensed', sans-serif; font-size: 48px; font-weight: 800; text-transform: uppercase; letter-spacing: -0.01em; color: white; margin-bottom: 8px;">Reliability In Motion™</div>
+
+  <div class="rule-cyan" style="margin: 24px auto;"></div>
+
+  <p style="font-size: 14px; color: var(--text-muted); max-width: 480px; margin: 0 auto 48px; line-height: 1.7;">For questions about brand usage, asset requests, or approval of new applications, contact the marketing team at <span style="color: var(--cyan-primary);">marketing@axxiomelevator.com</span></p>
+
+  <div style="display: flex; justify-content: center; gap: 48px; font-size: 12px; color: var(--slate);">
+    <div>
+      <div style="color: white; font-weight: 600; margin-bottom: 4px; font-size: 13px;">Headquarters</div>
+      2101 W Atlantic Blvd, Unit 104<br>Pompano Beach, FL 33069
+    </div>
+    <div>
+      <div style="color: white; font-weight: 600; margin-bottom: 4px; font-size: 13px;">Website</div>
+      axxiomelevator.com
+    </div>
+    <div>
+      <div style="color: white; font-weight: 600; margin-bottom: 4px; font-size: 13px;">Version</div>
+      1.0 · May 2026<br>Confidential
+    </div>
+  </div>
+
+</section>
+
+</body>
+</html>

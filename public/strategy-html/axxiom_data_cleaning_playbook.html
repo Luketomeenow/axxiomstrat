@@ -1,0 +1,833 @@
+
+<style>
+  *{box-sizing:border-box}
+  .wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+  .tab-row{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+  .tab{font-size:11px;font-weight:500;padding:5px 13px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+  .tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .panel{display:none}.panel.active{display:block}
+  .lbl{font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 3px}
+  .ttl{font-size:17px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .sub{font-size:13px;color:var(--color-text-secondary);margin:0 0 14px;line-height:1.6}
+  .field-block{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:10px;overflow:hidden}
+  .fb-head{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;cursor:pointer}
+  .fb-head:hover{background:var(--color-background-secondary)}
+  .field-block.open .fb-head{background:var(--color-background-secondary)}
+  .fb-left{flex:1}
+  .fb-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 2px}
+  .fb-sub{font-size:11px;color:var(--color-text-tertiary);margin:0}
+  .fb-body{display:none;border-top:0.5px solid var(--color-border-tertiary);padding:12px 14px}
+  .field-block.open .fb-body{display:block}
+  .ba-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+  .ba-box{border-radius:var(--border-radius-md);padding:9px 11px}
+  .ba-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin:0 0 6px}
+  .ba-content{font-size:11px;line-height:1.7;margin:0;font-family:var(--font-mono)}
+  .before-box{background:var(--color-background-danger);border:0.5px solid var(--color-border-tertiary)}
+  .before-label{color:var(--color-text-danger)}
+  .before-content{color:var(--color-text-danger)}
+  .after-box{background:var(--color-background-success);border:0.5px solid var(--color-border-tertiary)}
+  .after-label{color:var(--color-text-success)}
+  .after-content{color:var(--color-text-success)}
+  .method-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+  .method-row:last-child{border-bottom:none}
+  .mi{font-size:14px;flex-shrink:0;margin-top:1px}
+  .mt{flex:1;color:var(--color-text-primary);line-height:1.5}
+  .mn{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+  .mtag{font-size:10px;font-weight:500;padding:2px 6px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+  .divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:10px 0}
+  .badge{font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px}
+  .b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+  .b-green{background:var(--color-background-success);color:var(--color-text-success)}
+  .b-amber{background:var(--color-background-warning);color:var(--color-text-warning)}
+  .b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+  .b-purple{background:#EDE9FE;color:#5B21B6}
+  .oc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:10px}
+  .ol{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
+  .fr{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px;gap:8px}
+  .fr:last-child{border-bottom:none}
+  .fk{color:var(--color-text-secondary);flex:1}
+  .fv{font-weight:500;color:var(--color-text-primary);text-align:right;flex-shrink:0}
+  .nav-btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .info-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+  .ii{font-size:14px;color:var(--color-text-tertiary);flex-shrink:0;margin-top:1px}
+  .it{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+  .priority-header{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:var(--border-radius-md);margin-bottom:8px;font-size:12px;font-weight:500}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-bottom:12px}
+  .mini{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px}
+  .mini-title{font-size:12px;font-weight:500;color:var(--color-text-primary);margin:0 0 3px}
+  .mini-body{font-size:11px;color:var(--color-text-secondary);margin:0;line-height:1.5}
+  .score-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .score-label{font-size:12px;color:var(--color-text-secondary);width:160px;flex-shrink:0}
+  .score-track{flex:1;height:7px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden}
+  .score-fill{height:100%;border-radius:4px}
+  .score-pct{font-size:11px;font-weight:500;width:35px;text-align:right;flex-shrink:0}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Detailed data cleaning playbook for Axxiom Elevator — every field, before and after, cleaning method and owner</h2>
+
+  <div class="tab-row">
+    <button class="tab active" onclick="go(0)">Overview</button>
+    <button class="tab" onclick="go(1)">Asset records</button>
+    <button class="tab" onclick="go(2)">Service events</button>
+    <button class="tab" onclick="go(3)">Fault codes</button>
+    <button class="tab" onclick="go(4)">Compliance</button>
+    <button class="tab" onclick="go(5)">Tech profiles</button>
+    <button class="tab" onclick="go(6)">Scorecard</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div id="p0" class="panel active">
+    <p class="lbl">Data cleaning master plan</p>
+    <p class="ttl">5 data entities. 32 fields. One publishable dataset.</p>
+    <p class="sub">Every field below has a specific cleaning method — automated, human review, or backfill outreach. The priority order is non-negotiable: clean what blocks operations first, then clean what blocks the safety report, then clean everything else.</p>
+
+    <div class="priority-header" style="background:var(--color-background-danger)">
+      <span class="badge b-red">P1 — Clean first</span>
+      <span style="color:var(--color-text-danger)">Blocks operations or compliance right now — days 1–14</span>
+    </div>
+    <div class="oc" style="margin-bottom:14px">
+      <div class="fr"><span class="fk">Tech certification & licence expiry</span><span class="fv"><span class="badge b-red">Compliance gate broken without this</span></span></div>
+      <div class="fr"><span class="fk">AHJ jurisdiction per asset</span><span class="fv"><span class="badge b-red">Dispatch compliance check fails</span></span></div>
+      <div class="fr"><span class="fk">Asset install date</span><span class="fv"><span class="badge b-red">Risk score cannot calculate</span></span></div>
+      <div class="fr"><span class="fk">Last inspection date + outcome</span><span class="fv"><span class="badge b-red">Compliance tracker cannot alert</span></span></div>
+      <div class="fr"><span class="fk">Certificate expiry date</span><span class="fv"><span class="badge b-red">Compliance tracker cannot alert</span></span></div>
+    </div>
+
+    <div class="priority-header" style="background:var(--color-background-warning)">
+      <span class="badge b-amber">P2 — Clean second</span>
+      <span style="color:var(--color-text-warning)">Blocks safety reporting and predictive accuracy — weeks 2–6</span>
+    </div>
+    <div class="oc" style="margin-bottom:14px">
+      <div class="fr"><span class="fk">Equipment type standardisation</span><span class="fv"><span class="badge b-amber">Fault pattern analysis broken</span></span></div>
+      <div class="fr"><span class="fk">Manufacturer + model standardisation</span><span class="fv"><span class="badge b-amber">Benchmark grouping impossible</span></span></div>
+      <div class="fr"><span class="fk">Fault code extraction from tech notes</span><span class="fv"><span class="badge b-amber">Pattern intelligence = zero without this</span></span></div>
+      <div class="fr"><span class="fk">Parts replaced per job</span><span class="fv"><span class="badge b-amber">Parts forecasting blocked</span></span></div>
+      <div class="fr"><span class="fk">Service event type standardisation</span><span class="fv"><span class="badge b-amber">MTBF and PM rate metrics broken</span></span></div>
+      <div class="fr"><span class="fk">Building type per site</span><span class="fv"><span class="badge b-amber">Vertical benchmarking blocked</span></span></div>
+    </div>
+
+    <div class="priority-header" style="background:var(--color-background-secondary)">
+      <span class="badge b-gray">P3 — Clean third</span>
+      <span style="color:var(--color-text-secondary)">Enhances intelligence quality — weeks 6–12</span>
+    </div>
+    <div class="oc">
+      <div class="fr"><span class="fk">Job duration (time-on-site)</span><span class="fv"><span class="badge b-gray">Scheduling optimisation</span></span></div>
+      <div class="fr"><span class="fk">Client contact data</span><span class="fv"><span class="badge b-gray">Client communication AI</span></span></div>
+      <div class="fr"><span class="fk">Floor count per building</span><span class="fv"><span class="badge b-gray">Usage intensity scoring</span></span></div>
+      <div class="fr"><span class="fk">Hydraulic fluid type + capacity</span><span class="fv"><span class="badge b-gray">PM checklist accuracy</span></span></div>
+      <div class="fr"><span class="fk">Serial numbers</span><span class="fv"><span class="badge b-gray">Manufacturer recall tracking</span></span></div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">Start with asset records ↗</button>
+    </div>
+  </div>
+
+  <!-- ASSET RECORDS -->
+  <div id="p1" class="panel">
+    <p class="lbl">Entity 1 — Asset records</p>
+    <p class="ttl">The master record for every elevator unit</p>
+    <p class="sub">This is the most important entity. Every other data point — service history, compliance, risk score — links back here. If the asset record is wrong, everything downstream is wrong.</p>
+
+    <div class="field-block open">
+      <div class="fb-head" onclick="tog(this)">
+        <div class="fb-left">
+          <p class="fb-name">Equipment type <span class="badge b-amber">P2 · AI automated</span></p>
+          <p class="fb-sub">Estimated mess level: very high · 40–60 variations in most Dynamics instances</p>
+        </div>
+      </div>
+      <div class="fb-body">
+        <div class="ba-row">
+          <div class="ba-box before-box">
+            <p class="ba-label before-label">What you'll find</p>
+            <p class="ba-content before-content">
+              "Hydraulic"<br>"hydraulic elevator"<br>"Hyd."<br>"HYDR"<br>"otis hydraulic"<br>"Gen2 hyd"<br>"MRL traction"<br>"machine room less"<br>"MRL"<br>"escalator (moving)"<br>"moving stairs"
+            </p>
+          </div>
+          <div class="ba-box after-box">
+            <p class="ba-label after-label">What it must become</p>
+            <p class="ba-content after-content">
+              equipment_type: "Hydraulic"<br><br>equipment_type: "Hydraulic"<br><br>equipment_type: "Hydraulic"<br><br>equipment_type: "Hydraulic"<br><br>equipment_type: "MRL Traction"<br><br>equipment_type: "MRL Traction"<br><br>equipment_type: "Escalator"<br><br>equipment_type: "Escalator"
+            </p>
+          </div>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-robot mi" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="mt">Build a mapping table of every variation → canonical value. Run GPT-4o fuzzy match against the canonical list. Confidence above 85% = auto-commit. Below 85% = human review queue.
+            <p class="mn">Canonical list: Hydraulic · Traction · MRL Traction · Gearless Traction · Escalator · Moving Walk · Platform Lift · LULA Lift</p>
+          </div>
+          <span class="mtag b-blue">AI + review</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-block">
+      <div class="fb-head" onclick="tog(this)">
+        <div class="fb-left">
+          <p class="fb-name">Manufacturer + model <span class="badge b-amber">P2 · AI automated</span></p>
+          <p class="fb-sub">Estimated mess: high · manufacturer often embedded in equipment type field</p>
+        </div>
+      </div>
+      <div class="fb-body">
+        <div class="ba-row">
+          <div class="ba-box before-box">
+            <p class="ba-label before-label">What you'll find</p>
+            <p class="ba-content before-content">
+              "OTIS GEN2"<br>"Otis gen 2 hydraulic"<br>"kone monospace"<br>"KONE MS"<br>"schindler 3300"<br>"Schindler"<br>"Dover"<br>"ThyssenKrupp Evolution 200"
+            </p>
+          </div>
+          <div class="ba-box after-box">
+            <p class="ba-label after-label">What it must become</p>
+            <p class="ba-content after-content">
+              manufacturer: "Otis"<br>model: "Gen2"<br><br>manufacturer: "KONE"<br>model: "MonoSpace"<br><br>manufacturer: "Schindler"<br>model: "3300"<br><br>manufacturer: "Dover" (now Wittur)<br><br>manufacturer: "TK Elevator"<br>model: "Evolution 200"
+            </p>
+          </div>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-robot mi" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="mt">Use a pre-built manufacturer alias table (Otis, KONE, Schindler, TK Elevator, Mitsubishi, Fujitec, Dover/Wittur, Montgomery) + model extraction regex. AI splits compound strings into separate manufacturer + model fields.
+          </div>
+          <span class="mtag b-blue">AI automated</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-block">
+      <div class="fb-head" onclick="tog(this)">
+        <div class="fb-left">
+          <p class="fb-name">Install date <span class="badge b-red">P1 · backfill outreach</span></p>
+          <p class="fb-sub">Estimated miss rate: 30–50% of legacy assets · most critical single gap</p>
+        </div>
+      </div>
+      <div class="fb-body">
+        <div class="ba-row">
+          <div class="ba-box before-box">
+            <p class="ba-label before-label">What you'll find</p>
+            <p class="ba-content before-content">
+              NULL<br>NULL<br>"approx 2005"<br>"before our time"<br>"unknown"<br>"2010?"<br>NULL
+            </p>
+          </div>
+          <div class="ba-box after-box">
+            <p class="ba-label after-label">What it must become</p>
+            <p class="ba-content after-content">
+              install_date: "2003-06-01"<br>(recovered from permit)<br><br>install_date: "2005-01-01"<br>(year-only → Jan 1 of that year)<br><br>install_date: "2010-01-01"<br>(estimated, flagged)<br><br>install_date: NULL + flag:<br>"data_quality: unresolved"
+            </p>
+          </div>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-search mi" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="mt">Source 1: State elevator permit databases — many states list install permit date publicly by address. Query address → get permit year.
+            <p class="mn">Works for: FL, NY, IL, TX, CA — most have searchable permit portals</p>
+          </div>
+          <span class="mtag b-amber">Auto-lookup</span>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-building mi" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="mt">Source 2: Building permit records — county assessor databases often show building construction date which approximates elevator install year for commercial builds.
+          </div>
+          <span class="mtag b-amber">Lookup</span>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-phone mi" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="mt">Source 3: Account manager asks client during next scheduled contact — "Can you pull up the original install paperwork or building specs?" Frame as updating records for their compliance tracker.
+          </div>
+          <span class="mtag b-amber">Outreach</span>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-flag mi" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+          <div class="mt">If unresolvable after all 3 sources: set install_date to estimated year with data_quality flag = "estimated" so it's excluded from precision calculations in the safety report.
+          </div>
+          <span class="mtag b-red">Flag + exclude</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-block">
+      <div class="fb-head" onclick="tog(this)">
+        <div class="fb-left">
+          <p class="fb-name">AHJ jurisdiction <span class="badge b-red">P1 · auto-lookup</span></p>
+          <p class="fb-sub">Estimated miss rate: 60–80% · rarely entered · completely blocks compliance gate</p>
+        </div>
+      </div>
+      <div class="fb-body">
+        <div class="ba-row">
+          <div class="ba-box before-box">
+            <p class="ba-label before-label">What you'll find</p>
+            <p class="ba-content before-content">
+              NULL<br>NULL<br>"Florida"<br>"FL"<br>"Miami"<br>NULL<br>"NYC"
+            </p>
+          </div>
+          <div class="ba-box after-box">
+            <p class="ba-label after-label">What it must become</p>
+            <p class="ba-content after-content">
+              ahj_jurisdiction: "Miami-Dade County FL"<br>ahj_name: "Miami-Dade DPRD"<br>ahj_code: "FL-MIA-DADE"<br><br>ahj_jurisdiction: "New York City"<br>ahj_name: "NYC Dept of Buildings"<br>ahj_code: "NY-NYC-DOB"
+            </p>
+          </div>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-map-pin mi" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+          <div class="mt">Run every site address through the Xenoz AHJ lookup API — maps address → county → AHJ authority automatically. This is a one-time batch job that populates AHJ for 100% of assets with a complete address.
+            <p class="mn">Prerequisite: site address must be clean and USPS-standardised first — clean addresses before running AHJ lookup</p>
+          </div>
+          <span class="mtag b-red">Batch auto</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-block">
+      <div class="fb-head" onclick="tog(this)">
+        <div class="fb-left">
+          <p class="fb-name">Site address standardisation <span class="badge b-red">P1 · prerequisite for AHJ lookup</span></p>
+          <p class="fb-sub">Must be done before AHJ lookup · inconsistent formats break the address-to-AHJ match</p>
+        </div>
+      </div>
+      <div class="fb-body">
+        <div class="ba-row">
+          <div class="ba-box before-box">
+            <p class="ba-label before-label">What you'll find</p>
+            <p class="ba-content before-content">
+              "123 main st miami fl"<br>"123 Main Street, Miami, FL 33101"<br>"123 Main St., Miami Florida"<br>"Hyatt Regency - 123 Main"<br>"123 main"<br>"brickell area, miami"
+            </p>
+          </div>
+          <div class="ba-box after-box">
+            <p class="ba-label after-label">What it must become</p>
+            <p class="ba-content after-content">
+              address: "123 Main St"<br>city: "Miami"<br>state: "FL"<br>zip: "33101"<br>county: "Miami-Dade"<br><br>Note: building name goes<br>in separate name field,<br>not in address field
+            </p>
+          </div>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-robot mi" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="mt">Run all addresses through USPS standardisation API (SmartyStreets or Google Maps Geocoding API) — returns standardised address, city, state, zip, county as separate fields.
+            <p class="mn">Addresses that fail standardisation go to human review — likely missing street number or using building name only</p>
+          </div>
+          <span class="mtag b-blue">AI batch</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(0)">← Overview</button>
+      <button onclick="go(2)">Service events ↗</button>
+    </div>
+  </div>
+
+  <!-- SERVICE EVENTS -->
+  <div id="p2" class="panel">
+    <p class="lbl">Entity 2 — Service event records</p>
+    <p class="ttl">Every job ever completed — the core of the safety dataset</p>
+    <p class="sub">Service event records are the most data-rich entity and the most inconsistently captured. This is where the intelligence lives — MTBF, PM compliance rate, post-PM failure reduction. All of it lives in here, but only if the records are clean.</p>
+
+    <div class="field-block open">
+      <div class="fb-head" onclick="tog(this)">
+        <div class="fb-left">
+          <p class="fb-name">Event type <span class="badge b-amber">P2 · AI automated</span></p>
+          <p class="fb-sub">Currently: freetext or inconsistent dropdown · breaks every metric that filters by job type</p>
+        </div>
+      </div>
+      <div class="fb-body">
+        <div class="ba-row">
+          <div class="ba-box before-box">
+            <p class="ba-label before-label">What you'll find</p>
+            <p class="ba-content before-content">
+              "PM"<br>"preventive maint"<br>"maintenance visit"<br>"monthly service"<br>"repair call"<br>"callout"<br>"emergency"<br>"emerg repair"<br>"annual insp"<br>"inspection"<br>"modernization"<br>"mod project"
+            </p>
+          </div>
+          <div class="ba-box after-box">
+            <p class="ba-label after-label">Canonical event types</p>
+            <p class="ba-content after-content">
+              PM-Routine<br>PM-Interim<br>Repair-Standard<br>Repair-Emergency<br>Inspection-Annual<br>Inspection-Periodic<br>Inspection-Load-Test<br>Modernisation<br>Callback (repeat visit for same fault)<br>Vandalism / External Damage<br>New Installation
+            </p>
+          </div>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-robot mi" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="mt">Build a keyword → canonical map. Run GPT-4o on the combined event_type field + job description to classify each record. "emerg" + "passengers trapped" → Repair-Emergency. "monthly" + "lubrication" → PM-Routine.
+          </div>
+          <span class="mtag b-blue">AI classify</span>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-alert-circle mi" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="mt">Critical: Callback records must be identified and linked to the original job. A callback within 30 days of a repair means the first repair failed. This is one of the most important signals in the dataset.
+            <p class="mn">Detection: same asset_id + Repair event type + within 30 days of previous Repair on same asset → flag as Callback, link parent_event_id</p>
+          </div>
+          <span class="mtag b-amber">Link callbacks</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-block">
+      <div class="fb-head" onclick="tog(this)">
+        <div class="fb-left">
+          <p class="fb-name">Job date + time accuracy <span class="badge b-amber">P2 · validation script</span></p>
+          <p class="fb-sub">Date errors corrupt MTBF calculations and PM interval tracking</p>
+        </div>
+      </div>
+      <div class="fb-body">
+        <div class="ba-row">
+          <div class="ba-box before-box">
+            <p class="ba-label before-label">Common errors</p>
+            <p class="ba-content before-content">
+              Date: 2099-01-01 (fat finger)<br>Date: 1900-01-01 (system default)<br>Date: future date (pre-scheduled, not updated)<br>Date: 2022-13-05 (invalid month)<br>Completion time before start time<br>Duration: 0 minutes<br>Duration: 480 hours (typo)
+            </p>
+          </div>
+          <div class="ba-box after-box">
+            <p class="ba-label after-label">Validation rules</p>
+            <p class="ba-content after-content">
+              Date must be: between asset install_date and today<br><br>Duration must be: between 15 mins and 12 hours<br><br>Completion must be: after start time<br><br>No future dates on closed work orders<br><br>Flag: any date = 1900 or 2099 → NULL + review queue
+            </p>
+          </div>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-code mi" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="mt">Run a validation script that checks all 6 rules against every service event record. Flag violations → human review queue with the specific rule that failed shown alongside the record.
+          </div>
+          <span class="mtag b-blue">Script</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-block">
+      <div class="fb-head" onclick="tog(this)">
+        <div class="fb-left">
+          <p class="fb-name">Outcome field <span class="badge b-amber">P2 · standardise</span></p>
+          <p class="fb-sub">Inspection pass/fail rate metric is zero without clean outcome data</p>
+        </div>
+      </div>
+      <div class="fb-body">
+        <div class="ba-row">
+          <div class="ba-box before-box">
+            <p class="ba-label before-label">What you'll find</p>
+            <p class="ba-content before-content">
+              "passed"<br>"PASS"<br>"ok"<br>"complete"<br>"done"<br>"failed"<br>"fail - see notes"<br>"conditional"<br>"needs follow up"<br>"partial"<br>NULL
+            </p>
+          </div>
+          <div class="ba-box after-box">
+            <p class="ba-label after-label">Canonical outcomes</p>
+            <p class="ba-content after-content">
+              Pass<br>Fail<br>Conditional Pass (deficiency noted, not critical)<br>Deferred (job incomplete, revisit needed)<br>Incomplete (access denied or equipment off)<br>N/A (for PM events — outcome not applicable)
+            </p>
+          </div>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-robot mi" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="mt">Keyword map: "passed", "pass", "ok", "complete", "done" → Pass. "failed", "fail", "no pass" → Fail. "conditional", "needs follow up", "partial" → Conditional Pass. NULL on closed inspection records → human review.
+          </div>
+          <span class="mtag b-blue">AI map</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">← Asset records</button>
+      <button onclick="go(3)">Fault codes ↗</button>
+    </div>
+  </div>
+
+  <!-- FAULT CODES -->
+  <div id="p3" class="panel">
+    <p class="lbl">Entity 3 — Fault codes (extracted from tech notes)</p>
+    <p class="ttl">The hardest clean. The highest value.</p>
+    <p class="sub">Right now, fault codes live inside free-text tech notes. They are completely unanalysable. Extracting and standardising them is the single most valuable data cleaning task in the entire project — it's what turns Axxiom's service history into genuine safety intelligence.</p>
+
+    <div class="info-row">
+      <i class="ti ti-bulb ii" aria-hidden="true"></i>
+      <p class="it">The reason fault code cleaning is so valuable: once every fault is tagged with a standard code, you can ask "what is the most common failure mode on Otis Gen2 hydraulic units over 10 years old in coastal markets?" and get a real answer. Right now that question is completely unanswerable from the data. After cleaning, it's a 3-second query.</p>
+    </div>
+
+    <div class="field-block open">
+      <div class="fb-head" onclick="tog(this)">
+        <div class="fb-left">
+          <p class="fb-name">Fault code extraction from tech notes <span class="badge b-amber">P2 · AI extraction</span></p>
+          <p class="fb-sub">The most important single cleaning task · requires GPT-4o + human review on low-confidence matches</p>
+        </div>
+      </div>
+      <div class="fb-body">
+        <div class="ba-row">
+          <div class="ba-box before-box">
+            <p class="ba-label before-label">Raw tech notes (actual examples)</p>
+            <p class="ba-content before-content">
+              "door wouldn't close all the way, adjusted door operator and tracks, left working"<br><br>"stuck between 4 and 5, reset controller, passengers ok, needs new motor contactor"<br><br>"grinding noise on descent, found worn guide shoes, replaced, tested ok"<br><br>"no power to cab, traced to MCB, replaced, all good"
+            </p>
+          </div>
+          <div class="ba-box after-box">
+            <p class="ba-label after-label">Extracted + tagged</p>
+            <p class="ba-content after-content">
+              fault_codes: ["DOOR-OP-CLOSE"]<br>components: ["door operator","door track"]<br>action: "adjusted"<br>outcome: "resolved"<br><br>fault_codes: ["CTL-RESET","MOT-CONTACTOR"]<br>components: ["controller","motor contactor"]<br><br>fault_codes: ["GUIDE-SHOE-WEAR"]<br>components: ["guide shoes"]<br>action: "replaced"<br><br>fault_codes: ["ELEC-MCB-FAIL"]<br>components: ["main circuit breaker"]<br>action: "replaced"
+            </p>
+          </div>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-robot mi" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="mt">GPT-4o prompt: "Read this technician note. Extract: (1) fault codes from this taxonomy list, (2) components involved, (3) action taken, (4) resolution status. Return as JSON only. If uncertain, set confidence_score below 0.7."
+            <p class="mn">Taxonomy: pre-build a list of ~80 fault codes covering all major elevator systems — door, drive, control, hydraulic, safety, electrical, mechanical. This list is the critical prerequisite.</p>
+          </div>
+          <span class="mtag b-blue">AI extract</span>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-user-check mi" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="mt">Confidence ≥ 0.85 = auto-commit. Between 0.70–0.84 = flag for tech supervisor review (they can read notes and confirm). Below 0.70 = sent to senior mechanic review queue — only they know what the note meant.
+          </div>
+          <span class="mtag b-amber">Tiered review</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-block">
+      <div class="fb-head" onclick="tog(this)">
+        <div class="fb-left">
+          <p class="fb-name">Fault code taxonomy — must define before extraction begins</p>
+          <p class="fb-sub">The standard list every tech note gets mapped to — built from ASME A17.1 + Axxiom's most common fault types</p>
+        </div>
+      </div>
+      <div class="fb-body">
+        <div class="oc">
+          <p class="ol">Fault code taxonomy — 8 systems, ~80 codes total</p>
+          <div class="fr"><span class="fk"><span class="badge b-blue">DOOR</span> Door system</span><span class="fv">DOOR-OP-CLOSE · DOOR-OP-OPEN · DOOR-SENSOR · DOOR-LOCK · DOOR-ALIGN · DOOR-CLUTCH (12 codes)</span></div>
+          <div class="fr"><span class="fk"><span class="badge b-amber">DRIVE</span> Drive system</span><span class="fv">DRIVE-MOTOR · DRIVE-BELT · DRIVE-SHEAVE · DRIVE-BRAKE · DRIVE-CONTACTOR · DRIVE-VFD (10 codes)</span></div>
+          <div class="fr"><span class="fk"><span class="badge b-red">CTL</span> Control system</span><span class="fv">CTL-BOARD · CTL-RESET · CTL-RELAY · CTL-SELECTOR · CTL-LEVELING · CTL-SAFETY (10 codes)</span></div>
+          <div class="fr"><span class="fk"><span class="badge b-purple">HYD</span> Hydraulic system</span><span class="fv">HYD-PUMP · HYD-VALVE · HYD-CYLINDER · HYD-FLUID-LEAK · HYD-SEAL · HYD-PISTON (10 codes)</span></div>
+          <div class="fr"><span class="fk"><span class="badge b-green">SAFETY</span> Safety devices</span><span class="fv">SAFETY-GOV · SAFETY-BUFFER · SAFETY-SAFETIES · SAFETY-RUPTURE · SAFETY-LIMITS (8 codes)</span></div>
+          <div class="fr"><span class="fk"><span class="badge b-gray">ELEC</span> Electrical</span><span class="fv">ELEC-MCB · ELEC-WIRE · ELEC-GROUND · ELEC-LIGHTING · ELEC-PHONE · ELEC-POWER (8 codes)</span></div>
+          <div class="fr"><span class="fk"><span class="badge b-teal" style="background:#CCFBF1;color:#0F766E">MECH</span> Mechanical</span><span class="fv">MECH-GUIDE-SHOE · MECH-ROLLER · MECH-RAIL · MECH-BUFFER · MECH-SILL (8 codes)</span></div>
+          <div class="fr"><span class="fk"><span class="badge b-gray">PM</span> Preventive maintenance</span><span class="fv">PM-LUBE · PM-ADJUST · PM-CLEAN · PM-INSPECT · PM-TEST (6 codes)</span></div>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-users mi" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="mt">Build the taxonomy collaboratively: have 2 senior mechanics review the list and confirm it covers 95%+ of what they actually see in the field. Their input makes the extraction more accurate and improves their adoption of the structured capture form.
+          </div>
+          <span class="mtag b-amber">Co-create</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(2)">← Service events</button>
+      <button onclick="go(4)">Compliance records ↗</button>
+    </div>
+  </div>
+
+  <!-- COMPLIANCE -->
+  <div id="p4" class="panel">
+    <p class="lbl">Entity 4 — Compliance & certificate records</p>
+    <p class="ttl">The data that keeps Axxiom legally protected</p>
+    <p class="sub">Compliance records are often the most scattered data in any elevator company — spread across email attachments, a shared drive folder, a coordinator's spreadsheet, and (sometimes) Dynamics. The cleaning job here is consolidation and standardisation.</p>
+
+    <div class="field-block open">
+      <div class="fb-head" onclick="tog(this)">
+        <div class="fb-left">
+          <p class="fb-name">Certificate expiry date <span class="badge b-red">P1 · consolidate from all sources</span></p>
+          <p class="fb-sub">The most operationally critical field · live compliance alert system cannot function without this</p>
+        </div>
+      </div>
+      <div class="fb-body">
+        <div class="ba-row">
+          <div class="ba-box before-box">
+            <p class="ba-label before-label">Where it currently lives</p>
+            <p class="ba-content before-content">
+              — Email attachments (PDF certs)<br>— Coordinator's Excel tracker<br>— Shared Drive folder (unstructured)<br>— Some in Dynamics (inconsistent)<br>— Some in AHJ portals only<br>— Paper binders at regional offices<br>— Missing entirely for 20-40% of units
+            </p>
+          </div>
+          <div class="ba-box after-box">
+            <p class="ba-label after-label">What it must become</p>
+            <p class="ba-content after-content">
+              cert_type: "Operating Certificate"<br>issue_date: "2024-05-01"<br>expiry_date: "2025-05-01"<br>issuing_ahj: "FL-MIA-DADE"<br>cert_status: "Current"<br>cert_document_url: [link to PDF]<br>days_to_expiry: [calculated]<br>renewal_lead_required: 30
+            </p>
+          </div>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-file-search mi" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+          <div class="mt">Step 1: Have coordinator export every row from the compliance spreadsheet into a staging table. This is the fastest source — the coordinator already has it organised.
+          </div>
+          <span class="mtag b-red">Week 1</span>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-robot mi" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="mt">Step 2: Run Azure Document Intelligence against the email PDF attachments and shared drive folder — auto-extract cert type, issue date, expiry date, issuing authority from certificate PDFs. Accuracy ~90% on standard AHJ certificate formats.
+          </div>
+          <span class="mtag b-blue">AI extract</span>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-browser mi" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="mt">Step 3: For AHJs with public portals, run a batch lookup by permit number or address to pull current certificate status directly — fills remaining gaps without outreach.
+          </div>
+          <span class="mtag b-amber">Portal lookup</span>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-phone mi" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="mt">Step 4: For remaining gaps — account manager requests copy of certificate from client at next contact. Most clients have it in their building files.
+          </div>
+          <span class="mtag b-amber">Outreach</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-block">
+      <div class="fb-head" onclick="tog(this)">
+        <div class="fb-left">
+          <p class="fb-name">Inspection history records <span class="badge b-red">P1 · backfill from reports</span></p>
+          <p class="fb-sub">Last inspection date + outcome per unit — required for compliance alert and safety report</p>
+        </div>
+      </div>
+      <div class="fb-body">
+        <div class="ba-row">
+          <div class="ba-box before-box">
+            <p class="ba-label before-label">Common state of inspection data</p>
+            <p class="ba-content before-content">
+              — Paper inspection reports in binders<br>— PDFs attached to old work orders<br>— Some in Dynamics as WO notes<br>— Inspector's copy only, not filed with Axxiom<br>— Missing for any acquired client portfolio
+            </p>
+          </div>
+          <div class="ba-box after-box">
+            <p class="ba-label after-label">Minimum required per unit</p>
+            <p class="ba-content after-content">
+              last_inspection_date: "2024-03-15"<br>last_inspection_type: "Annual Safety"<br>last_inspection_outcome: "Pass"<br>inspector_license: "FL-EI-04821"<br>deficiency_codes: []<br>next_inspection_due: "2025-03-15"<br>next_inspection_source: "AHJ-annual-rule"
+            </p>
+          </div>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-robot mi" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="mt">Scan paper binders and PDF reports using Azure Document Intelligence — extracts inspection date, outcome, inspector licence number, and any deficiency codes. Batch process all at once.
+            <p class="mn">Even if you only recover the last 3 years of inspection history, that's enough for the safety report baseline and the compliance alert system.</p>
+          </div>
+          <span class="mtag b-blue">AI extract</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-block">
+      <div class="fb-head" onclick="tog(this)">
+        <div class="fb-left">
+          <p class="fb-name">Deficiency codes from failed inspections <span class="badge b-amber">P2 · high value</span></p>
+          <p class="fb-sub">What exactly failed — required for safety report failure analysis and recall tracking</p>
+        </div>
+      </div>
+      <div class="fb-body">
+        <div class="ba-row">
+          <div class="ba-box before-box">
+            <p class="ba-label before-label">What you'll find</p>
+            <p class="ba-content before-content">
+              "door doesn't meet code"<br>"safety device issue"<br>"oil leak"<br>ASME code reference (on some)<br>"failed - see attached report"<br>NULL on most failed records
+            </p>
+          </div>
+          <div class="ba-box after-box">
+            <p class="ba-label after-label">What it must become</p>
+            <p class="ba-content after-content">
+              deficiency_codes: ["ASME-2.1.3.1"]<br>deficiency_desc: "Door reopening device"<br>severity: "Critical"<br>corrective_action_required: true<br>corrective_action_deadline: "30 days"<br>corrective_action_completed: "2024-04-10"
+            </p>
+          </div>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-robot mi" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="mt">AI maps deficiency descriptions to ASME A17.1 code references where possible. Deficiency records that reference specific code sections are auto-tagged. Vague descriptions go to human review with the original inspection report attached.
+          </div>
+          <span class="mtag b-blue">AI + review</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(3)">← Fault codes</button>
+      <button onclick="go(5)">Tech profiles ↗</button>
+    </div>
+  </div>
+
+  <!-- TECH PROFILES -->
+  <div id="p5" class="panel">
+    <p class="lbl">Entity 5 — Technician profiles</p>
+    <p class="ttl">The compliance gate runs on this data</p>
+    <p class="sub">Tech profile cleaning is P1 because the entire dispatch compliance gate — the hard block that prevents uncertified dispatch — is built on this data. One missing licence expiry date means a tech could be dispatched to a job they're not legally qualified to work.</p>
+
+    <div class="field-block open">
+      <div class="fb-head" onclick="tog(this)">
+        <div class="fb-left">
+          <p class="fb-name">Elevator mechanic licence — number, state, expiry <span class="badge b-red">P1 · manual collection</span></p>
+          <p class="fb-sub">The single most important field in the tech profile · hard block depends entirely on this</p>
+        </div>
+      </div>
+      <div class="fb-body">
+        <div class="ba-row">
+          <div class="ba-box before-box">
+            <p class="ba-label before-label">Current state in Dynamics</p>
+            <p class="ba-content before-content">
+              — Mostly: NULL<br>— Some: "licensed FL"<br>— Rare: actual licence number<br>— Almost never: expiry date<br>— No: multi-state tracking<br>— No: AHJ-specific registration
+            </p>
+          </div>
+          <div class="ba-box after-box">
+            <p class="ba-label after-label">Required per tech</p>
+            <p class="ba-content after-content">
+              licence_number: "FL-EM-002847"<br>issuing_state: "FL"<br>licence_type: "Elevator Mechanic"<br>issue_date: "2020-03-01"<br>expiry_date: "2026-03-01"<br>status: "Active"<br>ahj_registrations: [<br>  {ahj: "FL-MIA-DADE", status: "Active"},<br>  {ahj: "FL-BROWARD", status: "Active"}<br>]
+            </p>
+          </div>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-id mi" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+          <div class="mt">HR/Ops collects licence numbers and expiry dates directly from every active technician — this is a one-time effort. Build a simple form (Microsoft Form or Power App) techs complete on their phone with their licence details and a photo of the licence card.
+            <p class="mn">Timeline: must be complete before the compliance gate goes live. Set a firm deadline — 5 business days from request.</p>
+          </div>
+          <span class="mtag b-red">Manual collect</span>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-browser mi" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="mt">Validate submitted licence numbers against state licensing board lookup APIs — most states have a public "verify a licence" endpoint. Batch verify all submitted numbers. Any that don't match = flag immediately for HR review.
+          </div>
+          <span class="mtag b-amber">Verify</span>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-bell mi" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="mt">Set auto-expiry alerts: 90 days before expiry → HR + manager notified. 30 days → escalation. Day of expiry → tech automatically removed from eligible dispatch pool until renewed licence is filed.
+          </div>
+          <span class="mtag b-green">Ongoing</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-block">
+      <div class="fb-head" onclick="tog(this)">
+        <div class="fb-left">
+          <p class="fb-name">Skill tags + equipment specialisations <span class="badge b-gray">P3 · enhances dispatch</span></p>
+          <p class="fb-sub">Which techs are best on which equipment types — improves asset familiarity scoring</p>
+        </div>
+      </div>
+      <div class="fb-body">
+        <div class="ba-row">
+          <div class="ba-box before-box">
+            <p class="ba-label before-label">Current state</p>
+            <p class="ba-content before-content">
+              — NULL for most techs<br>— "experienced" (meaningless)<br>— "all types" (also meaningless)<br>— No structured skill tags<br>— No equipment specialisation
+            </p>
+          </div>
+          <div class="ba-box after-box">
+            <p class="ba-label after-label">Required structure</p>
+            <p class="ba-content after-content">
+              equipment_specialisations: [<br>  "Hydraulic",<br>  "MRL Traction"<br>]<br>manufacturer_expertise: [<br>  "Otis",<br>  "KONE"<br>]<br>years_experience: 8<br>hospital_cleared: true<br>airport_sida_badge: "BADGE-4821"<br>airport_sida_expiry: "2026-08-01"
+            </p>
+          </div>
+        </div>
+        <div class="method-row">
+          <i class="ti ti-chart-bar mi" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="mt">Derive skill tags automatically from service history — a tech who has completed 200+ jobs on Otis Hydraulic units is tagged as Otis-Hydraulic specialist. No manual input needed for historical data. New techs get tags added as they accumulate job history.
+          </div>
+          <span class="mtag b-blue">Auto-derive</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(4)">← Compliance</button>
+      <button onclick="go(6)">Cleaning scorecard ↗</button>
+    </div>
+  </div>
+
+  <!-- SCORECARD -->
+  <div id="p6" class="panel">
+    <p class="lbl">Cleaning scorecard</p>
+    <p class="ttl">How you know the data is clean enough to publish</p>
+    <p class="sub">The cleaning is not "done" until these thresholds are met. Every metric below is measurable in Dynamics. Run the scorecard at Week 4, Week 8, and Week 12. Only proceed to publishing the safety report when all green thresholds are hit.</p>
+
+    <div class="oc">
+      <p class="ol">Asset record quality thresholds</p>
+      <div class="score-row">
+        <span class="score-label">Equipment type populated</span>
+        <div class="score-track"><div class="score-fill" style="width:100%;background:var(--color-text-success)"></div></div>
+        <span class="score-pct" style="color:var(--color-text-success)">100%</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">AHJ jurisdiction populated</span>
+        <div class="score-track"><div class="score-fill" style="width:100%;background:var(--color-text-success)"></div></div>
+        <span class="score-pct" style="color:var(--color-text-success)">100%</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">Install date populated</span>
+        <div class="score-track"><div class="score-fill" style="width:90%;background:var(--color-text-warning)"></div></div>
+        <span class="score-pct" style="color:var(--color-text-warning)">≥90%</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">Manufacturer + model clean</span>
+        <div class="score-track"><div class="score-fill" style="width:95%;background:var(--color-text-success)"></div></div>
+        <span class="score-pct" style="color:var(--color-text-success)">≥95%</span>
+      </div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">Service event quality thresholds</p>
+      <div class="score-row">
+        <span class="score-label">Event type standardised</span>
+        <div class="score-track"><div class="score-fill" style="width:98%;background:var(--color-text-success)"></div></div>
+        <span class="score-pct" style="color:var(--color-text-success)">≥98%</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">Outcome field populated</span>
+        <div class="score-track"><div class="score-fill" style="width:95%;background:var(--color-text-success)"></div></div>
+        <span class="score-pct" style="color:var(--color-text-success)">≥95%</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">Fault codes extracted</span>
+        <div class="score-track"><div class="score-fill" style="width:80%;background:var(--color-text-warning)"></div></div>
+        <span class="score-pct" style="color:var(--color-text-warning)">≥80%</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">Date validation passes</span>
+        <div class="score-track"><div class="score-fill" style="width:100%;background:var(--color-text-success)"></div></div>
+        <span class="score-pct" style="color:var(--color-text-success)">100%</span>
+      </div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">Compliance record quality thresholds</p>
+      <div class="score-row">
+        <span class="score-label">Current cert expiry date</span>
+        <div class="score-track"><div class="score-fill" style="width:100%;background:var(--color-text-success)"></div></div>
+        <span class="score-pct" style="color:var(--color-text-success)">100%</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">Last inspection date</span>
+        <div class="score-track"><div class="score-fill" style="width:95%;background:var(--color-text-success)"></div></div>
+        <span class="score-pct" style="color:var(--color-text-success)">≥95%</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">Last inspection outcome</span>
+        <div class="score-track"><div class="score-fill" style="width:95%;background:var(--color-text-success)"></div></div>
+        <span class="score-pct" style="color:var(--color-text-success)">≥95%</span>
+      </div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">Tech profile quality thresholds</p>
+      <div class="score-row">
+        <span class="score-label">Licence number on file</span>
+        <div class="score-track"><div class="score-fill" style="width:100%;background:var(--color-text-success)"></div></div>
+        <span class="score-pct" style="color:var(--color-text-success)">100%</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">Licence expiry date</span>
+        <div class="score-track"><div class="score-fill" style="width:100%;background:var(--color-text-success)"></div></div>
+        <span class="score-pct" style="color:var(--color-text-success)">100%</span>
+      </div>
+      <div class="score-row">
+        <span class="score-label">AHJ registrations documented</span>
+        <div class="score-track"><div class="score-fill" style="width:100%;background:var(--color-text-success)"></div></div>
+        <span class="score-pct" style="color:var(--color-text-success)">100%</span>
+      </div>
+    </div>
+
+    <div class="info-row" style="margin-top:4px">
+      <i class="ti ti-alert-triangle ii" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+      <p class="it">Tech profile thresholds are 100% with no exceptions — these directly control whether the compliance gate blocks an uncertified dispatch. Asset and service event thresholds have some flexibility because the safety report can exclude records flagged as incomplete. The compliance gate has zero flexibility.</p>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(5)">← Tech profiles</button>
+      <button onclick="go(0)">← Back to overview</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+function tog(h){h.closest('.field-block').classList.toggle('open')}
+</script>

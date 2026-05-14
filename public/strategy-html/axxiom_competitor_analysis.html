@@ -1,0 +1,586 @@
+
+<style>
+  *{box-sizing:border-box}
+  .wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+  .tab-row{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+  .tab{font-size:11px;font-weight:500;padding:5px 13px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+  .tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .panel{display:none}.panel.active{display:block}
+  .lbl{font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 3px}
+  .ttl{font-size:17px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .sub{font-size:13px;color:var(--color-text-secondary);margin:0 0 14px;line-height:1.6}
+  .comp-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:12px;overflow:hidden}
+  .cc-head{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;cursor:pointer}
+  .cc-head:hover,.comp-card.open .cc-head{background:var(--color-background-secondary)}
+  .cc-logo{width:36px;height:36px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;letter-spacing:-0.5px}
+  .cc-meta{flex:1}
+  .cc-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 2px}
+  .cc-sub{font-size:11px;color:var(--color-text-tertiary);margin:0}
+  .cc-body{display:none;border-top:0.5px solid var(--color-border-tertiary);padding:12px 14px}
+  .comp-card.open .cc-body{display:block}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+  .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:12px}
+  .stat-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px}
+  .stat-label{font-size:10px;color:var(--color-text-tertiary);margin:0 0 3px;text-transform:uppercase;letter-spacing:.05em}
+  .stat-val{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0}
+  .swot-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+  .swot-box{border-radius:var(--border-radius-md);padding:8px 10px}
+  .swot-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin:0 0 5px}
+  .swot-items{font-size:11px;color:var(--color-text-secondary);margin:0;padding-left:14px;line-height:1.7}
+  .threat-box{background:var(--color-background-danger);border-radius:var(--border-radius-md);padding:8px 12px;margin-top:8px}
+  .threat-label{font-size:11px;font-weight:500;color:var(--color-text-danger);margin:0 0 3px}
+  .threat-body{font-size:11px;color:var(--color-text-secondary);margin:0;line-height:1.5}
+  .opp-box{background:var(--color-background-success);border-radius:var(--border-radius-md);padding:8px 12px;margin-top:6px}
+  .opp-label{font-size:11px;font-weight:500;color:var(--color-text-success);margin:0 0 3px}
+  .opp-body{font-size:11px;color:var(--color-text-secondary);margin:0;line-height:1.5}
+  .divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:10px 0}
+  .badge{font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px}
+  .b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+  .b-green{background:var(--color-background-success);color:var(--color-text-success)}
+  .b-amber{background:var(--color-background-warning);color:var(--color-text-warning)}
+  .b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+  .b-purple{background:#EDE9FE;color:#5B21B6}
+  .b-teal{background:#CCFBF1;color:#0F766E}
+  .oc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:10px}
+  .ol{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
+  .fr{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px;gap:8px}
+  .fr:last-child{border-bottom:none}
+  .fk{color:var(--color-text-secondary);flex:1}
+  .fv{font-weight:500;color:var(--color-text-primary);text-align:right;flex-shrink:0}
+  .nav-btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .matrix-row{display:grid;grid-template-columns:140px repeat(5,1fr);gap:4px;margin-bottom:3px;align-items:center}
+  .matrix-label{font-size:11px;color:var(--color-text-secondary);padding:4px 0}
+  .matrix-cell{height:32px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500}
+  .matrix-head{font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-align:center;padding:2px}
+  .info-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+  .ii{font-size:14px;color:var(--color-text-tertiary);flex-shrink:0;margin-top:1px}
+  .it{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+  .win-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-left:3px solid;border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:8px}
+  .win-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .win-body{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Axxiom Elevator competitor analysis — OEMs, independent consolidators, and competitive positioning</h2>
+
+  <div class="tab-row">
+    <button class="tab active" onclick="go(0)">Market map</button>
+    <button class="tab" onclick="go(1)">OEM giants</button>
+    <button class="tab" onclick="go(2)">Independents</button>
+    <button class="tab" onclick="go(3)">Capability matrix</button>
+    <button class="tab" onclick="go(4)">Where Axxiom wins</button>
+  </div>
+
+  <!-- MARKET MAP -->
+  <div id="p0" class="panel active">
+    <p class="lbl">US elevator service market — 2025</p>
+    <p class="ttl">$54.9B industry. Two wars being fought at once.</p>
+    <p class="sub">Axxiom competes in two distinct battles simultaneously: against the OEM giants (Otis, KONE, Schindler, TKE) who own the equipment and are locking in service contracts through IoT platforms, and against fellow independent consolidators (AEG, ESI, Urban Elevator) racing to acquire regional operators before the market consolidates fully.</p>
+
+    <div class="oc">
+      <p class="ol">Market structure snapshot — 2025</p>
+      <div class="fr"><span class="fk">Total US market size</span><span class="fv">$54.9B (CAGR 1.6%)</span></div>
+      <div class="fr"><span class="fk">OEM market share (Otis, KONE, Schindler, TKE)</span><span class="fv"><span class="badge b-red">~55% combined</span></span></div>
+      <div class="fr"><span class="fk">Independent operator share</span><span class="fv"><span class="badge b-green">~45% — the battleground</span></span></div>
+      <div class="fr"><span class="fk">Maintenance & repair vs. new install</span><span class="fv">75% service / 25% new install</span></div>
+      <div class="fr"><span class="fk">Axxiom's acquisitions to date</span><span class="fv">8 acquisitions · AZ, CA, FL, TX, DC markets</span></div>
+      <div class="fr"><span class="fk">Otis move on Urban Elevator (April 2025)</span><span class="fv"><span class="badge b-red">OEMs are now acquiring independents</span></span></div>
+      <div class="fr"><span class="fk">Market consolidation pace</span><span class="fv">Accelerating — Maven Group M&A activity up 40% YoY</span></div>
+    </div>
+
+    <div class="grid3" style="margin-top:4px">
+      <div class="stat-box">
+        <p class="stat-label">Axxiom's competitive tier</p>
+        <p class="stat-val">Mid-market independent consolidator</p>
+      </div>
+      <div class="stat-box">
+        <p class="stat-label">Primary threat</p>
+        <p class="stat-val">OEM IoT lock-in + AEG scale competition</p>
+      </div>
+      <div class="stat-box">
+        <p class="stat-label">Primary opportunity</p>
+        <p class="stat-val">45% independent market not yet consolidated</p>
+      </div>
+    </div>
+
+    <div class="info-row" style="margin-top:8px">
+      <i class="ti ti-alert-triangle ii" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+      <p class="it"><strong style="color:var(--color-text-primary)">The Otis-Urban Elevator deal is the most important competitive signal of 2025.</strong> In April 2025, Otis announced the acquisition of eight of the eleven Urban Elevator locations in the US. OEMs are no longer just competing for new installs — they are now directly acquiring independent service providers. The consolidation window for companies like Axxiom is narrowing.</p>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">Analyse OEM giants ↗</button>
+      <button onclick="go(2)">Analyse independents ↗</button>
+    </div>
+  </div>
+
+  <!-- OEM GIANTS -->
+  <div id="p1" class="panel">
+    <p class="lbl">Tier 1 — OEM giants</p>
+    <p class="ttl">The companies that built the elevators Axxiom services</p>
+    <p class="sub">The four OEMs hold 55% of the US market and are aggressively using their IoT platforms to lock building owners into proprietary service ecosystems. They are Axxiom's biggest structural threat — not because they compete on price, but because they make switching away from OEM service increasingly painful.</p>
+
+    <div class="comp-card open">
+      <div class="cc-head" onclick="tog(this)">
+        <div class="cc-logo" style="background:#0066CC;color:white">OTIS</div>
+        <div class="cc-meta">
+          <p class="cc-name">Otis Worldwide Corporation</p>
+          <p class="cc-sub">NYSE: OTIS · #1 market share · 2M+ units globally · 68,000 employees</p>
+        </div>
+        <span class="badge b-red">Biggest threat</span>
+      </div>
+      <div class="cc-body">
+        <div class="grid3">
+          <div class="stat-box"><p class="stat-label">Annual revenue</p><p class="stat-val">~$14.2B</p></div>
+          <div class="stat-box"><p class="stat-label">Connected units</p><p class="stat-val">1.1M via Otis ONE</p></div>
+          <div class="stat-box"><p class="stat-label">US market share</p><p class="stat-val">Largest OEM share</p></div>
+        </div>
+        <div class="swot-row">
+          <div class="swot-box" style="background:var(--color-background-success)">
+            <p class="swot-label" style="color:var(--color-text-success)">Their strengths</p>
+            <ul class="swot-items">
+              <li>Otis ONE IoT on 1.1M units globally</li>
+              <li>Operating margin 14.8% — industry leading</li>
+              <li>Scale data advantage — 30+ yrs remote monitoring</li>
+              <li>Now acquiring independents (Urban Elevator)</li>
+              <li>Gen3 digital-first new installs</li>
+            </ul>
+          </div>
+          <div class="swot-box" style="background:var(--color-background-danger)">
+            <p class="swot-label" style="color:var(--color-text-danger)">Their weaknesses vs Axxiom</p>
+            <ul class="swot-items">
+              <li>Only monitors Otis-branded units</li>
+              <li>No AHJ jurisdiction compliance tracking</li>
+              <li>Slow, bureaucratic — cannot move like an independent</li>
+              <li>Client feels like a number, not a partner</li>
+              <li>Cannot serve multi-brand portfolios well</li>
+            </ul>
+          </div>
+        </div>
+        <div class="threat-box">
+          <p class="threat-label"><i class="ti ti-alert-triangle" aria-hidden="true"></i> Threat to Axxiom</p>
+          <p class="threat-body">Otis ONE locks building owners into Otis service by making their data only visible on the Otis platform. A building that signs up for Otis ONE on their Otis units has one more reason to stay with Otis when the contract renews. Axxiom must offer equivalent (or better) data visibility across all brands to counter this.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="cc-head" onclick="tog(this)">
+        <div class="cc-logo" style="background:#009BC7;color:white">KONE</div>
+        <div class="cc-meta">
+          <p class="cc-name">KONE Corporation</p>
+          <p class="cc-sub">Helsinki: KNEBV · Finland HQ · moves 2B people/day · strongest AI platform</p>
+        </div>
+        <span class="badge b-red">Most advanced AI</span>
+      </div>
+      <div class="cc-body">
+        <div class="grid3">
+          <div class="stat-box"><p class="stat-label">Annual revenue</p><p class="stat-val">~€11.1B</p></div>
+          <div class="stat-box"><p class="stat-label">R&D intensity</p><p class="stat-val">2.1% of revenue</p></div>
+          <div class="stat-box"><p class="stat-label">AI platform</p><p class="stat-val">24/7 Connected Services</p></div>
+        </div>
+        <div class="swot-row">
+          <div class="swot-box" style="background:var(--color-background-success)">
+            <p class="swot-label" style="color:var(--color-text-success)">Their strengths</p>
+            <ul class="swot-items">
+              <li>24/7 Connected Services: 70% more proactive fault detection</li>
+              <li>40% fewer service disruptions on connected fleet</li>
+              <li>Technician Assistant built on Claude AI (AWS)</li>
+              <li>Debt-free balance sheet — can invest aggressively</li>
+              <li>Highest R&D spend of any elevator OEM</li>
+            </ul>
+          </div>
+          <div class="swot-box" style="background:var(--color-background-danger)">
+            <p class="swot-label" style="color:var(--color-text-danger)">Their weaknesses vs Axxiom</p>
+            <ul class="swot-items">
+              <li>KONE units only — cannot service Otis/Schindler fleet</li>
+              <li>No compliance tracking for AHJ jurisdictions</li>
+              <li>Positioned globally — not locally responsive</li>
+              <li>Premium pricing — loses on price to independents</li>
+            </ul>
+          </div>
+        </div>
+        <div class="threat-box">
+          <p class="threat-label"><i class="ti ti-alert-triangle" aria-hidden="true"></i> Threat to Axxiom</p>
+          <p class="threat-body">KONE's AI is genuinely impressive — their Technician Assistant (built on the same Claude AI powering this conversation) helps field techs fix elevators faster using asset history and IoT data. KONE co-innovated with AWS in developing the Technician Assistant, built using Anthropic Claude models on Amazon Bedrock. This is the benchmark Axxiom's job brief AI needs to match or beat.</p>
+        </div>
+        <div class="opp-box">
+          <p class="opp-label"><i class="ti ti-check" aria-hidden="true"></i> Axxiom advantage</p>
+          <p class="opp-body">KONE's platform only covers KONE units. Most mid-market building portfolios have 3–4 different OEM brands. Axxiom can provide a single safety intelligence layer across ALL brands in a portfolio — something no OEM can offer.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="cc-head" onclick="tog(this)">
+        <div class="cc-logo" style="background:#E30513;color:white">SCH</div>
+        <div class="cc-meta">
+          <p class="cc-name">Schindler Group</p>
+          <p class="cc-sub">SIX: SCHN · Switzerland HQ · #2 global market share · expanding MRL line</p>
+        </div>
+        <span class="badge b-amber">Growing fast</span>
+      </div>
+      <div class="cc-body">
+        <div class="grid3">
+          <div class="stat-box"><p class="stat-label">Annual revenue</p><p class="stat-val">~CHF 11.5B</p></div>
+          <div class="stat-box"><p class="stat-label">2025 US launch</p><p class="stat-val">Schindler 5000 MRL</p></div>
+          <div class="stat-box"><p class="stat-label">Focus</p><p class="stat-val">Urban mobility + IoT retrofit</p></div>
+        </div>
+        <div class="swot-row">
+          <div class="swot-box" style="background:var(--color-background-success)">
+            <p class="swot-label" style="color:var(--color-text-success)">Their strengths</p>
+            <ul class="swot-items">
+              <li>Launched Schindler 5000 MRL in April 2025 — targets hotels, hospitals</li>
+              <li>Strong in Axxiom's core verticals (hospitality, healthcare)</li>
+              <li>Schindler Ahead IoT platform for remote monitoring</li>
+              <li>30% energy reduction with regenerative drives</li>
+            </ul>
+          </div>
+          <div class="swot-box" style="background:var(--color-background-danger)">
+            <p class="swot-label" style="color:var(--color-text-danger)">Their weaknesses vs Axxiom</p>
+            <ul class="swot-items">
+              <li>Less aggressive US market penetration than Otis/KONE</li>
+              <li>IoT platform less mature than Otis ONE or KONE 24/7</li>
+              <li>No multi-brand fleet intelligence capability</li>
+              <li>New Schindler 5000 targets same verticals Axxiom serves</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="cc-head" onclick="tog(this)">
+        <div class="cc-logo" style="background:#00669E;color:white">TKE</div>
+        <div class="cc-meta">
+          <p class="cc-name">TK Elevator (ThyssenKrupp)</p>
+          <p class="cc-sub">Germany HQ · MAX predictive platform · strong modernisation focus</p>
+        </div>
+        <span class="badge b-amber">Modernisation play</span>
+      </div>
+      <div class="cc-body">
+        <div class="grid3">
+          <div class="stat-box"><p class="stat-label">Platform</p><p class="stat-val">MAX (Azure-powered)</span></p></div>
+          <div class="stat-box"><p class="stat-label">Strategy focus</p><p class="stat-val">Modernisation + digital retrofit</p></div>
+          <div class="stat-box"><p class="stat-label">Science target</p><p class="stat-val">Net zero via Race to Zero</p></div>
+        </div>
+        <div class="swot-row">
+          <div class="swot-box" style="background:var(--color-background-success)">
+            <p class="swot-label" style="color:var(--color-text-success)">Their strengths</p>
+            <ul class="swot-items">
+              <li>MAX platform runs on Microsoft Azure — similar stack to Axxiom</li>
+              <li>Aggressive modernisation pricing targets aging US fleet</li>
+              <li>Strong R&D in digital transformation and energy transition</li>
+            </ul>
+          </div>
+          <div class="swot-box" style="background:var(--color-background-danger)">
+            <p class="swot-label" style="color:var(--color-text-danger)">Their weaknesses vs Axxiom</p>
+            <ul class="swot-items">
+              <li>Smallest US footprint of the Big 4 OEMs</li>
+              <li>MAX only works on TKE-branded equipment</li>
+              <li>Heavily Europe-focused management priorities</li>
+            </ul>
+          </div>
+        </div>
+        <div class="opp-box">
+          <p class="opp-label"><i class="ti ti-check" aria-hidden="true"></i> Strategic note</p>
+          <p class="opp-body">TKE's Azure-based MAX platform means they're building on the same Microsoft infrastructure as Axxiom. If Axxiom builds the data safety standard first, TKE is a natural acquisition or data-partnership target — they would benefit from Axxiom's multi-brand compliance intelligence.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(0)">← Market map</button>
+      <button onclick="go(2)">Independent competitors ↗</button>
+    </div>
+  </div>
+
+  <!-- INDEPENDENTS -->
+  <div id="p2" class="panel">
+    <p class="lbl">Tier 2 — Independent consolidators</p>
+    <p class="ttl">The companies competing for the same 45% Axxiom is targeting</p>
+    <p class="sub">These are Axxiom's most direct competitors — PE-backed rollup platforms acquiring regional independents at pace. The race is to acquire the best operators and reach national scale before the acquisition market gets too expensive. Axxiom is in this race with at least 3 well-funded rivals.</p>
+
+    <div class="comp-card open">
+      <div class="cc-head" onclick="tog(this)">
+        <div class="cc-logo" style="background:#1A3A6B;color:white">AEG</div>
+        <div class="cc-meta">
+          <p class="cc-name">American Elevator Group (AEG)</p>
+          <p class="cc-sub">Founded 2020 · Arcline PE-backed · 21 states · self-described "largest independent"</p>
+        </div>
+        <span class="badge b-red">Most direct rival</span>
+      </div>
+      <div class="cc-body">
+        <div class="grid3">
+          <div class="stat-box"><p class="stat-label">Founded</p><p class="stat-val">2020 (same era as Axxiom's push)</p></div>
+          <div class="stat-box"><p class="stat-label">Geographic reach</p><p class="stat-val">21 states</p></div>
+          <div class="stat-box"><p class="stat-label">Backing</p><p class="stat-val">Arcline (PE) · $24.7M raised</p></div>
+        </div>
+        <div class="swot-row">
+          <div class="swot-box" style="background:var(--color-background-success)">
+            <p class="swot-label" style="color:var(--color-text-success)">Their strengths</p>
+            <ul class="swot-items">
+              <li>21-state footprint — already national scale</li>
+              <li>Institutional PE backing with deep capital</li>
+              <li>RISE platform — proprietary tech for member companies</li>
+              <li>330+ years combined management experience claim</li>
+              <li>Faster geographic coverage than Axxiom today</li>
+            </ul>
+          </div>
+          <div class="swot-box" style="background:var(--color-background-danger)">
+            <p class="swot-label" style="color:var(--color-text-danger)">Their weaknesses vs Axxiom</p>
+            <ul class="swot-items">
+              <li>No published safety data or public safety standard</li>
+              <li>Federation model — harder to unify data across entities</li>
+              <li>No AI dispatch or predictive maintenance built yet</li>
+              <li>No AHJ compliance intelligence system</li>
+              <li>Brand is the group, not a single unified identity</li>
+            </ul>
+          </div>
+        </div>
+        <div class="threat-box">
+          <p class="threat-label"><i class="ti ti-alert-triangle" aria-hidden="true"></i> Threat to Axxiom</p>
+          <p class="threat-body">AEG is operating in 21 states versus Axxiom's 5. If AEG builds even a basic AI layer before Axxiom builds its data moat, they can outcompete on both scale and technology. The window to establish Axxiom's data advantage before AEG catches up is 12–18 months.</p>
+        </div>
+        <div class="opp-box">
+          <p class="opp-label"><i class="ti ti-check" aria-hidden="true"></i> Axxiom's edge</p>
+          <p class="opp-body">AEG's federation structure makes unified data quality very hard to achieve. Each member company has its own systems and culture. Axxiom's integrated model means one data standard across the whole organisation — a faster path to a publishable safety dataset.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="cc-head" onclick="tog(this)">
+        <div class="cc-logo" style="background:#0F766E;color:white">ESI</div>
+        <div class="cc-meta">
+          <p class="cc-name">Elevator Service Inc. (ESI)</p>
+          <p class="cc-sub">Acquiring in SW markets · expanding into Axxiom's TX territory</p>
+        </div>
+        <span class="badge b-amber">Territory overlap</span>
+      </div>
+      <div class="cc-body">
+        <div class="grid3">
+          <div class="stat-box"><p class="stat-label">2025 move</p><p class="stat-val">Acquired American Elevator (OK/TX)</p></div>
+          <div class="stat-box"><p class="stat-label">CEO</p><p class="stat-val">Jason Vallee</p></div>
+          <div class="stat-box"><p class="stat-label">Overlap with Axxiom</p><p class="stat-val">Texas market · SW expansion</p></div>
+        </div>
+        <div class="swot-row">
+          <div class="swot-box" style="background:var(--color-background-success)">
+            <p class="swot-label" style="color:var(--color-text-success)">Their strengths</p>
+            <ul class="swot-items">
+              <li>Active acquirer in Axxiom's core TX geography</li>
+              <li>Strong customer relationships in regional markets</li>
+              <li>Growing Southwest footprint rapidly</li>
+            </ul>
+          </div>
+          <div class="swot-box" style="background:var(--color-background-danger)">
+            <p class="swot-label" style="color:var(--color-text-danger)">Their weaknesses</p>
+            <ul class="swot-items">
+              <li>Smaller scale than AEG or Axxiom</li>
+              <li>No evidence of AI or data platform investment</li>
+              <li>Limited geographic reach outside SW</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-card">
+      <div class="cc-head" onclick="tog(this)">
+        <div class="cc-logo" style="background:#5B21B6;color:white">3PH</div>
+        <div class="cc-meta">
+          <p class="cc-name">3Phase Elevator</p>
+          <p class="cc-sub">DC/Baltimore market · digital capabilities called out explicitly · Advanced Elevator merger 2025</p>
+        </div>
+        <span class="badge b-purple">Digital-forward indie</span>
+      </div>
+      <div class="cc-body">
+        <div class="grid3">
+          <div class="stat-box"><p class="stat-label">Market</p><p class="stat-val">DC / Baltimore / Mid-Atlantic</p></div>
+          <div class="stat-box"><p class="stat-label">Differentiator</p><p class="stat-val">"Digital capabilities and automation"</p></div>
+          <div class="stat-box"><p class="stat-label">2025 move</p><p class="stat-val">Merged with Advanced Elevator</p></div>
+        </div>
+        <div class="swot-row">
+          <div class="swot-box" style="background:var(--color-background-success)">
+            <p class="swot-label" style="color:var(--color-text-success)">Their strengths</p>
+            <ul class="swot-items">
+              <li>Explicitly positioning on digital/automation — rare for an indie</li>
+              <li>Overlap with Axxiom's DC market (Quality Elevator)</li>
+              <li>Growing regional presence</li>
+            </ul>
+          </div>
+          <div class="swot-box" style="background:var(--color-background-danger)">
+            <p class="swot-label" style="color:var(--color-text-danger)">Their weaknesses</p>
+            <ul class="swot-items">
+              <li>Single region — not a national platform</li>
+              <li>Digital claims unsubstantiated publicly</li>
+              <li>No data product or safety standard</li>
+            </ul>
+          </div>
+        </div>
+        <div class="threat-box">
+          <p class="threat-label"><i class="ti ti-alert-triangle" aria-hidden="true"></i> Watch closely</p>
+          <p class="threat-body">3Phase is the canary in the coal mine for the independents space. If a small regional operator is explicitly calling out "digital capabilities" as a differentiator, it means the market is shifting. Clients are starting to ask about technology. Axxiom must out-execute this positioning before it becomes table stakes in every RFP.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">← OEM giants</button>
+      <button onclick="go(3)">Capability matrix ↗</button>
+    </div>
+  </div>
+
+  <!-- CAPABILITY MATRIX -->
+  <div id="p3" class="panel">
+    <p class="lbl">Head-to-head capability comparison</p>
+    <p class="ttl">Where Axxiom stands today vs. where it must be</p>
+    <p class="sub">Green = advantage or on-par. Amber = gap but closeable. Red = significant gap. The matrix compares current state (before the AI build) and projected state (after Year 1 implementation).</p>
+
+    <div class="oc">
+      <p class="ol">Capability matrix — current state + projected Year 1</p>
+
+      <div class="matrix-row">
+        <span class="matrix-label"></span>
+        <span class="matrix-head">Axxiom NOW</span>
+        <span class="matrix-head">Axxiom Y1</span>
+        <span class="matrix-head">Otis / KONE</span>
+        <span class="matrix-head">AEG</span>
+        <span class="matrix-head">ESI / 3Phase</span>
+      </div>
+
+      <div class="matrix-row">
+        <span class="matrix-label" style="font-size:11px;color:var(--color-text-secondary)">AI dispatch</span>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">Manual</div>
+        <div class="matrix-cell" style="background:var(--color-background-success);color:var(--color-text-success)">✓ Built</div>
+        <div class="matrix-cell" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">Internal only</div>
+        <div class="matrix-cell" style="background:var(--color-background-warning);color:var(--color-text-warning)">Partial</div>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">No</div>
+      </div>
+
+      <div class="matrix-row">
+        <span class="matrix-label" style="font-size:11px;color:var(--color-text-secondary)">Compliance gate</span>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">Manual</div>
+        <div class="matrix-cell" style="background:var(--color-background-success);color:var(--color-text-success)">✓ Hard block</div>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">None</div>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">None</div>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">None</div>
+      </div>
+
+      <div class="matrix-row">
+        <span class="matrix-label" style="font-size:11px;color:var(--color-text-secondary)">Predictive maintenance</span>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">None</div>
+        <div class="matrix-cell" style="background:var(--color-background-success);color:var(--color-text-success)">✓ All brands</div>
+        <div class="matrix-cell" style="background:var(--color-background-success);color:var(--color-text-success)">✓ Own brand</div>
+        <div class="matrix-cell" style="background:var(--color-background-warning);color:var(--color-text-warning)">Partial</div>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">No</div>
+      </div>
+
+      <div class="matrix-row">
+        <span class="matrix-label" style="font-size:11px;color:var(--color-text-secondary)">Multi-brand IoT</span>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">None</div>
+        <div class="matrix-cell" style="background:var(--color-background-warning);color:var(--color-text-warning)">Phase 2</div>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">Own brand only</div>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">No</div>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">No</div>
+      </div>
+
+      <div class="matrix-row">
+        <span class="matrix-label" style="font-size:11px;color:var(--color-text-secondary)">AHJ rules database</span>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">None</div>
+        <div class="matrix-cell" style="background:var(--color-background-success);color:var(--color-text-success)">✓ All markets</div>
+        <div class="matrix-cell" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">Not published</div>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">No</div>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">No</div>
+      </div>
+
+      <div class="matrix-row">
+        <span class="matrix-label" style="font-size:11px;color:var(--color-text-secondary)">Public safety report</span>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">None</div>
+        <div class="matrix-cell" style="background:var(--color-background-warning);color:var(--color-text-warning)">Year 1 end</div>
+        <div class="matrix-cell" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">Internal only</div>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">None</div>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">None</div>
+      </div>
+
+      <div class="matrix-row">
+        <span class="matrix-label" style="font-size:11px;color:var(--color-text-secondary)">Safety certification</span>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">None</div>
+        <div class="matrix-cell" style="background:var(--color-background-warning);color:var(--color-text-warning)">Year 2</div>
+        <div class="matrix-cell" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">None</div>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">None</div>
+        <div class="matrix-cell" style="background:var(--color-background-danger);color:var(--color-text-danger)">None</div>
+      </div>
+
+      <div class="matrix-row">
+        <span class="matrix-label" style="font-size:11px;color:var(--color-text-secondary)">New market speed</span>
+        <div class="matrix-cell" style="background:var(--color-background-warning);color:var(--color-text-warning)">Months</div>
+        <div class="matrix-cell" style="background:var(--color-background-success);color:var(--color-text-success)">✓ Weeks</div>
+        <div class="matrix-cell" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">Slow/franchise</div>
+        <div class="matrix-cell" style="background:var(--color-background-warning);color:var(--color-text-warning)">Months</div>
+        <div class="matrix-cell" style="background:var(--color-background-warning);color:var(--color-text-warning)">Months</div>
+      </div>
+    </div>
+
+    <div class="info-row">
+      <i class="ti ti-bulb ii" aria-hidden="true"></i>
+      <p class="it">The compliance gate row is the most striking finding in this matrix. <strong style="color:var(--color-text-primary)">No competitor — OEM or independent — has a systematic compliance gate that hard-blocks uncertified dispatch.</strong> Not Otis. Not KONE. Not AEG. This is a gap in the entire industry that Axxiom can own and make their headline differentiator in every enterprise sales conversation.</p>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(2)">← Independents</button>
+      <button onclick="go(4)">Where Axxiom wins ↗</button>
+    </div>
+  </div>
+
+  <!-- WHERE AXXIOM WINS -->
+  <div id="p4" class="panel">
+    <p class="lbl">Competitive positioning</p>
+    <p class="ttl">Axxiom's 5 unfair advantages — if the AI build happens</p>
+    <p class="sub">These are the specific competitive positions no one else in the market currently occupies. Each one is defensible, each one compounds over time, and none of them require Axxiom to out-spend the OEMs.</p>
+
+    <div class="win-card" style="border-left-color:var(--color-text-info)">
+      <p class="win-title"><span class="badge b-blue">01</span> &nbsp;The only service company with a systematic AHJ compliance gate</p>
+      <p class="win-body">No OEM tracks compliance at the dispatch level — they assume their techs are certified. No independent has this either. Axxiom can walk into any enterprise RFP and say: "Our dispatch system hard-blocks any uncertified technician from receiving a job assignment. No other elevator company can say that." In healthcare and government verticals, this closes deals that compliance-agnostic competitors cannot win.</p>
+    </div>
+
+    <div class="win-card" style="border-left-color:var(--color-text-success)">
+      <p class="win-title"><span class="badge b-green">02</span> &nbsp;Multi-brand predictive intelligence — OEMs are brand-locked, Axxiom isn't</p>
+      <p class="win-body">Otis ONE only works on Otis units. KONE 24/7 only covers KONE equipment. A hospital with 14 Otis, 6 KONE, and 3 Schindler elevators has to use three separate platforms — or none. Axxiom provides one unified risk score, one compliance dashboard, and one safety report covering the entire mixed-brand portfolio. This is a structural advantage the OEMs cannot match without abandoning their brand-protection strategy.</p>
+    </div>
+
+    <div class="win-card" style="border-left-color:var(--color-text-warning)">
+      <p class="win-title"><span class="badge b-amber">03</span> &nbsp;The only independent building toward a published safety standard</p>
+      <p class="win-body">AEG, ESI, 3Phase — none of them are building toward a public safety report, a safety index, or a certification program. The Annual Elevator Safety Report positions Axxiom as the intelligent operator in an industry that has never had one. Once the report is published and cited, it is extremely difficult for a competitor to simply launch a competing report and be taken seriously — credibility in this space takes years to build.</p>
+    </div>
+
+    <div class="win-card" style="border-left-color:var(--color-text-danger)">
+      <p class="win-title"><span class="badge b-red">04</span> &nbsp;Fastest expansion velocity through the AHJ database</p>
+      <p class="win-body">When Axxiom acquires a regional operator or enters a new city, the AHJ rules database and the AI dispatch system are already configured for that jurisdiction. The new market is compliance-ready from day one. AEG needs months to integrate each acquisition into their systems. Axxiom's onboarding speed — and the data quality that comes with it — is a genuine operational moat that accelerates the acquisition flywheel.</p>
+    </div>
+
+    <div class="win-card" style="border-left-color:var(--color-text-tertiary)">
+      <p class="win-title"><span class="badge b-gray">05</span> &nbsp;The platform exit that OEMs will pay for</p>
+      <p class="win-body">Otis, KONE, and Schindler all have proprietary IoT platforms that only cover their own brand. None of them have independent, regulator-trusted, multi-brand safety data. An acquisition of Axxiom at Year 3 gives any of the Big 4 exactly that — a credible, independent safety data standard they couldn't build themselves without losing the trust that makes it valuable. This exit optionality is worth building toward from day one.</p>
+    </div>
+
+    <div class="info-row" style="margin-top:8px">
+      <i class="ti ti-alert-triangle ii" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+      <p class="it"><strong style="color:var(--color-text-primary)">The urgency signal:</strong> In April 2025, Otis announced the acquisition of eight of the eleven Urban Elevator locations in the US. The OEMs have started buying independents. Every regional operator Otis, KONE, or AEG acquires is one fewer potential Axxiom acquisition and one more client portfolio locked into a competitor's platform. The window to build scale and data moat before the market consolidates is 18–24 months — not 5 years.</p>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(3)">← Capability matrix</button>
+      <button onclick="go(0)">← Market map</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+function tog(h){h.closest('.comp-card').classList.toggle('open')}
+</script>

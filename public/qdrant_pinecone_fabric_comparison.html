@@ -1,0 +1,402 @@
+
+<style>
+  *{box-sizing:border-box}
+  .wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+  .tab-row{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+  .tab{font-size:11px;font-weight:500;padding:5px 13px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+  .tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .panel{display:none}.panel.active{display:block}
+  .lbl{font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 4px}
+  .ttl{font-size:16px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .sub{font-size:13px;color:var(--color-text-secondary);margin:0 0 14px;line-height:1.6}
+  .divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:14px 0}
+  .badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px}
+  .b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+  .b-green{background:var(--color-background-success);color:var(--color-text-success)}
+  .b-amber{background:var(--color-background-warning);color:var(--color-text-warning)}
+  .b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+  .b-purple{background:#EDE9FE;color:#5B21B6}
+
+  /* Platform header cards */
+  .platform-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+  .platform-card{border-radius:var(--border-radius-lg);padding:16px;border:0.5px solid var(--color-border-tertiary)}
+  .p-qdrant{background:linear-gradient(135deg,rgba(0,184,124,0.08),rgba(0,184,124,0.03));border-color:rgba(0,184,124,0.25)}
+  .p-pinecone{background:linear-gradient(135deg,rgba(0,131,245,0.08),rgba(0,131,245,0.03));border-color:rgba(0,131,245,0.25)}
+  .p-fabric{background:linear-gradient(135deg,rgba(0,120,212,0.08),rgba(91,33,182,0.03));border-color:rgba(0,120,212,0.25)}
+  .platform-name{font-size:16px;font-weight:700;margin:0 0 3px}
+  .platform-tagline{font-size:11px;color:var(--color-text-tertiary);margin:0 0 10px}
+  .platform-verdicts{display:flex;flex-wrap:wrap;gap:4px}
+
+  /* Comparison table */
+  .comp-table{width:100%;border-collapse:collapse;margin-bottom:16px}
+  .comp-table th{text-align:left;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--color-text-tertiary);padding:10px 12px;border-bottom:1px solid var(--color-border-tertiary)}
+  .comp-table th:not(:first-child){text-align:center}
+  .comp-table td{padding:10px 12px;font-size:12px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top;line-height:1.5}
+  .comp-table tr:last-child td{border-bottom:none}
+  .comp-table td:first-child{font-weight:600;color:var(--color-text-secondary);font-size:11px;width:160px}
+  .comp-table td:not(:first-child){text-align:center;color:var(--color-text-primary)}
+  .comp-table .cat-row td{background:var(--color-background-secondary);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-tertiary);padding:6px 12px}
+
+  /* Score bars */
+  .score-wrap{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+  .score-row{display:flex;align-items:center;gap:10px}
+  .score-label{font-size:12px;color:var(--color-text-secondary);width:170px;flex-shrink:0}
+  .score-bars{display:flex;flex-direction:column;gap:3px;flex:1}
+  .bar-item{display:flex;align-items:center;gap:6px}
+  .bar-name{font-size:10px;color:var(--color-text-tertiary);width:60px;flex-shrink:0;text-align:right}
+  .bar-track{flex:1;height:8px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:4px;transition:width .5s}
+  .bar-val{font-size:10px;font-weight:600;width:36px;text-align:left;flex-shrink:0}
+
+  /* Use case cards */
+  .uc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+  .uc-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px}
+  .uc-title{font-size:12px;font-weight:600;color:var(--color-text-primary);margin:0 0 6px}
+  .uc-item{display:flex;align-items:flex-start;gap:6px;padding:4px 0;font-size:11px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);line-height:1.5}
+  .uc-item:last-child{border-bottom:none}
+  .uc-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px}
+
+  /* Pricing rows */
+  .price-row{display:flex;align-items:stretch;gap:12px;margin-bottom:10px}
+  .price-card{flex:1;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px}
+  .price-platform{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin:0 0 8px}
+  .price-tier{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+  .price-tier:last-child{border-bottom:none}
+  .pt-name{color:var(--color-text-secondary)}
+  .pt-val{font-weight:600;color:var(--color-text-primary)}
+
+  /* Winner callouts */
+  .winner-row{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .winner-card{flex:1;min-width:150px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px}
+  .winner-category{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 4px}
+  .winner-name{font-size:13px;font-weight:600;margin:0 0 3px}
+  .winner-why{font-size:11px;color:var(--color-text-secondary);margin:0}
+
+  .info-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+  .ii{font-size:14px;color:var(--color-text-tertiary);flex-shrink:0;margin-top:1px}
+  .it{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+  .nav-btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+
+  /* Important distinction box */
+  .distinction{background:var(--color-background-warning);border:0.5px solid var(--color-border-tertiary);border-left:3px solid var(--color-text-warning);border-radius:var(--border-radius-md);padding:12px 14px;margin-bottom:14px}
+  .distinction-title{font-size:12px;font-weight:600;color:var(--color-text-warning);margin:0 0 5px}
+  .distinction-body{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Qdrant vs Pinecone vs Microsoft Fabric — vector database and AI data platform comparison 2026</h2>
+
+  <div class="tab-row">
+    <button class="tab active" onclick="go(0)">Overview</button>
+    <button class="tab" onclick="go(1)">Performance</button>
+    <button class="tab" onclick="go(2)">Full comparison</button>
+    <button class="tab" onclick="go(3)">Pricing</button>
+    <button class="tab" onclick="go(4)">When to use each</button>
+    <button class="tab" onclick="go(5)">For your stack</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div id="p0" class="panel active">
+    <p class="lbl">Vector database + AI data platform · 2026</p>
+    <p class="ttl">Qdrant vs Pinecone vs Microsoft Fabric</p>
+    <p class="sub">Two purpose-built vector databases vs one unified data platform. Qdrant and Pinecone compete head-to-head on vector storage and similarity search. Microsoft Fabric is a different category altogether — it includes vector capabilities but is fundamentally an enterprise data analytics + AI platform.</p>
+
+    <div class="distinction">
+      <p class="distinction-title">⚠ Important framing before comparing</p>
+      <p class="distinction-body">Qdrant and Pinecone are <strong>purpose-built vector databases</strong> — their entire architecture exists to store and search embeddings. Microsoft Fabric is a <strong>unified analytics + AI platform</strong> that includes vector search via Eventhouse and SQL Database. Comparing them is like asking "should I use a dedicated scalpel or a surgical suite?" — different scope, different trade-offs.</p>
+    </div>
+
+    <div class="platform-grid">
+      <div class="platform-card p-qdrant">
+        <div class="platform-name" style="color:#00B87C">Qdrant</div>
+        <div class="platform-tagline">Open-source · Rust-powered · Fastest raw perf</div>
+        <div class="platform-verdicts">
+          <span class="badge b-green">Best performance</span>
+          <span class="badge b-green">Cheapest at scale</span>
+          <span class="badge b-green">Self-hostable</span>
+          <span class="badge b-gray">Needs engineering</span>
+        </div>
+      </div>
+      <div class="platform-card p-pinecone">
+        <div class="platform-name" style="color:#0083F5">Pinecone</div>
+        <div class="platform-tagline">Fully managed SaaS · Zero infra · Ship in days</div>
+        <div class="platform-verdicts">
+          <span class="badge b-blue">Easiest to start</span>
+          <span class="badge b-blue">HIPAA / SOC2</span>
+          <span class="badge b-blue">Best DX</span>
+          <span class="badge b-gray">Most expensive</span>
+        </div>
+      </div>
+      <div class="platform-card p-fabric">
+        <div class="platform-name" style="color:#0078D4">Microsoft Fabric</div>
+        <div class="platform-tagline">Unified data + AI platform · Not a pure vector DB</div>
+        <div class="platform-verdicts">
+          <span class="badge b-purple">Full data platform</span>
+          <span class="badge b-purple">OneLake + RAG</span>
+          <span class="badge b-purple">MS ecosystem</span>
+          <span class="badge b-gray">Overkill for pure vector</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="winner-row">
+      <div class="winner-card">
+        <div class="winner-category">Raw speed</div>
+        <div class="winner-name" style="color:#00B87C">🏆 Qdrant</div>
+        <div class="winner-why">22ms p95 vs Pinecone's 45ms · 326 QPS vs 150 QPS</div>
+      </div>
+      <div class="winner-card">
+        <div class="winner-category">Easiest setup</div>
+        <div class="winner-name" style="color:#0083F5">🏆 Pinecone</div>
+        <div class="winner-why">Live in hours, zero infra, best docs and DX</div>
+      </div>
+      <div class="winner-card">
+        <div class="winner-category">Cost at scale</div>
+        <div class="winner-name" style="color:#00B87C">🏆 Qdrant</div>
+        <div class="winner-why">$45/mo vs $70/mo at 10M vectors. Free self-hosted.</div>
+      </div>
+      <div class="winner-card">
+        <div class="winner-category">Compliance</div>
+        <div class="winner-name" style="color:#0083F5">🏆 Pinecone</div>
+        <div class="winner-why">HIPAA + SOC2 + ISO 27001 + GDPR all certified</div>
+      </div>
+      <div class="winner-card">
+        <div class="winner-category">Enterprise data platform</div>
+        <div class="winner-name" style="color:#0078D4">🏆 Fabric</div>
+        <div class="winner-why">If you need data + analytics + AI in one — nothing competes</div>
+      </div>
+      <div class="winner-card">
+        <div class="winner-category">Microsoft ecosystem</div>
+        <div class="winner-name" style="color:#0078D4">🏆 Fabric</div>
+        <div class="winner-why">Native Dynamics 365, Azure AD, Power BI, Teams integration</div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">See performance benchmarks ↗</button>
+      <button onclick="go(2)">Full feature comparison ↗</button>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <div id="p1" class="panel">
+    <p class="lbl">Performance benchmarks — 2025/2026</p>
+    <p class="ttl">Numbers from production testing at 10M vectors</p>
+    <p class="sub">Qdrant consistently wins on raw performance. Pinecone wins on operational simplicity. Fabric's Eventhouse is competitive for hybrid analytical + vector workloads but not designed for pure vector throughput racing.</p>
+
+    <div class="score-wrap">
+      <div>
+        <div class="lbl" style="margin-bottom:6px;">Query latency p95 (lower is better)</div>
+        <div class="bar-item"><span class="bar-name" style="color:#00B87C">Qdrant</span><div class="bar-track"><div class="bar-fill" style="width:30%;background:#00B87C"></div></div><span class="bar-val" style="color:#00B87C">22ms</span></div>
+        <div class="bar-item" style="margin-top:4px"><span class="bar-name" style="color:#0083F5">Pinecone</span><div class="bar-track"><div class="bar-fill" style="width:60%;background:#0083F5"></div></div><span class="bar-val" style="color:#0083F5">45ms</span></div>
+        <div class="bar-item" style="margin-top:4px"><span class="bar-name" style="color:#0078D4">Fabric EH</span><div class="bar-track"><div class="bar-fill" style="width:75%;background:#0078D4"></div></div><span class="bar-val" style="color:#0078D4">~60ms*</span></div>
+      </div>
+      <div class="divider"></div>
+      <div>
+        <div class="lbl" style="margin-bottom:6px;">Queries per second at 10M vectors (higher is better)</div>
+        <div class="bar-item"><span class="bar-name" style="color:#00B87C">Qdrant</span><div class="bar-track"><div class="bar-fill" style="width:90%;background:#00B87C"></div></div><span class="bar-val" style="color:#00B87C">326 QPS</span></div>
+        <div class="bar-item" style="margin-top:4px"><span class="bar-name" style="color:#0083F5">Pinecone</span><div class="bar-track"><div class="bar-fill" style="width:46%;background:#0083F5"></div></div><span class="bar-val" style="color:#0083F5">150 QPS</span></div>
+        <div class="bar-item" style="margin-top:4px"><span class="bar-name" style="color:#0078D4">Fabric EH</span><div class="bar-track"><div class="bar-fill" style="width:35%;background:#0078D4"></div></div><span class="bar-val" style="color:#0078D4">~115 QPS*</span></div>
+      </div>
+      <div class="divider"></div>
+      <div>
+        <div class="lbl" style="margin-bottom:6px;">Write throughput / indexing speed (higher is better)</div>
+        <div class="bar-item"><span class="bar-name" style="color:#00B87C">Qdrant</span><div class="bar-track"><div class="bar-fill" style="width:85%;background:#00B87C"></div></div><span class="bar-val" style="color:#00B87C">High</span></div>
+        <div class="bar-item" style="margin-top:4px"><span class="bar-name" style="color:#0083F5">Pinecone</span><div class="bar-track"><div class="bar-fill" style="width:70%;background:#0083F5"></div></div><span class="bar-val" style="color:#0083F5">High</span></div>
+        <div class="bar-item" style="margin-top:4px"><span class="bar-name" style="color:#0078D4">Fabric EH</span><div class="bar-track"><div class="bar-fill" style="width:80%;background:#0078D4"></div></div><span class="bar-val" style="color:#0078D4">Very high</span></div>
+      </div>
+    </div>
+
+    <p style="font-size:11px;color:var(--color-text-tertiary)">* Fabric Eventhouse benchmarks are for hybrid analytical-vector workloads on Kusto engine. Not directly comparable to pure vector DB benchmarks. Sources: particula.tech March 2026, airbyte.com Sept 2025, Fabric blog Feb 2026.</p>
+
+    <div class="divider"></div>
+    <div class="info-row">
+      <i class="ti ti-bulb ii" aria-hidden="true"></i>
+      <p class="it"><strong style="color:var(--color-text-primary)">The Qdrant gRPC advantage:</strong> Qdrant's gRPC support delivers 15–20% faster queries than REST due to binary serialization and persistent connections. For latency-sensitive production apps, use gRPC. Pinecone's serverless sub-10ms p95 claim is for their managed cloud — Qdrant Cloud is competitive at 22ms with full payload filtering enabled.</p>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(2)">Full feature comparison ↗</button>
+    </div>
+  </div>
+
+  <!-- FULL COMPARISON -->
+  <div id="p2" class="panel">
+    <p class="lbl">Feature-by-feature breakdown</p>
+    <p class="ttl">Complete head-to-head matrix</p>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th style="color:#00B87C">Qdrant</th>
+          <th style="color:#0083F5">Pinecone</th>
+          <th style="color:#0078D4">Microsoft Fabric</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="cat-row"><td colspan="4">Architecture</td></tr>
+        <tr><td>Type</td><td>Purpose-built vector DB (Rust)</td><td>Purpose-built vector DB (SaaS)</td><td>Unified data + AI platform</td></tr>
+        <tr><td>Deployment</td><td>Self-hosted · Cloud · Hybrid · Air-gapped</td><td>SaaS only (BYOC enterprise)</td><td>SaaS (Microsoft cloud)</td></tr>
+        <tr><td>Open source</td><td><span class="badge b-green">Yes — Apache 2.0</span></td><td><span class="badge b-red">No — proprietary</span></td><td><span class="badge b-red">No — proprietary</span></td></tr>
+        <tr><td>Index type</td><td>HNSW + quantization + on-disk</td><td>HNSW (managed)</td><td>DiskANN (SQL DB) · HNSW (Eventhouse)</td></tr>
+        <tr><td>Storage engine</td><td>RocksDB payloads + custom vector store</td><td>In-memory + blob storage</td><td>OneLake (Delta Parquet) + Kusto</td></tr>
+
+        <tr class="cat-row"><td colspan="4">Search capabilities</td></tr>
+        <tr><td>Vector similarity</td><td>✓ Cosine · Dot product · Euclidean</td><td>✓ All three metrics</td><td>✓ Via Eventhouse / SQL DB / AI Search</td></tr>
+        <tr><td>Hybrid search</td><td><span class="badge b-green">✓ Native (dense + sparse)</span></td><td><span class="badge b-green">✓ Native single or dual index</span></td><td><span class="badge b-green">✓ Via Azure AI Search</span></td></tr>
+        <tr><td>Metadata filtering</td><td><span class="badge b-green">✓ Advanced payload filtering</span></td><td><span class="badge b-green">✓ Key-value metadata</span></td><td><span class="badge b-green">✓ Full SQL + KQL filtering</span></td></tr>
+        <tr><td>Multi-vector / ColBERT</td><td><span class="badge b-green">✓ Native</span></td><td><span class="badge b-amber">Limited</span></td><td><span class="badge b-amber">Partial (AI Search)</span></td></tr>
+        <tr><td>Full-text (BM25)</td><td><span class="badge b-green">✓ Sparse vectors</span></td><td><span class="badge b-green">✓ Sparse vectors</span></td><td><span class="badge b-green">✓ Native KQL/SQL full-text</span></td></tr>
+        <tr><td>Geospatial / time decay</td><td><span class="badge b-green">✓ Native decay functions</span></td><td><span class="badge b-gray">Metadata workaround</span></td><td><span class="badge b-green">✓ Native KQL geo support</span></td></tr>
+
+        <tr class="cat-row"><td colspan="4">AI & embeddings</td></tr>
+        <tr><td>Built-in embedding gen</td><td><span class="badge b-green">✓ Qdrant Cloud Inference</span></td><td><span class="badge b-green">✓ Pinecone Inference API</span></td><td><span class="badge b-green">✓ slm_embeddings_fl() local SLMs</span></td></tr>
+        <tr><td>RAG pipeline support</td><td><span class="badge b-amber">Via frameworks (LangChain etc)</span></td><td><span class="badge b-green">✓ Managed server-side RAG</span></td><td><span class="badge b-green">✓ Native Fabric RAG pipelines</span></td></tr>
+        <tr><td>Agent memory</td><td><span class="badge b-green">✓ Common use case</span></td><td><span class="badge b-green">✓ Common use case</span></td><td><span class="badge b-green">✓ Eventhouse agent memory pattern</span></td></tr>
+        <tr><td>LLM integrations</td><td>LangChain · LlamaIndex · Haystack</td><td>LangChain · LlamaIndex · OpenAI</td><td>Semantic Kernel · Azure OpenAI · LangChain</td></tr>
+
+        <tr class="cat-row"><td colspan="4">Scalability</td></tr>
+        <tr><td>Max vectors</td><td>Billions (sharded)</td><td>Billions (serverless)</td><td>Billions (OneLake / Eventhouse)</td></tr>
+        <tr><td>Multi-tenancy</td><td><span class="badge b-green">✓ First-class named tenants</span></td><td><span class="badge b-green">✓ Namespaces</span></td><td><span class="badge b-green">✓ Workspace isolation</span></td></tr>
+        <tr><td>Auto-scaling</td><td><span class="badge b-amber">Cloud tier only</span></td><td><span class="badge b-green">✓ Serverless auto-scale</span></td><td><span class="badge b-green">✓ Fabric capacity auto-scale</span></td></tr>
+
+        <tr class="cat-row"><td colspan="4">Security & compliance</td></tr>
+        <tr><td>SOC 2 Type II</td><td><span class="badge b-green">✓ Certified</span></td><td><span class="badge b-green">✓ Certified</span></td><td><span class="badge b-green">✓ Microsoft certified</span></td></tr>
+        <tr><td>HIPAA</td><td><span class="badge b-amber">Ready, not formally attested</span></td><td><span class="badge b-green">✓ Attested</span></td><td><span class="badge b-green">✓ Microsoft BAA</span></td></tr>
+        <tr><td>ISO 27001</td><td><span class="badge b-gray">Not listed</span></td><td><span class="badge b-green">✓ Certified</span></td><td><span class="badge b-green">✓ Microsoft certified</span></td></tr>
+        <tr><td>Data sovereignty</td><td><span class="badge b-green">✓ Self-hosted / air-gapped</span></td><td><span class="badge b-green">✓ BYOC (Enterprise)</span></td><td><span class="badge b-green">✓ Azure regional deployment</span></td></tr>
+        <tr><td>RBAC + SSO</td><td><span class="badge b-green">✓ JWT · RBAC · SAML 2.0 · SSO</span></td><td><span class="badge b-green">✓ RBAC · SSO · PrivateLink</span></td><td><span class="badge b-green">✓ Azure AD · Entra ID</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="nav-btns">
+      <button onclick="go(3)">See pricing ↗</button>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div id="p3" class="panel">
+    <p class="lbl">Pricing — May 2026</p>
+    <p class="ttl">What you actually pay</p>
+    <p class="sub">Qdrant is cheapest by a significant margin — especially self-hosted. Pinecone's free tier is generous for prototyping but costs mount fast at scale. Fabric pricing is capacity-based and bundles vector with your entire analytics platform.</p>
+
+    <div class="price-row">
+      <div class="price-card" style="border-color:rgba(0,184,124,0.3)">
+        <div class="price-platform" style="color:#00B87C">Qdrant</div>
+        <div class="price-tier"><span class="pt-name">Self-hosted (Docker/K8s)</span><span class="pt-val">Free forever</span></div>
+        <div class="price-tier"><span class="pt-name">Cloud Free tier</span><span class="pt-val">1GB / 1 cluster free</span></div>
+        <div class="price-tier"><span class="pt-name">Cloud Starter</span><span class="pt-val">~$25/mo</span></div>
+        <div class="price-tier"><span class="pt-name">10M vectors managed</span><span class="pt-val">~$45/mo</span></div>
+        <div class="price-tier"><span class="pt-name">Enterprise hybrid cloud</span><span class="pt-val">Custom / BYOC</span></div>
+        <div class="price-tier"><span class="pt-name">100M vectors (self-hosted)</span><span class="pt-val">Infrastructure cost only</span></div>
+      </div>
+      <div class="price-card" style="border-color:rgba(0,131,245,0.3)">
+        <div class="price-platform" style="color:#0083F5">Pinecone</div>
+        <div class="price-tier"><span class="pt-name">Free (serverless)</span><span class="pt-val">2GB storage included</span></div>
+        <div class="price-tier"><span class="pt-name">Serverless (pay per use)</span><span class="pt-val">$0.04–0.08 / 1M reads</span></div>
+        <div class="price-tier"><span class="pt-name">10M vectors managed</span><span class="pt-val">~$70/mo</span></div>
+        <div class="price-tier"><span class="pt-name">Pod-based (p1 pods)</span><span class="pt-val">From $70/mo per pod</span></div>
+        <div class="price-tier"><span class="pt-name">Enterprise (BYOC)</span><span class="pt-val">Custom contract</span></div>
+        <div class="price-tier"><span class="pt-name">At 50-100M vectors</span><span class="pt-val">$500+/mo — migrate point</span></div>
+      </div>
+      <div class="price-card" style="border-color:rgba(0,120,212,0.3)">
+        <div class="price-platform" style="color:#0078D4">Microsoft Fabric</div>
+        <div class="price-tier"><span class="pt-name">Trial / dev</span><span class="pt-val">Free (60-day trial)</span></div>
+        <div class="price-tier"><span class="pt-name">F2 capacity (smallest)</span><span class="pt-val">~$263/mo</span></div>
+        <div class="price-tier"><span class="pt-name">F4 capacity</span><span class="pt-val">~$525/mo</span></div>
+        <div class="price-tier"><span class="pt-name">F8 capacity</span><span class="pt-val">~$1,050/mo</span></div>
+        <div class="price-tier"><span class="pt-name">Pay-as-you-go (Spark)</span><span class="pt-val">Per CU consumed</span></div>
+        <div class="price-tier"><span class="pt-name">Includes</span><span class="pt-val">ALL workloads (DW + data eng + AI)</span></div>
+      </div>
+    </div>
+
+    <div class="info-row">
+      <i class="ti ti-calculator ii" aria-hidden="true"></i>
+      <p class="it"><strong style="color:var(--color-text-primary)">The migration signal for Pinecone users:</strong> Industry data shows teams typically migrate from Pinecone to self-hosted Qdrant when they hit 50–100M vectors or $500+/month in cloud costs. At that point, Qdrant self-hosted cuts the bill to infrastructure cost only — often 70–80% savings. For Fabric, the pricing only makes sense when you're using it as your full data platform — not just for vector search alone.</p>
+    </div>
+  </div>
+
+  <!-- WHEN TO USE -->
+  <div id="p4" class="panel">
+    <p class="lbl">Decision framework</p>
+    <p class="ttl">Choose based on your actual situation</p>
+    <p class="sub">The right answer is never "which is best" — it's "which fits your team, scale, and compliance reality right now."</p>
+
+    <div class="uc-grid">
+      <div class="uc-card" style="border-color:rgba(0,184,124,0.3)">
+        <div class="uc-title" style="color:#00B87C">Choose Qdrant if…</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#00B87C"></span>You have engineering capacity to manage infrastructure</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#00B87C"></span>You need maximum performance at minimum cost</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#00B87C"></span>You need self-hosted / air-gapped / hybrid cloud</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#00B87C"></span>You have 10M+ vectors and cost is a concern</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#00B87C"></span>You need advanced payload filtering and multi-vector</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#00B87C"></span>You want open source with no vendor lock-in</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#00B87C"></span>You're building on LangGraph, RAG, agent memory</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#00B87C"></span>You want gRPC for low-latency production queries</div>
+      </div>
+      <div class="uc-card" style="border-color:rgba(0,131,245,0.3)">
+        <div class="uc-title" style="color:#0083F5">Choose Pinecone if…</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0083F5"></span>You want to ship in days with zero infrastructure</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0083F5"></span>Your team has limited ML/infra engineering capacity</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0083F5"></span>HIPAA / SOC2 / ISO 27001 compliance is required now</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0083F5"></span>You're prototyping under 10M vectors</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0083F5"></span>You want the best developer experience and docs</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0083F5"></span>Serverless auto-scaling is a priority</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0083F5"></span>You need managed re-ranking and inference in one</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0083F5"></span>You have a regulated enterprise with strict IT sign-off</div>
+      </div>
+      <div class="uc-card" style="border-color:rgba(0,120,212,0.3)">
+        <div class="uc-title" style="color:#0078D4">Choose Fabric if…</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0078D4"></span>You're already deep in the Microsoft ecosystem</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0078D4"></span>You need vector search + data engineering + analytics in one</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0078D4"></span>Your data lives in OneLake / Dynamics / Azure</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0078D4"></span>You need RAG over structured enterprise data (not just docs)</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0078D4"></span>You want Power BI, Teams, Copilot native integration</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0078D4"></span>You need real-time streaming + vector in same platform</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0078D4"></span>You're replacing a fragmented BI + data stack</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0078D4"></span>Enterprise data governance is a top-level requirement</div>
+      </div>
+    </div>
+
+    <div class="info-row">
+      <i class="ti ti-git-branch ii" aria-hidden="true"></i>
+      <p class="it"><strong style="color:var(--color-text-primary)">The common pattern:</strong> Teams start with Pinecone (fastest to prototype), migrate to self-hosted Qdrant when bills hit $500+/month at scale, and adopt Fabric when they need the broader enterprise data platform. These are not mutually exclusive — Fabric can co-exist with Qdrant or Pinecone as the vector layer while Fabric handles orchestration and analytics.</p>
+    </div>
+  </div>
+
+  <!-- FOR YOUR STACK -->
+  <div id="p5" class="panel">
+    <p class="lbl">For AI systems builders</p>
+    <p class="ttl">Which one fits your workflow and client projects</p>
+    <p class="sub">You build multi-agent AI frameworks, RAG systems, and automation on Python + LangGraph. Here's the honest recommendation for your stack — and for Axxiom specifically.</p>
+
+    <div class="uc-grid" style="grid-template-columns:1fr 1fr;margin-bottom:14px">
+      <div class="uc-card" style="border-color:rgba(0,184,124,0.3);">
+        <div class="uc-title" style="color:#00B87C">For your personal AI builds (Xenoz, client projects)</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#00B87C"></span><strong>Qdrant</strong> — run it locally on Docker for dev, Qdrant Cloud for production. Zero cost to start, best performance for RAG + agent memory patterns, native LangGraph integration, Python SDK is excellent.</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#00B87C"></span>For RAG over client documents, knowledge bases, SOPs — Qdrant self-hosted is the most cost-efficient at any scale beyond prototyping.</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0083F5"></span><strong>Pinecone free tier</strong> — ideal for rapid client demos and MVPs. Ship a working RAG prototype in an afternoon. Migrate to Qdrant if it turns into a paid engagement.</div>
+      </div>
+      <div class="uc-card" style="border-color:rgba(0,120,212,0.3);">
+        <div class="uc-title" style="color:#0078D4">For Axxiom Elevator specifically</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0078D4"></span><strong>Microsoft Fabric + Eventhouse</strong> — Axxiom already runs on Dynamics 365, Azure AD, and the Microsoft stack. Fabric Eventhouse with built-in SLM embeddings (slm_embeddings_fl()) is the native path. Data stays inside the Microsoft tenant they already control.</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#0078D4"></span>Use Fabric Eventhouse as the vector store for the predictive maintenance AI and compliance tracker — it ingests directly from Dynamics Dataverse and OneLake, and queries via KQL alongside their operational data.</div>
+        <div class="uc-item"><span class="uc-dot" style="background:#00B87C"></span>If Axxiom ever needs a standalone RAG system over external documents (client portals, safety reports), add <strong>Qdrant Cloud</strong> as a dedicated vector layer and connect it via Azure API Management.</div>
+      </div>
+    </div>
+
+    <div class="info-row" style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;margin-bottom:0">
+      <i class="ti ti-star ii" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+      <p class="it"><strong style="color:var(--color-text-primary)">Bottom line recommendation:</strong> For client AI projects on any stack — <strong>Qdrant</strong> is your default. Fast, free to self-host, excellent LangGraph integration, and the best performance-to-cost ratio in the market. Use <strong>Pinecone</strong> when a client needs zero-ops managed vector and has compliance requirements you need to satisfy in days not weeks. Use <strong>Fabric</strong> when the client is already Microsoft-native and needs vector as part of a unified enterprise data platform — Axxiom is the perfect example of this.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+</script>

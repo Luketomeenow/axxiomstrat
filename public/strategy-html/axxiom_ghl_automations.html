@@ -1,0 +1,633 @@
+
+<style>
+  *{box-sizing:border-box}
+  .wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+  .tab-row{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+  .tab{font-size:11px;font-weight:500;padding:5px 13px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+  .tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .panel{display:none}.panel.active{display:block}
+  .lbl{font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 3px}
+  .ttl{font-size:17px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .sub{font-size:13px;color:var(--color-text-secondary);margin:0 0 14px;line-height:1.6}
+  .auto-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:10px;overflow:hidden}
+  .ac-head{display:flex;align-items:flex-start;gap:12px;padding:11px 14px;cursor:pointer}
+  .ac-head:hover,.auto-card.open .ac-head{background:var(--color-background-secondary)}
+  .ac-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;margin-top:1px}
+  .ac-meta{flex:1}
+  .ac-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 2px}
+  .ac-sub{font-size:11px;color:var(--color-text-tertiary);margin:0}
+  .ac-body{display:none;border-top:0.5px solid var(--color-border-tertiary);padding:12px 14px}
+  .auto-card.open .ac-body{display:block}
+  .flow{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+  .flow-step{display:flex;align-items:flex-start;gap:10px;padding:7px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+  .flow-trigger{background:var(--color-background-info);border-color:transparent}
+  .flow-action{background:var(--color-background-primary)}
+  .flow-connector{width:2px;height:12px;background:var(--color-border-secondary);margin-left:18px;flex-shrink:0}
+  .flow-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+  .flow-text{font-size:12px;color:var(--color-text-primary);flex:1;line-height:1.5}
+  .flow-tag{font-size:10px;font-weight:500;padding:2px 6px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+  .divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:10px 0}
+  .badge{font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px}
+  .b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+  .b-green{background:var(--color-background-success);color:var(--color-text-success)}
+  .b-amber{background:var(--color-background-warning);color:var(--color-text-warning)}
+  .b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+  .b-purple{background:#EDE9FE;color:#5B21B6}
+  .b-teal{background:#CCFBF1;color:#0F766E}
+  .msg-box{border-radius:var(--border-radius-md);padding:9px 12px;margin-bottom:6px;font-size:12px;line-height:1.6}
+  .msg-sms{background:var(--color-background-success);color:var(--color-text-primary);border-left:3px solid var(--color-text-success)}
+  .msg-email{background:var(--color-background-info);color:var(--color-text-primary);border-left:3px solid var(--color-text-info)}
+  .msg-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin:0 0 4px;color:var(--color-text-tertiary)}
+  .msg-body{margin:0;color:var(--color-text-secondary)}
+  .oc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:10px}
+  .ol{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
+  .fr{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px;gap:8px}
+  .fr:last-child{border-bottom:none}
+  .fk{color:var(--color-text-secondary);flex:1}
+  .fv{font-weight:500;color:var(--color-text-primary);text-align:right;flex-shrink:0}
+  .nav-btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .info-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+  .ii{font-size:14px;color:var(--color-text-tertiary);flex-shrink:0;margin-top:1px}
+  .it{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+  .priority-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--border-radius-md);margin-bottom:8px;font-size:12px;font-weight:500}
+  .pipeline-stage{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+  .ps-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .ps-name{font-size:12px;font-weight:500;color:var(--color-text-primary);flex:1}
+  .ps-auto{font-size:11px;color:var(--color-text-secondary)}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Best GoHighLevel marketing automations for Axxiom Elevator — 10 workflows covering lead nurture, review generation, client retention, and revenue recovery</h2>
+
+  <div class="tab-row">
+    <button class="tab active" onclick="go(0)">GHL setup</button>
+    <button class="tab" onclick="go(1)">Lead & inbound</button>
+    <button class="tab" onclick="go(2)">Client nurture</button>
+    <button class="tab" onclick="go(3)">Reviews</button>
+    <button class="tab" onclick="go(4)">Revenue</button>
+    <button class="tab" onclick="go(5)">Pipeline</button>
+  </div>
+
+  <!-- SETUP -->
+  <div id="p0" class="panel active">
+    <p class="lbl">GHL for Axxiom Elevator</p>
+    <p class="ttl">How to structure GHL for a multi-market B2B elevator company</p>
+    <p class="sub">GHL is the automation layer on top of Axxiom's marketing — it handles all external-facing communication: lead capture, nurture sequences, review requests, client retention, and revenue recovery. It connects to Dynamics 365 via Zapier or Make for the ops data trigger.</p>
+
+    <div class="oc">
+      <p class="ol">GHL account structure for Axxiom</p>
+      <div class="fr"><span class="fk">Account type</span><span class="fv">Agency account → sub-accounts per market</span></div>
+      <div class="fr"><span class="fk">Sub-accounts</span><span class="fv">Florida · California · Arizona · Texas · DC/MD/VA · NY/NJ</span></div>
+      <div class="fr"><span class="fk">Why sub-accounts</span><span class="fv">Local phone numbers, local sender names, local reviews</span></div>
+      <div class="fr"><span class="fk">Shared assets</span><span class="fv">Email templates, SMS scripts, funnel pages, automations cloned per market</span></div>
+      <div class="fr"><span class="fk">CRM integration</span><span class="fv">Zapier → Dynamics 365 (job complete triggers GHL workflows)</span></div>
+      <div class="fr"><span class="fk">Phone system</span><span class="fv">GHL LC Phone (one local number per market) · AI conversation bot for inbound</span></div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">10 automations — priority order</p>
+      <div class="fr"><span class="fk"><span class="badge b-red">P1</span> &nbsp;Inbound lead response AI</span><span class="fv">Responds in under 60 seconds, 24/7</span></div>
+      <div class="fr"><span class="fk"><span class="badge b-red">P1</span> &nbsp;Post-job review request</span><span class="fv">Auto-fires 24hrs after job complete</span></div>
+      <div class="fr"><span class="fk"><span class="badge b-red">P1</span> &nbsp;New lead nurture sequence</span><span class="fv">5-touch email + SMS over 14 days</span></div>
+      <div class="fr"><span class="fk"><span class="badge b-amber">P2</span> &nbsp;Contract renewal campaign</span><span class="fv">90 days before contract end</span></div>
+      <div class="fr"><span class="fk"><span class="badge b-amber">P2</span> &nbsp;Inspection reminder sequence</span><span class="fv">60 days before inspection due date</span></div>
+      <div class="fr"><span class="fk"><span class="badge b-amber">P2</span> &nbsp;Modernisation upsell trigger</span><span class="fv">When risk score hits critical threshold</span></div>
+      <div class="fr"><span class="fk"><span class="badge b-amber">P2</span> &nbsp;Win-back campaign (lapsed clients)</span><span class="fv">For clients who left or went silent</span></div>
+      <div class="fr"><span class="fk"><span class="badge b-blue">P3</span> &nbsp;Referral automation</span><span class="fv">Auto-asks happy clients after 5-star review</span></div>
+      <div class="fr"><span class="fk"><span class="badge b-blue">P3</span> &nbsp;New market cold outreach</span><span class="fv">When Axxiom enters a new city</span></div>
+      <div class="fr"><span class="fk"><span class="badge b-blue">P3</span> &nbsp;Educational drip (prospects)</span><span class="fv">Long-term nurture for not-ready leads</span></div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">Build lead automations ↗</button>
+    </div>
+  </div>
+
+  <!-- LEAD & INBOUND -->
+  <div id="p1" class="panel">
+    <p class="lbl">Lead & inbound automations</p>
+    <p class="ttl">Never let a lead go cold — respond in 60 seconds, follow up for 14 days</p>
+    <p class="sub">The biggest revenue leak in service companies is slow lead response. Studies show responding within 5 minutes is 21× more effective than responding in 30 minutes. GHL's AI bot closes that gap permanently.</p>
+
+    <div class="auto-card open">
+      <div class="ac-head" onclick="tog(this)">
+        <span class="ac-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">1</span>
+        <div class="ac-meta">
+          <p class="ac-title">Inbound lead AI response bot</p>
+          <p class="ac-sub">Trigger: form fill, website chat, missed call · responds in under 60 seconds · 24/7</p>
+        </div>
+        <span class="badge b-red">Build first</span>
+      </div>
+      <div class="ac-body">
+        <div class="flow">
+          <div class="flow-step flow-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: Website form filled OR missed call OR website chat initiated</span>
+            <span class="flow-tag b-blue">Instant</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-robot flow-icon" style="color:var(--color-text-secondary)" aria-hidden="true"></i>
+            <span class="flow-text">GHL AI Conversation Bot sends personalised SMS within 60 seconds — captures: building type, number of elevators, service needed, urgency level</span>
+            <span class="flow-tag b-green">AI bot</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-tag flow-icon" style="color:var(--color-text-secondary)" aria-hidden="true"></i>
+            <span class="flow-text">Bot qualifies lead: if emergency (trapped passengers, out of service) → immediate notification to on-call dispatcher via SMS + Slack. If standard inquiry → routed to account manager queue with lead summary.</span>
+            <span class="flow-tag b-amber">Qualify</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-calendar flow-icon" style="color:var(--color-text-secondary)" aria-hidden="true"></i>
+            <span class="flow-text">If qualified standard lead → bot books a 15-minute discovery call directly into account manager's GHL calendar. Lead never waits for a human to call them back.</span>
+            <span class="flow-tag b-green">Book call</span>
+          </div>
+        </div>
+        <div class="msg-box msg-sms">
+          <p class="msg-label">SMS — sent within 60 seconds of form fill</p>
+          <p class="msg-body">"Hi [Name], this is Axxiom Elevator — thanks for reaching out! To get you to the right person fast, can you tell me: how many elevators does your building have, and is this a maintenance contract inquiry or an urgent repair? Reply here and we'll get back to you immediately."</p>
+        </div>
+        <div class="info-row" style="margin-top:4px">
+          <i class="ti ti-bulb ii" aria-hidden="true"></i>
+          <p class="it">The missed call text-back is the single highest-ROI automation in GHL for service companies. When someone calls Axxiom and nobody answers, GHL instantly sends an SMS: "Hi — we just missed your call. This is Axxiom Elevator. How can we help? Reply here and we'll get back to you right away." Converts 30–40% of missed calls that would otherwise go to a competitor.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="auto-card">
+      <div class="ac-head" onclick="tog(this)">
+        <span class="ac-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">2</span>
+        <div class="ac-meta">
+          <p class="ac-title">New lead 14-day nurture sequence</p>
+          <p class="ac-sub">5-touch email + SMS · educational + trust-building · ends with a call ask</p>
+        </div>
+        <span class="badge b-red">Essential</span>
+      </div>
+      <div class="ac-body">
+        <div class="flow">
+          <div class="flow-step flow-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: Lead captured but discovery call not yet booked / proposal not yet sent</span>
+            <span class="flow-tag b-blue">Entry</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-mail flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Day 1 — Email: "What to ask your elevator company before signing a contract" — 5 questions that expose bad operators. Axxiom answers all 5. Positions them as the transparent choice.</span>
+            <span class="flow-tag b-blue">Day 1</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-device-mobile flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Day 3 — SMS: "Quick question, [Name] — is your current elevator on a preventive maintenance schedule? If not, we put together a 5-minute guide on what that should look like for a [building type]. Want me to send it?"</span>
+            <span class="flow-tag b-green">Day 3</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-mail flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Day 6 — Email: "The real cost of an elevator breakdown in a hospital / hotel" — vertical-specific, data-backed. Links to Axxiom's predictive maintenance service page.</span>
+            <span class="flow-tag b-blue">Day 6</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-device-mobile flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Day 10 — SMS: "Hi [Name] — we've been in [city] for [X] years. Would it be worth 15 minutes to walk through what a maintenance contract with Axxiom looks like for your building? I can make time this week."</span>
+            <span class="flow-tag b-green">Day 10</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-mail flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Day 14 — Email: "Last touch — [Name], I don't want to keep filling your inbox. If elevator service is something you're actively evaluating, I'd love 15 minutes. If not, I'll close this out. Just reply either way." [Calendar link]</span>
+            <span class="flow-tag b-amber">Day 14</span>
+          </div>
+        </div>
+        <div class="info-row">
+          <i class="ti ti-arrow-right ii" aria-hidden="true"></i>
+          <p class="it">Vertical personalisation is automatic — GHL uses the "building type" tag captured by the AI bot to swap in hospital/hotel/office content in every message. One workflow, personalised for all 9 verticals.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(0)">← Setup</button>
+      <button onclick="go(2)">Client nurture ↗</button>
+    </div>
+  </div>
+
+  <!-- CLIENT NURTURE -->
+  <div id="p2" class="panel">
+    <p class="lbl">Client nurture automations</p>
+    <p class="ttl">Keep every client warm, informed, and loyal — automatically</p>
+    <p class="sub">Retention is cheaper than acquisition. These automations make every Axxiom client feel like they have a dedicated account manager — even if the account manager is handling 50 clients simultaneously.</p>
+
+    <div class="auto-card open">
+      <div class="ac-head" onclick="tog(this)">
+        <span class="ac-num" style="background:var(--color-background-amber);color:var(--color-text-warning)">3</span>
+        <div class="ac-meta">
+          <p class="ac-title">Post-job client communication sequence</p>
+          <p class="ac-sub">Trigger: job marked complete in Dynamics → GHL fires · 3-touch sequence</p>
+        </div>
+        <span class="badge b-amber">Connected to Dynamics</span>
+      </div>
+      <div class="ac-body">
+        <div class="flow">
+          <div class="flow-step flow-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: Work order marked "Complete" in Dynamics 365 → Zapier webhook → GHL contact tagged "Job Complete" + job details passed (tech name, building, service type)</span>
+            <span class="flow-tag b-blue">Dynamics trigger</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-device-mobile flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Immediate SMS (within 1 hour): "Hi [Name], your elevator at [Building] has been serviced by our tech [Tech First Name]. Everything is back in order. If you have any questions, reply here."</span>
+            <span class="flow-tag b-green">Immediate</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-mail flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">24 hours later — Email: AI-generated service summary. What was done, what was found, any follow-up recommendations. Professional, branded, specific to their unit.</span>
+            <span class="flow-tag b-blue">24hr</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-star flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">48 hours later — SMS review request (see Review automations tab). Only fires if service type was PM or Repair (not emergency — give them space first).</span>
+            <span class="flow-tag b-amber">48hr</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auto-card">
+      <div class="ac-head" onclick="tog(this)">
+        <span class="ac-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">4</span>
+        <div class="ac-meta">
+          <p class="ac-title">Contract renewal campaign</p>
+          <p class="ac-sub">Starts 90 days before contract end · 4-touch sequence · drives early renewal</p>
+        </div>
+        <span class="badge b-amber">Revenue protection</span>
+      </div>
+      <div class="ac-body">
+        <div class="flow">
+          <div class="flow-step flow-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: Contract end date = 90 days from today (daily Dynamics check → Zapier → GHL)</span>
+            <span class="flow-tag b-amber">90 days out</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-mail flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Day 0 (90 days out) — Email: "Your [Building Name] service contract review" — AI-generated annual summary: jobs completed, issues resolved, certifications maintained, money saved vs. emergency rates. Pure value statement.</span>
+            <span class="flow-tag b-blue">Value recap</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-device-mobile flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Day 14 — SMS from account manager name: "Hi [Name], I sent over a summary of everything we did for [Building] this year. Wanted to check — are you open to a quick call to talk through renewal options? We have some new services worth discussing." [Calendar link]</span>
+            <span class="flow-tag b-green">Personal touch</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-mail flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Day 30 — Email: "What's new at Axxiom for [Year]" — new market capabilities, AI monitoring, compliance tracker. Reminds them Axxiom is innovating and worth staying with.</span>
+            <span class="flow-tag b-blue">Innovation nudge</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-device-mobile flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Day 60 (30 days from expiry) — SMS: "Hi [Name] — contract for [Building] expires [date]. Happy to send renewal paperwork today or jump on a 15-min call. What works best?" Creates urgency without pressure.</span>
+            <span class="flow-tag b-red">Urgency</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auto-card">
+      <div class="ac-head" onclick="tog(this)">
+        <span class="ac-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">5</span>
+        <div class="ac-meta">
+          <p class="ac-title">Inspection & compliance reminder sequence</p>
+          <p class="ac-sub">Trigger: 60 days before inspection due date per asset · client-facing proactive alert</p>
+        </div>
+        <span class="badge b-blue">Trust builder</span>
+      </div>
+      <div class="ac-body">
+        <div class="flow">
+          <div class="flow-step flow-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: Compliance tracker in Dynamics flags inspection due in 60 days → Zapier → GHL sequence starts for that client</span>
+            <span class="flow-tag b-blue">60 days out</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-mail flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Day 0 — Email: "Heads up: your [Building] annual inspection is due [date]" — What the inspection covers, what Axxiom will prepare, what the client needs to do (usually nothing). Makes them feel protected, not surprised.</span>
+            <span class="flow-tag b-blue">Heads up</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-device-mobile flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Day 21 — SMS: "Hi [Name], we're scheduling [Building]'s annual elevator inspection for [month]. Any dates that don't work on your end? We'll coordinate with the inspector."</span>
+            <span class="flow-tag b-green">Schedule</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-check flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">After inspection — Email with AI-generated inspection summary + certificate copy attached. Client has documentation automatically. No request needed.</span>
+            <span class="flow-tag b-green">Deliver</span>
+          </div>
+        </div>
+        <div class="info-row">
+          <i class="ti ti-bulb ii" aria-hidden="true"></i>
+          <p class="it">This sequence is the #1 retention automation for Axxiom. Most elevator companies let inspections sneak up on building owners. Axxiom being proactive 60 days out — and handling everything — is exactly what makes clients say "I'm not switching, these guys have my back."</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">← Lead & inbound</button>
+      <button onclick="go(3)">Reviews ↗</button>
+    </div>
+  </div>
+
+  <!-- REVIEWS -->
+  <div id="p3" class="panel">
+    <p class="lbl">Reputation automations</p>
+    <p class="ttl">Build a 5-star reputation across every market — on autopilot</p>
+    <p class="sub">Axxiom needs Google reviews in every market. Right now they almost certainly have very few. GHL's review automation can change that in 90 days — turning every completed job into a potential 5-star review without anyone manually asking for one.</p>
+
+    <div class="auto-card open">
+      <div class="ac-head" onclick="tog(this)">
+        <span class="ac-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">6</span>
+        <div class="ac-meta">
+          <p class="ac-title">Post-job review request automation</p>
+          <p class="ac-sub">Fires 48 hours after job complete · personalised SMS · 2-touch sequence</p>
+        </div>
+        <span class="badge b-red">Build day one</span>
+      </div>
+      <div class="ac-body">
+        <div class="flow">
+          <div class="flow-step flow-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: Job complete tag applied in GHL (from Dynamics webhook) + job type = PM or Repair + outcome = Pass/Resolved</span>
+            <span class="flow-tag b-blue">Qualified trigger</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-clock flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Wait 48 hours — gives client time to verify everything is working before asking for a review</span>
+            <span class="flow-tag b-gray">Wait</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-device-mobile flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">SMS Touch 1 (from local Axxiom number): "Hi [Name], this is [Account Manager] from Axxiom — [Tech Name] serviced your elevator at [Building] this week. If we did a great job, a quick Google review helps us more than you know. Only takes 30 seconds: [Direct Google Review Link]"</span>
+            <span class="flow-tag b-green">SMS ask</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-git-branch flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">IF reviewed → tag "Reviewed ✓" → stop sequence → trigger referral automation (Tab 4). IF not reviewed in 72 hours → send Email Touch 2</span>
+            <span class="flow-tag b-amber">Branch logic</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-mail flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Email Touch 2 (72hrs after SMS): "Hi [Name], just following up on my text. I know your time is valuable — a 30-second review makes a huge difference for our small team serving [city]. [Review link] — thank you either way."</span>
+            <span class="flow-tag b-blue">Email follow</span>
+          </div>
+        </div>
+        <div class="msg-box msg-sms" style="margin-top:8px">
+          <p class="msg-label">Key rule — never ask after an emergency or complaint</p>
+          <p class="msg-body">Add a condition: if job type = Emergency OR if a complaint tag exists → skip review sequence entirely. Asking for a review when a passenger was trapped earlier that day is the fastest way to get a 1-star response.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="auto-card">
+      <div class="ac-head" onclick="tog(this)">
+        <span class="ac-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">7</span>
+        <div class="ac-meta">
+          <p class="ac-title">Negative review intercept</p>
+          <p class="ac-sub">Catches unhappy clients before they post publicly · routes to account manager</p>
+        </div>
+        <span class="badge b-amber">Protect reputation</span>
+      </div>
+      <div class="ac-body">
+        <div class="flow">
+          <div class="flow-step flow-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: GHL reputation management detects 1-2 star Google review OR client replies to review request SMS with negative sentiment</span>
+            <span class="flow-tag b-red">Alert trigger</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-bell flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Immediate: account manager SMS alert + email with full review text, client name, building, last job details. Target: manager sees this within 5 minutes.</span>
+            <span class="flow-tag b-red">Immediate alert</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-robot flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">AI drafts response to the review — empathetic, professional, specific, and ends with direct contact info. Manager reviews in GHL, edits if needed, posts with one click. Target: response posted within 2 hours.</span>
+            <span class="flow-tag b-blue">AI draft</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-phone flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Task created for account manager: call the client within 24 hours to understand what went wrong and offer a resolution. Every negative review is a client worth saving.</span>
+            <span class="flow-tag b-amber">Recovery call</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(2)">← Client nurture</button>
+      <button onclick="go(4)">Revenue automations ↗</button>
+    </div>
+  </div>
+
+  <!-- REVENUE -->
+  <div id="p4" class="panel">
+    <p class="lbl">Revenue automations</p>
+    <p class="ttl">Turn data signals into revenue conversations — automatically</p>
+    <p class="sub">These automations connect the AI systems (predictive maintenance risk scores, compliance flags) to GHL marketing sequences — turning internal data signals into external revenue conversations without a human having to notice the signal first.</p>
+
+    <div class="auto-card open">
+      <div class="ac-head" onclick="tog(this)">
+        <span class="ac-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">8</span>
+        <div class="ac-meta">
+          <p class="ac-title">Modernisation upsell trigger</p>
+          <p class="ac-sub">Fires when risk score hits 70+ for 30 consecutive days · warm, data-backed outreach</p>
+        </div>
+        <span class="badge b-purple">Highest revenue value</span>
+      </div>
+      <div class="ac-body">
+        <div class="flow">
+          <div class="flow-step flow-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: Dynamics risk score ≥ 70 for 30 consecutive days on an asset tagged as "modernisation candidate" → Zapier → GHL contact enters Modernisation Nurture sequence</span>
+            <span class="flow-tag b-purple">Data trigger</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-mail flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Email Day 1 — Subject: "A note about Elevator [Unit #] at [Building]" — "Our monitoring has flagged some patterns in your elevator's service history that we'd like to walk you through. Nothing urgent — but we think you'd want to see what the data is showing." Personalised, specific, not salesy.</span>
+            <span class="flow-tag b-purple">Warm open</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-device-mobile flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">SMS Day 4: "Hi [Name], did you get my email about elevator [Unit #]? I can walk you through what we're seeing in 10 minutes — the data is actually pretty interesting. Worth a quick call?" [Calendar link]</span>
+            <span class="flow-tag b-purple">SMS follow</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-presentation flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">If call booked → account manager presents risk score data + modernisation ROI calculation (repair cost trend vs. modernisation investment). This is a $50K–$500K conversation, initiated by AI automatically.</span>
+            <span class="flow-tag b-purple">$50K+ conversation</span>
+          </div>
+        </div>
+        <div class="info-row">
+          <i class="ti ti-trending-up ii" aria-hidden="true"></i>
+          <p class="it">This is the automation that pays for the entire GHL implementation. One modernisation project booked from a data-triggered outreach = $50K–$500K revenue. The AI noticed it. GHL delivered the message. The account manager closes it.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="auto-card">
+      <div class="ac-head" onclick="tog(this)">
+        <span class="ac-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">9</span>
+        <div class="ac-meta">
+          <p class="ac-title">Win-back campaign — lapsed clients</p>
+          <p class="ac-sub">For clients who didn't renew or went quiet · 3-touch "we noticed you left" sequence</p>
+        </div>
+        <span class="badge b-amber">Revenue recovery</span>
+      </div>
+      <div class="ac-body">
+        <div class="flow">
+          <div class="flow-step flow-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: Contract end date passed + no renewal recorded in Dynamics after 30 days → tagged "Lapsed Client" in GHL</span>
+            <span class="flow-tag b-amber">30 days post-expiry</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-mail flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Email 1 — "We noticed your contract ended — just checking in." Brief, no pressure. "We know circumstances change. If you're evaluating options or had a bad experience, I'd genuinely like to hear about it. No sales pitch — just a conversation."</span>
+            <span class="flow-tag b-amber">No pressure</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-device-mobile flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">SMS at Day 14: "Hi [Name], [Account Manager] from Axxiom. We serviced [Building] for [X months/years] — I'd love to understand if there's something we could have done better. Open to a 10-min call?"</span>
+            <span class="flow-tag b-amber">Personal</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-mail flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Email at Day 30: "What's new at Axxiom" — new capabilities (AI monitoring, compliance tracker, safety scorecard). If they left because the old Axxiom wasn't impressive enough, show them what's changed.</span>
+            <span class="flow-tag b-amber">Show change</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auto-card">
+      <div class="ac-head" onclick="tog(this)">
+        <span class="ac-num" style="background:var(--color-background-info);color:var(--color-text-info)">10</span>
+        <div class="ac-meta">
+          <p class="ac-title">Referral automation</p>
+          <p class="ac-sub">Fires after 5-star review · warm ask at the exact right moment</p>
+        </div>
+        <span class="badge b-teal">Low cost, high value</span>
+      </div>
+      <div class="ac-body">
+        <div class="flow">
+          <div class="flow-step flow-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: Client leaves 4 or 5-star Google review (GHL reputation management detects it) → tagged "Happy Client"</span>
+            <span class="flow-tag b-teal">Best moment</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-clock flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Wait 24 hours — let the positive moment breathe before asking anything else</span>
+            <span class="flow-tag b-gray">Wait</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-device-mobile flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">SMS: "Hi [Name], thank you so much for the review — it genuinely means a lot to us. Quick question: do you know any other building managers or facility directors who might benefit from working with Axxiom? Even just a name and I'll take it from there. No pressure at all."</span>
+            <span class="flow-tag b-teal">Warm ask</span>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step flow-action">
+            <i class="ti ti-gift flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">If referral provided → referral tracked in GHL CRM → if it converts to a client, original referrer gets a thank-you (handwritten card from account manager + a gift card). This closes the loop and generates more referrals.</span>
+            <span class="flow-tag b-teal">Close loop</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(3)">← Reviews</button>
+      <button onclick="go(5)">Pipeline setup ↗</button>
+    </div>
+  </div>
+
+  <!-- PIPELINE -->
+  <div id="p5" class="panel">
+    <p class="lbl">GHL pipeline setup</p>
+    <p class="ttl">Two pipelines — new business + revenue upsells</p>
+    <p class="sub">GHL pipelines give Axxiom's account team complete visibility into where every prospect and upsell opportunity sits — and trigger automated actions at each stage move.</p>
+
+    <div class="oc">
+      <p class="ol">Pipeline 1 — New business (maintenance contracts)</p>
+      <div class="pipeline-stage"><span class="ps-dot" style="background:var(--color-text-tertiary)"></span><span class="ps-name">Lead Captured</span><span class="ps-auto">→ AI bot fires, 14-day nurture starts</span></div>
+      <div class="pipeline-stage"><span class="ps-dot" style="background:var(--color-text-info)"></span><span class="ps-name">Discovery Call Booked</span><span class="ps-auto">→ Confirmation SMS + calendar reminder sequence</span></div>
+      <div class="pipeline-stage"><span class="ps-dot" style="background:var(--color-text-info)"></span><span class="ps-name">Site Visit Scheduled</span><span class="ps-auto">→ Pre-visit email with what to expect + tech bio</span></div>
+      <div class="pipeline-stage"><span class="ps-dot" style="background:var(--color-text-warning)"></span><span class="ps-name">Proposal Sent</span><span class="ps-auto">→ 3-day follow-up SMS, 7-day email if no response</span></div>
+      <div class="pipeline-stage"><span class="ps-dot" style="background:var(--color-text-warning)"></span><span class="ps-name">Proposal Follow-Up</span><span class="ps-auto">→ AI objection handling email ("We often hear X concern — here's how we address it")</span></div>
+      <div class="pipeline-stage"><span class="ps-dot" style="background:var(--color-text-success)"></span><span class="ps-name">Contract Signed</span><span class="ps-auto">→ Welcome sequence starts, Dynamics record created, account manager assigned task</span></div>
+      <div class="pipeline-stage"><span class="ps-dot" style="background:var(--color-text-danger)"></span><span class="ps-name">Lost / Not Now</span><span class="ps-auto">→ Tagged by reason · enters 6-month re-engagement sequence</span></div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">Pipeline 2 — Revenue upsells (existing clients)</p>
+      <div class="pipeline-stage"><span class="ps-dot" style="background:var(--color-text-info)"></span><span class="ps-name">Modernisation Signal Flagged</span><span class="ps-auto">→ Modernisation upsell sequence starts (Automation #8)</span></div>
+      <div class="pipeline-stage"><span class="ps-dot" style="background:var(--color-text-info)"></span><span class="ps-name">Conversation Started</span><span class="ps-auto">→ Account manager presents risk data + ROI model</span></div>
+      <div class="pipeline-stage"><span class="ps-dot" style="background:var(--color-text-warning)"></span><span class="ps-name">Scope Under Discussion</span><span class="ps-auto">→ AI generates preliminary modernisation proposal from asset data</span></div>
+      <div class="pipeline-stage"><span class="ps-dot" style="background:var(--color-text-warning)"></span><span class="ps-name">Proposal Sent</span><span class="ps-auto">→ 5-day follow-up SMS + financing options email</span></div>
+      <div class="pipeline-stage"><span class="ps-dot" style="background:var(--color-text-success)"></span><span class="ps-name">Project Signed</span><span class="ps-auto">→ Project kick-off email sequence · client communication plan starts</span></div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">The full GHL tech stack for Axxiom</p>
+      <div class="fr"><span class="fk">GHL triggers from Dynamics</span><span class="fv">Zapier (job complete, contract end, risk score) → GHL webhook</span></div>
+      <div class="fr"><span class="fk">SMS sender</span><span class="fk2">GHL LC Phone — one local number per market</span></div>
+      <div class="fr"><span class="fk">AI conversation bot</span><span class="fv">GHL Conversation AI (trained on Axxiom FAQs + services)</span></div>
+      <div class="fr"><span class="fk">Review management</span><span class="fv">GHL Reputation Management (monitors Google + responds)</span></div>
+      <div class="fr"><span class="fk">Calendar booking</span><span class="fv">GHL Calendar (account manager slots + discovery calls)</span></div>
+      <div class="fr"><span class="fk">Email sending</span><span class="fv">GHL Email (or connect SendGrid for high volume)</span></div>
+      <div class="fr"><span class="fk">Pipeline visibility</span><span class="fv">GHL CRM (synced read-only from Dynamics for service data)</span></div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(4)">← Revenue</button>
+      <button onclick="go(0)">← Back to setup</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+function tog(h){h.closest('.auto-card').classList.toggle('open')}
+</script>

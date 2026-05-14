@@ -1,0 +1,806 @@
+
+<style>
+  *{box-sizing:border-box}
+  .wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+  .tab-row{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+  .tab{font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+  .tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .panel{display:none}.panel.active{display:block}
+  .label{font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 3px}
+  .title{font-size:16px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .sub{font-size:13px;color:var(--color-text-secondary);margin:0 0 14px;line-height:1.6}
+  .step{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:10px;overflow:hidden}
+  .step-header{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;cursor:pointer}
+  .step-header:hover{background:var(--color-background-secondary)}
+  .step-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;margin-top:1px}
+  .step-meta{flex:1}
+  .step-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 2px}
+  .step-who{font-size:11px;color:var(--color-text-tertiary);margin:0}
+  .step-time{font-size:11px;font-weight:500;white-space:nowrap;padding:3px 8px;border-radius:20px;flex-shrink:0}
+  .step-body{padding:0 14px 12px 50px;display:none;border-top:0.5px solid var(--color-border-tertiary)}
+  .step.open .step-body{display:block}
+  .step.open .step-header{background:var(--color-background-secondary)}
+  .task-row{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+  .task-row:last-child{border-bottom:none}
+  .task-check{font-size:14px;flex-shrink:0;margin-top:1px}
+  .task-text{color:var(--color-text-primary);flex:1;line-height:1.5}
+  .task-note{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+  .task-badge{font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+  .deliverable{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 12px;margin-top:10px;font-size:12px;color:var(--color-text-secondary)}
+  .deliverable strong{color:var(--color-text-primary)}
+  .divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:12px 0}
+  .field-row{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px;gap:8px}
+  .field-row:last-child{border-bottom:none}
+  .field-key{color:var(--color-text-secondary);flex:1}
+  .field-val{font-weight:500;color:var(--color-text-primary);text-align:right;flex-shrink:0}
+  .output-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:10px}
+  .output-label{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
+  .badge{font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px}
+  .b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+  .b-green{background:var(--color-background-success);color:var(--color-text-success)}
+  .b-amber{background:var(--color-background-warning);color:var(--color-text-warning)}
+  .b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+  .b-purple{background:#EEEDFE;color:#3C3489}
+  .nav-btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .progress-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .progress-label{font-size:12px;color:var(--color-text-secondary);width:180px;flex-shrink:0}
+  .progress-track{flex:1;height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;border-radius:3px}
+  .info-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+  .info-icon{font-size:15px;color:var(--color-text-tertiary);flex-shrink:0;margin-top:1px}
+  .info-text{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+  .schema-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:8px}
+  .schema-entity{font-size:12px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .schema-fields{font-size:11px;color:var(--color-text-secondary);margin:0;line-height:1.8}
+  .tag{display:inline-block;font-size:10px;font-weight:500;padding:1px 6px;border-radius:4px;margin-right:4px}
+  .tag-req{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .tag-opt{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Detailed step-by-step execution plan for Axxiom Elevator's data foundation — six phases covering audit, schema, cleaning, governance, metrics, and pipeline</h2>
+
+  <div class="tab-row">
+    <button class="tab active"  onclick="go(0)">Overview</button>
+    <button class="tab" onclick="go(1)">Step 1 — Audit</button>
+    <button class="tab" onclick="go(2)">Step 2 — Schema</button>
+    <button class="tab" onclick="go(3)">Step 3 — Clean</button>
+    <button class="tab" onclick="go(4)">Step 4 — Govern</button>
+    <button class="tab" onclick="go(5)">Step 5 — Metrics</button>
+    <button class="tab" onclick="go(6)">Step 6 — Pipeline</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div id="p0" class="panel active">
+    <p class="label">Data foundation — 6-step execution</p>
+    <p class="title">What gets built, who does it, in what order</p>
+    <p class="sub">Six sequential steps over 6 months. Each step is a prerequisite for the next. The output of Step 6 is a self-sustaining data asset that compounds automatically — every job completed adds a data point without anyone manually entering it.</p>
+
+    <div class="output-card">
+      <p class="output-label">6-step execution map</p>
+
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-blue">Step 1</span> &nbsp;Data audit — know what you have and what's missing</span>
+        <span class="field-val">Weeks 1–2</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-blue">Step 2</span> &nbsp;Schema design — define the master data model in Dynamics</span>
+        <span class="field-val">Weeks 2–3</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-amber">Step 3</span> &nbsp;Data cleaning — backfill, standardise, and validate historical records</span>
+        <span class="field-val">Weeks 3–8</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-amber">Step 4</span> &nbsp;Data governance — policy, consent, access control, quality scoring</span>
+        <span class="field-val">Weeks 4–6</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-green">Step 5</span> &nbsp;Safety metrics framework — define the 8 metrics Axxiom owns publicly</span>
+        <span class="field-val">Weeks 5–7</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-green">Step 6</span> &nbsp;Automated pipeline — every future job auto-enriches the data asset</span>
+        <span class="field-val">Weeks 6–12</span>
+      </div>
+    </div>
+
+    <div class="output-card">
+      <p class="output-label">Team required</p>
+      <div class="field-row"><span class="field-key">Xenoz (AI systems lead)</span><span class="field-val">Steps 2, 3 (automation), 6</span></div>
+      <div class="field-row"><span class="field-key">Axxiom ops manager</span><span class="field-val">Steps 1, 3 (review), 4, 5</span></div>
+      <div class="field-row"><span class="field-key">Axxiom compliance officer</span><span class="field-val">Steps 1, 4, 5</span></div>
+      <div class="field-row"><span class="field-key">Field service techs (sample)</span><span class="field-val">Step 1 (audit input), Step 6 (pilot)</span></div>
+      <div class="field-row"><span class="field-key">Legal / contract team</span><span class="field-val">Step 4 (contract clauses)</span></div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">Start Step 1 — Data audit ↗</button>
+    </div>
+  </div>
+
+  <!-- STEP 1: AUDIT -->
+  <div id="p1" class="panel">
+    <p class="label">Step 1 — Weeks 1–2</p>
+    <p class="title">Data audit — know exactly what you have</p>
+    <p class="sub">Before any cleaning or schema design, you need a complete inventory of what data exists, where it lives, how complete it is, and what's missing. This takes 2 weeks and involves both system analysis and conversations with field techs and dispatchers.</p>
+
+    <div class="step open">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num" style="background:var(--color-background-info);color:var(--color-text-info)">1</span>
+        <div class="step-meta">
+          <p class="step-title">Inventory all data sources</p>
+          <p class="step-who">Xenoz + Ops manager · Day 1–3</p>
+        </div>
+        <span class="step-time" style="background:var(--color-background-info);color:var(--color-text-info)">Day 1–3</span>
+      </div>
+      <div class="step-body">
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="task-text">List every system that holds elevator-related data: Dynamics 365, spreadsheets, paper logs, legacy software, email threads, third-party inspection portals, technician notebooks
+            <p class="task-note">Common finds: Excel tracker for one market, paper inspection binders at a regional office, email threads with certificate attachments</p>
+          </div>
+          <span class="task-badge b-red">Critical</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="task-text">For each data source, document: what data it contains, date range, format, who owns it, update frequency
+          </div>
+          <span class="task-badge b-blue">Required</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="task-text">Interview 3–4 field techs: "What do you write down after a job that doesn't go into the system?" — this surfaces shadow data that's currently lost
+          </div>
+          <span class="task-badge b-amber">Key insight</span>
+        </div>
+        <div class="deliverable"><strong>Output:</strong> Data source inventory spreadsheet with completeness rating per source (1–5)</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num" style="background:var(--color-background-info);color:var(--color-text-info)">2</span>
+        <div class="step-meta">
+          <p class="step-title">Score data completeness per asset record</p>
+          <p class="step-who">Xenoz (automated script) · Day 3–6</p>
+        </div>
+        <span class="step-time" style="background:var(--color-background-info);color:var(--color-text-info)">Day 3–6</span>
+      </div>
+      <div class="step-body">
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="task-text">Run a completeness script against every asset record in Dynamics — score each record 0–100% based on required fields present
+            <p class="task-note">Required fields: install date, equipment type, manufacturer, serial number, site address, AHJ jurisdiction, last 5 service events, last inspection date and outcome</p>
+          </div>
+          <span class="task-badge b-red">Critical</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="task-text">Segment results into 3 tiers: Green (80–100% complete), Amber (50–79%), Red (below 50% — needs major backfill)
+          </div>
+          <span class="task-badge b-blue">Required</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="task-text">Map completeness by market and client — identify which regions or accounts have the worst data quality so cleaning effort is prioritised correctly
+          </div>
+          <span class="task-badge b-amber">Planning</span>
+        </div>
+        <div class="deliverable"><strong>Output:</strong> Completeness heatmap — every asset record scored, segmented by market and completeness tier</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num" style="background:var(--color-background-info);color:var(--color-text-info)">3</span>
+        <div class="step-meta">
+          <p class="step-title">Identify the critical data gaps</p>
+          <p class="step-who">Ops manager + Compliance officer · Day 6–10</p>
+        </div>
+        <span class="step-time" style="background:var(--color-background-info);color:var(--color-text-info)">Day 6–10</span>
+      </div>
+      <div class="step-body">
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="task-text">For safety reporting: which fields are missing that would prevent calculating the 8 safety metrics? These are Priority 1 gaps
+          </div>
+          <span class="task-badge b-red">Priority 1</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="task-text">For compliance tracking: which assets are missing AHJ jurisdiction, inspection due dates, or certificate expiry dates? These affect live operations immediately
+          </div>
+          <span class="task-badge b-red">Priority 1</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="task-text">For predictive maintenance: which assets lack equipment age, manufacturer, or fault code history? These limit the AI model accuracy
+          </div>
+          <span class="task-badge b-amber">Priority 2</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="task-text">Document which gaps can be backfilled from existing sources vs. which require going back to clients or inspectors
+          </div>
+          <span class="task-badge b-blue">Planning</span>
+        </div>
+        <div class="deliverable"><strong>Output:</strong> Gap priority matrix — P1/P2/P3 gaps with source of backfill and effort estimate per gap type</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num" style="background:var(--color-background-info);color:var(--color-text-info)">4</span>
+        <div class="step-meta">
+          <p class="step-title">Produce the audit report</p>
+          <p class="step-who">Xenoz · Day 10–14</p>
+        </div>
+        <span class="step-time" style="background:var(--color-background-info);color:var(--color-text-info)">Day 10–14</span>
+      </div>
+      <div class="step-body">
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="task-text">Compile findings into a 2-page exec summary: total assets, completeness distribution, top 5 gaps, estimated cleaning effort by region
+          </div>
+          <span class="task-badge b-blue">Required</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-info)" aria-hidden="true"></i>
+          <div class="task-text">Attach the completeness heatmap and gap priority matrix as appendices
+          </div>
+          <span class="task-badge b-blue">Required</span>
+        </div>
+        <div class="deliverable"><strong>Output:</strong> Data audit report — shared with leadership to get budget and resource sign-off for Steps 3–6</div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(0)">← Overview</button>
+      <button onclick="go(2)">Next — Step 2: Schema ↗</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: SCHEMA -->
+  <div id="p2" class="panel">
+    <p class="label">Step 2 — Weeks 2–3</p>
+    <p class="title">Schema design — define the master data model</p>
+    <p class="sub">Before cleaning anything, define exactly what the final data structure looks like. This is the blueprint everything else is cleaned into. Done in Dynamics Dataverse — it becomes the single source of truth for all elevator asset data.</p>
+
+    <div class="output-card">
+      <p class="output-label">Master schema — 5 core entities in Dataverse</p>
+
+      <div class="schema-box">
+        <p class="schema-entity"><i class="ti ti-building" style="font-size:14px;margin-right:6px" aria-hidden="true"></i>Asset record <span class="badge b-red" style="font-size:9px">Master entity</span></p>
+        <p class="schema-fields">
+          <span class="tag tag-req">Req</span>asset_id · equipment_type · manufacturer · model · serial_number · install_date · site_id · ahj_jurisdiction<br>
+          <span class="tag tag-req">Req</span>floor_count · drive_type (hydraulic/traction/MRL) · last_modernisation_date<br>
+          <span class="tag tag-opt">Opt</span>iot_sensor_id · warranty_expiry · rated_capacity_kg · rated_speed_mps
+        </p>
+      </div>
+
+      <div class="schema-box">
+        <p class="schema-entity"><i class="ti ti-clipboard-list" style="font-size:14px;margin-right:6px" aria-hidden="true"></i>Service event record <span class="badge b-blue" style="font-size:9px">Linked to asset</span></p>
+        <p class="schema-fields">
+          <span class="tag tag-req">Req</span>event_id · asset_id · event_type (PM/repair/inspection/emergency) · event_date · tech_id<br>
+          <span class="tag tag-req">Req</span>duration_mins · fault_codes[] · parts_replaced[] · outcome (pass/fail/partial)<br>
+          <span class="tag tag-opt">Opt</span>tech_notes · follow_up_required · client_notified · cost_usd
+        </p>
+      </div>
+
+      <div class="schema-box">
+        <p class="schema-entity"><i class="ti ti-certificate" style="font-size:14px;margin-right:6px" aria-hidden="true"></i>Compliance record <span class="badge b-amber" style="font-size:9px">Linked to asset</span></p>
+        <p class="schema-fields">
+          <span class="tag tag-req">Req</span>compliance_id · asset_id · cert_type · issue_date · expiry_date · issuing_ahj<br>
+          <span class="tag tag-req">Req</span>cert_status (current/expired/pending) · inspection_result · inspector_license_num<br>
+          <span class="tag tag-opt">Opt</span>cert_document_url · renewal_submitted_date · deficiency_codes[]
+        </p>
+      </div>
+
+      <div class="schema-box">
+        <p class="schema-entity"><i class="ti ti-map-pin" style="font-size:14px;margin-right:6px" aria-hidden="true"></i>Site record <span class="badge b-gray" style="font-size:9px">Linked to client</span></p>
+        <p class="schema-fields">
+          <span class="tag tag-req">Req</span>site_id · client_id · address · state · county · zip · building_type · ahj_jurisdiction<br>
+          <span class="tag tag-req">Req</span>floor_count · occupancy_type · access_requirements[]<br>
+          <span class="tag tag-opt">Opt</span>facility_manager_contact · bms_integration_id · annual_visit_count_target
+        </p>
+      </div>
+
+      <div class="schema-box">
+        <p class="schema-entity"><i class="ti ti-activity" style="font-size:14px;margin-right:6px" aria-hidden="true"></i>Risk & safety score record <span class="badge b-green" style="font-size:9px">AI-generated daily</span></p>
+        <p class="schema-fields">
+          <span class="tag tag-req">Req</span>score_id · asset_id · score_date · composite_risk_score · risk_tier (critical/watch/monitor/healthy)<br>
+          <span class="tag tag-req">Req</span>factor_pm_overdue · factor_component_age · factor_fault_frequency · factor_usage_intensity<br>
+          <span class="tag tag-opt">Opt</span>predicted_failure_window_days · recommended_action · iot_anomaly_flags[]
+        </p>
+      </div>
+    </div>
+
+    <div class="info-row">
+      <i class="ti ti-bulb info-icon" aria-hidden="true"></i>
+      <p class="info-text">The fault_codes[] and parts_replaced[] fields must use a standardised code taxonomy — not free-text tech notes. Define the fault code list before cleaning begins. This is what enables pattern analysis across thousands of events. "Door won't open" entered 47 different ways in free text is worthless. Fault code E14 appearing 3,200 times is signal.</p>
+    </div>
+
+    <div class="output-card">
+      <p class="output-label">Standardised taxonomy — must define before cleaning</p>
+      <div class="field-row"><span class="field-key">Equipment types</span><span class="field-val">Hydraulic · Traction · MRL · Escalator · Platform lift</span></div>
+      <div class="field-row"><span class="field-key">Event types</span><span class="field-val">PM-routine · PM-interim · Repair · Inspection-annual · Inspection-load · Emergency · Modernisation</span></div>
+      <div class="field-row"><span class="field-key">Fault code system</span><span class="field-val">Adopt ASME A17.1 code structure + Axxiom extensions</span></div>
+      <div class="field-row"><span class="field-key">Building types</span><span class="field-val">Hotel · Hospital · Office · Residential · Retail · Education · Airport · Government · Mixed-use</span></div>
+      <div class="field-row"><span class="field-key">Outcome values</span><span class="field-val">Pass · Fail · Conditional pass · Deferred · Incomplete</span></div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(1)">← Step 1</button>
+      <button onclick="go(3)">Next — Step 3: Clean ↗</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: CLEAN -->
+  <div id="p3" class="panel">
+    <p class="label">Step 3 — Weeks 3–8 (longest step)</p>
+    <p class="title">Data cleaning — backfill, standardise, validate</p>
+    <p class="sub">This is the hardest and most time-consuming step. It runs for 5 weeks and is split into three parallel tracks: AI-automated cleaning, human-review cleaning, and backfill outreach. Do not underestimate the effort here — this is what makes the data publishable.</p>
+
+    <div class="step open">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">A</span>
+        <div class="step-meta">
+          <p class="step-title">Track A — AI-automated cleaning (Weeks 3–5)</p>
+          <p class="step-who">Xenoz builds and runs · no human review needed for these</p>
+        </div>
+        <span class="step-time" style="background:var(--color-background-warning);color:var(--color-text-warning)">Automated</span>
+      </div>
+      <div class="step-body">
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="task-text">Standardise free-text equipment types → map to taxonomy values using fuzzy match + GPT-4o
+            <p class="task-note">E.g. "otis gen 2 hydraulic", "Otis Gen2 Hyd", "OTIS GEN-2" all → equipment_type: "Hydraulic", manufacturer: "Otis", model: "Gen2"</p>
+          </div>
+          <span class="task-badge b-amber">AI task</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="task-text">Parse tech notes to extract fault codes — AI reads historical notes and maps to the ASME fault code taxonomy, confidence-scored
+            <p class="task-note">High-confidence matches auto-committed. Low-confidence flagged for human review queue.</p>
+          </div>
+          <span class="task-badge b-amber">AI task</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="task-text">Resolve site address variations → normalise to USPS standard format + append AHJ jurisdiction via address lookup API
+          </div>
+          <span class="task-badge b-amber">AI task</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="task-text">Deduplicate asset records — identify and merge duplicate entries for the same physical unit across different market databases
+          </div>
+          <span class="task-badge b-amber">AI task</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="task-text">Calculate derived fields: asset age from install_date, days_since_last_PM, inspection_overdue_flag — all computed automatically
+          </div>
+          <span class="task-badge b-amber">AI task</span>
+        </div>
+        <div class="deliverable"><strong>Target:</strong> 85%+ of records cleaned automatically. Remaining 15% enter human review queue.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">B</span>
+        <div class="step-meta">
+          <p class="step-title">Track B — Human review queue (Weeks 4–7)</p>
+          <p class="step-who">Ops manager + 1 data coordinator · 2hrs/day</p>
+        </div>
+        <span class="step-time" style="background:var(--color-background-warning);color:var(--color-text-warning)">Human review</span>
+      </div>
+      <div class="step-body">
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="task-text">Xenoz builds a simple review UI in Power Apps: AI presents its best guess for ambiguous records, reviewer clicks Accept / Edit / Skip
+            <p class="task-note">Target: 50 records/hour per reviewer. At 15% of 5,000 assets = 750 records ≈ 15 hours total review time spread over 4 weeks</p>
+          </div>
+          <span class="task-badge b-blue">Build first</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="task-text">Every accepted correction is fed back to improve the AI's cleaning model — human review makes the automation smarter over time
+          </div>
+          <span class="task-badge b-green">Flywheel</span>
+        </div>
+        <div class="deliverable"><strong>Output:</strong> Review queue cleared weekly. Running data quality score visible to ops manager in Dynamics dashboard.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">C</span>
+        <div class="step-meta">
+          <p class="step-title">Track C — Backfill outreach (Weeks 4–8)</p>
+          <p class="step-who">Account managers · during normal client contact</p>
+        </div>
+        <span class="step-time" style="background:var(--color-background-warning);color:var(--color-text-warning)">Outreach</span>
+      </div>
+      <div class="step-body">
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="task-text">Priority 1 backfill: for Red-tier assets missing install date or AHJ jurisdiction, account managers ask during next scheduled visit or call — framed as "updating our records to improve your compliance tracking"
+          </div>
+          <span class="task-badge b-red">P1 gaps</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="task-text">Request historical inspection certificates from clients for assets missing cert records — many clients have these on file even if Axxiom doesn't
+          </div>
+          <span class="task-badge b-amber">P2 gaps</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="task-text">For legacy assets with no service history: check manufacturer registration databases and state elevator permit records (many are public) to recover install date and initial inspection records
+          </div>
+          <span class="task-badge b-amber">P2 gaps</span>
+        </div>
+        <div class="deliverable"><strong>Target:</strong> All P1 gaps resolved by Week 8. P2 gaps at 70%+ resolved. P3 gaps documented as known limitations.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">D</span>
+        <div class="step-meta">
+          <p class="step-title">Data quality validation — Week 8</p>
+          <p class="step-who">Xenoz · automated report</p>
+        </div>
+        <span class="step-time" style="background:var(--color-background-warning);color:var(--color-text-warning)">Week 8</span>
+      </div>
+      <div class="step-body">
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="task-text">Re-run completeness scoring against the cleaned dataset. Target: 90%+ of asset records at Green tier (80%+ complete)
+          </div>
+          <span class="task-badge b-green">Gate check</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="task-text">Run referential integrity checks: every service event links to a valid asset, every compliance record links to a valid asset and AHJ
+          </div>
+          <span class="task-badge b-green">Gate check</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+          <div class="task-text">Sample-audit 50 records manually: pick randomly across markets and verify that the cleaned data matches ground truth (paper records, client files)
+          </div>
+          <span class="task-badge b-green">Gate check</span>
+        </div>
+        <div class="deliverable"><strong>Gate:</strong> Data cleaning is considered complete only when the validation report shows ≥90% Green records and zero P1 gaps outstanding.</div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(2)">← Step 2</button>
+      <button onclick="go(4)">Next — Step 4: Govern ↗</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: GOVERNANCE -->
+  <div id="p4" class="panel">
+    <p class="label">Step 4 — Weeks 4–6 (runs parallel to cleaning)</p>
+    <p class="title">Data governance — policy, consent, access control</p>
+    <p class="sub">Governance runs in parallel with cleaning so that by the time the data is clean, the policy framework is ready. Without this, Axxiom cannot legally publish any of it or share it with regulators or insurers.</p>
+
+    <div class="step open">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">1</span>
+        <div class="step-meta">
+          <p class="step-title">Write the data governance policy</p>
+          <p class="step-who">Legal + Compliance officer + Xenoz · Week 4–5</p>
+        </div>
+        <span class="step-time" style="background:var(--color-background-danger);color:var(--color-text-danger)">Week 4–5</span>
+      </div>
+      <div class="step-body">
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+          <div class="task-text">Define what data Axxiom can use internally (all), what can be shared with the client (their own data only), what can be published externally (anonymised aggregates only, minimum cohort size of 50 units per data point)
+          </div>
+          <span class="task-badge b-red">Core policy</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+          <div class="task-text">Anonymisation standard: all published data is aggregated at the building-type + market level. No unit-level, client-level, or address-level data is ever published. Document this precisely so it can be shared with clients who ask
+          </div>
+          <span class="task-badge b-red">Core policy</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+          <div class="task-text">Data retention policy: how long each record type is kept, what happens when a client contract ends, how deletion requests are handled
+          </div>
+          <span class="task-badge b-amber">Required</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+          <div class="task-text">Breach notification procedure: what Axxiom does if data is compromised — required for any client contract that includes data processing terms
+          </div>
+          <span class="task-badge b-amber">Required</span>
+        </div>
+        <div class="deliverable"><strong>Output:</strong> Axxiom Data Governance Policy v1.0 — internal document, 4–6 pages, signed by CEO and Legal</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">2</span>
+        <div class="step-meta">
+          <p class="step-title">Update client contracts with data consent clause</p>
+          <p class="step-who">Legal · Week 5–6</p>
+        </div>
+        <span class="step-time" style="background:var(--color-background-danger);color:var(--color-text-danger)">Week 5–6</span>
+      </div>
+      <div class="step-body">
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+          <div class="task-text">Add a standard data clause to all new contracts: Axxiom may include anonymised, aggregated service data from this account in industry safety benchmarks and reports. No client-identifiable information will be published.
+          </div>
+          <span class="task-badge b-red">All new contracts</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+          <div class="task-text">For existing clients: send a one-page data addendum at next renewal — explain what it means in plain English, give an opt-out option. Most clients won't opt out, but having the process documented protects Axxiom legally
+          </div>
+          <span class="task-badge b-amber">Existing clients</span>
+        </div>
+        <div class="deliverable"><strong>Output:</strong> Standard data consent clause + client-facing plain-English explanation document</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">3</span>
+        <div class="step-meta">
+          <p class="step-title">Implement access control in Dynamics</p>
+          <p class="step-who">Xenoz · Week 5–6</p>
+        </div>
+        <span class="step-time" style="background:var(--color-background-danger);color:var(--color-text-danger)">Week 5–6</span>
+      </div>
+      <div class="step-body">
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+          <div class="task-text">Define 4 access tiers in Azure AD: Field tech (own jobs only), Account manager (their client portfolio), Ops manager (full fleet, no export), Data analyst (read-only aggregate queries, no raw PII)
+          </div>
+          <span class="task-badge b-red">Security</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+          <div class="task-text">Tag all records with data_classification field: internal-only · client-shareable · publishable-aggregate. Any export or report query is filtered by this tag automatically
+          </div>
+          <span class="task-badge b-red">Security</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+          <div class="task-text">Enable audit logging on all data access and exports — who queried what, when, and what they exported. Required for both internal compliance and regulator/insurance credibility
+          </div>
+          <span class="task-badge b-amber">Audit trail</span>
+        </div>
+        <div class="deliverable"><strong>Output:</strong> Azure AD roles configured · data classification tags on all records · audit log active</div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(3)">← Step 3</button>
+      <button onclick="go(5)">Next — Step 5: Metrics ↗</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: METRICS -->
+  <div id="p5" class="panel">
+    <p class="label">Step 5 — Weeks 5–7 (runs parallel)</p>
+    <p class="title">Safety metrics framework — the 8 metrics Axxiom owns</p>
+    <p class="sub">These are the specific, named, publicly-defined metrics that Axxiom will calculate, track, and publish. Defining them precisely before the pipeline is built ensures the pipeline captures exactly what's needed to calculate them.</p>
+
+    <div class="output-card">
+      <p class="output-label">The 8 Axxiom safety metrics — definitions and data requirements</p>
+
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-blue">M1</span> &nbsp;Inspection pass rate</span>
+        <span class="field-val">% inspections passing first-time, by vertical + market</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-blue">M2</span> &nbsp;Mean time between failures (MTBF)</span>
+        <span class="field-val">Avg days between unplanned outages, by equipment type + age cohort</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-blue">M3</span> &nbsp;PM compliance rate</span>
+        <span class="field-val">% of required PMs completed on schedule, by client and market</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-blue">M4</span> &nbsp;Emergency call rate</span>
+        <span class="field-val">Emergency events per 100 units per year, by building type</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-blue">M5</span> &nbsp;Top 10 fault codes by frequency</span>
+        <span class="field-val">Most common fault codes fleet-wide and by equipment type, updated quarterly</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-blue">M6</span> &nbsp;Certificate compliance rate</span>
+        <span class="field-val">% of units with current operating certificate, by AHJ jurisdiction</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-blue">M7</span> &nbsp;Age-risk correlation index</span>
+        <span class="field-val">Failure rate vs. unit age — shows at what age risk accelerates for each drive type</span>
+      </div>
+      <div class="field-row">
+        <span class="field-key"><span class="badge b-blue">M8</span> &nbsp;Post-PM failure reduction rate</span>
+        <span class="field-val">% reduction in emergency calls in the 90 days following a PM visit — proves PM value</span>
+      </div>
+    </div>
+
+    <div class="info-row">
+      <i class="ti ti-bulb info-icon" aria-hidden="true"></i>
+      <p class="info-text">M8 is the most powerful metric strategically. It directly quantifies the ROI of preventive maintenance — "buildings on Axxiom's PM program had 43% fewer emergency outages in the 90 days following a PM visit." This is the data that sells contract renewals, justifies premium pricing, and gets cited by insurance carriers when pricing policies for Axxiom-serviced buildings.</p>
+    </div>
+
+    <div class="step open">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num" style="background:var(--color-background-success);color:var(--color-text-success)">→</span>
+        <div class="step-meta">
+          <p class="step-title">For each metric: define → validate → automate</p>
+          <p class="step-who">Xenoz + Compliance officer · 3 iterations</p>
+        </div>
+        <span class="step-time" style="background:var(--color-background-success);color:var(--color-text-success)">3 steps each</span>
+      </div>
+      <div class="step-body">
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="task-text"><strong>Define:</strong> Write the precise calculation formula, minimum data requirements, and exclusion criteria (e.g. M2 excludes units with fewer than 24 months of history — insufficient sample)
+          </div>
+          <span class="task-badge b-green">Week 5</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="task-text"><strong>Validate:</strong> Run the formula against the cleaned dataset. Do the results make sense? Are there anomalies that suggest data quality issues? Adjust formula or flag data issues.
+          </div>
+          <span class="task-badge b-green">Week 6</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="task-text"><strong>Automate:</strong> Build the calculation as a scheduled Power Automate flow or Azure Function that recalculates each metric on a defined cadence (daily for operational metrics, monthly for trend metrics)
+          </div>
+          <span class="task-badge b-green">Week 7</span>
+        </div>
+        <div class="deliverable"><strong>Output:</strong> Axxiom Safety Metrics Framework v1.0 — a document defining each metric precisely, suitable for sharing with regulators and insurers as methodology documentation</div>
+      </div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(4)">← Step 4</button>
+      <button onclick="go(6)">Next — Step 6: Pipeline ↗</button>
+    </div>
+  </div>
+
+  <!-- STEP 6: PIPELINE -->
+  <div id="p6" class="panel">
+    <p class="label">Step 6 — Weeks 6–12</p>
+    <p class="title">Automated pipeline — the data flywheel that never stops</p>
+    <p class="sub">This is the step that makes the foundation self-sustaining. Every future job, inspection, fault code, and PM visit automatically enriches the data asset without anyone manually entering it. After Week 12, the data compounds on its own.</p>
+
+    <div class="step open">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num" style="background:var(--color-background-success);color:var(--color-text-success)">1</span>
+        <div class="step-meta">
+          <p class="step-title">Field tech mobile capture — structured input at job close</p>
+          <p class="step-who">Xenoz builds · Ops manager pilots with 5 techs first</p>
+        </div>
+        <span class="step-time" style="background:var(--color-background-success);color:var(--color-text-success)">Weeks 6–8</span>
+      </div>
+      <div class="step-body">
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="task-text">Replace the free-text "tech notes" field with a structured job close form in Dynamics mobile / Teams: fault code picker (searchable dropdown using ASME taxonomy), parts replaced (searchable parts catalogue), outcome selector, follow-up flag
+            <p class="task-note">The form must take under 2 minutes to complete. If it's slower than typing notes, techs won't use it.</p>
+          </div>
+          <span class="task-badge b-red">Critical UX</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="task-text">Add a voice-to-text option for tech notes — tech speaks their observation, Azure Speech converts to text, AI extracts fault codes from the transcript and pre-fills the form. Tech reviews and submits.
+          </div>
+          <span class="task-badge b-amber">Phase 2 option</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="task-text">Pilot with 5 techs for 2 weeks. Measure: completion rate, time-to-complete, data quality score of captured records vs. historical. Adjust the form UX before full rollout.
+          </div>
+          <span class="task-badge b-green">Pilot first</span>
+        </div>
+        <div class="deliverable"><strong>Output:</strong> Structured job close form live in Dynamics mobile. Every completed job = clean structured data point, zero manual data entry by office staff.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num" style="background:var(--color-background-success);color:var(--color-text-success)">2</span>
+        <div class="step-meta">
+          <p class="step-title">Inspection report ingestion — auto-parse third-party reports</p>
+          <p class="step-who">Xenoz · Weeks 7–9</p>
+        </div>
+        <span class="step-time" style="background:var(--color-background-success);color:var(--color-text-success)">Weeks 7–9</span>
+      </div>
+      <div class="step-body">
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="task-text">Build a document ingestion pipeline: inspector submits PDF report → Azure Document Intelligence extracts structured fields (inspection date, outcome, deficiency codes, inspector license number) → auto-populates compliance record in Dynamics
+          </div>
+          <span class="task-badge b-green">High value</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="task-text">For AHJ portals that have API access: build a scheduled pull to sync certificate status directly — daily check on upcoming expirations
+          </div>
+          <span class="task-badge b-green">Phase 2</span>
+        </div>
+        <div class="deliverable"><strong>Output:</strong> Inspection reports are never manually entered. Every report received = compliance record updated within 1 hour of receipt.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header" onclick="toggle(this)">
+        <span class="step-num" style="background:var(--color-background-success);color:var(--color-text-success)">3</span>
+        <div class="step-meta">
+          <p class="step-title">Metrics dashboard — live safety intelligence in Dynamics</p>
+          <p class="step-who">Xenoz · Weeks 9–11</p>
+        </div>
+        <span class="step-time" style="background:var(--color-background-success);color:var(--color-text-success)">Weeks 9–11</span>
+      </div>
+      <div class="step-body">
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="task-text">Build a live Power BI dashboard embedded in Dynamics showing all 8 safety metrics in real-time — filterable by market, building type, equipment type, date range
+          </div>
+          <span class="task-badge b-green">Ops visibility</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="task-text">Monthly automated snapshot: Power Automate saves a frozen copy of all 8 metrics on the 1st of each month. This is what gets used to generate the annual safety report — 12 monthly snapshots = one year of trend data.
+          </div>
+          <span class="task-badge b-green">Report feed</span>
+        </div>
+        <div class="task-row">
+          <i class="ti ti-circle-check task-check" style="color:var(--color-text-success)" aria-hidden="true"></i>
+          <div class="task-text">Anomaly detection: if any metric moves more than 2 standard deviations from its 90-day average, a Teams alert fires to the ops manager. This surfaces data quality issues as well as genuine safety trends.
+          </div>
+          <span class="task-badge b-amber">Alerting</span>
+        </div>
+        <div class="deliverable"><strong>Final output:</strong> Self-sustaining data flywheel. Every job → structured data → metrics update → dashboard refresh. The annual safety report is now a matter of taking the 12 monthly snapshots and writing the narrative around them.</div>
+      </div>
+    </div>
+
+    <div class="output-card" style="margin-top:14px">
+      <p class="output-label">What Axxiom has at the end of Week 12</p>
+      <div class="field-row"><span class="field-key">Unified asset master</span><span class="field-val"><span class="badge b-green">✓ Clean, 90%+ complete</span></span></div>
+      <div class="field-row"><span class="field-key">Historical service data</span><span class="field-val"><span class="badge b-green">✓ Standardised + fault-coded</span></span></div>
+      <div class="field-row"><span class="field-key">Compliance timeline per asset</span><span class="field-val"><span class="badge b-green">✓ Live, auto-updated</span></span></div>
+      <div class="field-row"><span class="field-key">Data governance policy</span><span class="field-val"><span class="badge b-green">✓ Signed, contracts updated</span></span></div>
+      <div class="field-row"><span class="field-key">8 safety metrics</span><span class="field-val"><span class="badge b-green">✓ Live dashboard + monthly snapshot</span></span></div>
+      <div class="field-row"><span class="field-key">Automated capture pipeline</span><span class="field-val"><span class="badge b-green">✓ Every future job auto-enriches</span></span></div>
+      <div class="field-row"><span class="field-key">Ready to publish Year 1 report?</span><span class="field-val"><span class="badge b-amber">After 6 months of pipeline data</span></span></div>
+    </div>
+
+    <div class="nav-btns">
+      <button onclick="go(5)">← Step 5</button>
+      <button onclick="go(0)">← Back to overview</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+function toggle(header){
+  header.closest('.step').classList.toggle('open');
+}
+</script>
