@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Layers, Palette } from 'lucide-react'
+import { ArrowRight, Database, Layers, Palette } from 'lucide-react'
 import {
   STRATEGY_DOCUMENTS,
   categoryLabel,
@@ -28,14 +28,24 @@ export function HomePage() {
           One place to read every HTML artifact: clearer typography, consistent
           navigation, and one-click copy for AI prompts embedded in the originals.
         </p>
-        <Link
-          to="/brandguidelines"
-          className="mt-6 inline-flex items-center gap-2 rounded-xl border border-slate-900/10 bg-slate-900 px-4 py-3 text-sm font-medium text-white shadow-sm transition-colors hover:bg-slate-800"
-        >
-          <Palette className="h-4 w-4 text-cyan-300" aria-hidden />
-          Open brand guidelines
-          <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
-        </Link>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Link
+            to="/brandguidelines"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-900/10 bg-slate-900 px-4 py-3 text-sm font-medium text-white shadow-sm transition-colors hover:bg-slate-800"
+          >
+            <Palette className="h-4 w-4 text-cyan-300" aria-hidden />
+            Brand guidelines
+            <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
+          </Link>
+          <Link
+            to="/vectordbcomparison"
+            className="inline-flex items-center gap-2 rounded-xl border border-emerald-800/20 bg-emerald-950 px-4 py-3 text-sm font-medium text-emerald-50 shadow-sm transition-colors hover:bg-emerald-900"
+          >
+            <Database className="h-4 w-4 text-emerald-300" aria-hidden />
+            Vector DB comparison
+            <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
+          </Link>
+        </div>
       </section>
 
       {catOrder.map((cat) => (

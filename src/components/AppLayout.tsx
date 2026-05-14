@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { ExternalLink, PanelLeft, Palette, Sparkles } from 'lucide-react'
+import { Database, ExternalLink, PanelLeft, Palette, Sparkles } from 'lucide-react'
 import {
   STRATEGY_DOCUMENTS,
   categoryLabel,
@@ -68,6 +68,13 @@ export function AppLayout() {
             <span className="flex items-center gap-2">
               <Palette className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
               Brand guidelines
+            </span>
+          </NavLink>
+
+          <NavLink to="/vectordbcomparison" className={navClass}>
+            <span className="flex items-center gap-2">
+              <Database className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+              Vector DB comparison
             </span>
           </NavLink>
 

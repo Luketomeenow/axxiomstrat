@@ -9,6 +9,8 @@ npm install
 npm run dev
 ```
 
+Dedicated viewers: **`/brandguidelines`**, **`/vectordbcomparison`** (Qdrant vs Pinecone vs Fabric).
+
 ## Deploy (Netlify)
 
 Connect this repository; Netlify reads `netlify.toml` here:

@@ -3,12 +3,14 @@ import { AppLayout } from './components/AppLayout'
 import { BrandGuidelinesPage } from './pages/BrandGuidelinesPage'
 import { DocumentPage } from './pages/DocumentPage'
 import { HomePage } from './pages/HomePage'
+import { VectorDbComparisonPage } from './pages/VectorDbComparisonPage'
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/brandguidelines" element={<BrandGuidelinesPage />} />
+        <Route path="/vectordbcomparison" element={<VectorDbComparisonPage />} />
         <Route element={<AppLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/doc/:slug" element={<DocumentPage />} />
