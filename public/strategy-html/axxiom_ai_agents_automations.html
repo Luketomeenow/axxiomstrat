@@ -1,0 +1,915 @@
+
+<style>
+  *{box-sizing:border-box}
+  .wrap{padding:1.5rem 0;font-family:var(--font-sans)}
+  .tab-row{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap}
+  .tab{font-size:11px;font-weight:500;padding:5px 13px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+  .tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .panel{display:none}.panel.active{display:block}
+  .lbl{font-size:11px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 3px}
+  .ttl{font-size:17px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+  .sub{font-size:13px;color:var(--color-text-secondary);margin:0 0 14px;line-height:1.6}
+  .divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:12px 0}
+  .badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap}
+  .b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+  .b-green{background:var(--color-background-success);color:var(--color-text-success)}
+  .b-amber{background:var(--color-background-warning);color:var(--color-text-warning)}
+  .b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+  .b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+  .b-purple{background:#EDE9FE;color:#5B21B6}
+  .b-teal{background:#CCFBF1;color:#0F766E}
+
+  /* Architecture diagram */
+  .arch-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .sys-pill{padding:8px 14px;border-radius:var(--border-radius-md);font-size:12px;font-weight:600;border:0.5px solid;text-align:center;flex:1;min-width:100px}
+  .sys-arrow{font-size:18px;color:var(--color-text-tertiary);flex-shrink:0}
+  .sys-ghl{background:rgba(0,184,124,0.1);border-color:rgba(0,184,124,0.4);color:var(--color-text-success)}
+  .sys-dynamics{background:rgba(0,131,245,0.1);border-color:rgba(0,131,245,0.4);color:var(--color-text-info)}
+  .sys-fb{background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.4);color:var(--color-text-warning)}
+  .sys-ga{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.4);color:var(--color-text-danger)}
+  .sys-pbi{background:rgba(91,33,182,0.1);border-color:rgba(91,33,182,0.4);color:#5B21B6}
+  .sys-core{background:rgba(0,131,245,0.15);border-color:rgba(0,131,245,0.6);color:var(--color-text-info);font-size:13px;font-weight:700}
+
+  /* Agent cards */
+  .agent-block{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:12px;overflow:hidden}
+  .ab-head{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;cursor:pointer}
+  .ab-head:hover,.agent-block.open .ab-head{background:var(--color-background-secondary)}
+  .ab-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+  .ab-meta{flex:1}
+  .ab-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin:0 0 3px}
+  .ab-sub{font-size:11px;color:var(--color-text-tertiary);margin:0}
+  .ab-badges{display:flex;gap:5px;flex-wrap:wrap;flex-shrink:0;align-items:flex-start}
+  .ab-body{display:none;border-top:0.5px solid var(--color-border-tertiary);padding:12px 14px}
+  .agent-block.open .ab-body{display:block}
+
+  /* Flow steps */
+  .flow{display:flex;flex-direction:column;gap:3px;margin-bottom:10px}
+  .flow-step{display:flex;align-items:flex-start;gap:10px;padding:7px 10px;border-radius:var(--border-radius-md);font-size:12px}
+  .fs-trigger{background:var(--color-background-info);border:0.5px solid rgba(0,131,245,0.2)}
+  .fs-action{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary)}
+  .fs-output{background:var(--color-background-success);border:0.5px solid rgba(0,184,124,0.2)}
+  .fs-ai{background:#EDE9FE;border:0.5px solid rgba(91,33,182,0.2)}
+  .flow-icon{font-size:13px;flex-shrink:0;margin-top:1px}
+  .flow-text{flex:1;color:var(--color-text-primary);line-height:1.5}
+  .flow-tag{font-size:9px;font-weight:600;padding:2px 6px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+  .connector{width:2px;height:10px;background:var(--color-border-secondary);margin-left:22px;flex-shrink:0}
+
+  /* Data fields */
+  .data-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:8px}
+  .data-label{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 6px}
+  .data-items{display:flex;flex-wrap:wrap;gap:5px}
+  .data-item{font-size:11px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:4px;padding:3px 8px;color:var(--color-text-secondary)}
+
+  /* Priority rows */
+  .priority-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+  .priority-row:last-child{border-bottom:none}
+  .pr-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+  .pr-title{flex:1;font-weight:500;color:var(--color-text-primary)}
+  .pr-meta{font-size:11px;color:var(--color-text-secondary);text-align:right}
+
+  /* Info */
+  .info-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px}
+  .ii{font-size:14px;color:var(--color-text-tertiary);flex-shrink:0;margin-top:1px}
+  .it{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+
+  /* Tools row */
+  .tools-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;padding-top:8px;border-top:0.5px solid var(--color-border-tertiary)}
+  .tool-chip{font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)}
+
+  /* Dynamics field boxes */
+  .dynamics-field{background:rgba(0,131,245,0.06);border:0.5px solid rgba(0,131,245,0.2);border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:8px}
+  .df-entity{font-size:11px;font-weight:600;color:var(--color-text-info);text-transform:uppercase;letter-spacing:.06em;margin:0 0 6px}
+  .df-fields{font-size:11px;color:var(--color-text-secondary);line-height:1.8}
+
+  .oc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:10px}
+  .ol{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
+  .fr{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px;gap:8px}
+  .fr:last-child{border-bottom:none}
+  .fk{color:var(--color-text-secondary);flex:1}
+  .fv{font-weight:500;color:var(--color-text-primary);text-align:right;flex-shrink:0}
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">Axxiom Elevator AI agents and automations — GHL, Dynamics, FieldBoss, Google Analytics to Power BI</h2>
+
+  <div class="tab-row">
+    <button class="tab active" onclick="go(0)">Architecture</button>
+    <button class="tab" onclick="go(1)">Marketing agents</button>
+    <button class="tab" onclick="go(2)">Ops agents</button>
+    <button class="tab" onclick="go(3)">Dynamics data model</button>
+    <button class="tab" onclick="go(4)">Power BI layer</button>
+    <button class="tab" onclick="go(5)">Build order</button>
+  </div>
+
+  <!-- ARCHITECTURE -->
+  <div id="p0" class="panel active">
+    <p class="lbl">System architecture</p>
+    <p class="ttl">Microsoft Dynamics = single source of truth. Everything flows in.</p>
+    <p class="sub">All four systems feed data into Dynamics Dataverse. Power Automate is the orchestration layer. Power BI reads from Dynamics for the data analyst. GHL handles client-facing marketing execution. FieldBoss is the field service engine. AI agents sit between the systems and make decisions.</p>
+
+    <div class="oc">
+      <p class="ol">Data flow — all roads lead to Dynamics</p>
+      <div class="fr"><span class="fk">GHL (GoHighLevel)</span><span class="fv">Leads · pipeline stages · conversations · reviews → Dynamics</span></div>
+      <div class="fr"><span class="fk">Google Analytics + Ads</span><span class="fv">Campaign data · traffic · conversions · spend → Dynamics custom tables</span></div>
+      <div class="fr"><span class="fk">FieldBoss</span><span class="fv">Work orders · tech data · job history · asset records → Dynamics</span></div>
+      <div class="fr"><span class="fk">Dynamics (Dataverse)</span><span class="fv"><span class="badge b-blue">Single source of truth — compliance + audit trail</span></span></div>
+      <div class="fr"><span class="fk">Power BI</span><span class="fv">Reads directly from Dataverse — no additional ETL needed</span></div>
+      <div class="fr"><span class="fk">AI agents</span><span class="fv">Read from + write to Dynamics · trigger GHL + FieldBoss actions</span></div>
+    </div>
+
+    <!-- System flow visual -->
+    <p class="lbl" style="margin-bottom:10px">System integration map</p>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-lg);padding:20px;margin-bottom:16px">
+      <div style="display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <div class="sys-pill sys-ghl">GoHighLevel<br><small style="font-weight:400;opacity:.7">CRM · Marketing</small></div>
+        <span class="sys-arrow">→</span>
+        <div class="sys-pill sys-core" style="flex:2;min-width:160px;padding:14px">Microsoft Dynamics<br><small style="font-weight:400;opacity:.8">Master Data + Compliance</small></div>
+        <span class="sys-arrow">→</span>
+        <div class="sys-pill sys-pbi">Power BI<br><small style="font-weight:400;opacity:.7">Analytics + Reports</small></div>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap">
+        <div class="sys-pill sys-fb">FieldBoss<br><small style="font-weight:400;opacity:.7">Field Ops</small></div>
+        <span class="sys-arrow">→</span>
+        <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-tertiary);min-width:160px;text-align:center;padding:8px">Power Automate<br>+ AI Agents</div>
+        <span class="sys-arrow">→</span>
+        <div class="sys-pill sys-ga">Google Ads + GA4<br><small style="font-weight:400;opacity:.7">Ad data → Dynamics</small></div>
+      </div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">Orchestration tools</p>
+      <div class="fr"><span class="fk">Power Automate</span><span class="fv">Primary Microsoft-native workflow engine — all Dynamics triggers</span></div>
+      <div class="fr"><span class="fk">Make (Integromat)</span><span class="fv">GHL ↔ Dynamics · FieldBoss ↔ Dynamics · Google Ads → Dynamics</span></div>
+      <div class="fr"><span class="fk">GHL Workflows</span><span class="fv">Marketing automations · lead nurture · review requests</span></div>
+      <div class="fr"><span class="fk">Azure OpenAI / Claude</span><span class="fv">AI agent intelligence layer — reasoning, classification, generation</span></div>
+      <div class="fr"><span class="fk">Dataverse</span><span class="fv">Central data store — all entities, audit logs, compliance records</span></div>
+      <div class="fr"><span class="fk">Power BI dataflows</span><span class="fv">Reads Dataverse, refreshes dashboards for data analyst team</span></div>
+    </div>
+
+    <div class="info-row">
+      <i class="ti ti-shield-check ii" style="color:var(--color-text-info)" aria-hidden="true"></i>
+      <p class="it"><strong style="color:var(--color-text-primary)">Why Dynamics must be the master:</strong> Compliance requires every dispatch decision, tech certification check, client communication, and financial event to have an audit trail. Dynamics Dataverse provides that — every record has a created-by, modified-by, and timestamp automatically. Power BI then reads this clean, governed data directly without any intermediate transformation that could break the audit chain.</p>
+    </div>
+  </div>
+
+  <!-- MARKETING AGENTS -->
+  <div id="p1" class="panel">
+    <p class="lbl">Marketing AI agents — 7 automations</p>
+    <p class="ttl">Turn ad spend and lead data into Dynamics-governed intelligence</p>
+    <p class="sub">Every marketing event — a lead form fill, a Google Ads click, a GHL conversation — must land in Dynamics with full attribution. These agents make that happen automatically and add AI intelligence on top.</p>
+
+    <!-- Agent 1 -->
+    <div class="agent-block open">
+      <div class="ab-head" onclick="tog(this)">
+        <i class="ti ti-target ab-icon" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+        <div class="ab-meta">
+          <p class="ab-title">Agent 1 — Ad Attribution Sync (Google Ads + GA4 → Dynamics)</p>
+          <p class="ab-sub">Pulls every campaign, ad group, keyword, and conversion into Dynamics daily · the #1 missing piece</p>
+        </div>
+        <div class="ab-badges">
+          <span class="badge b-red">Build first</span>
+          <span class="badge b-gray">Marketing</span>
+        </div>
+      </div>
+      <div class="ab-body">
+        <div class="flow">
+          <div class="flow-step fs-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: Daily at 6am — Make scenario pulls Google Ads API + GA4 Data API for previous day</span>
+            <span class="flow-tag b-blue">Daily pull</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-action">
+            <i class="ti ti-transform flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">For each campaign: maps impressions, clicks, spend, conversions, CPA, ROAS to a custom Dynamics entity "ax_MarketingCampaignMetric" — one row per campaign per day</span>
+            <span class="flow-tag b-gray">Transform</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-action">
+            <i class="ti ti-link flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">GA4 session data synced: traffic by source/medium/campaign → "ax_WebsiteSessionMetric" entity in Dataverse. UTM parameters preserved for attribution.</span>
+            <span class="flow-tag b-gray">GA4 sync</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-ai">
+            <i class="ti ti-brain flow-icon" style="color:#5B21B6" aria-hidden="true"></i>
+            <span class="flow-text">AI layer: flags campaigns with CPA above threshold, declining CTR, or zero conversions for 3+ days → creates a Dynamics Task assigned to marketing manager with AI-written brief</span>
+            <span class="flow-tag b-purple">AI alert</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-output">
+            <i class="ti ti-chart-bar flow-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+            <span class="flow-text">Power BI refreshes: marketing analyst sees live campaign performance, spend vs. lead volume, ROAS by market and vertical — all from Dynamics</span>
+            <span class="flow-tag b-green">Power BI</span>
+          </div>
+        </div>
+        <div class="data-box">
+          <div class="data-label">Dynamics fields created</div>
+          <div class="data-items">
+            <span class="data-item">campaign_name</span>
+            <span class="data-item">ad_spend_usd</span>
+            <span class="data-item">impressions</span>
+            <span class="data-item">clicks</span>
+            <span class="data-item">ctr_pct</span>
+            <span class="data-item">conversions</span>
+            <span class="data-item">cpa_usd</span>
+            <span class="data-item">roas</span>
+            <span class="data-item">market_tag</span>
+            <span class="data-item">vertical_tag</span>
+            <span class="data-item">date_period</span>
+          </div>
+        </div>
+        <div class="tools-row">
+          <span class="tool-chip">Make (Integromat)</span>
+          <span class="tool-chip">Google Ads API v16</span>
+          <span class="tool-chip">GA4 Data API</span>
+          <span class="tool-chip">Dataverse REST API</span>
+          <span class="tool-chip">Azure OpenAI</span>
+          <span class="tool-chip">Power BI dataflow</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agent 2 -->
+    <div class="agent-block">
+      <div class="ab-head" onclick="tog(this)">
+        <i class="ti ti-user-plus ab-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+        <div class="ab-meta">
+          <p class="ab-title">Agent 2 — Lead Capture & Attribution (GHL → Dynamics)</p>
+          <p class="ab-sub">Every GHL lead lands in Dynamics with source, campaign, vertical tag, and AI lead score</p>
+        </div>
+        <div class="ab-badges">
+          <span class="badge b-red">Build first</span>
+          <span class="badge b-gray">Marketing</span>
+        </div>
+      </div>
+      <div class="ab-body">
+        <div class="flow">
+          <div class="flow-step fs-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: New contact created in GHL (form fill, SMS inbound, missed call text-back, ad lead form) — GHL webhook fires instantly</span>
+            <span class="flow-tag b-blue">Real-time</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-action">
+            <i class="ti ti-tag flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Make scenario: extracts UTM parameters (campaign, source, medium, keyword) from the lead's entry point → maps to the exact Google Ads campaign in Dynamics → links lead to campaign spend record</span>
+            <span class="flow-tag b-gray">Attribution</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-ai">
+            <i class="ti ti-brain flow-icon" style="color:#5B21B6" aria-hidden="true"></i>
+            <span class="flow-text">AI lead classifier: reads company name, title, message, building type → tags vertical (hotel/hospital/office), assigns lead quality score (1–10), identifies if commercial or residential → writes to Dynamics Contact record</span>
+            <span class="flow-tag b-purple">AI score</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-action">
+            <i class="ti ti-database flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Contact created in Dynamics with all fields: source, campaign, vertical, score, original message, assigned account manager based on market → Contact linked to Campaign record for attribution</span>
+            <span class="flow-tag b-gray">Dynamics</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-output">
+            <i class="ti ti-arrow-back flow-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+            <span class="flow-text">Dynamics writes back to GHL: contact tagged with vertical, score, and assigned rep. GHL automation sequences fire based on vertical tag (hotel sequence vs hospital sequence)</span>
+            <span class="flow-tag b-green">GHL trigger</span>
+          </div>
+        </div>
+        <div class="tools-row">
+          <span class="tool-chip">GHL Webhooks</span>
+          <span class="tool-chip">Make</span>
+          <span class="tool-chip">Azure OpenAI (classifier)</span>
+          <span class="tool-chip">Dataverse API</span>
+          <span class="tool-chip">GHL REST API v2</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agent 3 -->
+    <div class="agent-block">
+      <div class="ab-head" onclick="tog(this)">
+        <i class="ti ti-route ab-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+        <div class="ab-meta">
+          <p class="ab-title">Agent 3 — Pipeline Stage Sync (GHL ↔ Dynamics)</p>
+          <p class="ab-sub">Every pipeline move in GHL updates the Dynamics opportunity record in real time — one source of truth for deals</p>
+        </div>
+        <div class="ab-badges">
+          <span class="badge b-amber">P1</span>
+          <span class="badge b-gray">Marketing</span>
+        </div>
+      </div>
+      <div class="ab-body">
+        <div class="flow">
+          <div class="flow-step fs-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: Contact moves stage in GHL pipeline (Lead Captured → Discovery Booked → Proposal Sent → Closed Won/Lost)</span>
+            <span class="flow-tag b-blue">GHL webhook</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-action">
+            <i class="ti ti-refresh flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Make maps GHL stage → Dynamics Opportunity stage. Updates: estimated value, close probability, stage date, assigned rep. Closed Won → triggers new client onboarding workflow in Dynamics + FieldBoss.</span>
+            <span class="flow-tag b-gray">Bi-directional</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-ai">
+            <i class="ti ti-brain flow-icon" style="color:#5B21B6" aria-hidden="true"></i>
+            <span class="flow-text">AI win/loss analysis: when a deal is marked Lost, AI reads the full contact history and tags the loss reason (price / timing / competitor / no response) → stored in Dynamics for Power BI loss analysis report</span>
+            <span class="flow-tag b-purple">Win/loss AI</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-output">
+            <i class="ti ti-chart-line flow-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+            <span class="flow-text">Power BI: Sales pipeline by stage, by rep, by vertical, by market. Win rate by lead source. Average time in each stage. Loss reason breakdown. All live from Dynamics.</span>
+            <span class="flow-tag b-green">Power BI</span>
+          </div>
+        </div>
+        <div class="tools-row">
+          <span class="tool-chip">GHL Webhooks</span>
+          <span class="tool-chip">Make</span>
+          <span class="tool-chip">Dynamics Opportunity entity</span>
+          <span class="tool-chip">Azure OpenAI (loss analysis)</span>
+          <span class="tool-chip">Power Automate (onboarding)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agent 4 -->
+    <div class="agent-block">
+      <div class="ab-head" onclick="tog(this)">
+        <i class="ti ti-stars ab-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+        <div class="ab-meta">
+          <p class="ab-title">Agent 4 — Review Intelligence Agent (GHL reviews → Dynamics → Power BI)</p>
+          <p class="ab-sub">Captures every Google review, AI-analyzes sentiment, stores in Dynamics, flags negatives, feeds reputation dashboard</p>
+        </div>
+        <div class="ab-badges">
+          <span class="badge b-amber">P2</span>
+          <span class="badge b-gray">Marketing</span>
+        </div>
+      </div>
+      <div class="ab-body">
+        <div class="flow">
+          <div class="flow-step fs-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER A: Job marked complete in FieldBoss → GHL review request SMS fires 48hrs later (if job type = PM or Repair, outcome = Pass)</span>
+            <span class="flow-tag b-blue">Job complete</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER B: New Google review detected by GHL reputation management → webhook fires</span>
+            <span class="flow-tag b-blue">Review posted</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-ai">
+            <i class="ti ti-brain flow-icon" style="color:#5B21B6" aria-hidden="true"></i>
+            <span class="flow-text">AI sentiment analysis: star rating + review text → sentiment score (1-10), key themes extracted (response time / tech quality / communication / compliance), service issues flagged. AI drafts a response in Axxiom brand voice.</span>
+            <span class="flow-tag b-purple">AI analyze</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-action">
+            <i class="ti ti-database flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Review record created in Dynamics "ax_ClientReview" entity: rating, sentiment score, themes, market, linked client/work order, response draft, response status. Negative reviews (1-2★) → Dynamics Task to account manager</span>
+            <span class="flow-tag b-gray">Dynamics</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-output">
+            <i class="ti ti-chart-bar flow-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+            <span class="flow-text">Power BI: review volume by market, avg rating trend, sentiment themes word cloud, response rate %, NPS equivalent by vertical. All from Dynamics.</span>
+            <span class="flow-tag b-green">Power BI</span>
+          </div>
+        </div>
+        <div class="tools-row">
+          <span class="tool-chip">GHL Reputation Mgmt</span>
+          <span class="tool-chip">FieldBoss webhook</span>
+          <span class="tool-chip">Make</span>
+          <span class="tool-chip">Azure OpenAI (sentiment)</span>
+          <span class="tool-chip">Dataverse custom entity</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agent 5 -->
+    <div class="agent-block">
+      <div class="ab-head" onclick="tog(this)">
+        <i class="ti ti-mail-forward ab-icon" style="color:#5B21B6" aria-hidden="true"></i>
+        <div class="ab-meta">
+          <p class="ab-title">Agent 5 — Contract Renewal AI Agent (Dynamics → GHL sequences)</p>
+          <p class="ab-sub">Monitors contract end dates in Dynamics, fires timed GHL renewal sequences automatically — nothing slips through</p>
+        </div>
+        <div class="ab-badges">
+          <span class="badge b-amber">P2</span>
+          <span class="badge b-gray">Marketing</span>
+        </div>
+      </div>
+      <div class="ab-body">
+        <div class="flow">
+          <div class="flow-step fs-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: Daily Power Automate flow checks Dynamics for contracts with end_date = 90 / 60 / 30 / 14 days from today</span>
+            <span class="flow-tag b-blue">Daily check</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-ai">
+            <i class="ti ti-brain flow-icon" style="color:#5B21B6" aria-hidden="true"></i>
+            <span class="flow-text">AI generates personalized renewal brief: pulls client's full service history from Dynamics — jobs completed, emergencies prevented, compliance records maintained, PM completion rate → writes a 3-paragraph value summary for the account manager</span>
+            <span class="flow-tag b-purple">AI brief</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-action">
+            <i class="ti ti-send flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Contact enrolled in GHL renewal sequence with the AI-generated value content. Sequence: Day 0 (90 days out) value email → Day 14 SMS → Day 30 new capabilities email → Day 60 urgency SMS → Day 75 final call task</span>
+            <span class="flow-tag b-gray">GHL sequence</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-output">
+            <i class="ti ti-check flow-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+            <span class="flow-text">On renewal: Dynamics contract record updated, GHL contact tagged "Renewed", sequence stopped. On non-renewal: tagged "Churned", win-back sequence starts, Power BI churn dashboard updated.</span>
+            <span class="flow-tag b-green">Close loop</span>
+          </div>
+        </div>
+        <div class="tools-row">
+          <span class="tool-chip">Power Automate</span>
+          <span class="tool-chip">Dynamics contract entity</span>
+          <span class="tool-chip">Azure OpenAI (value brief)</span>
+          <span class="tool-chip">GHL API v2</span>
+          <span class="tool-chip">Make (GHL enrollment)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPS AGENTS -->
+  <div id="p2" class="panel">
+    <p class="lbl">Operations AI agents — 6 automations</p>
+    <p class="ttl">FieldBoss + Dynamics + AI = an ops system that runs itself</p>
+    <p class="sub">Operations data is the most valuable data Axxiom has — and right now it's locked inside FieldBoss. These agents extract it, govern it in Dynamics, and give the ops team decision-making intelligence they don't currently have.</p>
+
+    <!-- Ops Agent 1 -->
+    <div class="agent-block open">
+      <div class="ab-head" onclick="tog(this)">
+        <i class="ti ti-clipboard-list ab-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+        <div class="ab-meta">
+          <p class="ab-title">Ops Agent 1 — FieldBoss Work Order Sync (FieldBoss → Dynamics)</p>
+          <p class="ab-sub">Every work order, tech, asset, and job outcome lands in Dynamics immediately — the data foundation for every other ops automation</p>
+        </div>
+        <div class="ab-badges">
+          <span class="badge b-red">Build first</span>
+          <span class="badge b-gray">Operations</span>
+        </div>
+      </div>
+      <div class="ab-body">
+        <div class="flow">
+          <div class="flow-step fs-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: FieldBoss webhook fires on: work order created · work order updated · job status changed · tech checked in/out · job closed with notes</span>
+            <span class="flow-tag b-blue">Real-time</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-action">
+            <i class="ti ti-transform flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Make maps FieldBoss WO fields → Dynamics "ax_WorkOrder" entity. Key fields: WO number, asset ID, client ID, tech assigned, service type, start/end time, outcome, fault codes, parts used, tech notes</span>
+            <span class="flow-tag b-gray">Map fields</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-ai">
+            <i class="ti ti-brain flow-icon" style="color:#5B21B6" aria-hidden="true"></i>
+            <span class="flow-text">AI fault code extractor: reads tech notes (free text) → extracts structured fault codes using ASME A17.1 taxonomy → writes fault_codes[] and components[] fields to Dynamics asset service record. Confidence score attached — low confidence → human review queue</span>
+            <span class="flow-tag b-purple">AI extract</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-action">
+            <i class="ti ti-activity flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Asset record in Dynamics updated: last_service_date, last_fault_code, service_count, days_since_last_PM recalculated. Risk score recalculated by predictive model. Compliance timeline checked.</span>
+            <span class="flow-tag b-gray">Asset update</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-output">
+            <i class="ti ti-chart-dots flow-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+            <span class="flow-text">Power BI: ops analyst sees live job completion rates, first-fix rate, avg job duration, fault code frequency, tech performance by market. All governed, timestamped, audit-ready in Dynamics.</span>
+            <span class="flow-tag b-green">Power BI</span>
+          </div>
+        </div>
+        <div class="tools-row">
+          <span class="tool-chip">FieldBoss webhooks / API</span>
+          <span class="tool-chip">Make</span>
+          <span class="tool-chip">Azure OpenAI (fault extraction)</span>
+          <span class="tool-chip">Dataverse API</span>
+          <span class="tool-chip">Power Automate (asset update)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ops Agent 2 -->
+    <div class="agent-block">
+      <div class="ab-head" onclick="tog(this)">
+        <i class="ti ti-activity ab-icon" style="color:var(--color-text-danger)" aria-hidden="true"></i>
+        <div class="ab-meta">
+          <p class="ab-title">Ops Agent 2 — Predictive Maintenance AI Agent</p>
+          <p class="ab-sub">Scores every elevator asset daily · auto-creates PM work orders · prevents emergency call-outs before they happen</p>
+        </div>
+        <div class="ab-badges">
+          <span class="badge b-red">Highest ROI</span>
+          <span class="badge b-gray">Operations</span>
+        </div>
+      </div>
+      <div class="ab-body">
+        <div class="flow">
+          <div class="flow-step fs-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: Daily Power Automate flow at 5am — pulls all active assets from Dynamics Dataverse</span>
+            <span class="flow-tag b-blue">Daily 5am</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-ai">
+            <i class="ti ti-brain flow-icon" style="color:#5B21B6" aria-hidden="true"></i>
+            <span class="flow-text">AI risk model scores each asset (0-100): factors = PM interval overdue (days) + component age + fault code frequency (last 90 days) + repeat fault patterns + equipment type + building vertical (usage intensity). Score written to Dynamics ax_AssetRiskScore entity.</span>
+            <span class="flow-tag b-purple">Risk score</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-action">
+            <i class="ti ti-git-branch flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Score routing: 75-100 (Critical) → draft PM work order auto-created in FieldBoss + Dynamics + Teams alert to ops manager + account manager notified to contact client. 50-74 (Watch) → flagged on Dynamics risk dashboard. Below 50 → log only.</span>
+            <span class="flow-tag b-gray">Route</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-action">
+            <i class="ti ti-file-text flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">AI-generated job brief for tech: asset history summary, top 3 most likely fault components, suggested parts to bring (from past similar jobs), last 3 fault codes, safety notes for site type. Written to FieldBoss work order notes field.</span>
+            <span class="flow-tag b-purple">AI job brief</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-output">
+            <i class="ti ti-chart-bar flow-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+            <span class="flow-text">Power BI: fleet risk heatmap by market, risk score trend over time, # of emergency call-outs prevented (tracked by comparing flagged units vs actual emergency rate), modernization pipeline candidates.</span>
+            <span class="flow-tag b-green">Power BI</span>
+          </div>
+        </div>
+        <div class="tools-row">
+          <span class="tool-chip">Power Automate</span>
+          <span class="tool-chip">Azure ML (risk model)</span>
+          <span class="tool-chip">Azure OpenAI (job brief)</span>
+          <span class="tool-chip">Dataverse</span>
+          <span class="tool-chip">FieldBoss API</span>
+          <span class="tool-chip">Teams notifications</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ops Agent 3 -->
+    <div class="agent-block">
+      <div class="ab-head" onclick="tog(this)">
+        <i class="ti ti-shield-check ab-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+        <div class="ab-meta">
+          <p class="ab-title">Ops Agent 3 — Compliance Watchdog Agent</p>
+          <p class="ab-sub">Monitors tech certifications AND asset inspection due dates · hard alerts before anything lapses</p>
+        </div>
+        <div class="ab-badges">
+          <span class="badge b-amber">P1</span>
+          <span class="badge b-gray">Operations</span>
+        </div>
+      </div>
+      <div class="ab-body">
+        <div class="flow">
+          <div class="flow-step fs-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: Daily sweep at 6am — Power Automate queries Dynamics for: tech licences expiring in ≤90 days AND asset certificates expiring in ≤60 days AND PM logs missing within AHJ-required window</span>
+            <span class="flow-tag b-blue">Daily sweep</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-action">
+            <i class="ti ti-alert-triangle flow-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i>
+            <span class="flow-text">Tech cert alerts: 90 days → HR email + manager task. 30 days → escalation to director. Day of expiry → tech automatically removed from eligible dispatch pool in Dynamics (compliance gate hard block). Licence renewal tracked via Dynamics task.</span>
+            <span class="flow-tag b-amber">Tech certs</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-action">
+            <i class="ti ti-certificate flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Asset cert alerts: 60 days → inspection scheduling task created for account manager. 14 days → critical alert to ops manager + client notification via GHL automated email. Day of expiry → Dynamics flags asset as "Non-compliant".</span>
+            <span class="flow-tag b-gray">Asset certs</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-ai">
+            <i class="ti ti-brain flow-icon" style="color:#5B21B6" aria-hidden="true"></i>
+            <span class="flow-text">AI generates client-facing inspection prep email: what the inspection covers, what documents to have ready, what Axxiom is handling. Sent via GHL 30 days before inspection date. Positions Axxiom as proactive partner.</span>
+            <span class="flow-tag b-purple">AI client email</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-output">
+            <i class="ti ti-chart-bar flow-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+            <span class="flow-text">Power BI compliance dashboard: certificate compliance rate by market, tech cert status heatmap, upcoming inspection calendar, AHJ jurisdiction risk map. Real-time from Dynamics.</span>
+            <span class="flow-tag b-green">Power BI</span>
+          </div>
+        </div>
+        <div class="tools-row">
+          <span class="tool-chip">Power Automate</span>
+          <span class="tool-chip">Dynamics (tech + asset entities)</span>
+          <span class="tool-chip">Azure OpenAI</span>
+          <span class="tool-chip">GHL (client email)</span>
+          <span class="tool-chip">Teams (internal alert)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ops Agent 4 -->
+    <div class="agent-block">
+      <div class="ab-head" onclick="tog(this)">
+        <i class="ti ti-chart-line ab-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+        <div class="ab-meta">
+          <p class="ab-title">Ops Agent 4 — Tech Performance Tracker</p>
+          <p class="ab-sub">Scores each technician on first-fix rate, callback rate, job duration, and data quality — weekly report to ops managers</p>
+        </div>
+        <div class="ab-badges">
+          <span class="badge b-blue">P2</span>
+          <span class="badge b-gray">Operations</span>
+        </div>
+      </div>
+      <div class="ab-body">
+        <div class="flow">
+          <div class="flow-step fs-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: Weekly Monday 7am — Power Automate aggregates all FieldBoss work orders from prior 7 days in Dynamics, grouped by technician</span>
+            <span class="flow-tag b-blue">Weekly</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-ai">
+            <i class="ti ti-brain flow-icon" style="color:#5B21B6" aria-hidden="true"></i>
+            <span class="flow-text">AI calculates per tech: first-fix rate (repairs not followed by callback in 30 days), avg job duration vs. peer average, data quality score (% of required fields completed in job close form), fault code accuracy (human-reviewed corrections), client satisfaction proxy (reviews mentioning tech name).</span>
+            <span class="flow-tag b-purple">AI score</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-action">
+            <i class="ti ti-database flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Scores written to Dynamics "ax_TechPerformanceScore" entity — one record per tech per week. Running average tracked. Significant drops → manager alert via Teams with specific job examples flagged.</span>
+            <span class="flow-tag b-gray">Dynamics</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-output">
+            <i class="ti ti-chart-bar flow-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+            <span class="flow-text">Power BI: tech leaderboard by market, first-fix rate trend, data quality compliance by team, training need flags. Ops managers use this to allocate jobs (asset familiarity), identify training gaps, and reward top performers.</span>
+            <span class="flow-tag b-green">Power BI</span>
+          </div>
+        </div>
+        <div class="tools-row">
+          <span class="tool-chip">Power Automate</span>
+          <span class="tool-chip">Dynamics WO + tech entities</span>
+          <span class="tool-chip">Azure OpenAI</span>
+          <span class="tool-chip">Teams</span>
+          <span class="tool-chip">Power BI</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ops Agent 5 -->
+    <div class="agent-block">
+      <div class="ab-head" onclick="tog(this)">
+        <i class="ti ti-trending-up ab-icon" style="color:#5B21B6" aria-hidden="true"></i>
+        <div class="ab-meta">
+          <p class="ab-title">Ops Agent 5 — Modernisation Pipeline Trigger</p>
+          <p class="ab-sub">When an asset's risk score stays critical for 30 days, AI auto-drafts an upsell opportunity and notifies the account manager</p>
+        </div>
+        <div class="ab-badges">
+          <span class="badge b-purple">Revenue impact</span>
+          <span class="badge b-gray">Ops + Marketing</span>
+        </div>
+      </div>
+      <div class="ab-body">
+        <div class="flow">
+          <div class="flow-step fs-trigger">
+            <i class="ti ti-bolt flow-icon" style="color:var(--color-text-info)" aria-hidden="true"></i>
+            <span class="flow-text">TRIGGER: Dynamics query — asset with risk_score ≥ 70 for 30 consecutive days OR asset age > 15 years with 3+ emergency events in 12 months → enters modernisation pipeline</span>
+            <span class="flow-tag b-purple">Data signal</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-ai">
+            <i class="ti ti-brain flow-icon" style="color:#5B21B6" aria-hidden="true"></i>
+            <span class="flow-text">AI generates modernisation brief: asset age, cost of repairs YTD vs. modernisation ROI estimate, projected failure window, specific components at end-of-life, comparable modernisation projects Axxiom has completed. Written as a 2-page client-ready summary.</span>
+            <span class="flow-tag b-purple">AI brief</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-action">
+            <i class="ti ti-currency-dollar flow-icon" aria-hidden="true"></i>
+            <span class="flow-text">Dynamics Opportunity created: linked to asset + client, estimated value ($50K-$500K bracket), stage = "Modernisation Signal Flagged". Account manager assigned task. GHL contact enrolled in warm modernisation outreach sequence.</span>
+            <span class="flow-tag b-gray">Opportunity</span>
+          </div>
+          <div class="connector"></div>
+          <div class="flow-step fs-output">
+            <i class="ti ti-chart-bar flow-icon" style="color:var(--color-text-success)" aria-hidden="true"></i>
+            <span class="flow-text">Power BI: modernisation pipeline value (total $ at risk), conversion rate from signal to signed project, avg time from flagged to closed. This single report justifies the entire AI build investment.</span>
+            <span class="flow-tag b-green">Power BI</span>
+          </div>
+        </div>
+        <div class="tools-row">
+          <span class="tool-chip">Power Automate</span>
+          <span class="tool-chip">Azure OpenAI (brief)</span>
+          <span class="tool-chip">Dynamics Opportunity entity</span>
+          <span class="tool-chip">GHL modernisation sequence</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DYNAMICS DATA MODEL -->
+  <div id="p3" class="panel">
+    <p class="lbl">Dynamics Dataverse — data model</p>
+    <p class="ttl">Custom entities to build for this system</p>
+    <p class="sub">Dynamics needs 8 custom entities (tables) beyond the standard CRM objects. These are the containers that make the entire data architecture work — everything the agents write to, everything Power BI reads from.</p>
+
+    <div class="dynamics-field">
+      <div class="df-entity">ax_Asset (elevator unit record)</div>
+      <div class="df-fields">asset_id · equipment_type · manufacturer · model · serial_number · install_date · site_id · ahj_jurisdiction · drive_type · last_service_date · last_inspection_date · cert_expiry_date · current_risk_score · risk_tier · days_since_pm · modernisation_candidate_flag · iot_sensor_id</div>
+    </div>
+    <div class="dynamics-field">
+      <div class="df-entity">ax_WorkOrder (synced from FieldBoss)</div>
+      <div class="df-fields">wo_number · asset_id · client_id · tech_id · service_type · event_date · duration_mins · outcome · fault_codes[] · parts_replaced[] · tech_notes · ai_fault_extract_confidence · callback_flag · parent_wo_id · fieldboss_sync_status</div>
+    </div>
+    <div class="dynamics-field">
+      <div class="df-entity">ax_MarketingCampaignMetric (from Google Ads)</div>
+      <div class="df-fields">campaign_name · platform · date_period · impressions · clicks · ctr_pct · ad_spend_usd · conversions · cpa_usd · roas · market_tag · vertical_tag · ai_performance_flag</div>
+    </div>
+    <div class="dynamics-field">
+      <div class="df-entity">ax_WebsiteSessionMetric (from GA4)</div>
+      <div class="df-fields">date · sessions · users · new_users · bounce_rate · avg_session_duration · source · medium · campaign · conversions · top_pages[] · market_filter</div>
+    </div>
+    <div class="dynamics-field">
+      <div class="df-entity">ax_AssetRiskScore (daily AI scoring)</div>
+      <div class="df-fields">asset_id · score_date · composite_risk_score · risk_tier · factor_pm_overdue · factor_component_age · factor_fault_frequency · factor_usage_intensity · predicted_failure_window_days · recommended_action · ai_job_brief</div>
+    </div>
+    <div class="dynamics-field">
+      <div class="df-entity">ax_ClientReview (from GHL reputation)</div>
+      <div class="df-fields">review_id · client_id · platform · rating · review_text · sentiment_score · ai_themes[] · market · linked_work_order · ai_response_draft · response_status · response_posted_date</div>
+    </div>
+    <div class="dynamics-field">
+      <div class="df-entity">ax_ComplianceRecord (cert tracking)</div>
+      <div class="df-fields">asset_id · cert_type · issue_date · expiry_date · issuing_ahj · cert_status · inspector_license · deficiency_codes[] · cert_document_url · days_to_expiry · alert_sent_60 · alert_sent_14 · renewal_initiated</div>
+    </div>
+    <div class="dynamics-field">
+      <div class="df-entity">ax_TechPerformanceScore (weekly AI)</div>
+      <div class="df-fields">tech_id · week_starting · jobs_completed · first_fix_rate · callback_count · avg_job_duration_mins · data_quality_score · fault_code_accuracy · ai_performance_flag · peer_benchmark_delta</div>
+    </div>
+  </div>
+
+  <!-- POWER BI LAYER -->
+  <div id="p4" class="panel">
+    <p class="lbl">Power BI dashboards</p>
+    <p class="ttl">What the data analyst builds from Dynamics</p>
+    <p class="sub">Power BI connects directly to Dataverse via the native connector — no ETL needed. The data analyst builds these 6 dashboards. All data is live, governed, and compliance-auditable because it comes from Dynamics.</p>
+
+    <div class="oc">
+      <p class="ol">Dashboard 1 — Marketing Performance Hub</p>
+      <div class="fr"><span class="fk">Ad spend vs. leads by campaign</span><span class="fv">Source: ax_MarketingCampaignMetric</span></div>
+      <div class="fr"><span class="fk">Cost per lead by vertical and market</span><span class="fv">Source: CampaignMetric + Contact entity</span></div>
+      <div class="fr"><span class="fk">Lead source attribution (which ad → which deal)</span><span class="fv">Source: Contact.campaign_id → Opportunity</span></div>
+      <div class="fr"><span class="fk">Website traffic by source and conversion rate</span><span class="fv">Source: ax_WebsiteSessionMetric</span></div>
+      <div class="fr"><span class="fk">ROAS trend over time by campaign</span><span class="fv">Source: ax_MarketingCampaignMetric</span></div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">Dashboard 2 — Sales Pipeline Report</p>
+      <div class="fr"><span class="fk">Open opportunities by stage, value, rep</span><span class="fv">Source: Dynamics Opportunity entity</span></div>
+      <div class="fr"><span class="fk">Win rate by lead source and vertical</span><span class="fv">Source: Opportunity + Contact.source</span></div>
+      <div class="fr"><span class="fk">Avg time in each pipeline stage</span><span class="fv">Source: Opportunity stage history</span></div>
+      <div class="fr"><span class="fk">Loss reason breakdown (AI-tagged)</span><span class="fv">Source: Opportunity.loss_reason (AI field)</span></div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">Dashboard 3 — Fleet Operations Intelligence</p>
+      <div class="fr"><span class="fk">Jobs completed by market, type, tech</span><span class="fv">Source: ax_WorkOrder</span></div>
+      <div class="fr"><span class="fk">First-fix rate trend (emergency prevention KPI)</span><span class="fv">Source: WO.callback_flag aggregated</span></div>
+      <div class="fr"><span class="fk">Top fault codes by equipment type</span><span class="fv">Source: WO.fault_codes[] aggregated</span></div>
+      <div class="fr"><span class="fk">Asset risk heatmap across portfolio</span><span class="fv">Source: ax_AssetRiskScore latest per asset</span></div>
+      <div class="fr"><span class="fk">Emergency call-out trend (before/after AI PM)</span><span class="fv">Source: WO.service_type = Emergency</span></div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">Dashboard 4 — Compliance & Certificate Monitor</p>
+      <div class="fr"><span class="fk">Certificate compliance rate by market and AHJ</span><span class="fv">Source: ax_ComplianceRecord</span></div>
+      <div class="fr"><span class="fk">Tech certification status (expiry calendar)</span><span class="fv">Source: Dynamics SystemUser + cert entity</span></div>
+      <div class="fr"><span class="fk">Upcoming inspection calendar (next 90 days)</span><span class="fv">Source: ax_ComplianceRecord</span></div>
+      <div class="fr"><span class="fk">Deficiency code frequency (what fails most)</span><span class="fv">Source: ComplianceRecord.deficiency_codes[]</span></div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">Dashboard 5 — Revenue & Retention Report</p>
+      <div class="fr"><span class="fk">MRR / ARR from active contracts</span><span class="fv">Source: Dynamics Contract entity</span></div>
+      <div class="fr"><span class="fk">Contract renewals due next 90 days + value at risk</span><span class="fv">Source: Contract.end_date</span></div>
+      <div class="fr"><span class="fk">Modernisation pipeline value and stage</span><span class="fv">Source: Opportunity.type = Modernisation</span></div>
+      <div class="fr"><span class="fk">Churn rate and win-back pipeline</span><span class="fv">Source: Contract + Contact GHL tags</span></div>
+    </div>
+
+    <div class="oc">
+      <p class="ol">Dashboard 6 — Reputation & Client Health</p>
+      <div class="fr"><span class="fk">Review volume and avg rating by market</span><span class="fv">Source: ax_ClientReview</span></div>
+      <div class="fr"><span class="fk">Sentiment theme breakdown (AI-extracted)</span><span class="fv">Source: ClientReview.ai_themes[]</span></div>
+      <div class="fr"><span class="fk">Review response rate and avg response time</span><span class="fv">Source: ClientReview.response_status</span></div>
+      <div class="fr"><span class="fk">Tech performance scores (weekly)</span><span class="fv">Source: ax_TechPerformanceScore</span></div>
+    </div>
+  </div>
+
+  <!-- BUILD ORDER -->
+  <div id="p5" class="panel">
+    <p class="lbl">Execution priority</p>
+    <p class="ttl">What to build first, second, and third</p>
+    <p class="sub">Build in this exact order. The data foundation (Dynamics entities + FieldBoss sync) must come before anything else — without clean data in Dynamics, no agent or Power BI dashboard can work correctly.</p>
+
+    <div class="oc" style="border-color:rgba(239,68,68,0.3)">
+      <p class="ol" style="color:var(--color-text-danger)">Phase 1 — Weeks 1–3: Data foundation (build before anything else)</p>
+      <div class="priority-row">
+        <span class="pr-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">1</span>
+        <span class="pr-title">Create 8 custom Dynamics entities (Dataverse schema)</span>
+        <span class="pr-meta">Xenoz · 2 days</span>
+      </div>
+      <div class="priority-row">
+        <span class="pr-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">2</span>
+        <span class="pr-title">FieldBoss → Dynamics work order sync (Make scenario)</span>
+        <span class="pr-meta">Xenoz · 3 days</span>
+      </div>
+      <div class="priority-row">
+        <span class="pr-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">3</span>
+        <span class="pr-title">Google Ads + GA4 → Dynamics campaign metric sync</span>
+        <span class="pr-meta">Xenoz · 2 days</span>
+      </div>
+      <div class="priority-row">
+        <span class="pr-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">4</span>
+        <span class="pr-title">GHL lead → Dynamics contact sync with attribution</span>
+        <span class="pr-meta">Xenoz · 2 days</span>
+      </div>
+      <div class="priority-row">
+        <span class="pr-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">5</span>
+        <span class="pr-title">Power BI connected to Dataverse — first 2 dashboards live</span>
+        <span class="pr-meta">Data analyst · 3 days</span>
+      </div>
+    </div>
+
+    <div class="oc" style="border-color:rgba(245,158,11,0.3)">
+      <p class="ol" style="color:var(--color-text-warning)">Phase 2 — Weeks 4–7: AI agents go live</p>
+      <div class="priority-row">
+        <span class="pr-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">6</span>
+        <span class="pr-title">Fault code AI extractor (FieldBoss tech notes → Dynamics)</span>
+        <span class="pr-meta">Xenoz · 3 days</span>
+      </div>
+      <div class="priority-row">
+        <span class="pr-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">7</span>
+        <span class="pr-title">Lead AI classifier (vertical + score on GHL contact creation)</span>
+        <span class="pr-meta">Xenoz · 2 days</span>
+      </div>
+      <div class="priority-row">
+        <span class="pr-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">8</span>
+        <span class="pr-title">Compliance watchdog agent (cert + tech licence alerts)</span>
+        <span class="pr-meta">Xenoz · 2 days</span>
+      </div>
+      <div class="priority-row">
+        <span class="pr-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">9</span>
+        <span class="pr-title">Review intelligence agent (GHL → Dynamics with sentiment)</span>
+        <span class="pr-meta">Xenoz · 2 days</span>
+      </div>
+      <div class="priority-row">
+        <span class="pr-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">10</span>
+        <span class="pr-title">GHL pipeline stage → Dynamics opportunity sync</span>
+        <span class="pr-meta">Xenoz · 1 day</span>
+      </div>
+    </div>
+
+    <div class="oc" style="border-color:rgba(0,184,124,0.3)">
+      <p class="ol" style="color:var(--color-text-success)">Phase 3 — Weeks 8–12: Revenue intelligence</p>
+      <div class="priority-row">
+        <span class="pr-num" style="background:var(--color-background-success);color:var(--color-text-success)">11</span>
+        <span class="pr-title">Predictive maintenance risk score agent (daily AI scoring)</span>
+        <span class="pr-meta">Xenoz · 4 days</span>
+      </div>
+      <div class="priority-row">
+        <span class="pr-num" style="background:var(--color-background-success);color:var(--color-text-success)">12</span>
+        <span class="pr-title">Contract renewal AI agent (Dynamics → GHL sequences)</span>
+        <span class="pr-meta">Xenoz · 2 days</span>
+      </div>
+      <div class="priority-row">
+        <span class="pr-num" style="background:var(--color-background-success);color:var(--color-text-success)">13</span>
+        <span class="pr-title">Modernisation pipeline trigger agent</span>
+        <span class="pr-meta">Xenoz · 2 days</span>
+      </div>
+      <div class="priority-row">
+        <span class="pr-num" style="background:var(--color-background-success);color:var(--color-text-success)">14</span>
+        <span class="pr-title">Tech performance tracker (weekly AI scoring)</span>
+        <span class="pr-meta">Xenoz · 2 days</span>
+      </div>
+      <div class="priority-row">
+        <span class="pr-num" style="background:var(--color-background-success);color:var(--color-text-success)">15</span>
+        <span class="pr-title">All 6 Power BI dashboards complete + analyst trained</span>
+        <span class="pr-meta">Data analyst + Xenoz · 5 days</span>
+      </div>
+    </div>
+
+    <div class="info-row" style="margin-top:4px">
+      <i class="ti ti-rocket ii" style="color:var(--color-text-info)" aria-hidden="true"></i>
+      <p class="it"><strong style="color:var(--color-text-primary)">The Week 12 outcome:</strong> Every dollar of ad spend is tracked from click to closed contract in Dynamics. Every elevator risk score is updated daily. Every tech cert expiry is flagged before it lapses. Every GHL pipeline move updates the Dynamics opportunity. And the data analyst has 6 live Power BI dashboards reading from a single, clean, compliant Dataverse — no fragmented exports, no manual data pulls, no spreadsheets.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+function tog(h){h.closest('.agent-block').classList.toggle('open')}
+</script>

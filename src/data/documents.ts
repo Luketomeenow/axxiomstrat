@@ -53,6 +53,14 @@ export const STRATEGY_DOCUMENTS: StrategyDocument[] = [
     category: 'automation',
   },
   {
+    slug: 'ai-agents-automations',
+    filename: 'axxiom_ai_agents_automations.html',
+    title: 'AI agents & automations',
+    blurb:
+      'End-to-end architecture: GHL, Dynamics, FieldBoss, Google Analytics, and Power BI — marketing agents, ops agents, data model, and BI layer.',
+    category: 'automation',
+  },
+  {
     slug: 'data-foundation',
     filename: 'axxiom_data_foundation_execution.html',
     title: 'Data foundation execution',
