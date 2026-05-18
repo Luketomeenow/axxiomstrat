@@ -61,6 +61,14 @@ export const STRATEGY_DOCUMENTS: StrategyDocument[] = [
     category: 'automation',
   },
   {
+    slug: 'diagram-text-all-nodes',
+    filename: 'axxiom_diagram_text_all_nodes.html',
+    title: 'Architecture diagram — all nodes',
+    blurb:
+      'Copy-ready descriptions for every node in the AI architecture diagram — Security through Outputs, with per-field copy actions.',
+    category: 'automation',
+  },
+  {
     slug: 'data-foundation',
     filename: 'axxiom_data_foundation_execution.html',
     title: 'Data foundation execution',

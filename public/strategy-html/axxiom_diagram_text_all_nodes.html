@@ -1,0 +1,824 @@
+
+<style>
+*{box-sizing:border-box}
+.wrap{font-family:var(--font-sans);padding:.75rem 0}
+.tab-row{display:flex;gap:5px;margin-bottom:16px;flex-wrap:wrap}
+.tab{font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s;white-space:nowrap}
+.tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+.panel{display:none}.panel.active{display:block}
+.layer-intro{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:12px}
+.li-label{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 3px}
+.li-title{font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+.li-desc{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.6}
+.node-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:8px;overflow:hidden}
+.nc-head{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;cursor:pointer}
+.nc-head:hover,.node-card.open .nc-head{background:var(--color-background-secondary)}
+.nc-num{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
+.nc-meta{flex:1}
+.nc-name{font-size:12px;font-weight:500;color:var(--color-text-primary);margin:0 0 2px}
+.nc-role{font-size:10px;color:var(--color-text-tertiary);margin:0}
+.nc-copy{font-size:10px;font-weight:500;padding:3px 10px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
+.nc-copy:hover{background:var(--color-background-success);color:var(--color-text-success);border-color:transparent}
+.nc-copy.copied{background:var(--color-background-success);color:var(--color-text-success);border-color:transparent}
+.nc-body{display:none;border-top:0.5px solid var(--color-border-tertiary);padding:0}
+.node-card.open .nc-body{display:block}
+.text-row{display:flex;align-items:stretch;border-bottom:0.5px solid var(--color-border-tertiary)}
+.text-row:last-child{border-bottom:none}
+.tr-label{font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-tertiary);width:90px;flex-shrink:0;padding:9px 12px;border-right:0.5px solid var(--color-border-tertiary);display:flex;align-items:flex-start;padding-top:10px}
+.tr-text{flex:1;padding:9px 14px;font-size:11.5px;color:var(--color-text-primary);line-height:1.6}
+.tr-copy{width:60px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-left:0.5px solid var(--color-border-tertiary)}
+.trc{font-size:10px;font-weight:500;padding:4px 8px;border-radius:12px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-tertiary);cursor:pointer;transition:all .15s}
+.trc:hover{background:var(--color-background-success);color:var(--color-text-success);border-color:transparent}
+.trc.copied{background:var(--color-background-success);color:var(--color-text-success);border-color:transparent}
+</style>
+
+<div class="wrap">
+<h2 class="sr-only">Complete text descriptions for every node in the Axxiom AI architecture diagram — organized by layer, copy-ready</h2>
+
+<div class="tab-row">
+  <button class="tab active" onclick="go(0)">Security</button>
+  <button class="tab" onclick="go(1)">Data sources</button>
+  <button class="tab" onclick="go(2)">Azure infra</button>
+  <button class="tab" onclick="go(3)">Integration</button>
+  <button class="tab" onclick="go(4)">AI agents</button>
+  <button class="tab" onclick="go(5)">LangChain + Smith</button>
+  <button class="tab" onclick="go(6)">Fabric</button>
+  <button class="tab" onclick="go(7)">Outputs</button>
+</div>
+
+<!-- SECURITY -->
+<div id="p0" class="panel active">
+<div class="layer-intro">
+  <p class="li-label">Layer 0 — Security & Governance</p>
+  <p class="li-title">Spans every layer in the architecture</p>
+  <p class="li-desc">All seven controls work together. They cover identity (who is allowed), secrets (where credentials live), authentication (how services prove identity), transport security (data in flight), storage security (data at rest), forensic logging (what happened), and regulatory compliance (healthcare clients).</p>
+</div>
+
+<div class="node-card open">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">01</span>
+    <div class="nc-meta"><p class="nc-name">Azure Entra ID</p><p class="nc-role">Identity & access management · the front door to everything</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Azure Entra ID</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Azure Entra ID')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">SSO · RBAC · MFA · Conditional Access</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'SSO · RBAC · MFA · Conditional Access')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it is</span><span class="tr-text">Microsoft's cloud identity platform — the single authentication authority for every user, service, and AI agent in the Axxiom system.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,`Microsoft's cloud identity platform — the single authentication authority for every user, service, and AI agent in the Axxiom system.`)">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Controls who can access what across Dynamics 365, Microsoft Fabric, Power BI, and Azure OpenAI. Enforces MFA on every login. Blocks sign-ins from outside the US via Conditional Access policies. Manages 5 distinct RBAC roles — architect, data analyst, ops manager, account manager, and AI agent service principal.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Controls who can access what across Dynamics 365, Microsoft Fabric, Power BI, and Azure OpenAI. Enforces MFA on every login. Blocks sign-ins from outside the US via Conditional Access policies. Manages 5 distinct RBAC roles.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">AI agents authenticate as service principals — not human users. They have scoped access only: read from Dynamics, write to Fabric ax_ tables, read secrets from Key Vault. They cannot delete data.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'AI agents authenticate as service principals with scoped access only — read from Dynamics, write to Fabric ax_ tables, read from Key Vault. They cannot delete data.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">02</span>
+    <div class="nc-meta"><p class="nc-name">Azure Key Vault</p><p class="nc-role">Secrets management · every API credential lives here and only here</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Azure Key Vault</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Azure Key Vault')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">All API keys & secrets stored here · 90-day rotation</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'All API keys & secrets stored here · 90-day rotation')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it is</span><span class="tr-text">A FIPS 140-2 Level 2 Hardware Security Module — an encrypted vault that stores every credential the system needs: Google Ads tokens, GHL API key, CallRail key, FieldBoss Salesforce credentials, Azure OpenAI key, Qdrant key, LangSmith key.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'A FIPS 140-2 Level 2 Hardware Security Module — an encrypted vault storing every credential: Google Ads tokens, GHL API key, CallRail key, FieldBoss credentials, Azure OpenAI key, Qdrant key, LangSmith key.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">When an AI agent or notebook needs a credential, it calls Key Vault at runtime via Managed Identity. No passwords are stored in code, environment files, or developer machines. Every secret access is logged — who retrieved which secret at what time.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'When an agent or notebook needs a credential, it calls Key Vault at runtime via Managed Identity. No passwords in code or environment files. Every access is logged — who retrieved which secret at what time.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">14 secrets stored. Rotation policy: 90 days for all third-party API keys. Azure alerts 30 days before expiry for keys that require manual renewal.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'14 secrets stored. 90-day rotation policy. Azure alerts 30 days before expiry for keys requiring manual renewal.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">03</span>
+    <div class="nc-meta"><p class="nc-name">Managed Identity</p><p class="nc-role">Passwordless authentication · services prove identity without credentials</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Managed Identity</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Managed Identity')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Passwordless auth for all agents & notebooks</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Passwordless auth for all agents & notebooks')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it is</span><span class="tr-text">Azure's solution to the hardest security problem — how do you authenticate a service without giving it a password? Azure manages a short-lived certificate for each service, rotates it automatically, and uses it to authenticate with other Azure resources.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,"Azure's solution to passwordless service authentication. Azure manages a short-lived certificate for each service, rotates it automatically, and uses it to authenticate with other Azure resources.")">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Every Fabric notebook and LangGraph agent uses Managed Identity to access Key Vault, Dynamics 365, and Azure OpenAI. If someone stole the agent code, there is nothing in it that grants access — the identity is tied to the Azure resource, not the code.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Every Fabric notebook and LangGraph agent uses Managed Identity to access Key Vault, Dynamics 365, and Azure OpenAI. Identity is tied to the Azure resource, not the code — stolen code grants zero access.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">Tokens are valid for 60 minutes and issued by Azure Instance Metadata Service. No password ever exists to leak, rotate, or steal.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Tokens valid for 60 minutes, issued by Azure Instance Metadata Service. No password ever exists to leak, rotate, or steal.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">04</span>
+    <div class="nc-meta"><p class="nc-name">TLS 1.3 Everywhere</p><p class="nc-role">Transport encryption · all data in transit is unreadable to interceptors</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">TLS 1.3 — Encryption in Transit</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'TLS 1.3 — Encryption in Transit')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">All API calls encrypted end-to-end</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'All API calls encrypted end-to-end')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Every API call — to Google Ads, GHL, CallRail, FieldBoss, and Azure OpenAI — uses TLS 1.3. Azure API Management rejects any HTTP (unencrypted) request with a redirect to HTTPS. Microsoft-to-Microsoft traffic (Dynamics → Fabric) uses Azure Private Link and never touches the public internet.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Every API call uses TLS 1.3. Azure API Management rejects unencrypted HTTP requests. Dynamics → Fabric traffic uses Azure Private Link — never touches the public internet.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">TLS 1.3 is 40% faster than TLS 1.2 due to a shorter handshake. Security and performance, not a trade-off.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'TLS 1.3 is 40% faster than TLS 1.2 due to a shorter handshake — security and performance together, not a trade-off.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">05</span>
+    <div class="nc-meta"><p class="nc-name">AES-256 Encryption at Rest</p><p class="nc-role">Storage encryption · all data stored is unreadable without keys</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">AES-256 — Encryption at Rest</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'AES-256 — Encryption at Rest')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Fabric + Dynamics + Key Vault all auto-encrypted</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Fabric + Dynamics + Key Vault all auto-encrypted')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Every Delta table in Fabric OneLake, every record in Dynamics Dataverse, every secret in Key Vault, and every file on the Qdrant vector store VM is encrypted using AES-256. This is automatic — no configuration required. Microsoft manages the encryption keys.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Every Delta table in Fabric, every Dynamics record, every Key Vault secret, and every Qdrant file is encrypted using AES-256 automatically. Microsoft manages encryption keys.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">Customer-Managed Keys (CMK) available as upgrade — Axxiom holds the encryption keys in their own Key Vault. Recommended for Phase 2 when handling hospital client data at scale.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Customer-Managed Keys (CMK) available as upgrade — Axxiom holds encryption keys in their own Key Vault. Recommended for Phase 2 when handling hospital client data at scale.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">06</span>
+    <div class="nc-meta"><p class="nc-name">Audit Trail</p><p class="nc-role">Three-layer forensic logging · everything that happens is recorded</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Audit Trail — Forensic Logging</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Audit Trail — Forensic Logging')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Dynamics log · LangSmith traces · Azure Monitor</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Dynamics log · LangSmith traces · Azure Monitor')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Three logging systems run simultaneously. Dynamics 365 field-level audit log records every create, update, and delete — who changed which field from what value to what, retained 3 years. LangSmith records every agent run — which prompt was sent, which tools were called, what the LLM returned — with no raw PII, only reasoning metadata. Azure Monitor captures system-level health, error rates, and Key Vault access events.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Three logging systems: Dynamics field-level audit (3-year retention), LangSmith agent run traces (no PII — metadata only), Azure Monitor system health and Key Vault access events.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">Answers in seconds: "Who dispatched that tech to the hospital?" · "Was the licence valid that day?" · "What AI reasoning flagged that asset as critical?"</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Answers instantly: Who dispatched which tech · Was the licence valid that day · What AI reasoning flagged that asset as critical')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">07</span>
+    <div class="nc-meta"><p class="nc-name">HIPAA-Ready</p><p class="nc-role">Healthcare compliance · Microsoft BAA covers all Azure services</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">HIPAA-Ready Architecture</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'HIPAA-Ready Architecture')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Microsoft BAA · healthcare elevator clients covered</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Microsoft BAA · healthcare elevator clients covered')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">All six HIPAA technical safeguards are satisfied: unique user identification (Entra ID), automatic logoff (Conditional Access), encryption (AES-256 + TLS 1.3), audit controls (3-layer logging), integrity controls (append-only agent writes), and transmission security (TLS 1.3 + Private Link). Microsoft's HIPAA Business Associate Agreement covers Azure OpenAI, Fabric, Dynamics, Key Vault, and Communication Services.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'All 6 HIPAA technical safeguards satisfied. Microsoft BAA covers Azure OpenAI, Fabric, Dynamics 365, Key Vault, and Communication Services. Competitive advantage for hospital and healthcare facility procurement.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">Competitive advantage: hospital and healthcare facility procurement teams increasingly require HIPAA-ready vendor infrastructure in elevator service contracts. Axxiom can say yes.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Hospital procurement increasingly requires HIPAA-ready infrastructure in elevator service vendor contracts. Axxiom closes deals competitors cannot.')">Copy</button></div></div>
+  </div>
+</div>
+</div>
+
+<!-- DATA SOURCES -->
+<div id="p1" class="panel">
+<div class="layer-intro">
+  <p class="li-label">Layer 1 — Data Sources</p>
+  <p class="li-title">Seven external systems — data pulled via API only</p>
+  <p class="li-desc">No raw data is stored outside Axxiom's control. Every source is queried via authenticated API calls, and the data lands in the Staging Lakehouse in Microsoft Fabric — inside Axxiom's Azure tenant. Google and GHL data is queried, not synced — Axxiom controls the copy.</p>
+</div>
+
+<div class="node-card open">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">01</span>
+    <div class="nc-meta"><p class="nc-name">Google Ads</p><p class="nc-role">Paid advertising performance data</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Google Ads</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Google Ads')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Campaigns · ad spend · conversions · keywords</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Campaigns · ad spend · conversions · keywords')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it provides</span><span class="tr-text">Campaign-level daily performance: impressions, clicks, cost (in micros), conversions, CTR, average CPC, conversion rate. Segmented by campaign, ad group, and keyword. Attribution source for every dollar Axxiom spends on paid advertising across all 7 markets.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Campaign daily performance: impressions, clicks, cost, conversions, CTR, CPC, conversion rate. Segmented by campaign, ad group, keyword. Attribution source for every dollar of ad spend across 7 markets.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">How it connects</span><span class="tr-text">Google Ads API v17 (REST + gRPC). OAuth 2.0 with refresh token. Pulled daily at 6am via Fabric Python Notebook. Lands in ax_MarketingMetric Delta table.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Google Ads API v17. OAuth 2.0 auth. Daily pull at 6am via Fabric Python Notebook. Lands in ax_MarketingMetric Delta table.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">02</span>
+    <div class="nc-meta"><p class="nc-name">Google Analytics 4</p><p class="nc-role">Website traffic and user behaviour</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Google Analytics 4 (GA4)</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Google Analytics 4 (GA4)')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Website traffic · sessions · UTM attribution · behaviour</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Website traffic · sessions · UTM attribution · behaviour')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it provides</span><span class="tr-text">Sessions, users, new vs returning, bounce rate, average session duration, top landing pages, traffic by source/medium/campaign. UTM parameters preserved end-to-end — the link between a Google Ad click and a website visit and a form fill.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Sessions, users, bounce rate, session duration, top pages, traffic by source/medium/campaign. UTM parameters preserved — the link between an ad click, website visit, and form submission.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">How it connects</span><span class="tr-text">GA4 Data API. Service account authentication. Daily pull. Lands in ax_WebsiteSessionMetric Delta table in Staging Lakehouse.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'GA4 Data API with service account auth. Daily pull. Lands in ax_WebsiteSessionMetric Delta table.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">03</span>
+    <div class="nc-meta"><p class="nc-name">Google Business Profile</p><p class="nc-role">Local presence · reviews · calls from Google Maps</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Google Business Profile</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Google Business Profile')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Reviews · calls · profile views · local presence</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Reviews · calls · profile views · local presence')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it provides</span><span class="tr-text">Star rating and review text for every Google review posted across all Axxiom market profiles. Calls made directly from Google Maps. Profile views and direction requests. This is the reputation data layer — what building owners see when they search for elevator companies in their city.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Star rating and review text for all Google reviews across all markets. Direct calls from Google Maps. Profile views and direction requests. Primary reputation data — what buyers see when searching for elevator companies.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">How it connects</span><span class="tr-text">GBP API daily poll. Review data feeds the Review Agent for sentiment analysis and response drafts. Review records stored in ax_ClientReview Delta table.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'GBP API daily poll. Review data feeds the Review Agent for sentiment analysis. Stored in ax_ClientReview Delta table.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-success);color:var(--color-text-success)">04</span>
+    <div class="nc-meta"><p class="nc-name">GoHighLevel (GHL)</p><p class="nc-role">CRM · marketing automation · pipeline · conversations</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">GoHighLevel (GHL)</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'GoHighLevel (GHL)')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">CRM · pipeline · conversations · marketing sequences</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'CRM · pipeline · conversations · marketing sequences')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it provides</span><span class="tr-text">Lead contact records, pipeline stage data, SMS and email conversations, review requests sent and received, workflow automation history, and campaign sequence performance. GHL is both a data source and an action destination — the AI agents both read from it and write back to it to trigger sequences.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Lead contacts, pipeline stages, SMS/email conversations, review request history, sequence performance. GHL is both a data source and an action destination — agents read from and write back to it.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">How it connects</span><span class="tr-text">GHL REST API v2. Webhooks fire in real-time on lead capture, pipeline stage changes, and new conversations. Connects via Integrately to Dynamics and via Make for complex pipelines. Leads sync to ax_Lead Delta table.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'GHL REST API v2. Webhooks fire real-time on lead capture and pipeline changes. Integrately connects GHL to Dynamics. Leads sync to ax_Lead Delta table.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">05</span>
+    <div class="nc-meta"><p class="nc-name">FieldBoss</p><p class="nc-role">Field service management · work orders · technicians · assets</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">FieldBoss</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'FieldBoss')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Work orders · field techs · asset records · job outcomes</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Work orders · field techs · asset records · job outcomes')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it provides</span><span class="tr-text">Every work order ever completed: job type, assigned tech, start/end time, outcome, technician notes (free text), parts replaced. All active elevator asset records: equipment type, manufacturer, model, install location. The operational heartbeat of Axxiom's field service — the most data-rich source in the entire system.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Every work order: job type, assigned tech, timing, outcome, tech notes, parts replaced. All asset records: equipment type, manufacturer, model, location. The operational heartbeat — most data-rich source in the system.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">How it connects</span><span class="tr-text">FieldBoss is built on Salesforce — uses Salesforce REST API. Webhooks fire on work order creation, status change, and closure. Events route to Azure Event Grid for real-time dispatch triggering. Job data syncs to ax_WorkOrder and ax_Asset Delta tables.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Built on Salesforce — uses Salesforce REST API. Webhooks fire on WO creation and closure. Events route to Azure Event Grid for real-time dispatch. Job data syncs to ax_WorkOrder and ax_Asset.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-info);color:var(--color-text-info)">06</span>
+    <div class="nc-meta"><p class="nc-name">CallRail</p><p class="nc-role">Call tracking · marketing attribution · inbound lead data</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">CallRail</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'CallRail')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Call tracking · attribution · UTM source data</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Call tracking · attribution · UTM source data')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it provides</span><span class="tr-text">Every inbound phone call with full attribution: which Google Ad campaign drove the call, which keyword, which landing page, which referrer. Call duration, whether answered, caller location, first-time vs. repeat caller. Form submission data with same attribution chain. Closes the attribution loop — connects ad spend directly to phone calls, not just form fills.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Inbound calls with full attribution: which campaign, keyword, landing page drove the call. Duration, answered status, caller location, first-time vs repeat. Closes attribution loop between ad spend and phone calls.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">How it connects</span><span class="tr-text">CallRail REST API v3. Token-based auth: Authorization header with API key from Key Vault. Daily Fabric Python Notebook pull with full pagination handling. Lands in callrail_calls and callrail_form_submissions Delta tables.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'CallRail REST API v3. Token auth via Key Vault. Daily Fabric Notebook pull with pagination. Lands in callrail_calls and callrail_form_submissions Delta tables.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-info);color:var(--color-text-info)">07</span>
+    <div class="nc-meta"><p class="nc-name">Dynamics 365</p><p class="nc-role">Compliance master · contracts · the record of authority for everything that matters legally</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Microsoft Dynamics 365</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Microsoft Dynamics 365')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Compliance master · contracts · single source of truth</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Compliance master · contracts · single source of truth')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it provides</span><span class="tr-text">The authoritative record for everything that has legal or compliance significance: active service contracts, client accounts, technician profiles and licence records, certificate expiry dates, inspection history, and AHJ jurisdiction assignments. Every other system feeds data into Dynamics or reads governance data from it. It is the compliance layer that keeps Axxiom legally protected.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'The authoritative record for all legally significant data: service contracts, technician licences, certificate expiry dates, inspection history, AHJ jurisdiction assignments. Every system feeds into or reads governance data from Dynamics.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">How it connects</span><span class="tr-text">Dataverse Web API (OData). Azure AD authentication. Bidirectional sync with Microsoft Fabric via Dataverse connector. Power Automate reads Dynamics events and triggers AI agents. Field-level audit log enabled — 3-year retention.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Dataverse Web API with Azure AD auth. Bidirectional Fabric sync. Power Automate reads events to trigger agents. Field-level audit log — 3-year retention.')">Copy</button></div></div>
+  </div>
+</div>
+</div>
+
+<!-- AZURE INFRA -->
+<div id="p2" class="panel">
+<div class="layer-intro">
+  <p class="li-label">Layer 2 — Microsoft Azure Infrastructure</p>
+  <p class="li-title">The backbone — all processing stays inside Axxiom's Azure tenant</p>
+  <p class="li-desc">All eight Azure services run within Axxiom's own Microsoft subscription in the US East region. Data processed by Azure OpenAI never leaves the tenant. Azure API Management is the gateway for all external API calls. Azure Event Grid enables real-time responses to field events. This is what makes the architecture enterprise-grade — not just cloud-connected, but cloud-governed.</p>
+</div>
+
+<div class="node-card open">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-info);color:var(--color-text-info)">01</span>
+    <div class="nc-meta"><p class="nc-name">Azure OpenAI (GPT-4o)</p><p class="nc-role">The LLM powering every AI agent · runs inside Axxiom's tenant</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Azure OpenAI — GPT-4o</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Azure OpenAI — GPT-4o')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">LLM inference engine · data never leaves the tenant</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'LLM inference engine · data never leaves the tenant')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Powers the intelligence in every LangGraph agent: classifying leads by vertical, generating dispatch job briefs, drafting review responses, writing compliance client emails, and reasoning through predictive maintenance risk factors. GPT-4o processes all prompts and returns structured JSON responses parsed by LangChain output parsers.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Powers every LangGraph agent: lead classification, dispatch job briefs, review response drafts, compliance emails, maintenance risk reasoning. GPT-4o returns structured JSON parsed by LangChain output parsers.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">Critical distinction from OpenAI's public API: Azure OpenAI runs inside Axxiom's Azure subscription. When the Dispatch Agent generates a job brief with a client's building address and elevator fault history, that data processes within the tenant and is never transmitted to OpenAI's servers.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Runs inside Axxiom\'s Azure subscription — not OpenAI\'s public API. Client building addresses, fault histories, and tech names process within the tenant only. Data never transmitted to OpenAI\'s servers.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-info);color:var(--color-text-info)">02</span>
+    <div class="nc-meta"><p class="nc-name">Azure Machine Learning</p><p class="nc-role">Predictive maintenance model · trains and runs the daily asset risk scorer</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Azure Machine Learning</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Azure Machine Learning')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Predictive maintenance risk model · daily batch scoring</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Predictive maintenance risk model · daily batch scoring')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Hosts and runs the trained ML model that scores every elevator asset from 0 to 100 each day at 5am. The model is trained on historical work order data, fault code frequency, PM interval compliance, component age, equipment type, and building vertical (usage intensity). As Axxiom accumulates more service history, the model retrains and improves automatically.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Hosts the ML model scoring every elevator asset 0-100 daily at 5am. Trained on work order history, fault frequency, PM compliance, component age, equipment type, usage intensity. Retrains automatically as more data accumulates.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">Score tiers: Critical (75-100) auto-creates PM work order + Teams alert. Watch (50-74) flags on dashboard. Monitor (25-49) logs only. A unit scoring 75+ for 30 consecutive days triggers the Modernisation Pipeline Agent.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Critical (75-100): auto PM work order + alert. Watch (50-74): dashboard flag. Monitor (25-49): log only. 75+ for 30 days triggers Modernisation Pipeline Agent.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-info);color:var(--color-text-info)">03</span>
+    <div class="nc-meta"><p class="nc-name">Azure API Management</p><p class="nc-role">The gateway · all external API calls route through here</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Azure API Management</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Azure API Management')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Gateway · rate limiting · auth · TLS enforcement</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Gateway · rate limiting · auth · TLS enforcement')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">All external API calls — to Google Ads, GA4, Google Business Profile — route through APIM first. It enforces HTTPS-only (rejects HTTP), applies rate limiting so no single burst of agent activity accidentally hits Google's API quotas, handles authentication headers centrally, and logs every outbound API call for the audit trail.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'All external API calls route through APIM. Enforces HTTPS-only, applies rate limiting to prevent quota overruns, handles auth headers centrally, logs every outbound call for the audit trail.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">Single point of control — if a third-party API changes its authentication method or endpoint, the update is made once in APIM and propagates to all agents automatically. No code changes needed.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Single point of control — if an external API changes its auth or endpoint, update once in APIM and all agents update automatically. No code changes required.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-info);color:var(--color-text-info)">04</span>
+    <div class="nc-meta"><p class="nc-name">Azure Maps</p><p class="nc-role">Geo-optimised dispatch · routes techs based on location and asset proximity</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Azure Maps</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Azure Maps')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Geo-optimised dispatch routing · tech proximity scoring</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Geo-optimised dispatch routing · tech proximity scoring')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">When the Dispatch Agent needs to assign a technician to a new work order, Azure Maps calculates travel time from every available tech to the job site, factoring in real-time traffic. Combined with the tech's asset familiarity score (how many times they've worked on that specific elevator) and their AHJ certification for that jurisdiction, the agent picks the optimal assignment.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Calculates travel time from every available tech to the job site with real-time traffic. Combined with asset familiarity score and AHJ certification check, the Dispatch Agent picks the optimal tech assignment.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">Azure Maps stays inside the Microsoft ecosystem — no Google Maps dependency. Complies with data residency requirements for all 7 Axxiom markets including DC government buildings.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Stays within Microsoft ecosystem — no Google Maps dependency. Complies with data residency requirements for all 7 markets including DC government building contracts.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-info);color:var(--color-text-info)">05</span>
+    <div class="nc-meta"><p class="nc-name">Azure Communication Services</p><p class="nc-role">SMS and email from agents · tech notifications · compliance alerts</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Azure Communication Services</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Azure Communication Services')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">SMS & email delivery from AI agents</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'SMS & email delivery from AI agents')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">The communication layer for all agent-initiated messages that go outside Microsoft's ecosystem. When the Dispatch Agent assigns a tech, it sends them an SMS with the job brief via Azure Communication Services. When the Compliance Agent detects a critical certificate expiry, it sends an SMS alert to the ops manager. All messages are logged in the audit trail.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'All agent-initiated external communications. Dispatch Agent sends tech SMS with job brief. Compliance Agent sends critical cert expiry SMS to ops manager. All messages logged in audit trail.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">Covered by Microsoft's HIPAA BAA. Communications stay within Azure — no third-party SMS provider with separate data handling agreements needed.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Covered by Microsoft HIPAA BAA. Communications stay within Azure — no third-party SMS provider with separate data agreements needed.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-info);color:var(--color-text-info)">06</span>
+    <div class="nc-meta"><p class="nc-name">Azure Event Grid</p><p class="nc-role">Real-time event routing · makes the dispatch agent instant</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Azure Event Grid</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Azure Event Grid')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Real-time event routing · FieldBoss triggers → agent response</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Real-time event routing · FieldBoss triggers → agent response')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">When a new work order is created in FieldBoss, a webhook fires. Azure Event Grid receives that event and instantly routes it to the Dispatch Agent running in Azure Container Apps. This is what makes the system real-time rather than batch — the tech is assigned within seconds of a new job being logged, not the next time a scheduled job runs.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'FieldBoss work order creation fires a webhook to Event Grid, which instantly routes to the Dispatch Agent in Container Apps. Tech assigned within seconds — real-time, not next scheduled batch.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">Event Grid guarantees at-least-once delivery with retry logic — if the Dispatch Agent is temporarily unavailable, the event is queued and retried automatically. No work orders are silently dropped.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Guarantees at-least-once event delivery with automatic retry. If the Dispatch Agent is temporarily unavailable, events queue and retry — no work orders silently dropped.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-info);color:var(--color-text-info)">07</span>
+    <div class="nc-meta"><p class="nc-name">Azure Monitor</p><p class="nc-role">System health · error detection · cost tracking for the whole platform</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Azure Monitor</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Azure Monitor')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Platform health · error alerts · usage & cost tracking</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Platform health · error alerts · usage & cost tracking')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Monitors every Azure service in the architecture: API error rates, latency per service, Azure OpenAI token consumption and cost, Event Grid delivery success rate, and Key Vault access anomalies. Fires alerts to the architect (Luke) if any service degrades or an unusual access pattern appears — such as 500 Key Vault reads in one minute.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Monitors all Azure services: API errors, latency, OpenAI token cost, Event Grid delivery, Key Vault access patterns. Fires alerts to architect if services degrade or unusual access patterns appear.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">Azure Monitor dashboards show the architect the real-time cost of the entire AI system — per agent, per day. This is how you demonstrate ROI to Axxiom leadership and identify any runaway processes before the bill grows.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Shows real-time cost of the entire AI system — per agent, per day. How the architect demonstrates ROI to Axxiom leadership and catches runaway processes before they grow.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-info);color:var(--color-text-info)">08</span>
+    <div class="nc-meta"><p class="nc-name">Azure Container Apps</p><p class="nc-role">Runtime environment for all LangGraph agents</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Azure Container Apps</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Azure Container Apps')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Hosts all LangGraph agents · auto-scales · serverless runtime</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Hosts all LangGraph agents · auto-scales · serverless runtime')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Each LangGraph agent runs as a containerised Python application in Azure Container Apps. When a work order event fires, the Dispatch Agent container scales from zero and processes the event. When the daily 5am schedule runs, the Predictive Maintenance Agent container spins up, scores all assets, and scales back down. No always-on infrastructure cost.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Each LangGraph agent runs as a containerised Python app. Scales from zero on demand — Dispatch Agent activates on work order events, Predictive Maintenance scales for daily batch. No always-on infrastructure cost.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">System-assigned Managed Identity enabled on each container — no credentials in container code, no credentials in environment variables. Identity is the container's Azure resource itself.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'System-assigned Managed Identity on each container — no credentials in code or environment variables. Identity is the Azure resource itself.')">Copy</button></div></div>
+  </div>
+</div>
+</div>
+
+<!-- INTEGRATION -->
+<div id="p3" class="panel">
+<div class="layer-intro">
+  <p class="li-label">Layer 3 — Integration & Automation</p>
+  <p class="li-title">Five tools moving data between systems without custom code for every connection</p>
+  <p class="li-desc">The integration layer is the plumbing. It moves data from the sources to the AI agents and the Fabric warehouse without requiring a full engineering build for every connection. Each tool is chosen for its specific strength — Integrately for GHL webhooks, Power Automate for Microsoft ecosystem flows, Make for complex multi-step pipelines, Fabric Notebooks for scheduled API pulls.</p>
+</div>
+
+<div class="node-card open">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-success);color:var(--color-text-success)">01</span>
+    <div class="nc-meta"><p class="nc-name">Integrately</p><p class="nc-role">GHL ↔ Dynamics real-time webhook connector</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Integrately</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Integrately')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">GHL ↔ Dynamics bidirectional sync · real-time webhooks</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'GHL ↔ Dynamics bidirectional sync · real-time webhooks')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Handles the real-time bidirectional sync between GoHighLevel and Dynamics 365. When a new lead is captured in GHL, Integrately instantly creates a corresponding Contact in Dynamics. When a pipeline stage moves in GHL, the Dynamics Opportunity stage updates in seconds. When the Dispatch Agent updates a Dynamics record, relevant fields sync back to GHL for the account manager to see.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Real-time bidirectional sync: GHL lead → Dynamics Contact. GHL pipeline stage move → Dynamics Opportunity update. Dynamics record update → GHL sync for account managers.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">UTM parameters from GHL lead capture are preserved through the Integrately sync to Dynamics — this is what makes end-to-end attribution possible: ad click → GHL contact → Dynamics opportunity → closed contract.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'UTM parameters preserved through the sync — enables end-to-end attribution: ad click → GHL lead → Dynamics opportunity → closed contract.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-success);color:var(--color-text-success)">02</span>
+    <div class="nc-meta"><p class="nc-name">GHL Workflows</p><p class="nc-role">Native GHL marketing sequences · lead nurture · review requests</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">GHL Workflows</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'GHL Workflows')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Native marketing sequences · lead nurture · review automation</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Native marketing sequences · lead nurture · review automation')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">GHL's built-in visual automation builder runs all client-facing marketing sequences: 14-day lead nurture (5-touch email + SMS), 90-day contract renewal campaign, post-job review request (48hr delay after job complete), inspection reminder sequence (60 days before due date), and the missed-call text-back that fires within 60 seconds of any missed inbound call.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Runs all client-facing sequences: 14-day lead nurture, 90-day renewal campaign, post-job review request, 60-day inspection reminder, 60-second missed-call text-back. All personalised by vertical and market.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">Vertical personalisation is automatic — GHL uses the contact tag (hotel/hospital/office) set by the AI Marketing Agent to swap the correct sequence and messaging for each vertical.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Vertical personalisation automatic — uses AI-set contact tags (hotel/hospital/office) to send the correct sequence and messaging per vertical.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-success);color:var(--color-text-success)">03</span>
+    <div class="nc-meta"><p class="nc-name">Power Automate</p><p class="nc-role">Microsoft ecosystem flows · Dynamics triggers → agents</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Power Automate</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Power Automate')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Microsoft-native flows · Dynamics events → AI agent triggers</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Microsoft-native flows · Dynamics events → AI agent triggers')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Handles all automation flows within the Microsoft ecosystem. Runs the daily 5am sweep that checks Dynamics for contracts expiring within 90 days and triggers the renewal agent. Monitors Dynamics for tech certificates expiring and fires the Compliance Agent. Triggers the Predictive Maintenance Agent batch job each morning. The right tool for Microsoft-to-Microsoft orchestration — no custom code needed.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Runs daily Dynamics sweeps: contracts expiring in 90 days → renewal agent, tech certs expiring → compliance agent, 5am asset pull → predictive maintenance agent. Right tool for Microsoft-to-Microsoft orchestration.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">Connects natively to Dynamics Dataverse without API keys — uses Azure AD authentication automatically. Part of the Microsoft 365 subscription Axxiom likely already has.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Connects to Dynamics Dataverse natively without API keys — uses Azure AD auth automatically. Part of Microsoft 365 subscription Axxiom likely already has.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-success);color:var(--color-text-success)">04</span>
+    <div class="nc-meta"><p class="nc-name">Make (Integromat)</p><p class="nc-role">Complex multi-step cross-platform pipelines</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Make (Integromat)</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Make (Integromat)')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Complex multi-system pipelines · conditional logic · data transformation</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Complex multi-system pipelines · conditional logic · data transformation')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Handles the complex integrations that cross multiple systems and require conditional logic or data transformation that simpler tools can't manage. Orchestrates the FieldBoss → Dynamics work order sync with fault code pre-processing. Manages GHL review events → Review Agent → Dynamics write-back. Handles multi-step pipelines with error handling and retry logic.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Handles complex cross-platform integrations: FieldBoss → Dynamics with fault code processing, GHL review events → Review Agent → Dynamics write-back. Error handling and retry logic included.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">Used where Integrately is too simple and a full Python build would be over-engineered. Make's visual scenario builder means Luke can modify pipelines without touching code.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Used where Integrately is too simple and a full Python build is over-engineered. Visual scenario builder — pipelines modified without code changes.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-success);color:var(--color-text-success)">05</span>
+    <div class="nc-meta"><p class="nc-name">Fabric Notebooks (Python)</p><p class="nc-role">Scheduled API pulls for Google and CallRail → Delta tables</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Fabric Notebooks — Python</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Fabric Notebooks — Python')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Scheduled daily API pulls · raw data → Staging Lakehouse Delta tables</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Scheduled daily API pulls · raw data → Staging Lakehouse Delta tables')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Python notebooks running inside Microsoft Fabric pull raw data from Google Ads API, GA4 Data API, and CallRail REST API on a daily scheduled pipeline. They handle pagination, data type conversion, and incremental loading (only pulling new data, not re-pulling everything). Secrets retrieved from Key Vault via Managed Identity — no hardcoded credentials.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Python notebooks pull daily from Google Ads API, GA4, and CallRail with full pagination handling, incremental loading, and Managed Identity secret retrieval. Raw data lands in Staging Lakehouse Delta tables.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">Google Ads has no native Fabric connector — the Python notebook using the google-ads library is the best approach. Scheduled via Fabric Data Pipeline at 6am daily, before the team starts work.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Google Ads has no native Fabric connector — Python notebook with google-ads library is the correct approach. Scheduled via Fabric Data Pipeline at 6am daily.')">Copy</button></div></div>
+  </div>
+</div>
+</div>
+
+<!-- AI AGENTS -->
+<div id="p4" class="panel">
+<div class="layer-intro">
+  <p class="li-label">Layer 4 — AI Agents (LangGraph)</p>
+  <p class="li-title">Six specialised agents orchestrated by LangGraph · each has a clear job and data requirement</p>
+  <p class="li-desc">LangGraph is the orchestration framework — it defines multi-agent workflows as directed graphs where each agent is a node. Graphs can be cyclical (agents loop until satisfied), conditional (different path based on data), and support human-in-the-loop checkpoints. All agents share the same LangChain foundation layer and are observed by LangSmith.</p>
+</div>
+
+<div class="node-card open">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:#EDE9FE;color:#5B21B6">01</span>
+    <div class="nc-meta"><p class="nc-name">Dispatch & Work Order Agent</p><p class="nc-role">Real-time · most critical · routes techs and blocks non-compliant dispatch</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Dispatch & Work Order Agent</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Dispatch & Work Order Agent')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Real-time · compliance gate · geo-routing · AI job brief</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Real-time · compliance gate · geo-routing · AI job brief')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Trigger</span><span class="tr-text">New work order created in FieldBoss → Azure Event Grid fires → agent activates in seconds.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Triggered in real-time: new FieldBoss work order → Azure Event Grid → agent activates in seconds.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Data it reads</span><span class="tr-text">ax_TechProfile (licence, AHJ registrations, skills, location). ax_Asset (equipment type, site address, AHJ jurisdiction). AHJ rules table (jurisdiction-specific requirements). Open work orders for scheduling conflicts.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Reads: ax_TechProfile (licence, AHJ registrations, skills), ax_Asset (equipment type, site, AHJ), AHJ rules table, open work orders for scheduling conflicts.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Runs 4 compliance gates before assigning any tech: (1) Licence validity — hard block if expired. (2) AHJ jurisdiction match — hard block if tech not registered for that jurisdiction. (3) Site clearance — soft block requiring manager approval. (4) Insurance/contract — advisory flag. If all gates pass, Azure Maps calculates travel time from each eligible tech, combined with asset familiarity score, to select the optimal assignment. GPT-4o generates a structured job brief for the tech.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Runs 4 compliance gates: licence validity (hard block), AHJ jurisdiction match (hard block), site clearance (soft block), insurance check (advisory). Azure Maps picks optimal tech. GPT-4o generates job brief.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it writes</span><span class="tr-text">FieldBoss work order (tech assigned + job brief in notes). Dynamics ax_WorkOrder (status updated). Azure Communication Services SMS to assigned tech. Teams alert to dispatcher.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Writes: FieldBoss WO (tech assigned + job brief), Dynamics ax_WorkOrder update, SMS to tech via Azure Comms, Teams alert to dispatcher.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:#EDE9FE;color:#5B21B6">02</span>
+    <div class="nc-meta"><p class="nc-name">Predictive Maintenance AI</p><p class="nc-role">Daily · scores every elevator 0-100 · prevents emergencies before they happen</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Predictive Maintenance AI</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Predictive Maintenance AI')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Azure ML · daily 0-100 risk score per unit · auto PM work orders</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Azure ML · daily 0-100 risk score per unit · auto PM work orders')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Trigger</span><span class="tr-text">Daily scheduled Power Automate flow at 5am pulls all active assets from Dynamics.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Daily scheduled Power Automate at 5am — pulls all active assets from Dynamics Dataverse.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Risk factors</span><span class="tr-text">PM interval overdue (days past schedule). Component age by type (motor, door operator, hydraulic pump). Fault code frequency in last 90 days. Repeat fault patterns (same code twice = elevated risk). Equipment type (hydraulic vs traction). Building vertical usage intensity (hospital runs 24/7, office runs 12hrs). Asset age correlation.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Risk factors: PM days overdue, component age, fault frequency last 90 days, repeat fault patterns, equipment type, vertical usage intensity, asset age. Composite 0-100 score per unit.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Score routing</span><span class="tr-text">75-100 (Critical): PM work order auto-created in FieldBoss + Dynamics + Teams alert to ops manager + account manager notification. 50-74 (Watch): flagged on Fabric risk dashboard. Below 50 (Monitor/Healthy): logged only. Score 75+ for 30 consecutive days: Modernisation Pipeline Agent triggered.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Critical (75-100): auto PM WO + Teams alert + account manager notification. Watch (50-74): dashboard flag. Healthy (<50): log only. 75+ for 30 days: Modernisation Agent triggered.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it writes</span><span class="tr-text">ax_AssetRiskScore Delta table (one record per asset per day). FieldBoss PM work order (for critical units). Dynamics task to account manager. Teams channel alert.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Writes: ax_AssetRiskScore (one per asset per day), FieldBoss PM WO for critical units, Dynamics task to account manager, Teams alert.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:#EDE9FE;color:#5B21B6">03</span>
+    <div class="nc-meta"><p class="nc-name">Compliance Tracker Agent</p><p class="nc-role">Daily · monitors tech licences and asset certificates · hard alerts before anything lapses</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Compliance Tracker Agent</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Compliance Tracker Agent')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Daily cert sweep · tech licence alerts · client inspection prep emails</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Daily cert sweep · tech licence alerts · client inspection prep emails')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it monitors</span><span class="tr-text">Tech elevator mechanic licences (expiry per state per AHJ). Asset operating certificates (expiry per unit per jurisdiction). Periodic inspection due dates. PM log gaps — units that haven't had a logged PM within the AHJ-required window. Certificate document completeness in Dynamics.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Monitors: tech mechanic licences per state, asset operating certs per unit, inspection due dates, PM log gaps vs AHJ-required window, certificate document completeness.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Alert tiers</span><span class="tr-text">Tech cert — 90 days: HR + manager email. 30 days: director escalation. Day of expiry: tech removed from eligible dispatch pool automatically (compliance gate enforces). Asset cert — 60 days: scheduling task created. 14 days: critical alert + client notification via GHL. Day of expiry: asset flagged non-compliant in Dynamics.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Tech: 90d HR alert, 30d director escalation, expiry day: removed from dispatch pool. Asset cert: 60d scheduling task, 14d critical alert + client notification, expiry: non-compliant flag.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">AI output</span><span class="tr-text">GPT-4o generates personalised client inspection prep email sent 30 days before inspection: what the inspection covers, what Axxiom is handling, what documents to have ready. Positions Axxiom as proactive partner, not reactive vendor.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'GPT-4o generates personalised client inspection prep email 30 days before inspection — what is covered, what Axxiom handles, what documents are needed. Positions Axxiom as proactive partner.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:#EDE9FE;color:#5B21B6">04</span>
+    <div class="nc-meta"><p class="nc-name">Marketing Intelligence Agent</p><p class="nc-role">Real-time lead scoring · vertical classification · GHL sequence enrollment</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Marketing Intelligence Agent</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Marketing Intelligence Agent')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Lead scoring · vertical tagging · ad performance alerts · attribution</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Lead scoring · vertical tagging · ad performance alerts · attribution')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">On every new lead capture: reads the contact's company name, title, message, building type, and UTM source — GPT-4o classifies the vertical (hotel/hospital/office/residential), assigns a quality score 1-10, identifies whether commercial or residential, and maps the lead to its originating Google Ads campaign in Dynamics. Daily: reviews campaign performance and flags campaigns with CPA above threshold or declining CTR for 3+ days.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'On lead capture: classifies vertical, assigns quality score 1-10, maps to originating ad campaign. Daily: reviews campaign performance, flags high CPA or declining CTR campaigns.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it writes</span><span class="tr-text">Dynamics Contact: vertical tag, lead score, campaign source, assigned account manager. GHL: vertical tag (triggers correct nurture sequence) + lead score (visible to account manager). ax_Lead Delta table: full attribution record.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Dynamics Contact: vertical tag + lead score + campaign source. GHL: tags trigger correct vertical sequence. ax_Lead: full attribution record for Power BI.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:#EDE9FE;color:#5B21B6">05</span>
+    <div class="nc-meta"><p class="nc-name">Review & Reputation Agent</p><p class="nc-role">Sentiment analysis · response drafts · tracks reputation per market</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Review & Reputation Agent</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Review & Reputation Agent')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Sentiment analysis · AI response drafts · GBP review management</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Sentiment analysis · AI response drafts · GBP review management')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Trigger</span><span class="tr-text">Job complete in FieldBoss → 48-hour delay → GHL review request SMS fired (not for emergency jobs). New Google Business Profile review detected → agent activates.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Job complete → 48hr delay → GHL review request SMS (not for emergency jobs). New GBP review detected → agent activates.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">GPT-4o reads each review's star rating and text — extracts sentiment score (1-10), identifies key themes (response time, tech quality, communication, compliance handling), flags service issues for ops follow-up. Drafts a personalised response in Axxiom's brand voice that references the specific job, building, and technician. For 1-2 star reviews: immediate alert to account manager + Dynamics task to call the client within 24 hours.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Extracts sentiment score, key themes, service issues. Drafts personalised response referencing specific job and tech. 1-2 star reviews: immediate account manager alert + Dynamics call-back task within 24 hours.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it writes</span><span class="tr-text">ax_ClientReview: rating, sentiment score, themes, market, response draft, response status. After 4-5 star review (24hr delay): GHL referral request SMS to client.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'ax_ClientReview: rating, sentiment, themes, market, response draft. After 4-5 star review + 24hr: GHL referral SMS to client.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:#EDE9FE;color:#5B21B6">06</span>
+    <div class="nc-meta"><p class="nc-name">Modernisation Pipeline Agent</p><p class="nc-role">Data-triggered upsell · connects risk score to revenue opportunity</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Modernisation Pipeline Agent</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Modernisation Pipeline Agent')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Risk score ≥70 for 30 days → upsell opportunity → $50K-$500K revenue</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Risk score ≥70 for 30 days → upsell opportunity → $50K–$500K modernisation revenue')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Trigger</span><span class="tr-text">Daily Dynamics check: any asset with risk_score ≥70 for 30 consecutive days OR asset age over 15 years with 3+ emergency events in 12 months.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Daily check: risk_score ≥70 for 30 consecutive days OR asset age >15 years with 3+ emergency events in 12 months.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">GPT-4o generates a modernisation ROI brief: asset age, total repair cost YTD vs. modernisation investment estimate, projected failure window, specific components at end-of-life, comparable projects Axxiom has completed. Creates a Dynamics Opportunity record. Enrolls the client in a warm, data-backed GHL outreach sequence — not a cold sales pitch, a data-backed conversation starter.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'GPT-4o generates modernisation ROI brief: asset age, repair cost YTD, projected failure window, end-of-life components. Creates Dynamics Opportunity. Enrolls client in warm GHL outreach sequence.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">The highest-revenue automation in the system. One modernisation project conversion = $50K-$500K. The agent noticed it. GHL delivered the message. The account manager closes it. This single automation pays for the entire architecture build.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Highest-revenue automation. One conversion = $50K–$500K. Agent notices it, GHL delivers the message, account manager closes it. Single automation pays for the entire architecture build.')">Copy</button></div></div>
+  </div>
+</div>
+</div>
+
+<!-- LANGCHAIN + SMITH -->
+<div id="p5" class="panel">
+<div class="layer-intro">
+  <p class="li-label">Foundation — LangChain + LangSmith</p>
+  <p class="li-title">The tools every agent is built on · and the observability layer watching all of them</p>
+  <p class="li-desc">LangChain provides the building blocks — tools, prompts, memory, parsers, chains. Every agent is assembled from these components. LangSmith sits above all agents and records what happens at every step — not the raw data (no PII ever), but the reasoning: which prompt was sent, which tool was called, what was returned, how long it took.</p>
+</div>
+
+<div class="node-card open">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">01</span>
+    <div class="nc-meta"><p class="nc-name">LangChain — Tools & APIs</p><p class="nc-role">How agents call external systems — GHL, Dynamics, FieldBoss, Fabric</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">LangChain Tools & APIs</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'LangChain Tools & APIs')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Agent connectors to GHL · Dynamics · FieldBoss · Fabric · Azure Maps</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Agent connectors to GHL · Dynamics · FieldBoss · Fabric · Azure Maps')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it is</span><span class="tr-text">LangChain Tools are the functions an agent can call during its reasoning cycle. Each tool wraps an API call — get_tech_profile() calls the Dynamics Dataverse API, create_work_order() calls the FieldBoss Salesforce API, enroll_ghl_sequence() calls the GHL REST API. The agent decides which tool to call based on the task — it is not hardcoded to call them in a fixed order.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Tools are functions the agent calls during reasoning: get_tech_profile() → Dynamics, create_work_order() → FieldBoss, enroll_ghl_sequence() → GHL. Agent decides which to call — not hardcoded sequence.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">02</span>
+    <div class="nc-meta"><p class="nc-name">LangChain Prompt Templates</p><p class="nc-role">Structured, versioned inputs to GPT-4o for each agent task</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">LangChain Prompt Templates</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'LangChain Prompt Templates')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Structured per-agent prompts · versioned · tested in LangSmith</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Structured per-agent prompts · versioned in LangSmith · tested before deployment')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it is</span><span class="tr-text">Every agent has specific prompt templates that define how it reasons. The Dispatch Agent's prompt instructs GPT-4o to reason as a compliance-first dispatcher. The Review Agent's prompt instructs GPT-4o to write in Axxiom's brand voice. Templates use variable substitution — the asset data, tech profiles, and client information are injected at runtime. Prompt versions are tracked in LangSmith — a prompt change is tested against historical cases before deployment.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Per-agent prompts define reasoning style: compliance-first for dispatch, brand voice for reviews. Variables injected at runtime. Versions tracked in LangSmith — tested against historical cases before deployment.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">03</span>
+    <div class="nc-meta"><p class="nc-name">LangChain Memory — Qdrant Vector Store</p><p class="nc-role">Agent context memory · enables personalised, history-aware responses</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Memory — Qdrant Vector Store</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Memory — Qdrant Vector Store')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Agent context memory · self-hosted on Azure VM · no data leaves tenant</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Agent context memory · self-hosted on Azure VM · data stays in tenant')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Stores vector embeddings of asset service history, client communication history, and past agent reasoning so that agents can retrieve relevant context during a task. When the Dispatch Agent handles a job for a building it has worked at 15 times, it retrieves the history of past faults at that site and includes it in the job brief. Qdrant runs on a dedicated Azure VM — self-hosted for data sovereignty.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Stores embeddings of service history and past reasoning. Dispatch Agent retrieves site fault history for job briefs. Review Agent recalls past client sentiment trends. Self-hosted on Azure VM for data sovereignty.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key detail</span><span class="tr-text">22ms p95 query latency, 326 QPS — fast enough for real-time dispatch agent operation. AES-256 disk encryption on the Azure VM. Access restricted to agent service principal only.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'22ms p95 latency, 326 QPS — fast enough for real-time dispatch. AES-256 disk encryption. Access restricted to agent service principal only.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">04</span>
+    <div class="nc-meta"><p class="nc-name">LangChain Output Parsers</p><p class="nc-role">Forces structured JSON from every agent response — no free text output</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">LangChain Output Parsers</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'LangChain Output Parsers')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Structured JSON output from every agent · no free text · machine-readable</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Structured JSON from every agent · no free text · machine-readable downstream')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Every agent response is validated against a defined JSON schema before being written anywhere. The Dispatch Agent must return {tech_id, assignment_reason, compliance_gates_passed, job_brief_text, estimated_arrival}. The risk scoring agent must return {asset_id, risk_score, risk_tier, top_risk_factors, recommended_action}. If GPT-4o returns malformed output, the parser catches it and retries — never writes corrupted data to Dynamics or Fabric.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Every agent response validated against JSON schema before writing anywhere. Malformed output caught and retried — never writes corrupted data to Dynamics or Fabric.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">05</span>
+    <div class="nc-meta"><p class="nc-name">LangSmith</p><p class="nc-role">Observability platform for all agents · traces, evals, costs — no PII</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">LangSmith — Agent Observability</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'LangSmith — Agent Observability')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Traces · evals · cost · latency · NO PII — metadata only</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Traces · evals · cost per run · latency · NO PII — metadata only')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it records</span><span class="tr-text">For every agent run: the exact prompt template sent (with variable names, not values), which tools were called and in what order, the tool inputs and outputs at a structural level, the final output schema, token count and estimated cost, end-to-end latency broken down by step, whether the run succeeded or failed and why.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Per run: prompt template (variable names not values), tool call sequence, structural inputs/outputs, token count and cost, step-by-step latency, success/failure reason.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it never records</span><span class="tr-text">Raw client data (building addresses, client names, elevator fault descriptions, tech personal details). LangSmith is configured to log only reasoning metadata — never the actual values injected into prompts. This is what keeps it safe outside Axxiom's Azure tenant.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'NEVER records: building addresses, client names, elevator fault text, tech personal details. Only reasoning metadata — this keeps it safe outside the Azure tenant.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key capability</span><span class="tr-text">Prompt versioning: when a prompt is updated, LangSmith runs the new version against a set of test cases before deployment. No prompt change goes live without passing regression testing. This is how the architect maintains quality as the system evolves.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Prompt versioning: every prompt change runs against test cases before deployment. No change goes live without passing regression testing.')">Copy</button></div></div>
+  </div>
+</div>
+</div>
+
+<!-- FABRIC -->
+<div id="p6" class="panel">
+<div class="layer-intro">
+  <p class="li-label">Layer 5 — Microsoft Fabric / OneLake</p>
+  <p class="li-title">The data warehouse — single source of truth · compliance-governed · Power BI reads here</p>
+  <p class="li-desc">Microsoft Fabric is where every data source and every AI agent write their output. It is the authoritative, encrypted, auditable store for all operational and marketing data. Power BI connects directly to the SQL analytics endpoint — no intermediate ETL, no data leakage risk. Delta format means every table has a full version history and time-travel capability.</p>
+</div>
+
+<div class="node-card open">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-info);color:var(--color-text-info)">01</span>
+    <div class="nc-meta"><p class="nc-name">Staging Lakehouse</p><p class="nc-role">First landing zone for all raw API data before processing</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Staging Lakehouse</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Staging Lakehouse')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Raw API data lands here first · before transformation · full history preserved</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Raw API data lands here first · before transformation · full history preserved')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">The entry point for all external data. Google Ads campaign metrics, GA4 sessions, CallRail calls, FieldBoss work orders, and GHL lead data all land here as raw Delta tables first. Raw data is preserved in its original form before any transformation — if a processing step produces an error, the raw data is still there and can be reprocessed. The staging lakehouse is what Luke already has set up (visible in the Fabric screenshot).</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Entry point for all external data. Raw data preserved before transformation — if processing fails, data can be reprocessed. Visible in current Fabric setup as StagingLakehouseForDataflows.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-info);color:var(--color-text-info)">02</span>
+    <div class="nc-meta"><p class="nc-name">Governed Delta Tables — 8 custom entities</p><p class="nc-role">The clean, queryable data that Power BI and AI agents actually use</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Governed Delta Tables</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Governed Delta Tables')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">8 custom ax_ entities · versioned · auditable · compliance-ready</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'8 custom ax_ entities · versioned · auditable · compliance-ready')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">The 8 entities</span><span class="tr-text">ax_Asset (elevator unit records). ax_WorkOrder (every job completed — fault codes AI-extracted from tech notes). ax_AssetRiskScore (daily AI-generated 0-100 scores). ax_ComplianceRecord (certificates, inspections, expiry dates). ax_TechProfile (licences, AHJ registrations, skills). ax_MarketingMetric (Google Ads, GA4, GBP daily performance). ax_Lead (GHL contacts with UTM attribution). ax_ClientReview (Google reviews with AI sentiment scores).</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'ax_Asset · ax_WorkOrder (AI fault extraction) · ax_AssetRiskScore (daily AI scores) · ax_ComplianceRecord · ax_TechProfile · ax_MarketingMetric · ax_Lead (UTM attribution) · ax_ClientReview (AI sentiment)')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Delta format advantage</span><span class="tr-text">Delta tables have time-travel: query what the data looked like on any past date. Critical for compliance audits — "what was the asset's risk score on the day of that incident?" returns an exact answer.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Delta time-travel: query what data looked like on any past date. Critical for audits: "what was the risk score on the day of that incident?" returns an exact historical answer.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-info);color:var(--color-text-info)">03</span>
+    <div class="nc-meta"><p class="nc-name">Dataverse Sync — Dynamics ↔ Fabric</p><p class="nc-role">Bidirectional bridge between the compliance master and the analytics warehouse</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Dataverse Sync</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Dataverse Sync')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Dynamics 365 ↔ Fabric · bidirectional · native Microsoft connector</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Dynamics 365 ↔ Fabric bidirectional · native Microsoft connector · no ETL needed')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">The native Microsoft Fabric link table connector keeps Dynamics Dataverse and Fabric OneLake in sync automatically. When an AI agent writes a new risk score to ax_AssetRiskScore in Fabric, it syncs to the corresponding Dynamics entity for the account manager to see in their CRM view. When a tech's licence is renewed in Dynamics, ax_TechProfile in Fabric updates — the Compliance Agent reads the latest data at all times.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Native link table connector — Dynamics and Fabric stay in sync automatically. Risk scores written to Fabric appear in CRM. Licence renewals in Dynamics update ax_TechProfile for Compliance Agent.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-info);color:var(--color-text-info)">04</span>
+    <div class="nc-meta"><p class="nc-name">SQL Analytics Endpoint</p><p class="nc-role">Auto-generated SQL view over Delta tables · Power BI connects here</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">SQL Analytics Endpoint</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'SQL Analytics Endpoint')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Auto-generated · Power BI reads directly · read-only · no ETL</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Auto-generated SQL view · Power BI reads directly · read-only · no ETL pipeline needed')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">What it does</span><span class="tr-text">Microsoft Fabric automatically generates a SQL analytics endpoint over every Delta table in the Lakehouse. Power BI connects to this endpoint as a DirectQuery or Import source — whichever the data analyst chooses. The endpoint is read-only for all Power BI connections — no report can accidentally modify data. This was created automatically when Luke set up the staging lakehouse (the notification visible in the Fabric screenshot).</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Auto-generated SQL view over all Delta tables. Power BI connects here — DirectQuery or Import. Read-only — no report can modify data. Created automatically when Staging Lakehouse was set up.')">Copy</button></div></div>
+  </div>
+</div>
+</div>
+
+<!-- OUTPUTS -->
+<div id="p7" class="panel">
+<div class="layer-intro">
+  <p class="li-label">Layer 6 — Outputs</p>
+  <p class="li-title">Five Power BI dashboards + four agent write-back actions</p>
+  <p class="li-desc">The output layer is split: passive output (Power BI dashboards the data analyst builds for leadership to read) and active output (what the AI agents DO — writing back to FieldBoss, GHL, Dynamics, and Teams). Both are driven by the same clean data in Fabric.</p>
+</div>
+
+<div class="node-card open">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">01</span>
+    <div class="nc-meta"><p class="nc-name">Marketing Performance Dashboard</p><p class="nc-role">Ads · leads · ROAS · attribution — the commercial picture</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Marketing Performance Dashboard</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Marketing Performance Dashboard')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Ad spend · leads · ROAS · cost per lead · end-to-end attribution</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Ad spend · leads · ROAS · cost per lead · end-to-end attribution')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Data sources</span><span class="tr-text">ax_MarketingMetric (Google Ads daily), ax_WebsiteSessionMetric (GA4), ax_Lead (GHL contacts + UTM), callrail_calls (inbound call attribution), Dynamics Opportunity (pipeline stage).</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Sources: ax_MarketingMetric (Ads), ax_WebsiteSessionMetric (GA4), ax_Lead (GHL + UTM), callrail_calls, Dynamics Opportunity pipeline.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key report</span><span class="tr-text">The report this architecture unlocks that doesn't exist today: "Hotel Elevator FL campaign spent $4,140 this month → drove 23 form fills + 31 calls (18 answered) → 4 became signed contracts worth $87,000 ARR → ROAS: 21x." A live Power BI visual, not a manual spreadsheet calculation.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Unlocks: campaign spend → leads generated → calls received → contracts signed → ARR value → ROAS. Full attribution chain live in Power BI — not a manual spreadsheet.')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">02</span>
+    <div class="nc-meta"><p class="nc-name">Ops Intelligence Dashboard</p><p class="nc-role">Jobs · first-fix rate · fault codes · tech performance · fleet risk</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Ops Intelligence Dashboard</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Ops Intelligence Dashboard')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Jobs · first-fix rate · fault codes · tech scores · fleet risk heatmap</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Jobs completed · first-fix rate · fault codes · tech scores · fleet risk heatmap')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Data sources</span><span class="tr-text">ax_WorkOrder (all jobs + fault codes AI-extracted), ax_AssetRiskScore (daily scores), ax_TechPerformanceScore (weekly AI scores per tech).</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Sources: ax_WorkOrder (jobs + AI-extracted fault codes), ax_AssetRiskScore (daily), ax_TechPerformanceScore (weekly).')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key reports</span><span class="tr-text">First-fix rate trend (repairs not followed by callback in 30 days). Top fault codes by equipment type, manufacturer, and market. Fleet risk heatmap showing which markets have the most at-risk units. Tech performance leaderboard by market — first-fix rate, data quality score, avg job duration vs peer average.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'First-fix rate trend · top fault codes by equipment type · fleet risk heatmap by market · tech performance leaderboard (first-fix, data quality, job duration vs peer avg)')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">03</span>
+    <div class="nc-meta"><p class="nc-name">Compliance Dashboard</p><p class="nc-role">Certificate status · AHJ map · tech licence matrix · inspection calendar</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Compliance Dashboard</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Compliance Dashboard')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Certificate compliance rate · AHJ coverage · inspection calendar · tech licences</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Certificate compliance rate · AHJ coverage · inspection calendar · tech licence matrix')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key reports</span><span class="tr-text">Certificate compliance rate per market (target: 100%). Upcoming inspection calendar — next 90 days across all assets. Tech certification matrix — which techs are certified for which AHJ jurisdictions. Deficiency code frequency — what fails most often in inspections and where. Real-time alert feed from Compliance Agent.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Cert compliance rate per market (target 100%) · inspection calendar next 90 days · tech cert matrix by AHJ · deficiency code frequency · real-time Compliance Agent alert feed')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">04</span>
+    <div class="nc-meta"><p class="nc-name">Revenue Dashboard</p><p class="nc-role">MRR · contract renewals · modernisation pipeline · churn risk</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Revenue Dashboard</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Revenue Dashboard')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">MRR · ARR · contract renewals · modernisation pipeline · churn risk</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'MRR · ARR · contract renewals at risk · modernisation pipeline value · churn risk')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key reports</span><span class="tr-text">MRR and ARR from active contracts. Contracts due for renewal in next 90 days with ARR value at risk. Modernisation pipeline: total opportunity value, stage breakdown, avg time from AI flag to signed project. Churn rate and win-back pipeline status. Revenue by vertical (hotels, healthcare, office, residential) and by market.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'MRR/ARR · contracts renewing next 90 days + value at risk · modernisation pipeline total + stages · churn rate + win-back status · revenue by vertical and market')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">05</span>
+    <div class="nc-meta"><p class="nc-name">Reputation Dashboard</p><p class="nc-role">Reviews · sentiment themes · NPS equivalent · response rate</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Reputation Dashboard</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Reputation Dashboard')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Subtitle</span><span class="tr-text">Reviews · sentiment themes · NPS equivalent · response rate by market</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Review volume and rating · sentiment themes · NPS equivalent · response rate by market')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">Key reports</span><span class="tr-text">Review volume and avg rating trend by market. Sentiment theme breakdown (AI-extracted): which themes appear most — response time, tech quality, compliance, communication. Review response rate and avg response time. Star distribution. Review volume benchmarked against review request volume (conversion rate). NPS equivalent derived from sentiment scores.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Review volume + avg rating by market · AI sentiment themes (response time, tech quality, communication) · response rate and avg response time · NPS equivalent from sentiment scores')">Copy</button></div></div>
+  </div>
+</div>
+
+<div class="node-card">
+  <div class="nc-head" onclick="tog(this)">
+    <span class="nc-num" style="background:var(--color-background-success);color:var(--color-text-success)">06</span>
+    <div class="nc-meta"><p class="nc-name">Agent Write-backs</p><p class="nc-role">What the agents DO — actions written back to operational tools</p></div>
+    <button class="nc-copy" onclick="copyNode(this)">Copy all</button>
+  </div>
+  <div class="nc-body">
+    <div class="text-row"><span class="tr-label">Title</span><span class="tr-text">Agent Write-back Actions</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'Agent Write-back Actions')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">→ FieldBoss</span><span class="tr-text">Dispatch Agent creates work order, assigns tech, writes AI job brief to notes field. Predictive Maintenance Agent auto-creates PM work orders for Critical units. Every write is logged in Dynamics for compliance.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'→ FieldBoss: Dispatch Agent creates WO + assigns tech + AI job brief. Predictive Maintenance auto-creates PM WOs for critical units. All logged in Dynamics.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">→ GoHighLevel</span><span class="tr-text">Marketing Agent enrolls leads in correct vertical nurture sequence. Review Agent sends post-job review request SMS. Modernisation Agent triggers upsell outreach sequence. Contract renewal sequences fire from Dynamics date triggers.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'→ GHL: Marketing Agent enrolls vertical sequences. Review Agent sends review SMS. Modernisation Agent triggers upsell sequence. Renewal sequences from Dynamics date triggers.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">→ Dynamics 365</span><span class="tr-text">Risk scores written daily. Compliance flags updated. Modernisation Opportunities created. Contract renewal tasks assigned to account managers. All writes audited at field level.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'→ Dynamics: daily risk scores, compliance flags, modernisation opportunities, renewal tasks. All writes field-level audited.')">Copy</button></div></div>
+    <div class="text-row"><span class="tr-label">→ Teams / SMS</span><span class="tr-text">Critical compliance alerts. Tech dispatch notifications. Emergency call-out prevention alerts (predictive maintenance). All via Azure Communication Services — covered by Microsoft HIPAA BAA.</span><div class="tr-copy"><button class="trc" onclick="copyText(this,'→ Teams/SMS: critical compliance alerts, dispatch notifications, predictive maintenance emergency prevention alerts. All via Azure Communication Services — HIPAA BAA covered.')">Copy</button></div></div>
+  </div>
+</div>
+</div>
+</div>
+
+<script>
+function go(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+function tog(h){h.closest('.node-card').classList.toggle('open')}
+function copyText(btn,text){
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='✓';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},1500);
+  });
+}
+function copyNode(btn){
+  const card = btn.closest('.node-card');
+  card.classList.add('open');
+  const rows = card.querySelectorAll('.tr-text');
+  const labels = card.querySelectorAll('.tr-label');
+  let text = '';
+  rows.forEach((r,i)=>{
+    if(labels[i]) text += labels[i].textContent.trim()+': '+r.textContent.trim()+'\n\n';
+  });
+  navigator.clipboard.writeText(text.trim()).then(()=>{
+    btn.textContent='Copied!';
+    setTimeout(()=>{btn.textContent='Copy all'},2000);
+  });
+}
+</script>
