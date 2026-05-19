@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Database, ExternalLink, PanelLeft, Palette, Sparkles } from 'lucide-react'
+import {
+  Clapperboard,
+  Database,
+  ExternalLink,
+  Megaphone,
+  PanelLeft,
+  Palette,
+  Sparkles,
+} from 'lucide-react'
 import {
   STRATEGY_DOCUMENTS,
   categoryLabel,
@@ -75,6 +83,20 @@ export function AppLayout() {
             <span className="flex items-center gap-2">
               <Database className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
               Vector DB comparison
+            </span>
+          </NavLink>
+
+          <NavLink to="/marketingvidsprompts" className={navClass}>
+            <span className="flex items-center gap-2">
+              <Clapperboard className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+              Video prompts (Higgsfield)
+            </span>
+          </NavLink>
+
+          <NavLink to="/marketingcampaign" className={navClass}>
+            <span className="flex items-center gap-2">
+              <Megaphone className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+              Marketing campaign
             </span>
           </NavLink>
 

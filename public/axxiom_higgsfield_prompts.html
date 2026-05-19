@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Axxiom Elevator — Higgsfield Reel Prompts</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Instrument+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0c0e;
+    --surface: #13131a;
+    --card: #18181f;
+    --border: rgba(255,255,255,0.06);
+    --border-hover: rgba(255,165,0,0.3);
+    --white: #f0eee8;
+    --muted: #6b6b7a;
+    --orange: #ff6b1a;
+    --amber: #ffaa44;
+    --amber-dim: rgba(255,170,68,0.1);
+    --gold: #e8b84b;
+    --teal: #00c9a7;
+    --red: #ff3b3b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'Instrument Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 64px 60px 52px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; right: -40px;
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(255,107,26,0.08) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 22px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    display: block;
+    width: 22px;
+    height: 1px;
+    background: var(--orange);
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(40px, 6vw, 76px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+
+  h1 .line2 { color: var(--orange); }
+
+  .header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .tag {
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 5px 12px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--surface);
+  }
+
+  /* ── FILTERS ── */
+  .filter-bar {
+    padding: 20px 60px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .filter-btn {
+    padding: 7px 16px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--muted);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.03em;
+  }
+
+  .filter-btn:hover { color: var(--white); border-color: rgba(255,255,255,0.15); }
+  .filter-btn.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+  /* ── GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    padding: 2px;
+    background: var(--border);
+  }
+
+  /* ── CARD ── */
+  .prompt-card {
+    background: var(--card);
+    padding: 36px 40px 32px;
+    position: relative;
+    transition: background 0.2s;
+  }
+
+  .prompt-card:hover { background: #1c1c25; }
+
+  /* number watermark */
+  .card-num {
+    position: absolute;
+    top: 28px;
+    right: 36px;
+    font-family: 'Syne', sans-serif;
+    font-size: 64px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .card-index {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--orange);
+    color: #fff;
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+
+  .card-title-wrap {}
+  .card-vibe {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 5px;
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+  }
+
+  /* concept strip */
+  .concept-strip {
+    background: var(--amber-dim);
+    border: 1px solid rgba(255,170,68,0.18);
+    border-radius: 2px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    color: var(--amber);
+    line-height: 1.55;
+    font-style: italic;
+  }
+
+  /* prompt box */
+  .prompt-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .prompt-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .prompt-box {
+    background: #0f0f16;
+    border: 1px solid rgba(255,107,26,0.15);
+    border-radius: 3px;
+    padding: 18px 20px;
+    font-family: 'Fira Code', monospace;
+    font-size: 12.5px;
+    color: #c9c8d4;
+    line-height: 1.75;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.2s;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .prompt-box:hover { border-color: rgba(255,107,26,0.4); }
+
+  .copy-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 4px 10px;
+    background: rgba(255,107,26,0.15);
+    border: 1px solid rgba(255,107,26,0.3);
+    border-radius: 2px;
+    color: var(--orange);
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .copy-btn:hover { background: var(--orange); color: #fff; }
+  .copy-btn.copied { background: var(--teal); border-color: var(--teal); color: #fff; }
+
+  /* specs row */
+  .specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .spec-chip {
+    font-size: 11px;
+    font-family: 'Fira Code', monospace;
+    padding: 4px 10px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  .spec-chip.duration { border-color: rgba(0,201,167,0.25); color: var(--teal); }
+  .spec-chip.hook { border-color: rgba(255,59,59,0.25); color: var(--red); }
+  .spec-chip.format { border-color: rgba(232,184,75,0.25); color: var(--gold); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 36px 60px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-brand {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--orange);
+    letter-spacing: 0.04em;
+  }
+
+  .footer-note {
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 860px) {
+    .header, .filter-bar, footer { padding-left: 20px; padding-right: 20px; }
+    .grid { grid-template-columns: 1fr; }
+    .prompt-card { padding: 28px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="eyebrow">Higgsfield AI · Video Prompts</div>
+  <h1>10 VIRAL REEL<br><span class="line2">PROMPTS</span></h1>
+  <p style="color:var(--muted); font-size:15px; max-width:580px; line-height:1.7; margin-top:8px;">Witty, punchy, scroll-stopping commercial reel concepts for Axxiom Elevator — ready to drop directly into Higgsfield AI. Click any prompt box to copy.</p>
+  <div class="header-meta">
+    <div class="tag">9:16 Vertical · Reels / TikTok</div>
+    <div class="tag">15–30 sec each</div>
+    <div class="tag">B2B Comedy</div>
+    <div class="tag">Reliability In Motion™</div>
+    <div class="tag">Axxiom Elevator</div>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filterCards('all', this)">All 10</button>
+  <button class="filter-btn" onclick="filterCards('humor', this)">😂 Humor</button>
+  <button class="filter-btn" onclick="filterCards('drama', this)">🎬 Drama</button>
+  <button class="filter-btn" onclick="filterCards('story', this)">📖 Story</button>
+  <button class="filter-btn" onclick="filterCards('visual', this)">✨ Visual Stunt</button>
+</div>
+
+<!-- CARDS GRID -->
+<div class="grid" id="cardGrid">
+
+  <!-- 01 -->
+  <div class="prompt-card" data-type="humor">
+    <div class="card-num">01</div>
+    <div class="card-top">
+      <div class="card-index">01</div>
+      <div class="card-title-wrap">
+        <div class="card-vibe">Humor · Office Comedy</div>
+        <div class="card-title">"The Guy Who Always Takes the Stairs"</div>
+      </div>
+    </div>
+    <div class="concept-strip">💡 Concept: A buff, exhausted office worker has famously avoided the elevator for months after it broke. He's now in absurd shape — but miserable. Then Axxiom shows up.</div>
+    <div class="prompt-label">Higgsfield Prompt</div>
+    <div class="prompt-box" onclick="copyPrompt(this)">
+      <button class="copy-btn" onclick="event.stopPropagation(); copyPrompt(this.parentElement)">COPY</button>Cinematic vertical 9:16 short commercial reel. Scene 1 (0–5s): Close-up of a muscular man in business attire gasping at the bottom of a staircase, sweat dripping, tie askew, briefcase barely held. He looks up at 20 floors of stairs with genuine dread. Handheld camera, fluorescent office lighting, slight lens shake. Scene 2 (5–12s): Quick-cut montage — same man doing heroic feats of stair climbing: crawling on all fours past the 10th floor, being passed by a coworker casually eating a sandwich, crying silently while climbing, calves visibly enormous in tight suit trousers. Fast-cut editing, comedic timing, upbeat lo-fi music building. Scene 3 (12–22s): Wide shot — an Axxiom elevator technician in a clean navy uniform arrives, tools in hand, gives a confident nod at the elevator panel, works for exactly 3 seconds. Elevator door opens with a satisfying DING. Scene 4 (22–28s): The man stares at the open elevator door, then at his own massive legs, then slowly, emotionally steps inside. Single tear. Elevator doors close. Text overlay fades in: "AXXIOM ELEVATOR. We fixed it." End card: Axxiom logo on dark background. Cinematic color grade, warm tones inside the elevator, cold fluorescent for staircase. Subtle comedy timing, no dialogue.
+    </div>
+    <div class="specs">
+      <span class="spec-chip duration">⏱ 28 sec</span>
+      <span class="spec-chip hook">🪝 Relatability hook</span>
+      <span class="spec-chip format">📱 Reels / TikTok</span>
+      <span class="spec-chip">No dialogue</span>
+    </div>
+  </div>
+
+  <!-- 02 -->
+  <div class="prompt-card" data-type="drama">
+    <div class="card-num">02</div>
+    <div class="card-top">
+      <div class="card-index">02</div>
+      <div class="card-title-wrap">
+        <div class="card-vibe">Drama · Cinematic</div>
+        <div class="card-title">"The Elevator That Remembered"</div>
+      </div>
+    </div>
+    <div class="concept-strip">💡 Concept: A cinematic slow-motion tribute to the most underappreciated employee in the building — the elevator. Treated like a hero's send-off when it goes offline, and a triumphant return when Axxiom brings it back.</div>
+    <div class="prompt-label">Higgsfield Prompt</div>
+    <div class="prompt-box" onclick="copyPrompt(this)">
+      <button class="copy-btn" onclick="event.stopPropagation(); copyPrompt(this.parentElement)">COPY</button>Hyper-cinematic vertical 9:16 commercial reel shot like a prestige film trailer. Slow motion throughout. Epic orchestral score swells from silence. Scene 1 (0–6s): Extreme close-up of elevator buttons, gleaming chrome, finger pressing lobby button — dramatic lens flare. Cut to wide shot of an empty elevator lobby at dawn, golden hour light flooding through glass doors. Text overlay: "Every day, it carried thousands." Scene 2 (6–14s): Montage of slow-motion elevator moments — businessman stepping in checking phone, nurse pushing wheelchair through elevator doors, exhausted parent holding toddler, architect rolling blueprints. Golden cinematic grade, sweeping crane shots. Text overlay: "It never complained." Scene 3 (14–20s): Doors slide shut for the last time. Dark. Out of service sign hangs. Building staff look confused, concerned. Camera slowly tilts up the out-of-service elevator shaft in dramatic silence. Text: "Until one day…" Scene 4 (20–28s): Axxiom technician arrives in slow motion — wind in hair, tool belt catching light, walking like a action hero entering frame. Fixes panel. Single spark of light. DING. Doors open. Warm golden light pours out. Everyone in the lobby exhales. Text: "AXXIOM ELEVATOR. Reliability In Motion." End card: Axxiom logo, dark background, gold text. Anamorphic lens flares, desaturated-to-warm color grade.
+    </div>
+    <div class="specs">
+      <span class="spec-chip duration">⏱ 28 sec</span>
+      <span class="spec-chip hook">🪝 Cinematic emotion</span>
+      <span class="spec-chip format">📱 Reels / LinkedIn</span>
+      <span class="spec-chip">Slow motion</span>
+    </div>
+  </div>
+
+  <!-- 03 -->
+  <div class="prompt-card" data-type="humor">
+    <div class="card-num">03</div>
+    <div class="card-top">
+      <div class="card-index">03</div>
+      <div class="card-title-wrap">
+        <div class="card-vibe">Humor · POV Comedy</div>
+        <div class="card-title">"The Property Manager's Worst Day"</div>
+      </div>
+    </div>
+    <div class="concept-strip">💡 Concept: POV mockumentary-style reel following a frazzled property manager as their phone explodes with elevator complaints — until they call Axxiom.</div>
+    <div class="prompt-label">Higgsfield Prompt</div>
+    <div class="prompt-box" onclick="copyPrompt(this)">
+      <button class="copy-btn" onclick="event.stopPropagation(); copyPrompt(this.parentElement)">COPY</button>Vertical 9:16 mockumentary-style POV commercial reel, handheld shaky cam, slightly overexposed office lighting, feels like The Office or Abbott Elementary. Scene 1 (0–5s): Close-up POV of a property manager's phone screen. Notifications flood in rapid-fire: "Elevator broken AGAIN," "My client is stuck on floor 8," "ADA violation??", "We're moving out," all in quick succession. Phone buzzing continuously. Manager's face reflected in phone screen — pure despair. Scene 2 (5–14s): Manager speed-walking down hallway talking to themselves, jacket half-on, coffee spilling, passing angry tenants giving thumbs-down gestures. Quick documentary zoom-ins on each angry face. Lo-fi chaotic background chatter audio. Text overlay: "7:58 AM on a Monday." Scene 3 (14–20s): Manager stops, takes deep breath, calls Axxiom. Phone rings once. Calm, confident voice answers immediately. Manager's shoulders physically drop with relief — the tension visibly leaves their body. Time-lapse: sun moves across window, technician arrives, elevator fixed. Scene 4 (20–28s): Manager stares directly into camera — mockumentary interview style — deadpan expression. Says nothing. Slowly raises thumb up. Text overlay: "AXXIOM ELEVATOR. We pick up on the first ring." End card: Axxiom logo. Warm grade. Hand-held, natural lighting throughout.
+    </div>
+    <div class="specs">
+      <span class="spec-chip duration">⏱ 28 sec</span>
+      <span class="spec-chip hook">🪝 Pain point humor</span>
+      <span class="spec-chip format">📱 TikTok / Reels</span>
+      <span class="spec-chip">Mockumentary style</span>
+    </div>
+  </div>
+
+  <!-- 04 -->
+  <div class="prompt-card" data-type="visual">
+    <div class="card-num">04</div>
+    <div class="card-top">
+      <div class="card-index">04</div>
+      <div class="card-title-wrap">
+        <div class="card-vibe">Visual Stunt · Surreal Comedy</div>
+        <div class="card-title">"What If Your Elevator Had Feelings"</div>
+      </div>
+    </div>
+    <div class="concept-strip">💡 Concept: The elevator is personified — it makes facial expressions, sighs dramatically, looks offended when neglected, and cries tears of oil when overworked. Until it gets proper maintenance from Axxiom.</div>
+    <div class="prompt-label">Higgsfield Prompt</div>
+    <div class="prompt-box" onclick="copyPrompt(this)">
+      <button class="copy-btn" onclick="event.stopPropagation(); copyPrompt(this.parentElement)">COPY</button>Vertical 9:16 surreal comedy commercial with magical realism aesthetic, warm Wes Anderson-inspired symmetrical compositions, pastel-tinged color grade. Scene 1 (0–6s): An elevator with subtly human facial expressions — eyes formed by call buttons, a mouth formed by the door gap — looks exhausted. Dark circles under its button-eyes. It yawns slowly as doors open. A cartoon-style thought bubble shows a maintenance calendar covered in red X marks. Whimsical background music, plucky strings. Scene 2 (6–14s): Quick cuts — elevator doors slam dramatically when ignored, elevator makes a grinding noise and visibly winces, elevator door opens to reveal nothing then closes again sulkily. Each reaction is exaggerated and comedic. The elevator is clearly having a breakdown. Text overlay: "Your elevator has been trying to tell you something." Scene 3 (14–22s): Axxiom technician arrives. Elevator immediately lights up — buttons glow brighter, a small animated smile on the door panel. Technician does maintenance work. Elevator does a little shimmy. Confetti falls inside the elevator. Scene 4 (22–28s): Happy elevator with glowing buttons, doors opening and closing smoothly and cheerfully. Text overlay: "Happy elevator. Happy building. AXXIOM ELEVATOR." End card: Axxiom logo, white background, playful typography. Soft magical lighting, symmetrical camera work.
+    </div>
+    <div class="specs">
+      <span class="spec-chip duration">⏱ 28 sec</span>
+      <span class="spec-chip hook">🪝 Surreal stop-scroll</span>
+      <span class="spec-chip format">📱 Reels / TikTok</span>
+      <span class="spec-chip">Wes Anderson aesthetic</span>
+    </div>
+  </div>
+
+  <!-- 05 -->
+  <div class="prompt-card" data-type="humor">
+    <div class="card-num">05</div>
+    <div class="card-top">
+      <div class="card-index">05</div>
+      <div class="card-title-wrap">
+        <div class="card-vibe">Humor · Villain Origin Story</div>
+        <div class="card-title">"How Bad Elevator Service Creates Monsters"</div>
+      </div>
+    </div>
+    <div class="concept-strip">💡 Concept: A perfectly pleasant, normal person slowly transforms into a villain every time their elevator breaks down. Axxiom is the hero that saves them — and the world.</div>
+    <div class="prompt-label">Higgsfield Prompt</div>
+    <div class="prompt-box" onclick="copyPrompt(this)">
+      <button class="copy-btn" onclick="event.stopPropagation(); copyPrompt(this.parentElement)">COPY</button>Vertical 9:16 cinematic comedy reel styled like a superhero villain origin story — dark humor, dramatic music stings, moody lighting. Scene 1 (0–5s): Bright morning. A cheerful, well-dressed building manager happily hums, walks to elevator, presses button. Elevator makes grinding noise and does nothing. Manager blinks. Text overlay: "Day 1." Upbeat music suddenly cuts to ominous cello note. Scene 2 (5–16s): Rapid montage showing transformation. Text overlays count days: "Day 3" — Manager slightly disheveled, eye twitching. "Day 7" — Manager talks to elevator like it's a person, pleading. "Day 14" — Manager wearing a cape made of out-of-service signs, a crown of caution tape. Dramatic villain lighting, thunderstorm sound effects, operatic music. Tenants and coworkers backing away slowly. Scene 3 (16–22s): Final form — manager stands atop a staircase dramatically, windblown hair, pointing down at lobby with theatrical monologue expression, cityscape behind, lightning in background. Text overlay: "Nobody should have to become this." Scene 4 (22–28s): Axxiom technician walks in calmly like a superhero. One phone call. Fixed. Manager slowly removes the caution tape crown, looks at their reflection, transforms back to normal. Exhales. Smiles. Text overlay: "AXXIOM ELEVATOR. We save buildings. And the people in them." End card: Axxiom logo. Dark-to-bright color grade.
+    </div>
+    <div class="specs">
+      <span class="spec-chip duration">⏱ 28 sec</span>
+      <span class="spec-chip hook">🪝 Character arc comedy</span>
+      <span class="spec-chip format">📱 TikTok / Reels</span>
+      <span class="spec-chip">Origin story format</span>
+    </div>
+  </div>
+
+  <!-- 06 -->
+  <div class="prompt-card" data-type="story">
+    <div class="card-num">06</div>
+    <div class="card-top">
+      <div class="card-index">06</div>
+      <div class="card-title-wrap">
+        <div class="card-vibe">Story · Emotional Pull</div>
+        <div class="card-title">"The Hospital That Couldn't Afford to Stop"</div>
+      </div>
+    </div>
+    <div class="concept-strip">💡 Concept: A quietly powerful, zero-comedy reel showing the invisible heroes of a hospital. The elevator silently serves patients, nurses, and families 24/7 — Axxiom keeps it that way.</div>
+    <div class="prompt-label">Higgsfield Prompt</div>
+    <div class="prompt-box" onclick="copyPrompt(this)">
+      <button class="copy-btn" onclick="event.stopPropagation(); copyPrompt(this.parentElement)">COPY</button>Vertical 9:16 cinematic documentary-style commercial, soft desaturated teal and white hospital color palette, gentle ambient sound design, no dialogue. Slow intentional pacing, emotional score — quiet piano. Scene 1 (0–7s): Pre-dawn. Empty hospital corridor. An elevator door opens slowly. Soft fluorescent light. A nurse wheels a patient in a wheelchair through the doors in slow motion, giving a small reassuring squeeze on the patient's shoulder. Camera lingers on the elevator button glowing as doors close. Text overlay: "3:00 AM. Floor 7. ICU." Scene 2 (7–15s): Time-lapse from inside the elevator — doors open and close in rapid succession. Glimpses: a running doctor, a crying family member, a gurney being rushed in. The elevator never stops. Text overlay: "It runs 400 times a day. It cannot stop." Scene 3 (15–22s): 2 AM. An Axxiom technician in clean uniform works quietly, alone, on the elevator panel. Building asleep around them. They work carefully, attentively. Finish. Test the door. Smooth. Done. They leave quietly. No fanfare. Scene 4 (22–30s): Morning. Same nurse. Same patient. Elevator opens right on time. Nurse nods slightly — something is just… right. Camera pulls back slowly down the corridor. Text overlay: "AXXIOM ELEVATOR. Because some things can't wait." End card: Axxiom logo. Soft glow, white background. Minimal. Powerful.
+    </div>
+    <div class="specs">
+      <span class="spec-chip duration">⏱ 30 sec</span>
+      <span class="spec-chip hook">🪝 Emotional resonance</span>
+      <span class="spec-chip format">📱 LinkedIn / Reels</span>
+      <span class="spec-chip">No dialogue</span>
+    </div>
+  </div>
+
+  <!-- 07 -->
+  <div class="prompt-card" data-type="visual">
+    <div class="card-num">07</div>
+    <div class="card-top">
+      <div class="card-index">07</div>
+      <div class="card-title-wrap">
+        <div class="card-vibe">Visual Stunt · Absurdist</div>
+        <div class="card-title">"The Elevator Inspection That Went Wrong Everywhere Else"</div>
+      </div>
+    </div>
+    <div class="concept-strip">💡 Concept: A rapid-fire parody showing other "elevator companies" failing spectacularly at inspections — cut against the calm, precise professionalism of Axxiom.</div>
+    <div class="prompt-label">Higgsfield Prompt</div>
+    <div class="prompt-box" onclick="copyPrompt(this)">
+      <button class="copy-btn" onclick="event.stopPropagation(); copyPrompt(this.parentElement)">COPY</button>Vertical 9:16 split-narrative comedy reel with two visual worlds — chaotic LEFT side (washed out, shaky cam, slapstick) and clean RIGHT side (sharp, stable, professional). Edited in rapid alternating cuts. Comedic sound effects for left side, calm confident music for right side. Scene 1 (0–5s): Split screen — LEFT: A fake "other company" technician arrives in a beat-up van wearing mismatched uniform, trips getting out, drops clipboard, looks at the elevator panel and tilts head in confusion. RIGHT: Axxiom technician steps out of clean van, clean uniform, clipboard in hand, walks with calm purpose. Text overlay: LEFT "Other guys." RIGHT "Axxiom." Scene 2 (5–15s): Fast-cut montage. LEFT side: technician hits elevator button with a shoe, reads manual upside down, wraps elevator cables with duct tape, uses a pizza box as a diagnostics tool, sparks fly everywhere, fire extinguisher goes off. RIGHT: Axxiom technician calmly runs diagnostics, checks panel, makes precise adjustments, door opens smoothly. Scene 3 (15–22s): LEFT: Building manager chasing technician down hallway with invoice flapping. RIGHT: Building manager shakes Axxiom technician's hand with genuine gratitude, gives thumbs up at working elevator. Scene 4 (22–28s): Both screens merge into one clean frame. Text overlay: "Your elevator deserves better. AXXIOM ELEVATOR." End card: Logo on dark background. Sharp, confident typography.
+    </div>
+    <div class="specs">
+      <span class="spec-chip duration">⏱ 28 sec</span>
+      <span class="spec-chip hook">🪝 Comparison comedy</span>
+      <span class="spec-chip format">📱 TikTok / Reels</span>
+      <span class="spec-chip">Split-screen</span>
+    </div>
+  </div>
+
+  <!-- 08 -->
+  <div class="prompt-card" data-type="story">
+    <div class="card-num">08</div>
+    <div class="card-top">
+      <div class="card-index">08</div>
+      <div class="card-title-wrap">
+        <div class="card-vibe">Story · Warm Brand</div>
+        <div class="card-title">"What Moves a City"</div>
+      </div>
+    </div>
+    <div class="concept-strip">💡 Concept: A sweeping brand reel that reframes elevator service as something larger — the invisible infrastructure that keeps cities, people, and lives moving forward.</div>
+    <div class="prompt-label">Higgsfield Prompt</div>
+    <div class="prompt-box" onclick="copyPrompt(this)">
+      <button class="copy-btn" onclick="event.stopPropagation(); copyPrompt(this.parentElement)">COPY</button>Vertical 9:16 premium brand commercial reel — cinematic, aspirational, sweeping. Shot like an Apple or Google brand film. Warm color grade, city textures, human moments. Rising orchestral score builds to a quiet, confident resolution. Scene 1 (0–6s): Aerial drone shot slowly descending into a city skyline at golden hour. Camera passes windows of an office tower — people working, meeting, laughing. Music builds. Text overlay dissolves in: "What moves a city?" Scene 2 (6–18s): Intimate montage of elevator moments — diverse, human, real. A teenage athlete with a sports bag heading to practice. An elderly woman carefully stepping into the elevator with her groceries. Two colleagues laughing mid-conversation as doors close. A chef carrying food from kitchen to event floor. A scientist in a lab coat checking notes. Each shot beautifully lit, slow-motion, emotional. No dialogue. Text overlays: "People." "Purpose." "Progress." Scene 3 (18–24s): Intercut with Axxiom technician doing precision maintenance work — gloved hands, careful attention, close-up of smooth door mechanism. Wide shot of technician alone in the elevator shaft, working by headlamp, small figure in a tall building. Text overlay: "We keep it moving." Scene 4 (24–30s): Doors open one final time — warm light, city visible through lobby windows. A child presses the button. Doors close. DING. Text overlay: "AXXIOM ELEVATOR. Reliability In Motion.™" End card: Logo on warm dark background. Minimal. Confident.
+    </div>
+    <div class="specs">
+      <span class="spec-chip duration">⏱ 30 sec</span>
+      <span class="spec-chip hook">🪝 Brand emotion</span>
+      <span class="spec-chip format">📱 LinkedIn / YouTube</span>
+      <span class="spec-chip">Apple-style narrative</span>
+    </div>
+  </div>
+
+  <!-- 09 -->
+  <div class="prompt-card" data-type="humor">
+    <div class="card-num">09</div>
+    <div class="card-top">
+      <div class="card-index">09</div>
+      <div class="card-title-wrap">
+        <div class="card-vibe">Humor · Relatable Rage</div>
+        <div class="card-title">"The Out of Service Sign Has Been There For 3 Weeks"</div>
+      </div>
+    </div>
+    <div class="concept-strip">💡 Concept: The "OUT OF SERVICE" sign becomes a running character — people start relating to it, befriending it, building a shrine around it — as days tick by with no repair. Until Axxiom shows up.</div>
+    <div class="prompt-label">Higgsfield Prompt</div>
+    <div class="prompt-box" onclick="copyPrompt(this)">
+      <button class="copy-btn" onclick="event.stopPropagation(); copyPrompt(this.parentElement)">COPY</button>Vertical 9:16 comedy reel styled like a mockumentary or reality TV show, handheld camera, talking-head interview cuts, deadpan humor. Warm orange building lobby colors. Satirical tone. Scene 1 (0–5s): Close-up of a yellow "OUT OF SERVICE" sign taped crookedly to elevator doors. A tiny spider has built a web on it. Text overlay: "Day 1." Upbeat quirky music. Cut to: Interview shot of frustrated building manager staring into camera: "They said someone was coming." Scene 2 (5–15s): Time-lapse calendar days ticking by — sign is still there. Tenants begin reacting: "Day 5" — someone has drawn googly eyes on the sign. "Day 10" — sign now has a birthday hat on it, people are singing to it. "Day 15" — someone has built a small altar with candles and fruit around the elevator sign. Fast-cut montage of increasingly absurd tributes. Scene 3 (15–22s): Tenant interview, deadpan: "I've named it Gerald. Gerald's been there for my hardest moments." Another tenant: "I brought Gerald a coffee this morning. He didn't drink it. That was upsetting." Scene 4 (22–28s): Phone rings. Axxiom answers. 4-hour time-lapse. Sign gone. Elevator open. Tenant walks to elevator — pauses — looks back at empty spot where Gerald stood — single moment of grief — then steps inside. Text overlay: "AXXIOM ELEVATOR. We remove Geralds." End card: Axxiom logo. Cheeky footnote: "Get a free consultation before it comes to this."
+    </div>
+    <div class="specs">
+      <span class="spec-chip duration">⏱ 28 sec</span>
+      <span class="spec-chip hook">🪝 Meme-able absurdism</span>
+      <span class="spec-chip format">📱 TikTok / Reels</span>
+      <span class="spec-chip">Interview cuts</span>
+    </div>
+  </div>
+
+  <!-- 10 -->
+  <div class="prompt-card" data-type="visual">
+    <div class="card-num">10</div>
+    <div class="card-top">
+      <div class="card-index">10</div>
+      <div class="card-title-wrap">
+        <div class="card-vibe">Visual Stunt · Recruitment + B2B</div>
+        <div class="card-title">"7 Cities. One Standard."</div>
+      </div>
+    </div>
+    <div class="concept-strip">💡 Concept: A kinetic, high-energy brand reel that introduces the 7-brand Axxiom network — each brand gets its hero moment, unified by one standard and one identity. Think: regional pride meets national power.</div>
+    <div class="prompt-label">Higgsfield Prompt</div>
+    <div class="prompt-box" onclick="copyPrompt(this)">
+      <button class="copy-btn" onclick="event.stopPropagation(); copyPrompt(this.parentElement)">COPY</button>Vertical 9:16 high-energy brand anthem reel, kinetic typography, rapid-cut city montages, electric color grade — deep navy, white, gold. Music: building cinematic hip-hop or dramatic electronic score with a driving beat. Feels like a league or franchise introduction. Scene 1 (0–4s): Black screen. Single white text slams onto screen letter by letter: "7 CITIES." Beat drop. Camera flashes across 7 rapid aerial city shots — Texas skyline, Arizona desert towers, Pacific coast buildings, Mid-Atlantic row buildings — each tagged with glowing city name text in lower third. Scene 2 (4–16s): Brand showcase sequence. Each brand gets a 1.5-second hero shot: dramatic technician silhouette against city backdrop, brand name slamming into frame in bold typography, then whisking off. "AmeriTex Elevator — TEXAS." — "Arizona Elevator — PHOENIX." — "Liftech Elevator — WEST COAST." — "Motion Elevator." — "Quality Elevator — MID-ATLANTIC." Each cut timed to music beat. Kinetic motion, lens flares, flag-waving energy. Scene 3 (16–22s): Pull back shot — all 7 city skylines appear simultaneously in a mosaic frame, each with glowing elevator cables running vertically through the buildings like city veins. Camera pushes in slowly. Text overlay: "Local experts. National standard." Scene 4 (22–30s): Single Axxiom technician in foreground, back to camera, looking out over a glowing city at night. Axxiom logo appears with sweeping golden light. Text: "AXXIOM ELEVATOR. Reliability In Motion.™ — Expanding nationwide." End card. Dark background, gold logo. Powerful, confident close.
+    </div>
+    <div class="specs">
+      <span class="spec-chip duration">⏱ 30 sec</span>
+      <span class="spec-chip hook">🪝 Brand power / recruitment</span>
+      <span class="spec-chip format">📱 LinkedIn / YouTube / Reels</span>
+      <span class="spec-chip">Kinetic typography</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">AXXIOM ELEVATOR · HIGGSFIELD PROMPTS</div>
+  <div class="footer-note">10 prompts · Paste directly into Higgsfield AI · axxiomelevator.com</div>
+</footer>
+
+<script>
+  function copyPrompt(el) {
+    const text = el.innerText.replace('COPY', '').replace('COPIED', '').trim();
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = el.querySelector('.copy-btn') || el;
+      if (btn.classList.contains('copy-btn')) {
+        btn.textContent = 'COPIED';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'COPY'; btn.classList.remove('copied'); }, 2000);
+      }
+    });
+  }
+
+  function filterCards(type, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.prompt-card').forEach(card => {
+      if (type === 'all' || card.dataset.type === type) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>
+</body>
+</html>

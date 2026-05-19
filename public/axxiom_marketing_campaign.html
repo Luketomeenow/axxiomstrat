@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Axxiom Elevator — Marketing Campaign Strategy</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --dark: #111217;
+    --panel: #16181f;
+    --border: rgba(255,255,255,0.07);
+    --white: #f5f4f0;
+    --cream: #e8e4d9;
+    --gold: #c9a84c;
+    --gold-dim: rgba(201,168,76,0.15);
+    --blue: #2563eb;
+    --blue-dim: rgba(37,99,235,0.12);
+    --red: #dc2626;
+    --green: #16a34a;
+    --muted: #6b7280;
+    --accent: #c9a84c;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    overflow: hidden;
+    padding: 80px 60px 70px;
+    border-bottom: 1px solid var(--border);
+    background: var(--dark);
+  }
+
+  header::before {
+    content:'';
+    position:absolute;
+    top:-120px; right:-80px;
+    width:500px; height:500px;
+    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+    pointer-events:none;
+  }
+
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 8vw, 96px);
+    letter-spacing: 0.02em;
+    line-height: 0.92;
+    color: var(--white);
+    margin-bottom: 28px;
+  }
+
+  header h1 span {
+    color: var(--gold);
+  }
+
+  .header-sub {
+    font-size: 16px;
+    color: var(--cream);
+    opacity: 0.7;
+    max-width: 600px;
+    line-height: 1.7;
+    margin-bottom: 36px;
+  }
+
+  .badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 2px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    background: var(--gold-dim);
+  }
+
+  /* NAV TABS */
+  .tabs-wrap {
+    background: var(--dark);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .tabs {
+    display: flex;
+    overflow-x: auto;
+    gap: 0;
+    padding: 0 60px;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display:none; }
+
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 18px 24px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab-btn:hover { color: var(--cream); }
+  .tab-btn.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  /* SECTIONS */
+  .section { display: none; padding: 60px; }
+  .section.active { display: block; }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 48px;
+    max-width: 680px;
+    line-height: 1.7;
+  }
+
+  /* GRID UTILITIES */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+  /* CARD */
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: rgba(201,168,76,0.3); }
+
+  .card-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .card h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  .card p {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* HIGHLIGHT CARD */
+  .card-gold {
+    background: linear-gradient(135deg, rgba(201,168,76,0.12), rgba(201,168,76,0.04));
+    border-color: rgba(201,168,76,0.35);
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 48px 0;
+  }
+
+  /* STAT ROW */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .stat-cell {
+    background: var(--panel);
+    padding: 28px 24px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 44px;
+    color: var(--gold);
+    letter-spacing: 0.03em;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* BRAND TAGS */
+  .brand-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .brand-pill {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 20px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--panel);
+    transition: all 0.2s;
+  }
+
+  .brand-pill:hover {
+    border-color: rgba(201,168,76,0.4);
+    transform: translateY(-1px);
+  }
+
+  .brand-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .brand-region {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+  }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before {
+    content:'';
+    position:absolute;
+    left: 0; top: 8px; bottom: 8px;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .tl-item {
+    position: relative;
+    padding: 0 0 36px 28px;
+  }
+
+  .tl-item::before {
+    content:'';
+    position:absolute;
+    left: -4px; top: 7px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid var(--black);
+  }
+
+  .tl-phase {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .tl-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .tl-body {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* CHANNEL TABLE */
+  .ch-table { width: 100%; border-collapse: collapse; }
+  .ch-table th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+  }
+  .ch-table td {
+    padding: 14px 16px;
+    font-size: 13.5px;
+    color: var(--cream);
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .ch-table tr:last-child td { border-bottom: none; }
+  .ch-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .priority-high { color: var(--red); font-weight: 600; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.08em; }
+  .priority-med { color: var(--gold); font-weight: 600; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.08em; }
+  .priority-low { color: var(--green); font-weight: 600; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:0.08em; }
+
+  /* COPY BLOCKS */
+  .copy-block {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 4px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+
+  .copy-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .copy-text {
+    font-size: 15px;
+    color: var(--white);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  .copy-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  /* ICP TABLE */
+  .icp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .icp-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+  }
+
+  .icp-card h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .icp-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 6px 0;
+    font-size: 13px;
+  }
+  .icp-key { color: var(--muted); flex-shrink: 0; min-width: 90px; }
+  .icp-val { color: var(--cream); text-align: right; line-height: 1.4; }
+
+  /* BUDGET BAR */
+  .budget-item { margin-bottom: 18px; }
+  .budget-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .budget-name { font-size: 13.5px; color: var(--cream); }
+  .budget-pct { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--gold); }
+  .budget-bar-wrap { background: rgba(255,255,255,0.06); border-radius: 2px; height: 6px; }
+  .budget-bar { height: 6px; border-radius: 2px; background: var(--gold); transition: width 0.6s ease; }
+
+  /* KPI TABLE */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .kpi-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 22px;
+  }
+
+  .kpi-card .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--gold);
+    letter-spacing: 0.03em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .kpi-card .label {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+
+  .kpi-card .target {
+    font-size: 12px;
+    color: var(--cream);
+    opacity: 0.6;
+  }
+
+  /* SWOT */
+  .swot-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .swot-cell {
+    background: var(--panel);
+    padding: 28px;
+  }
+
+  .swot-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+
+  .swot-cell:nth-child(1) .swot-label { color: #22c55e; }
+  .swot-cell:nth-child(2) .swot-label { color: #ef4444; }
+  .swot-cell:nth-child(3) .swot-label { color: #3b82f6; }
+  .swot-cell:nth-child(4) .swot-label { color: #f59e0b; }
+
+  .swot-list { list-style: none; }
+  .swot-list li {
+    font-size: 13.5px;
+    color: var(--muted);
+    padding: 5px 0;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .swot-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--border);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 40px 60px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.06em;
+    color: var(--gold);
+  }
+
+  .footer-note {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    header, .section, .tabs { padding-left: 24px; padding-right: 24px; }
+    .grid-2, .grid-3, .grid-4, .icp-grid, .swot-grid, .kpi-grid { grid-template-columns: 1fr; }
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    footer { flex-direction: column; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-eyebrow">Marketing Campaign Strategy · 2025–2026</div>
+  <h1>AXXIOM<br><span>ELEVATOR</span><br>CAMPAIGN</h1>
+  <p class="header-sub">A full-funnel marketing system for a 7-brand elevator service network — built to drive qualified B2B leads, deepen brand authority, and accelerate multi-market expansion across the U.S.</p>
+  <div class="badge-row">
+    <div class="badge">7 Regional Brands</div>
+    <div class="badge">B2B Lead Gen</div>
+    <div class="badge">National + Local</div>
+    <div class="badge">Full-Funnel</div>
+    <div class="badge">Reliability In Motion™</div>
+  </div>
+</header>
+
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+    <button class="tab-btn" onclick="showTab('audience')">Audience & SWOT</button>
+    <button class="tab-btn" onclick="showTab('strategy')">Campaign Strategy</button>
+    <button class="tab-btn" onclick="showTab('channels')">Channels & Tactics</button>
+    <button class="tab-btn" onclick="showTab('copy')">Copy & Messaging</button>
+    <button class="tab-btn" onclick="showTab('roadmap')">90-Day Roadmap</button>
+    <button class="tab-btn" onclick="showTab('budget')">Budget & KPIs</button>
+  </div>
+</div>
+
+<!-- ═══ OVERVIEW ═══ -->
+<div id="overview" class="section active">
+  <div class="section-title">Campaign Overview</div>
+  <p class="section-desc">Axxiom Elevator operates as a holding company for 7 regionally trusted elevator service brands. The campaign system must serve two layers simultaneously: corporate brand authority for Axxiom, and hyper-local lead generation for each subsidiary.</p>
+
+  <div class="stat-row">
+    <div class="stat-cell">
+      <div class="stat-num">7</div>
+      <div class="stat-label">Regional Brands</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">9+</div>
+      <div class="stat-label">Vertical Markets Served</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">5</div>
+      <div class="stat-label">Core Service Lines</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Emergency Response</div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:28px; margin-bottom: 20px;">The 7 Brands</div>
+  <div class="brand-grid">
+    <div class="brand-pill">
+      <div class="brand-name">AmeriTex Elevator</div>
+      <div class="brand-region">Texas · California</div>
+    </div>
+    <div class="brand-pill">
+      <div class="brand-name">Arizona Elevator Solutions</div>
+      <div class="brand-region">Arizona</div>
+    </div>
+    <div class="brand-pill">
+      <div class="brand-name">Liftech Elevator</div>
+      <div class="brand-region">Western U.S.</div>
+    </div>
+    <div class="brand-pill">
+      <div class="brand-name">Motion Elevator Services</div>
+      <div class="brand-region">Multi-Market</div>
+    </div>
+    <div class="brand-pill">
+      <div class="brand-name">Quality Elevator Company</div>
+      <div class="brand-region">Mid-Atlantic</div>
+    </div>
+    <div class="brand-pill">
+      <div class="brand-name">Brand 6</div>
+      <div class="brand-region">TBD Region</div>
+    </div>
+    <div class="brand-pill">
+      <div class="brand-name">Brand 7</div>
+      <div class="brand-region">TBD Region</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title" style="font-size:28px; margin-bottom: 16px;">Campaign North Star</div>
+  <div class="grid-2" style="margin-bottom:40px;">
+    <div class="card card-gold">
+      <div class="card-label">Corporate Goal</div>
+      <h3>Position Axxiom as the #1 trusted elevator network in every market it enters</h3>
+      <p>Establish Axxiom's reputation as the premium alternative to Otis, Schindler, and TK Elevator — with local expertise and national muscle.</p>
+    </div>
+    <div class="card card-gold">
+      <div class="card-label">Brand Goal</div>
+      <h3>Make each regional brand the obvious local choice for property decision-makers</h3>
+      <p>Drive qualified consultation requests at the local brand level through SEO, paid search, and B2B relationship marketing.</p>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-label">Services to Promote</div>
+      <h3>Maintenance + Repair (Lead)</h3>
+      <p>Recurring contracts are the revenue backbone. Lead with maintenance as the entry-point offer, repair as the urgency driver.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Services to Promote</div>
+      <h3>Modernization (Upsell)</h3>
+      <p>Highest ticket value. Position as a proactive investment, not a reactive cost — target aging building stock.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Services to Promote</div>
+      <h3>New Installation (Enterprise)</h3>
+      <p>Long sales cycle, high value. Requires account-based outreach and developer/GC relationships.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ AUDIENCE & SWOT ═══ -->
+<div id="audience" class="section">
+  <div class="section-title">Audience & SWOT</div>
+  <p class="section-desc">Axxiom's buyers are B2B decision-makers who prioritize reliability, compliance, and vendor accountability over price. Understanding their pain points is the foundation of every campaign message.</p>
+
+  <div class="section-title" style="font-size:26px; margin-bottom: 20px;">Ideal Customer Profiles</div>
+  <div class="icp-grid" style="margin-bottom:48px;">
+    <div class="icp-card">
+      <h4>🏢 Property Manager / Facility Director</h4>
+      <div class="icp-row"><span class="icp-key">Role</span><span class="icp-val">Manages 1–20 buildings; elevator is operationally critical</span></div>
+      <div class="icp-row"><span class="icp-key">Pain Point</span><span class="icp-val">Downtime complaints from tenants, compliance risk, unreliable vendor</span></div>
+      <div class="icp-row"><span class="icp-key">Channels</span><span class="icp-val">LinkedIn, Google Search, BOMA events, email</span></div>
+      <div class="icp-row"><span class="icp-key">Message Hook</span><span class="icp-val">"Stop managing elevator complaints. Start managing outcomes."</span></div>
+      <div class="icp-row"><span class="icp-key">Priority</span><span class="icp-val" style="color:var(--gold);">★ Primary</span></div>
+    </div>
+    <div class="icp-card">
+      <h4>🏥 Healthcare / Hospital Facilities VP</h4>
+      <div class="icp-row"><span class="icp-key">Role</span><span class="icp-val">Oversees life-safety systems in regulated environments</span></div>
+      <div class="icp-row"><span class="icp-key">Pain Point</span><span class="icp-val">Code compliance, patient safety risk, non-negotiable uptime</span></div>
+      <div class="icp-row"><span class="icp-key">Channels</span><span class="icp-val">LinkedIn, Healthcare trade pubs, referrals</span></div>
+      <div class="icp-row"><span class="icp-key">Message Hook</span><span class="icp-val">"Every floor counts when lives are on the line."</span></div>
+      <div class="icp-row"><span class="icp-key">Priority</span><span class="icp-val" style="color:var(--gold);">★ Primary</span></div>
+    </div>
+    <div class="icp-card">
+      <h4>🏗 Real Estate Developer / GC</h4>
+      <div class="icp-row"><span class="icp-key">Role</span><span class="icp-val">Sources elevator vendors for new construction or major reno</span></div>
+      <div class="icp-row"><span class="icp-key">Pain Point</span><span class="icp-val">Timeline reliability, warranty, permitting complexity</span></div>
+      <div class="icp-row"><span class="icp-key">Channels</span><span class="icp-val">Trade shows, direct outreach, referral networks</span></div>
+      <div class="icp-row"><span class="icp-key">Message Hook</span><span class="icp-val">"From permit to first ride — one team, zero surprises."</span></div>
+      <div class="icp-row"><span class="icp-key">Priority</span><span class="icp-val" style="color:var(--muted);">★ Secondary</span></div>
+    </div>
+    <div class="icp-card">
+      <h4>🏨 Hotel GM / Asset Manager</h4>
+      <div class="icp-row"><span class="icp-key">Role</span><span class="icp-val">Guest experience is revenue-critical; elevator = brand reputation</span></div>
+      <div class="icp-row"><span class="icp-key">Pain Point</span><span class="icp-val">Guest complaints, negative reviews, outdated equipment</span></div>
+      <div class="icp-row"><span class="icp-key">Channels</span><span class="icp-val">LinkedIn, hospitality trade media, AHLA events</span></div>
+      <div class="icp-row"><span class="icp-key">Message Hook</span><span class="icp-val">"Your guests notice everything — including the elevator."</span></div>
+      <div class="icp-row"><span class="icp-key">Priority</span><span class="icp-val" style="color:var(--muted);">★ Secondary</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:26px; margin-bottom: 20px;">SWOT Analysis</div>
+  <div class="swot-grid">
+    <div class="swot-cell">
+      <div class="swot-label">STRENGTHS</div>
+      <ul class="swot-list">
+        <li>7 trusted regional brands with local reputations</li>
+        <li>National network = enterprise-level scale</li>
+        <li>Quality, Delivery, Integrity, Responsiveness framework is highly differentiating</li>
+        <li>24/7 emergency response</li>
+        <li>Full life-cycle coverage (5 service lines)</li>
+        <li>Expanding footprint = growth story</li>
+      </ul>
+    </div>
+    <div class="swot-cell">
+      <div class="swot-label">WEAKNESSES</div>
+      <ul class="swot-list">
+        <li>Holding company structure may dilute brand recognition</li>
+        <li>Limited digital marketing presence vs. OEM giants</li>
+        <li>New brand; national trust not yet established</li>
+        <li>7 brands require coordinated but distinct campaigns</li>
+        <li>LinkedIn presence underdeveloped</li>
+      </ul>
+    </div>
+    <div class="swot-cell">
+      <div class="swot-label">OPPORTUNITIES</div>
+      <ul class="swot-list">
+        <li>Massive aging elevator stock = modernization demand</li>
+        <li>Property managers frustrated with big OEM service quality</li>
+        <li>Healthcare, education, multifamily verticals underserved</li>
+        <li>Content marketing gap — very few elevator companies publish useful content</li>
+        <li>ADA compliance deadlines driving urgency</li>
+        <li>Partner acquisition pipeline as growth marketing tool</li>
+      </ul>
+    </div>
+    <div class="swot-cell">
+      <div class="swot-label">THREATS</div>
+      <ul class="swot-list">
+        <li>Otis, Schindler, TK Elevator dominate brand recall</li>
+        <li>Switching costs create inertia in existing contracts</li>
+        <li>Labor shortages affecting technician recruitment</li>
+        <li>Commoditization risk if brand story isn't differentiated</li>
+        <li>Regional economic downturns affecting construction spend</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CAMPAIGN STRATEGY ═══ -->
+<div id="strategy" class="section">
+  <div class="section-title">Campaign Strategy</div>
+  <p class="section-desc">The campaign operates on a two-tier architecture: Axxiom corporate builds category authority and trust, while each regional brand drives localized lead generation. Both tiers amplify each other.</p>
+
+  <div class="grid-2" style="margin-bottom:40px;">
+    <div class="card card-gold">
+      <div class="card-label">Tier 1 — Corporate (Axxiom)</div>
+      <h3>Category Authority + Network Story</h3>
+      <p>Build Axxiom's reputation as the most trusted elevator network in the U.S. Focus on thought leadership, network expansion PR, partner acquisition, and LinkedIn authority. Audience: enterprise property groups, investors, potential partner companies.</p>
+    </div>
+    <div class="card card-gold">
+      <div class="card-label">Tier 2 — Regional Brands</div>
+      <h3>Local Lead Generation + Vertical Marketing</h3>
+      <p>Each brand runs geo-targeted Google PPC, local SEO, and vertical-specific outreach. Shared messaging framework, locally customized execution. Audience: local facility managers, property owners, building operators.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title" style="font-size:26px; margin-bottom:20px;">Core Campaign Themes</div>
+  <div class="grid-3" style="margin-bottom:48px;">
+    <div class="card">
+      <div class="card-label">Theme 1</div>
+      <h3>"Reliability In Motion"</h3>
+      <p>Everything reinforces Axxiom's core positioning. Every elevator runs. Every call gets answered. Every technician shows up. Reliability is the product.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Theme 2</div>
+      <h3>"Local Expertise, National Strength"</h3>
+      <p>The 7-brand network is a feature, not a complexity. You get a technician who knows your building codes AND the backing of a national organization.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Theme 3</div>
+      <h3>"Your Elevator Is The Last Thing You Should Think About"</h3>
+      <p>Reframe the value prop from "elevator service" to "peace of mind." Target the mental load of property managers and facility directors.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Theme 4 — Urgency</div>
+      <h3>"Every Hour of Downtime Has a Price"</h3>
+      <p>Quantify the cost of an out-of-service elevator — tenant dissatisfaction, ADA violations, lost business. Make inaction feel expensive.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Theme 5 — Trust</div>
+      <h3>"We Only Recommend What's Right for You"</h3>
+      <p>Integrity as a brand pillar. Counter the "overselling" reputation of large OEMs. Let technicians be the heroes, not salespeople.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Theme 6 — Growth</div>
+      <h3>"Expanding Into Your Community"</h3>
+      <p>Turn network expansion into a PR story. New market entries are news. Use this to build awareness in pre-launch markets before the brand arrives.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title" style="font-size:26px; margin-bottom:20px;">Vertical Campaign Angles</div>
+  <table class="ch-table" style="margin-bottom:0;">
+    <thead>
+      <tr>
+        <th>Vertical</th>
+        <th>Core Fear / Pain</th>
+        <th>Lead Message</th>
+        <th>CTA</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Office Buildings</strong></td>
+        <td>Tenant complaints, lease renewals at risk</td>
+        <td>"Keep your tenants moving — and renewing."</td>
+        <td>Free Audit</td>
+      </tr>
+      <tr>
+        <td><strong>Healthcare</strong></td>
+        <td>Life safety, regulatory violations, patient impact</td>
+        <td>"When every floor matters, uptime is non-negotiable."</td>
+        <td>Schedule Inspection</td>
+      </tr>
+      <tr>
+        <td><strong>Hotels</strong></td>
+        <td>Guest experience, negative reviews</td>
+        <td>"One broken elevator. One-star review. Don't risk it."</td>
+        <td>Free Consultation</td>
+      </tr>
+      <tr>
+        <td><strong>Education</strong></td>
+        <td>ADA compliance, budget cycles, deferred maintenance</td>
+        <td>"ADA-compliant. Code-ready. Budget-friendly plans."</td>
+        <td>Request Assessment</td>
+      </tr>
+      <tr>
+        <td><strong>Residential / Multifamily</strong></td>
+        <td>Resident complaints, liability, aging equipment</td>
+        <td>"Your residents deserve better than a 'Sorry, it's out of service' sign."</td>
+        <td>Get a Quote</td>
+      </tr>
+      <tr>
+        <td><strong>Industrial / Freight</strong></td>
+        <td>Operations disruption, heavy-load compliance</td>
+        <td>"Industrial-grade reliability for freight that can't wait."</td>
+        <td>Get a Quote</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ CHANNELS ═══ -->
+<div id="channels" class="section">
+  <div class="section-title">Channels & Tactics</div>
+  <p class="section-desc">A multi-channel approach where each channel plays a distinct role in the funnel — from awareness to close. Priority is weighted toward highest-ROI channels for B2B elevator services.</p>
+
+  <table class="ch-table" style="margin-bottom:48px;">
+    <thead>
+      <tr>
+        <th>Channel</th>
+        <th>Priority</th>
+        <th>Goal</th>
+        <th>Tactics</th>
+        <th>Who Runs It</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Google Search (PPC)</strong></td>
+        <td><span class="priority-high">CRITICAL</span></td>
+        <td>Capture active buyers at bottom of funnel</td>
+        <td>Local + branded keywords per brand, emergency repair terms, competitor conquest</td>
+        <td>Each regional brand</td>
+      </tr>
+      <tr>
+        <td><strong>SEO / Local SEO</strong></td>
+        <td><span class="priority-high">CRITICAL</span></td>
+        <td>Organic traffic for high-intent queries</td>
+        <td>Google Business Profiles, local city pages, service + vertical landing pages, blog</td>
+        <td>Shared + local</td>
+      </tr>
+      <tr>
+        <td><strong>LinkedIn (B2B)</strong></td>
+        <td><span class="priority-high">HIGH</span></td>
+        <td>Authority building + warm lead pipeline</td>
+        <td>Executive thought leadership posts, company page content, LinkedIn Ads targeting facility managers</td>
+        <td>Axxiom corporate</td>
+      </tr>
+      <tr>
+        <td><strong>Email Marketing</strong></td>
+        <td><span class="priority-high">HIGH</span></td>
+        <td>Nurture leads, retain clients, upsell</td>
+        <td>Monthly safety/compliance newsletter, inspection reminders, modernization campaign sequences</td>
+        <td>Axxiom + brands</td>
+      </tr>
+      <tr>
+        <td><strong>Content / Blog</strong></td>
+        <td><span class="priority-med">MEDIUM</span></td>
+        <td>SEO fuel + credibility assets</td>
+        <td>Compliance guides, "when to modernize" calculators, safety checklists, case studies</td>
+        <td>Axxiom corporate</td>
+      </tr>
+      <tr>
+        <td><strong>Google Display / Retargeting</strong></td>
+        <td><span class="priority-med">MEDIUM</span></td>
+        <td>Stay top-of-mind with warm audiences</td>
+        <td>Retarget website visitors with urgency-driven creative; vertically segmented display</td>
+        <td>Each regional brand</td>
+      </tr>
+      <tr>
+        <td><strong>Referral / Partnership Program</strong></td>
+        <td><span class="priority-med">MEDIUM</span></td>
+        <td>Tap into trusted networks</td>
+        <td>Property management company partnerships, GC referral incentive program, BOMA/IREM engagement</td>
+        <td>Regional brands</td>
+      </tr>
+      <tr>
+        <td><strong>Trade Shows / Events</strong></td>
+        <td><span class="priority-low">SUPPORT</span></td>
+        <td>High-value relationship building</td>
+        <td>BOMA International, NAIOP, healthcare facilities events; branded booth + executive speaking</td>
+        <td>Axxiom + regional</td>
+      </tr>
+      <tr>
+        <td><strong>YouTube / Video</strong></td>
+        <td><span class="priority-low">SUPPORT</span></td>
+        <td>Trust + SEO amplification</td>
+        <td>Technician spotlights, "how to spot aging elevator signs," modernization before/after</td>
+        <td>Axxiom corporate</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-title" style="font-size:26px; margin-bottom:20px;">Google PPC Strategy — Deep Dive</div>
+  <div class="grid-3" style="margin-bottom:40px;">
+    <div class="card">
+      <div class="card-label">Campaign Type 1</div>
+      <h3>Emergency / Repair Capture</h3>
+      <p>Keywords: "elevator repair near me," "elevator out of service," "emergency elevator technician [city]." High CPC, high intent. Route to 24/7 call flow.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Campaign Type 2</div>
+      <h3>Maintenance Contract Acquisition</h3>
+      <p>Keywords: "elevator maintenance contract," "elevator service company [city]," "elevator inspection [state]." Lower urgency, higher LTV. Route to free consultation CTA.</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Campaign Type 3</div>
+      <h3>Competitor Conquest</h3>
+      <p>Keywords: "[Otis/Schindler/TK] alternative," "better elevator service company." Capture brand switchers. Ad copy: "Local expertise. National strength. Better service."</p>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:26px; margin-bottom:20px;">LinkedIn Strategy — Deep Dive</div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-label">Organic Content Pillars</div>
+      <h3>4-Pillar Content System</h3>
+      <p><strong style="color:var(--cream);">Pillar 1: Safety & Compliance</strong> — Regulatory updates, inspection guides, ADA deadlines<br><br>
+      <strong style="color:var(--cream);">Pillar 2: Industry Insight</strong> — Elevator technology trends, modernization ROI data<br><br>
+      <strong style="color:var(--cream);">Pillar 3: Network Growth Stories</strong> — New brand additions, market expansions, team spotlights<br><br>
+      <strong style="color:var(--cream);">Pillar 4: Customer Proof</strong> — Case studies, testimonials, before/after modernizations</p>
+    </div>
+    <div class="card">
+      <div class="card-label">LinkedIn Ads Targeting</div>
+      <h3>Precision B2B Targeting</h3>
+      <p><strong style="color:var(--cream);">Job Titles:</strong> Facility Manager, Property Manager, Director of Operations, VP Real Estate, Building Engineer<br><br>
+      <strong style="color:var(--cream);">Industries:</strong> Real Estate, Healthcare, Hospitality, Education, Government<br><br>
+      <strong style="color:var(--cream);">Company Size:</strong> 50–5,000 employees<br><br>
+      <strong style="color:var(--cream);">Ad Format:</strong> Sponsored content (thought leadership), Message Ads for warm retargeting, Lead Gen Forms</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COPY & MESSAGING ═══ -->
+<div id="copy" class="section">
+  <div class="section-title">Copy & Messaging</div>
+  <p class="section-desc">Ready-to-deploy messaging across every key channel and use case. These are strategic anchors — adapt tone and specifics for each regional brand.</p>
+
+  <div class="section-title" style="font-size:22px; margin-bottom:16px;">Core Brand Messages</div>
+
+  <div class="copy-block">
+    <div class="copy-type">Master Tagline</div>
+    <div class="copy-text">"Reliability In Motion™ — When your elevators have to work, we make sure they do."</div>
+    <div class="copy-note">Use across all materials. The trademark signals seriousness. Never abbreviate.</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-type">Elevator Pitch (30 sec)</div>
+    <div class="copy-text">"Axxiom powers a national network of elite local elevator service brands — so your building gets a technician who knows your codes, your equipment, and your market. No call centers. No national dispatch. Just experts in your city, backed by the resources of a national organization."</div>
+    <div class="copy-note">Use in executive conversations, trade show introductions, LinkedIn summary.</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-type">Website Hero Copy</div>
+    <div class="copy-text">"Your elevators should be the last thing on your mind. We'll make sure they are. Local technicians. National standards. Zero excuses."</div>
+    <div class="copy-note">Pair with a stat: "24/7 emergency response across [X] markets."</div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-title" style="font-size:22px; margin-bottom:16px;">Google Ad Copy</div>
+
+  <div class="copy-block">
+    <div class="copy-type">Search Ad — Emergency Repair</div>
+    <div class="copy-text">Headline 1: "Elevator Out? We're On It — 24/7"<br>Headline 2: "Local Technicians. Fast Response."<br>Headline 3: "[Brand Name] — Call Now"<br>Description: "Don't let downtime cost you. [Brand] dispatches certified local technicians fast. Emergency service available around the clock. Call now."</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-type">Search Ad — Maintenance Contract</div>
+    <div class="copy-text">Headline 1: "Elevator Maintenance You Can Count On"<br>Headline 2: "Free Consultation — No Commitment"<br>Headline 3: "Local Experts. National Standards."<br>Description: "Reduce downtime, extend equipment life, stay code compliant. [Brand] brings certified local technicians to your building — proactively. Get a free assessment today."</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-type">Search Ad — Modernization</div>
+    <div class="copy-text">Headline 1: "Time to Modernize Your Elevator?"<br>Headline 2: "Protect Your Investment — Free Assessment"<br>Headline 3: "Customized Plans. No Surprises."<br>Description: "Aging equipment costs more to maintain than to modernize. Get a customized modernization plan from [Brand] — proactive, transparent, and built around your timeline."</div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-title" style="font-size:22px; margin-bottom:16px;">LinkedIn Post Templates</div>
+
+  <div class="copy-block">
+    <div class="copy-type">LinkedIn — Thought Leadership (Safety)</div>
+    <div class="copy-text">"Most facility managers don't know their elevator is out of compliance until an inspector shows up.<br><br>The reality: elevator codes change every 3–5 years. Your equipment ages every day. And the cost of a violation isn't just the fine — it's the liability, the downtime, and the tenant relationships you lose.<br><br>At Axxiom, our technicians don't just service equipment. They stay ahead of every code update so you don't have to.<br><br>When was your last inspection audit? 👇"</div>
+    <div class="copy-note">Post from Axxiom company page + CEO/executive personal profile. Tag: #FacilityManagement #ElevatorSafety #PropertyManagement</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-type">LinkedIn — Network Expansion Announcement</div>
+    <div class="copy-text">"Big news: [Brand Name] is now part of the Axxiom network — bringing our Reliability In Motion™ standard to [Region].<br><br>[Brand] has served [region] for [X] years. Now, they have the national infrastructure, training resources, and technology of Axxiom behind them.<br><br>For property owners and managers in [region]: you now have both a local expert AND a national-grade service organization on your side.<br><br>Welcome to the family, [Brand Name]. 🤝"</div>
+    <div class="copy-note">Use each new brand acquisition as a content moment. Tag the regional brand page.</div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-title" style="font-size:22px; margin-bottom:16px;">Email Sequences</div>
+
+  <div class="copy-block">
+    <div class="copy-type">Email 1 of 3 — Lead Nurture (Consultation Request)</div>
+    <div class="copy-text">Subject: "Your free elevator assessment — here's what to expect"<br><br>"Hi [Name], thanks for reaching out to [Brand Name]. You're in good hands.<br><br>Before your consultation, we want you to know what we'll cover: your current maintenance status, any upcoming code requirements in [City], and whether your equipment is approaching the modernization window. No sales pitch — just an honest assessment.<br><br>We'll be in touch within [X] hours to confirm your appointment. In the meantime, here's a quick guide: [The 5 Signs Your Elevator Needs Modernization]"</div>
+    <div class="copy-note">Attach a branded PDF guide. Builds trust before the first sales call.</div>
+  </div>
+
+  <div class="copy-block">
+    <div class="copy-type">Email — Monthly Newsletter (Client Retention)</div>
+    <div class="copy-text">Subject: "This Month in Elevator Compliance — [Month] Update"<br><br>"Your [Month] Elevator Safety Brief from [Brand / Axxiom Network]:<br>→ [State] updated its elevator code for [specific change] — here's what it means for your building<br>→ 3 questions to ask before your next inspection<br>→ Spotlight: How [Property Type] in [City] reduced downtime by [X]% with proactive maintenance<br><br>As always, we're one call away. [CTA: Schedule a Check-In]"</div>
+    <div class="copy-note">Monthly cadence. Positions Axxiom as a compliance partner, not just a vendor.</div>
+  </div>
+</div>
+
+<!-- ═══ ROADMAP ═══ -->
+<div id="roadmap" class="section">
+  <div class="section-title">90-Day Launch Roadmap</div>
+  <p class="section-desc">A phased execution plan that builds foundation first, activates paid channels second, and optimizes for scale in the third phase. Designed for a central marketing team coordinating with regional brands.</p>
+
+  <div class="grid-2" style="margin-bottom:48px;">
+    <div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-phase">Days 1–15 · Foundation</div>
+          <div class="tl-title">Brand Audit & Asset Creation</div>
+          <div class="tl-body">Audit all 7 brand websites for SEO gaps, conversion rate issues, and messaging consistency. Create shared brand asset library (ad templates, email headers, social graphics). Build master keyword list per brand and market. Set up Google Analytics 4, Google Tag Manager, and call tracking across all brands.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-phase">Days 15–30 · Foundation</div>
+          <div class="tl-title">Local SEO Blitz</div>
+          <div class="tl-body">Fully optimize Google Business Profiles for all brands. Ensure consistent NAP (Name, Address, Phone) across all directories. Build 3–5 city-specific landing pages per brand. Set up review generation workflow — automated post-service email requesting Google review.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-phase">Days 30–45 · Activation</div>
+          <div class="tl-title">Paid Media Launch</div>
+          <div class="tl-body">Launch Google Search campaigns for each brand (Emergency, Maintenance, Modernization). Set up Google Display retargeting. Launch LinkedIn Ads (Axxiom corporate) targeting facility managers. Install conversion tracking — form fills, calls, chat initiations all tracked as conversions.</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-phase">Days 45–60 · Activation</div>
+          <div class="tl-title">Content + Email Engine</div>
+          <div class="tl-body">Publish first 4 blog posts across Axxiom and top regional brands. Launch email newsletter to existing client list. Deploy 3-email lead nurture sequence for new consultation requests. Begin weekly LinkedIn publishing cadence (Axxiom corporate page + exec profiles).</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-phase">Days 60–75 · Optimization</div>
+          <div class="tl-title">Data Review & Optimization Sprint</div>
+          <div class="tl-body">Review PPC performance: cut underperforming keywords, double down on top converters. A/B test ad headlines and landing page CTAs. Identify top-performing content and create 2 variations. Begin outreach to 3 property management companies per brand for referral partnership.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-phase">Days 75–90 · Scale</div>
+          <div class="tl-title">Scale & Systematize</div>
+          <div class="tl-body">Expand PPC to cover competitor conquest keywords. Launch vertical-specific campaigns (Healthcare, Hotel, Multifamily). Create playbook for new brand onboarding — so any future acquisition can be marketing-ready in 30 days. Set Q2 targets and present full campaign performance report.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title" style="font-size:26px; margin-bottom:20px;">Ongoing Monthly Rhythm</div>
+  <table class="ch-table">
+    <thead>
+      <tr><th>Week</th><th>Activity</th><th>Owner</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Week 1</td><td>PPC budget review + bid adjustments; publish 2 blog posts; LinkedIn posts (3x)</td><td>Marketing + Agency</td></tr>
+      <tr><td>Week 2</td><td>Send monthly email newsletter; review Google Business Profile reviews + respond to all; outreach to 2 referral partners</td><td>Marketing + Regional GMs</td></tr>
+      <tr><td>Week 3</td><td>Publish vertical spotlight content; LinkedIn posts (3x); update any new code compliance info on site</td><td>Marketing</td></tr>
+      <tr><td>Week 4</td><td>Full monthly dashboard review; report leads per brand; adjust budgets for next month; plan content calendar</td><td>Marketing Lead</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ BUDGET & KPIs ═══ -->
+<div id="budget" class="section">
+  <div class="section-title">Budget & KPIs</div>
+  <p class="section-desc">Recommended budget allocation and success metrics for the first 90 days. Adjust per market maturity — newer brands require higher SEO/PPC investment; established brands can shift budget toward retention.</p>
+
+  <div class="section-title" style="font-size:26px; margin-bottom:20px;">Budget Allocation (Per Brand / Month)</div>
+  <div class="grid-2" style="margin-bottom:48px;">
+    <div class="card">
+      <div class="card-label">Recommended Monthly Budget Per Brand</div>
+      <h3 style="margin-bottom:24px;">$3,500 – $8,000 / mo</h3>
+      <div class="budget-item">
+        <div class="budget-header"><span class="budget-name">Google Search PPC</span><span class="budget-pct">45%</span></div>
+        <div class="budget-bar-wrap"><div class="budget-bar" style="width:45%"></div></div>
+      </div>
+      <div class="budget-item">
+        <div class="budget-header"><span class="budget-name">SEO / Content</span><span class="budget-pct">25%</span></div>
+        <div class="budget-bar-wrap"><div class="budget-bar" style="width:25%"></div></div>
+      </div>
+      <div class="budget-item">
+        <div class="budget-header"><span class="budget-name">Email Marketing</span><span class="budget-pct">10%</span></div>
+        <div class="budget-bar-wrap"><div class="budget-bar" style="width:10%"></div></div>
+      </div>
+      <div class="budget-item">
+        <div class="budget-header"><span class="budget-name">Display / Retargeting</span><span class="budget-pct">10%</span></div>
+        <div class="budget-bar-wrap"><div class="budget-bar" style="width:10%"></div></div>
+      </div>
+      <div class="budget-item">
+        <div class="budget-header"><span class="budget-name">Partnerships / Events</span><span class="budget-pct">10%</span></div>
+        <div class="budget-bar-wrap"><div class="budget-bar" style="width:10%"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Corporate (Axxiom) Monthly Budget</div>
+      <h3 style="margin-bottom:24px;">$4,000 – $10,000 / mo</h3>
+      <div class="budget-item">
+        <div class="budget-header"><span class="budget-name">LinkedIn Ads</span><span class="budget-pct">40%</span></div>
+        <div class="budget-bar-wrap"><div class="budget-bar" style="width:40%"></div></div>
+      </div>
+      <div class="budget-item">
+        <div class="budget-header"><span class="budget-name">Content / SEO (corporate site)</span><span class="budget-pct">30%</span></div>
+        <div class="budget-bar-wrap"><div class="budget-bar" style="width:30%"></div></div>
+      </div>
+      <div class="budget-item">
+        <div class="budget-header"><span class="budget-name">PR / Trade Media</span><span class="budget-pct">15%</span></div>
+        <div class="budget-bar-wrap"><div class="budget-bar" style="width:15%"></div></div>
+      </div>
+      <div class="budget-item">
+        <div class="budget-header"><span class="budget-name">Video Production</span><span class="budget-pct">15%</span></div>
+        <div class="budget-bar-wrap"><div class="budget-bar" style="width:15%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:26px; margin-bottom:20px;">Key Performance Indicators</div>
+  <div class="kpi-grid" style="margin-bottom:48px;">
+    <div class="kpi-card">
+      <div class="num">CPL</div>
+      <div class="label">Cost Per Lead (Target)</div>
+      <div class="target">$80–$200 for maintenance leads; $300–$600 for modernization/installation</div>
+    </div>
+    <div class="kpi-card">
+      <div class="num">MQL</div>
+      <div class="label">Monthly Qualified Leads (Per Brand)</div>
+      <div class="target">Target: 15–40 MQLs/mo per brand by Month 3</div>
+    </div>
+    <div class="kpi-card">
+      <div class="num">CVR</div>
+      <div class="label">Consultation-to-Contract Rate</div>
+      <div class="target">Target: 20–35% of consultations convert to signed contracts</div>
+    </div>
+    <div class="kpi-card">
+      <div class="num">GBP</div>
+      <div class="label">Google Business Profile Rank</div>
+      <div class="target">Target: Top 3 Local Pack for "[elevator service] + [city]" within 90 days</div>
+    </div>
+    <div class="kpi-card">
+      <div class="num">LI</div>
+      <div class="label">LinkedIn Follower Growth</div>
+      <div class="target">Target: +500 followers/mo on Axxiom corporate page by Month 2</div>
+    </div>
+    <div class="kpi-card">
+      <div class="num">REV</div>
+      <div class="label">Revenue Attributed to Marketing</div>
+      <div class="target">Target: 3–5x ROAS on paid; track with UTMs and CRM integration</div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:26px; margin-bottom:20px;">Quick Wins (First 30 Days)</div>
+  <div class="grid-2">
+    <div class="card card-gold">
+      <div class="card-label">Quick Win 1</div>
+      <h3>Optimize All Google Business Profiles</h3>
+      <p>Complete profiles with photos, services, Q&A, and weekly posts. Costs nothing — can drive 30–50% more inbound calls within 30 days.</p>
+    </div>
+    <div class="card card-gold">
+      <div class="card-label">Quick Win 2</div>
+      <h3>Launch Review Generation System</h3>
+      <p>Email every satisfied client asking for a Google review. 4.5+ star rating is a top local ranking factor and trust signal. 20 new reviews can move you into the Local Pack.</p>
+    </div>
+    <div class="card card-gold">
+      <div class="card-label">Quick Win 3</div>
+      <h3>Emergency Repair PPC — Live in 7 Days</h3>
+      <p>The highest-intent, lowest-competition window. "Elevator out of service near me" campaigns can produce leads within 48 hours of launch. Start here.</p>
+    </div>
+    <div class="card card-gold">
+      <div class="card-label">Quick Win 4</div>
+      <h3>LinkedIn Executive Activation</h3>
+      <p>Have Axxiom's leadership post 2–3 times per week on LinkedIn. A single viral post from a credible executive can generate 10–30 inbound inquiries with zero ad spend.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">AXXIOM ELEVATOR · CAMPAIGN STRATEGY</div>
+  <div class="footer-note">Reliability In Motion™ · 2025–2026 · Confidential</div>
+</footer>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>

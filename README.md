@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-Dedicated viewers: **`/brandguidelines`**, **`/vectordbcomparison`** (Qdrant vs Pinecone vs Fabric).
+Dedicated viewers: **`/brandguidelines`**, **`/vectordbcomparison`**, **`/marketingvidsprompts`**, **`/marketingcampaign`**.
 
 ## Deploy (Netlify)
 

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Database, Layers, Palette } from 'lucide-react'
+import { ArrowRight, Clapperboard, Database, Layers, Megaphone, Palette } from 'lucide-react'
 import {
   STRATEGY_DOCUMENTS,
   categoryLabel,
@@ -43,6 +43,22 @@ export function HomePage() {
           >
             <Database className="h-4 w-4 text-emerald-300" aria-hidden />
             Vector DB comparison
+            <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
+          </Link>
+          <Link
+            to="/marketingvidsprompts"
+            className="inline-flex items-center gap-2 rounded-xl border border-orange-900/30 bg-[#1a0f0a] px-4 py-3 text-sm font-medium text-orange-50 shadow-sm transition-colors hover:bg-[#261409]"
+          >
+            <Clapperboard className="h-4 w-4 text-orange-300" aria-hidden />
+            Video prompts (Higgsfield)
+            <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
+          </Link>
+          <Link
+            to="/marketingcampaign"
+            className="inline-flex items-center gap-2 rounded-xl border border-amber-900/25 bg-amber-950/80 px-4 py-3 text-sm font-medium text-amber-50 shadow-sm transition-colors hover:bg-amber-950"
+          >
+            <Megaphone className="h-4 w-4 text-amber-300" aria-hidden />
+            Marketing campaign
             <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
           </Link>
         </div>
