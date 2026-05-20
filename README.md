@@ -9,6 +9,19 @@ npm install
 npm run dev
 ```
 
+### Hub password (optional)
+
+If `VITE_HUB_PASSWORD` is set at build time, the app shows a **password screen** until the correct value is entered (unlock is stored in **sessionStorage** for the browser tab only).
+
+1. Copy `.env.example` to **`.env.local`** (ignored by git).
+2. Set your password, using **double quotes** if it contains `#` or other special characters, for example:
+   - `VITE_HUB_PASSWORD="your-password-here"`
+3. Restart `npm run dev` after changing env vars.
+
+On **Netlify**, add the same variable under **Site configuration → Environment variables** (name: `VITE_HUB_PASSWORD`, value: your password), then trigger a new deploy.
+
+**Note:** Vite inlines `VITE_*` at **build** time, so the password string can appear in published JavaScript — use this as a **deterrent** only, and add Netlify access control / SSO if you need real protection.
+
 Dedicated viewers: **`/brandguidelines`**, **`/vectordbcomparison`**, **`/marketingvidsprompts`**, **`/marketingcampaign`**, **`/axxiomairoadmap`** (full HTML reference), **`/airoadmap`** (slide-style presentation of the same roadmap).
 
 ## Deploy (Netlify)
