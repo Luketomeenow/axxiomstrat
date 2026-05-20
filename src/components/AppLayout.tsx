@@ -4,9 +4,11 @@ import {
   Clapperboard,
   Database,
   ExternalLink,
+  Map,
   Megaphone,
   PanelLeft,
   Palette,
+  Presentation,
   Sparkles,
 } from 'lucide-react'
 import {
@@ -97,6 +99,20 @@ export function AppLayout() {
             <span className="flex items-center gap-2">
               <Megaphone className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
               Marketing campaign
+            </span>
+          </NavLink>
+
+          <NavLink to="/axxiomairoadmap" className={navClass}>
+            <span className="flex items-center gap-2">
+              <Map className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+              AI roadmap 2026–27
+            </span>
+          </NavLink>
+
+          <NavLink to="/airoadmap" className={navClass}>
+            <span className="flex items-center gap-2">
+              <Presentation className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+              AI roadmap (presentation)
             </span>
           </NavLink>
 

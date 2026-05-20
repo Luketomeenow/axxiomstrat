@@ -1,0 +1,545 @@
+
+<style>
+*{box-sizing:border-box}
+.wrap{font-family:var(--font-sans);padding:.75rem 0}
+.tab-row{display:flex;gap:5px;margin-bottom:16px;flex-wrap:wrap}
+.tab{font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s;white-space:nowrap}
+.tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+.panel{display:none}.panel.active{display:block}
+.phase-header{border-radius:var(--border-radius-lg);padding:14px 18px;margin-bottom:14px;border:0.5px solid var(--color-border-tertiary)}
+.ph-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ph-left{flex:1}
+.ph-label{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 3px}
+.ph-title{font-size:15px;font-weight:500;color:var(--color-text-primary);margin:0 0 4px}
+.ph-desc{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.5}
+.ph-milestone{text-align:right;flex-shrink:0}
+.pm-label{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 4px}
+.pm-tag{font-size:12px;font-weight:500;padding:4px 12px;border-radius:20px;display:inline-block}
+.week-block{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:10px;overflow:hidden}
+.wb-head{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer}
+.wb-head:hover,.week-block.open .wb-head{background:var(--color-background-secondary)}
+.wb-week{font-size:10px;font-weight:700;padding:3px 9px;border-radius:12px;flex-shrink:0;white-space:nowrap}
+.wb-title{font-size:12px;font-weight:500;color:var(--color-text-primary);flex:1}
+.wb-body{display:none;border-top:0.5px solid var(--color-border-tertiary);padding:12px 14px}
+.week-block.open .wb-body{display:block}
+.task-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.task-row:last-child{border-bottom:none}
+.task-icon{font-size:13px;flex-shrink:0;margin-top:1px}
+.task-text{flex:1;color:var(--color-text-primary);line-height:1.5}
+.task-note{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.task-tag{font-size:10px;font-weight:500;padding:2px 7px;border-radius:10px;flex-shrink:0;white-space:nowrap}
+.oc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:10px}
+.ol{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
+.fr{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px;gap:8px}
+.fr:last-child{border-bottom:none}
+.fk{color:var(--color-text-secondary);flex:1;line-height:1.5}
+.fv{font-weight:500;color:var(--color-text-primary);text-align:right;flex-shrink:0}
+.badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.b-green{background:var(--color-background-success);color:var(--color-text-success)}
+.b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-purple{background:#EDE9FE;color:#5B21B6}
+.b-teal{background:#CCFBF1;color:#0F766E}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.info-box{background:var(--color-background-info);border-left:3px solid var(--color-text-info);border-radius:var(--border-radius-md);padding:10px 14px;margin:8px 0;font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.warn-box{background:var(--color-background-warning);border-left:3px solid var(--color-text-warning);border-radius:var(--border-radius-md);padding:10px 14px;margin:8px 0;font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.data-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.dc{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px}
+.dc-title{font-size:11px;font-weight:600;color:var(--color-text-primary);margin:0 0 6px}
+.dc-item{font-size:11px;color:var(--color-text-secondary);padding:2px 0;border-bottom:0.5px solid var(--color-border-tertiary);line-height:1.4}
+.dc-item:last-child{border-bottom:none}
+.timeline-bar{display:flex;gap:3px;margin-bottom:14px;flex-wrap:wrap}
+.tb{flex:1;min-width:80px;border-radius:var(--border-radius-md);padding:10px 10px;text-align:center;border:0.5px solid var(--color-border-tertiary)}
+.tb-month{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin:0 0 3px}
+.tb-phase{font-size:10px;font-weight:400;opacity:.8;margin:0}
+.stack-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.sg{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:8px 10px}
+.sg-label{font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 5px}
+.sg-items{display:flex;flex-wrap:wrap;gap:3px}
+.sg-item{font-size:10px;font-weight:500;padding:2px 7px;border-radius:10px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)}
+</style>
+
+<div class="wrap">
+<h2 class="sr-only">Axxiom Elevator AI automation roadmap May 2026 to May 2027 with tool stack, data schema, and monthly milestones</h2>
+
+<div class="tab-row">
+  <button class="tab active" onclick="go(0)">Overview</button>
+  <button class="tab" onclick="go(1)">Data schema</button>
+  <button class="tab" onclick="go(2)">May — Week by week</button>
+  <button class="tab" onclick="go(3)">Month 2–3</button>
+  <button class="tab" onclick="go(4)">Month 4–6</button>
+  <button class="tab" onclick="go(5)">Month 7–12</button>
+  <button class="tab" onclick="go(6)">Tech stack map</button>
+</div>
+
+<!-- OVERVIEW -->
+<div id="p0" class="panel active">
+
+<div class="timeline-bar">
+  <div class="tb" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3)">
+    <p class="tb-month" style="color:var(--color-text-danger)">May '26</p>
+    <p class="tb-phase" style="color:var(--color-text-danger)">Phase 1<br>Data foundation</p>
+  </div>
+  <div class="tb" style="background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.3)">
+    <p class="tb-month" style="color:var(--color-text-warning)">Jun '26</p>
+    <p class="tb-phase" style="color:var(--color-text-warning)">Phase 2<br>Marketing auto</p>
+  </div>
+  <div class="tb" style="background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.3)">
+    <p class="tb-month" style="color:var(--color-text-warning)">Jul '26</p>
+    <p class="tb-phase" style="color:var(--color-text-warning)">Phase 2<br>AI agents start</p>
+  </div>
+  <div class="tb" style="background:rgba(0,184,124,0.1);border-color:rgba(0,184,124,0.3)">
+    <p class="tb-month" style="color:var(--color-text-success)">Aug '26</p>
+    <p class="tb-phase" style="color:var(--color-text-success)">✓ 3-month<br>milestone</p>
+  </div>
+  <div class="tb" style="background:rgba(0,131,245,0.1);border-color:rgba(0,131,245,0.3)">
+    <p class="tb-month" style="color:var(--color-text-info)">Sep–Nov '26</p>
+    <p class="tb-phase" style="color:var(--color-text-info)">Phase 3<br>Ops data layer</p>
+  </div>
+  <div class="tb" style="background:rgba(91,33,182,0.1);border-color:rgba(91,33,182,0.3)">
+    <p class="tb-month" style="color:#5B21B6">Dec–Feb '27</p>
+    <p class="tb-phase" style="color:#5B21B6">Phase 4<br>AI agents live</p>
+  </div>
+  <div class="tb" style="background:rgba(0,184,124,0.15);border-color:rgba(0,184,124,0.5)">
+    <p class="tb-month" style="color:var(--color-text-success)">May '27</p>
+    <p class="tb-phase" style="color:var(--color-text-success)">✓ 1-year<br>milestone</p>
+  </div>
+</div>
+
+<div class="oc">
+  <p class="ol">Three milestone goals</p>
+  <div class="fr">
+    <span class="fk"><span class="badge b-red">May 2026</span> &nbsp;This month — data foundation + marketing automations firing</span>
+    <span class="fv">4 weeks</span>
+  </div>
+  <div class="fr">
+    <span class="fk"><span class="badge b-warn">August 2026</span> &nbsp;3-month — all marketing automations live, full attribution in Power BI</span>
+    <span class="fv">12 weeks</span>
+  </div>
+  <div class="fr">
+    <span class="fk"><span class="badge b-green">May 2027</span> &nbsp;1-year — clean marketing + ops data ready for AI agents + ML models</span>
+    <span class="fv">52 weeks</span>
+  </div>
+</div>
+
+<div class="oc">
+  <p class="ol">What you are building toward — the 1-year outcome</p>
+  <div class="fr"><span class="fk">Marketing data layer</span><span class="fv">GHL + Google Ads + GA4 + GBP + Apollo + CallRail → clean Delta tables in Fabric → Power BI live</span></div>
+  <div class="fr"><span class="fk">Marketing automations</span><span class="fv">Lead response, nurture, review requests, renewal sequences, AiSDR outbound — all running in GHL + Zapier</span></div>
+  <div class="fr"><span class="fk">Ops data layer</span><span class="fv">FieldBoss + Dynamics → clean Delta tables → fault codes extracted → asset risk scores daily</span></div>
+  <div class="fr"><span class="fk">AI agent readiness</span><span class="fv">12+ months clean data → Predictive Maintenance ML model can train → Dispatch Agent has clean tech profiles</span></div>
+  <div class="fr"><span class="fk">Microsoft Foundry</span><span class="fv">Department-level AI agents built on top of clean Fabric data — marketing, ops, compliance, HR</span></div>
+  <div class="fr"><span class="fk">Claude Teams</span><span class="fv">Deployed to all departments with Axxiom master context + department-specific skills</span></div>
+</div>
+
+<div class="info-box">
+  <strong style="color:var(--color-text-info)">Why this sequence matters:</strong> You cannot build AI agents without clean data. You cannot get clean data without building the pipelines first. The marketing data layer comes first because (1) it is the most business-critical right now and (2) it is the simpler half — external APIs with clear schemas. Ops data (FieldBoss, Dynamics) is messier and requires more engineering. Do marketing right, then carry the same patterns to ops.
+</div>
+</div>
+
+<!-- DATA SCHEMA -->
+<div id="p1" class="panel">
+<div class="phase-header" style="background:var(--color-background-secondary)">
+  <p class="ph-label">Data architecture</p>
+  <p class="ph-title">What to track per campaign — the definitive data schema</p>
+  <p class="ph-desc">This is the clean data structure you build in May. Every column is intentional. Every table serves either Power BI dashboards today or AI agent training data tomorrow. Build it right once.</p>
+</div>
+
+<div class="oc">
+  <p class="ol">Table 1 — campaign_daily_metrics (from Google Ads · source of ad spend truth)</p>
+  <div class="fr"><span class="fk">campaign_id · campaign_name · platform</span><span class="fv">Google Ads / GA4 / LinkedIn / Meta</span></div>
+  <div class="fr"><span class="fk">campaign_type</span><span class="fv">Search · Display · Performance Max · Video</span></div>
+  <div class="fr"><span class="fk">market · vertical · date</span><span class="fv">FL/CA/TX + hotel/hospital/office + YYYY-MM-DD</span></div>
+  <div class="fr"><span class="fk">impressions · clicks · ad_spend_usd</span><span class="fv">Raw performance</span></div>
+  <div class="fr"><span class="fk">ctr_pct · avg_cpc_usd · conversion_rate_pct</span><span class="fv">Efficiency metrics</span></div>
+  <div class="fr"><span class="fk">conversions · cpa_usd · roas</span><span class="fv">Outcome metrics</span></div>
+  <div class="fr"><span class="fk">impression_share_pct · quality_score</span><span class="fv">Competitive + quality signals</span></div>
+  <div class="fr"><span class="fk">ai_performance_flag · load_date</span><span class="fv">AI-set flag when CPA exceeds threshold</span></div>
+</div>
+
+<div class="oc">
+  <p class="ol">Table 2 — lead_attribution (from GHL + CallRail · the attribution bridge)</p>
+  <div class="fr"><span class="fk">lead_id · source_platform · entry_point</span><span class="fv">GHL form / CallRail call / AiSDR outbound / Apollo</span></div>
+  <div class="fr"><span class="fk">utm_campaign · utm_source · utm_medium · utm_term · utm_content</span><span class="fv">Full UTM chain — all 5 preserved</span></div>
+  <div class="fr"><span class="fk">campaign_id</span><span class="fk" style="font-weight:500;color:var(--color-text-primary)">← linked to campaign_daily_metrics (the join key for ROAS)</span></div>
+  <div class="fr"><span class="fk">landing_page · referrer · first_touch_date</span><span class="fv">Entry path</span></div>
+  <div class="fr"><span class="fk">company_name · vertical_tag · lead_score</span><span class="fv">AI-classified vertical + AI quality score 1-10</span></div>
+  <div class="fr"><span class="fk">market · assigned_rep · ghl_contact_id</span><span class="fv">Routing data</span></div>
+  <div class="fr"><span class="fk">pipeline_stage · stage_date · opportunity_value_usd</span><span class="fv">Live pipeline position</span></div>
+  <div class="fr"><span class="fk">closed_status · close_date · arr_usd · loss_reason</span><span class="fv">Final outcome — AI-tagged loss reason</span></div>
+</div>
+
+<div class="oc">
+  <p class="ol">Table 3 — call_tracking (from CallRail · closes the call attribution gap)</p>
+  <div class="fr"><span class="fk">call_id · tracking_number · campaign_id</span><span class="fv">Linked to campaign spend</span></div>
+  <div class="fr"><span class="fk">utm_campaign · utm_source · utm_medium · utm_term</span><span class="fv">Which ad drove the call</span></div>
+  <div class="fr"><span class="fk">start_time · duration_sec · answered · direction</span><span class="fv">Call quality signals</span></div>
+  <div class="fr"><span class="fk">first_call_flag · caller_city · caller_state</span><span class="fv">New vs returning · geography</span></div>
+  <div class="fr"><span class="fk">keyword · landing_page · referrer</span><span class="fv">Search intent that drove the call</span></div>
+  <div class="fr"><span class="fk">recording_url · ai_sentiment_score</span><span class="fv">Future: AI call scoring</span></div>
+</div>
+
+<div class="oc">
+  <p class="ol">Table 4 — ga4_sessions (from Google Analytics · web behaviour)</p>
+  <div class="fr"><span class="fk">date · source · medium · campaign</span><span class="fv">Standard attribution</span></div>
+  <div class="fr"><span class="fk">sessions · users · new_users · bounce_rate_pct</span><span class="fv">Traffic quality</span></div>
+  <div class="fr"><span class="fk">avg_session_duration_sec · conversions · page_views</span><span class="fv">Engagement depth</span></div>
+  <div class="fr"><span class="fk">landing_page · city · device_category</span><span class="fv">Entry point + audience</span></div>
+</div>
+
+<div class="oc">
+  <p class="ol">Table 5 — outbound_pipeline (from Apollo + AiSDR · outbound attribution)</p>
+  <div class="fr"><span class="fk">prospect_id · company_name · title · vertical</span><span class="fv">Contact enrichment from Apollo</span></div>
+  <div class="fr"><span class="fk">sequence_name · step_number · outreach_date</span><span class="fv">AiSDR sequence tracking</span></div>
+  <div class="fr"><span class="fk">email_opened · email_replied · meeting_booked</span><span class="fv">Engagement signals</span></div>
+  <div class="fr"><span class="fk">ghl_contact_id · pipeline_stage · outcome</span><span class="fv">Linked to GHL after reply</span></div>
+  <div class="fr"><span class="fk">market · assigned_rep · source_tag</span><span class="fv">Apollo outbound vs AiSDR outbound</span></div>
+</div>
+
+<div class="oc">
+  <p class="ol">Table 6 — gbp_reviews (from Google Business Profile · reputation data)</p>
+  <div class="fr"><span class="fk">review_id · location_id · market · rating</span><span class="fv">Core review data</span></div>
+  <div class="fr"><span class="fk">comment · create_time · reviewer_name</span><span class="fv">Review content</span></div>
+  <div class="fr"><span class="fk">ai_sentiment_score · ai_themes · ai_response_draft</span><span class="fv">AI-enriched fields (added in Month 2)</span></div>
+  <div class="fr"><span class="fk">reply_posted · reply_time · response_rate_flag</span><span class="fv">Response tracking</span></div>
+</div>
+
+<div class="warn-box">
+  <strong style="color:var(--color-text-warning)">The most important join in the entire data model:</strong><br>
+  <code>campaign_daily_metrics.campaign_id = lead_attribution.campaign_id = call_tracking.campaign_id</code><br><br>
+  This three-way join is what produces the report leadership wants: "We spent $4,140 on Hotel FL campaign → drove 31 calls (18 answered) + 23 form fills → 4 became signed contracts → $87,000 ARR → ROAS 21x." Without clean campaign_id preserved all the way through the UTM chain, this report is impossible to build.
+</div>
+</div>
+
+<!-- MAY WEEK BY WEEK -->
+<div id="p2" class="panel">
+<div class="phase-header" style="background:rgba(239,68,68,0.05);border-color:rgba(239,68,68,0.25)">
+  <div class="ph-row">
+    <div class="ph-left">
+      <p class="ph-label">Phase 1 — May 2026</p>
+      <p class="ph-title">Data foundation + first marketing automations live</p>
+      <p class="ph-desc">Four focused weeks. Week 1-2 is all infrastructure — no agents, no automations until the foundation is secure. Week 3-4 first automations fire and data starts flowing.</p>
+    </div>
+    <div class="ph-milestone">
+      <p class="pm-label">Goal by May 31</p>
+      <span class="pm-tag b-red">Data flowing. GHL automations live.</span>
+    </div>
+  </div>
+</div>
+
+<div class="week-block open">
+  <div class="wb-head" onclick="tog(this)">
+    <span class="wb-week b-red">Week 1 · May 19–25</span>
+    <span class="wb-title">Security setup + Key Vault + Managed Identity + Fabric schema</span>
+  </div>
+  <div class="wb-body">
+    <div class="task-row"><i class="ti ti-key task-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i><div class="task-text">Create Azure Key Vault (axxiom-keyvault) · store all API credentials: GHL, Google Ads, GA4, GBP, Apollo, CallRail<div class="task-note">Run store_secrets.py from local machine after az login</div></div><span class="task-tag b-warn">Security</span></div>
+    <div class="task-row"><i class="ti ti-fingerprint task-icon" style="color:var(--color-text-info)" aria-hidden="true"></i><div class="task-text">Enable Managed Identity on Fabric workspace · grant Key Vault Secrets User role to workspace identity<div class="task-note">Test with mssparkutils.credentials.getSecret() in a notebook</div></div><span class="task-tag b-blue">Identity</span></div>
+    <div class="task-row"><i class="ti ti-database task-icon" style="color:var(--color-text-info)" aria-hidden="true"></i><div class="task-text">Create all 6 Delta table schemas in Staging Lakehouse: campaign_daily_metrics, lead_attribution, call_tracking, ga4_sessions, outbound_pipeline, gbp_reviews<div class="task-note">CREATE TABLE statements with all columns — empty tables first, data fills later</div></div><span class="task-tag b-blue">Schema</span></div>
+    <div class="task-row"><i class="ti ti-settings task-icon" style="color:var(--color-text-secondary)" aria-hidden="true"></i><div class="task-text">Verify Fabric SQL Analytics Endpoint URL · confirm Power BI can connect · set up read-only service principal for data analyst</div><span class="task-tag b-gray">Setup</span></div>
+  </div>
+</div>
+
+<div class="week-block">
+  <div class="wb-head" onclick="tog(this)">
+    <span class="wb-week b-red">Week 2 · May 26–Jun 1</span>
+    <span class="wb-title">Build all 6 Fabric Notebooks + Fabric Data Pipeline scheduler</span>
+  </div>
+  <div class="wb-body">
+    <div class="task-row"><i class="ti ti-brand-google task-icon" style="color:var(--color-text-danger)" aria-hidden="true"></i><div class="task-text">Build GoogleAds_to_Fabric notebook — pulls campaign metrics daily to campaign_daily_metrics table<div class="task-note">Requires Google Ads developer token — apply if not done. Use test access while waiting for approval.</div></div><span class="task-tag b-red">Google Ads</span></div>
+    <div class="task-row"><i class="ti ti-brand-google-analytics task-icon" style="color:var(--color-text-danger)" aria-hidden="true"></i><div class="task-text">Build GA4_GBP_to_Fabric notebook — GA4 sessions to ga4_sessions · GBP reviews to gbp_reviews<div class="task-note">Run generate_refresh_token.py locally first — stores refresh token in Key Vault</div></div><span class="task-tag b-red">GA4 + GBP</span></div>
+    <div class="task-row"><i class="ti ti-phone task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">Build CallRail_to_Fabric notebook — calls and form submissions with full UTM chain to call_tracking table<div class="task-note">CallRail API v3 · Token auth · paginate all results · preserve all 5 UTM parameters</div></div><span class="task-tag b-green">CallRail</span></div>
+    <div class="task-row"><i class="ti ti-database task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">Build GHL_to_Fabric notebook — contacts with UTM + pipeline opportunities → lead_attribution table<div class="task-note">Preserve utm_campaign on every GHL contact — this is the attribution bridge to ad spend</div></div><span class="task-tag b-green">GHL</span></div>
+    <div class="task-row"><i class="ti ti-rocket task-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i><div class="task-text">Build Apollo_to_Fabric notebook — enriched prospect data + outbound sequence stats → outbound_pipeline table</div><span class="task-tag b-warn">Apollo</span></div>
+    <div class="task-row"><i class="ti ti-clock task-icon" style="color:var(--color-text-info)" aria-hidden="true"></i><div class="task-text">Create Fabric Data Pipeline (Axxiom_Daily_Data_Pull) — runs all 5 notebooks in sequence daily at 6am · failure email notifications on<div class="task-note">Test with Run Now — verify all 6 tables populated in Staging Lakehouse</div></div><span class="task-tag b-blue">Pipeline</span></div>
+  </div>
+</div>
+
+<div class="week-block">
+  <div class="wb-head" onclick="tog(this)">
+    <span class="wb-week b-red">Week 3 · Jun 2–8</span>
+    <span class="wb-title">GHL automations live + Zapier workflows + AiSDR → GHL sync</span>
+  </div>
+  <div class="wb-body">
+    <div class="task-row"><i class="ti ti-bolt task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">GHL Workflow 1: Missed call text-back — fires within 60 seconds of any missed inbound call. SMS: "Hi [name], sorry we missed your call at Axxiom. What building can we help with?"</div><span class="task-tag b-green">GHL</span></div>
+    <div class="task-row"><i class="ti ti-bolt task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">GHL Workflow 2: New lead 5-touch nurture (14 days) — triggered on any new GHL contact. Vertical-tagged contacts get the correct sequence (hotel vs hospital vs office)</div><span class="task-tag b-green">GHL</span></div>
+    <div class="task-row"><i class="ti ti-bolt task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">GHL Workflow 3: Review request — fires 48 hours after job marked complete in FieldBoss (via Zapier trigger). Never fires for emergency jobs.</div><span class="task-tag b-green">GHL</span></div>
+    <div class="task-row"><i class="ti ti-arrows-exchange task-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i><div class="task-text">Zapier: AiSDR reply detected → new contact created in GHL with source_tag = "aisdr_outbound" + original Apollo company data<div class="task-note">This closes the outbound attribution loop — AiSDR replies enter GHL pipeline as tagged leads</div></div><span class="task-tag b-warn">Zapier</span></div>
+    <div class="task-row"><i class="ti ti-arrows-exchange task-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i><div class="task-text">Zapier: New GHL contact created → enrich via Apollo (company data, LinkedIn, tech stack) → write back enriched fields to GHL contact + Fabric lead_attribution table</div><span class="task-tag b-warn">Zapier</span></div>
+  </div>
+</div>
+
+<div class="week-block">
+  <div class="wb-head" onclick="tog(this)">
+    <span class="wb-week b-red">Week 4 · Jun 9–15</span>
+    <span class="wb-title">First Power BI dashboard + data quality audit + end-to-end test</span>
+  </div>
+  <div class="wb-body">
+    <div class="task-row"><i class="ti ti-chart-bar task-icon" style="color:#5B21B6" aria-hidden="true"></i><div class="task-text">Power BI Marketing Dashboard v1: Connect to Fabric SQL endpoint · build 4 visuals: (1) Daily ad spend by campaign, (2) Leads by source, (3) CPL by campaign, (4) GBP review rating trend<div class="task-note">This is the minimum viable dashboard — proves the data is flowing correctly before building more</div></div><span class="task-tag b-purple">Power BI</span></div>
+    <div class="task-row"><i class="ti ti-checklist task-icon" style="color:var(--color-text-secondary)" aria-hidden="true"></i><div class="task-text">Data quality audit: check that campaign_id is preserved from Google Ads → lead_attribution (via UTM) → call_tracking. If the join fails, the attribution model breaks. Fix UTM parameter gaps now.</div><span class="task-tag b-gray">QA</span></div>
+    <div class="task-row"><i class="ti ti-file-text task-icon" style="color:var(--color-text-secondary)" aria-hidden="true"></i><div class="task-text">Document everything: API endpoints used, notebook names, Key Vault secret names, table schemas, Zapier workflow IDs. This is the handoff document for Axxiom's team.</div><span class="task-tag b-gray">Docs</span></div>
+    <div class="task-row"><i class="ti ti-check task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">May milestone review: Is data flowing daily from all 6 sources? Are 3 GHL workflows firing? Is Power BI showing live data? If yes — Phase 1 complete.</div><span class="task-tag b-green">Milestone</span></div>
+  </div>
+</div>
+</div>
+
+<!-- MONTH 2-3 -->
+<div id="p3" class="panel">
+<div class="phase-header" style="background:rgba(245,158,11,0.05);border-color:rgba(245,158,11,0.25)">
+  <div class="ph-row">
+    <div class="ph-left">
+      <p class="ph-label">Phase 2 — June & July 2026</p>
+      <p class="ph-title">Full marketing automation stack + first AI agents + complete attribution</p>
+      <p class="ph-desc">Month 2: Complete the GHL automation suite and connect AiSDR + Apollo into one outbound pipeline. Month 3: First LangChain AI agents go live — lead scoring and campaign performance intelligence.</p>
+    </div>
+    <div class="ph-milestone">
+      <p class="pm-label">Goal by July 31</p>
+      <span class="pm-tag b-warn">All marketing automations live</span>
+    </div>
+  </div>
+</div>
+
+<div class="week-block open">
+  <div class="wb-head" onclick="tog(this)">
+    <span class="wb-week b-warn">June — Week 1-2</span>
+    <span class="wb-title">Complete GHL automation suite + AiSDR outbound loop</span>
+  </div>
+  <div class="wb-body">
+    <div class="task-row"><i class="ti ti-bolt task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">GHL Workflow 4: Contract renewal campaign — Power Automate checks Dynamics contracts expiring in 90 days → enrolls contact in GHL 4-touch renewal sequence with AI value brief</div><span class="task-tag b-green">GHL + Dynamics</span></div>
+    <div class="task-row"><i class="ti ti-bolt task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">GHL Workflow 5: Inspection reminder — 60 days before cert expiry → client email with AI-generated prep brief (what Axxiom is handling, what client needs to do)</div><span class="task-tag b-green">GHL</span></div>
+    <div class="task-row"><i class="ti ti-bolt task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">GHL Workflow 6: Post-service summary — job complete in FieldBoss → Zapier trigger → AI generates summary email → sent via GHL within 2 hours of job close</div><span class="task-tag b-green">GHL + Zapier</span></div>
+    <div class="task-row"><i class="ti ti-arrows-right-left task-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i><div class="task-text">Full AiSDR → Apollo → GHL loop: AiSDR sequences pull from Apollo lists → replies route to GHL → Apollo enriches the contact → GHL pipeline stage updated → data synced to Fabric outbound_pipeline table</div><span class="task-tag b-warn">Outbound</span></div>
+  </div>
+</div>
+
+<div class="week-block">
+  <div class="wb-head" onclick="tog(this)">
+    <span class="wb-week b-warn">June — Week 3-4</span>
+    <span class="wb-title">Complete attribution model + full Power BI marketing suite</span>
+  </div>
+  <div class="wb-body">
+    <div class="task-row"><i class="ti ti-link task-icon" style="color:var(--color-text-info)" aria-hidden="true"></i><div class="task-text">Build the attribution bridge query in Fabric: JOIN campaign_daily_metrics + lead_attribution + call_tracking on campaign_id. This produces: spend → leads → calls → pipeline value → closed ARR → ROAS per campaign.</div><span class="task-tag b-blue">Attribution</span></div>
+    <div class="task-row"><i class="ti ti-chart-bar task-icon" style="color:#5B21B6" aria-hidden="true"></i><div class="task-text">Power BI Marketing Dashboard v2: Full 5-visual suite — Campaign ROAS, Lead source mix, Cost per qualified lead, CallRail call attribution by campaign, AiSDR vs inbound pipeline comparison</div><span class="task-tag b-purple">Power BI</span></div>
+    <div class="task-row"><i class="ti ti-star task-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i><div class="task-text">Power BI Reputation Dashboard: GBP review volume by market, avg rating trend, review response rate, sentiment themes (manual analysis — AI enrichment comes Month 3)</div><span class="task-tag b-warn">Power BI</span></div>
+  </div>
+</div>
+
+<div class="week-block">
+  <div class="wb-head" onclick="tog(this)">
+    <span class="wb-week b-warn">July — First AI agents</span>
+    <span class="wb-title">LangChain lead scoring agent + campaign performance AI alerts</span>
+  </div>
+  <div class="wb-body">
+    <div class="task-row"><i class="ti ti-cpu task-icon" style="color:#5B21B6" aria-hidden="true"></i><div class="task-text">Marketing Intelligence Agent v1 (LangChain): New GHL contact → AI classifies vertical (hotel/hospital/office) + assigns quality score 1-10 + maps to originating campaign → writes back to GHL tags + Fabric lead_attribution<div class="task-note">Deploy on Railway first, migrate to Azure Container Apps in Phase 3</div></div><span class="task-tag b-purple">LangChain</span></div>
+    <div class="task-row"><i class="ti ti-brain task-icon" style="color:#5B21B6" aria-hidden="true"></i><div class="task-text">Set up Qdrant on Railway for agent memory — stores lead context, past campaign patterns, vertical engagement history. Embeddings via Voyage AI + MongoDB for structured metadata alongside vectors.</div><span class="task-tag b-purple">Qdrant + MongoDB</span></div>
+    <div class="task-row"><i class="ti ti-eye task-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i><div class="task-text">LangSmith tracing live on all agents — configure to log only reasoning metadata, zero raw PII. Every agent run traced: prompt sent, tools called, output schema, token cost, latency.</div><span class="task-tag b-warn">LangSmith</span></div>
+    <div class="task-row"><i class="ti ti-chart-line task-icon" style="color:#5B21B6" aria-hidden="true"></i><div class="task-text">GBP Review Agent: New review detected → Voyage AI embeds review text → Qdrant similarity search for past response patterns → GPT-4o drafts personalised response → stored in gbp_reviews.ai_response_draft for team approval</div><span class="task-tag b-purple">AI Agent</span></div>
+  </div>
+</div>
+</div>
+
+<!-- MONTH 4-6 -->
+<div id="p4" class="panel">
+<div class="phase-header" style="background:rgba(0,131,245,0.05);border-color:rgba(0,131,245,0.25)">
+  <div class="ph-row">
+    <div class="ph-left">
+      <p class="ph-label">Phase 3 — August to November 2026</p>
+      <p class="ph-title">3-month milestone + Ops data layer + compliance foundation</p>
+      <p class="ph-desc">August: verify all marketing milestones hit, document and hand off. September–November: build the ops data layer — FieldBoss and Dynamics into Fabric. This is the harder engineering work that requires clean data to run the future AI agents.</p>
+    </div>
+    <div class="ph-milestone">
+      <p class="pm-label">Goal by Nov 30</p>
+      <span class="pm-tag b-blue">Ops data clean. ML training ready.</span>
+    </div>
+  </div>
+</div>
+
+<div class="week-block open">
+  <div class="wb-head" onclick="tog(this)">
+    <span class="wb-week b-green">August — 3-month milestone</span>
+    <span class="wb-title">Verify all marketing goals met · document · present to Axxiom leadership</span>
+  </div>
+  <div class="wb-body">
+    <div class="task-row"><i class="ti ti-check task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">✓ All 6 data sources flowing daily to Fabric (GHL, Google Ads, GA4, GBP, CallRail, Apollo)</div><span class="task-tag b-green">Check</span></div>
+    <div class="task-row"><i class="ti ti-check task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">✓ Full attribution: campaign spend → lead → call → pipeline stage → closed deal in Power BI</div><span class="task-tag b-green">Check</span></div>
+    <div class="task-row"><i class="ti ti-check task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">✓ 6 GHL automations running: missed call text-back, lead nurture, review request, renewal, inspection prep, post-job summary</div><span class="task-tag b-green">Check</span></div>
+    <div class="task-row"><i class="ti ti-check task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">✓ Marketing Intelligence Agent live: AI lead scoring + vertical classification + GBP review drafts</div><span class="task-tag b-green">Check</span></div>
+    <div class="task-row"><i class="ti ti-presentation task-icon" style="color:var(--color-text-info)" aria-hidden="true"></i><div class="task-text">Present to Axxiom leadership: Power BI dashboards live, ROAS by campaign, lead cost by source, automation ROI (time saved + leads followed up vs not). This is the proof of concept that unlocks Phase 3 budget.</div><span class="task-tag b-blue">Present</span></div>
+  </div>
+</div>
+
+<div class="week-block">
+  <div class="wb-head" onclick="tog(this)">
+    <span class="wb-week b-blue">September — Ops data layer</span>
+    <span class="wb-title">FieldBoss → Fabric · Dynamics → Fabric · fault code extraction</span>
+  </div>
+  <div class="wb-body">
+    <div class="task-row"><i class="ti ti-database task-icon" style="color:var(--color-text-info)" aria-hidden="true"></i><div class="task-text">FieldBoss → Fabric: Build Salesforce API connector for FieldBoss — pulls work orders, asset records, tech data daily. Lands in ax_WorkOrder, ax_Asset, ax_TechProfile Delta tables.</div><span class="task-tag b-blue">FieldBoss</span></div>
+    <div class="task-row"><i class="ti ti-arrows-exchange task-icon" style="color:var(--color-text-info)" aria-hidden="true"></i><div class="task-text">Dynamics → Fabric bidirectional sync: Enable Dataverse link connector. Contract records, tech licences, compliance certs, client accounts all flow to Fabric. Fabric writes (risk scores) sync back to Dynamics.</div><span class="task-tag b-blue">Dynamics</span></div>
+    <div class="task-row"><i class="ti ti-cpu task-icon" style="color:#5B21B6" aria-hidden="true"></i><div class="task-text">Fault code AI extractor: LangChain + Azure OpenAI reads FieldBoss tech notes (free text) → extracts structured ASME A17.1 fault codes → writes to ax_WorkOrder.fault_codes[] field. Confidence ≥85% auto-commit, lower = human review queue.<div class="task-note">This is the single most important data quality step for future ML model training</div></div><span class="task-tag b-purple">AI Extraction</span></div>
+    <div class="task-row"><i class="ti ti-shield-check task-icon" style="color:var(--color-text-warning)" aria-hidden="true"></i><div class="task-text">Compliance Tracker Agent: Daily sweep of ax_ComplianceRecord and ax_TechProfile for expiring certs and licences. Alerts via Dynamics task + Teams notification. Hard-block expired techs in dispatch pool.</div><span class="task-tag b-warn">Compliance</span></div>
+  </div>
+</div>
+
+<div class="week-block">
+  <div class="wb-head" onclick="tog(this)">
+    <span class="wb-week b-blue">October–November — Clean ops data</span>
+    <span class="wb-title">Data cleaning · ops Power BI · Predictive Maintenance data pipeline</span>
+  </div>
+  <div class="wb-body">
+    <div class="task-row"><i class="ti ti-wash task-icon" style="color:var(--color-text-info)" aria-hidden="true"></i><div class="task-text">Data cleaning sprint: standardise equipment types (8 canonical types), backfill install dates from permit portals, validate AHJ jurisdiction per asset address, standardise tech licence fields per state. Target: 90%+ completeness on all P1 fields.</div><span class="task-tag b-blue">Data quality</span></div>
+    <div class="task-row"><i class="ti ti-chart-bar task-icon" style="color:#5B21B6" aria-hidden="true"></i><div class="task-text">Power BI Ops Dashboard: Jobs completed by market + type, first-fix rate, fault code frequency by equipment type, tech performance matrix. Data analyst builds these from Fabric SQL endpoint.</div><span class="task-tag b-purple">Power BI</span></div>
+    <div class="task-row"><i class="ti ti-activity task-icon" style="color:var(--color-text-danger)" aria-hidden="true"></i><div class="task-text">Predictive Maintenance data pipeline: Daily batch job scores all active assets using heuristic rules (PM days overdue + fault frequency) as the baseline model before Azure ML is trained. Scores written to ax_AssetRiskScore. This generates training data for the real ML model.</div><span class="task-tag b-red">PM Pipeline</span></div>
+  </div>
+</div>
+</div>
+
+<!-- MONTH 7-12 -->
+<div id="p5" class="panel">
+<div class="phase-header" style="background:rgba(91,33,182,0.05);border-color:rgba(91,33,182,0.3)">
+  <div class="ph-row">
+    <div class="ph-left">
+      <p class="ph-label">Phase 4 — December 2026 to May 2027</p>
+      <p class="ph-title">Full AI agent suite + ML model training + Microsoft Foundry + 1-year milestone</p>
+      <p class="ph-desc">The system has been collecting clean data for 6+ months. Now the ML models have enough history to train. LangGraph agents go live in production. Microsoft Foundry enables department-level AI agents. Claude Teams deployed across all departments.</p>
+    </div>
+    <div class="ph-milestone">
+      <p class="pm-label">Goal by May 2027</p>
+      <span class="pm-tag b-purple">AI agents live. ML in prod. Foundry deployed.</span>
+    </div>
+  </div>
+</div>
+
+<div class="week-block open">
+  <div class="wb-head" onclick="tog(this)">
+    <span class="wb-week b-purple">December 2026</span>
+    <span class="wb-title">Dispatch Agent + LangGraph multi-agent orchestration live</span>
+  </div>
+  <div class="wb-body">
+    <div class="task-row"><i class="ti ti-topology-star task-icon" style="color:#5B21B6" aria-hidden="true"></i><div class="task-text">Dispatch & Work Order Agent (LangGraph): Real-time trigger from FieldBoss via Azure Event Grid → 4 compliance gates → Azure Maps geo-routing → GPT-4o job brief → assigns tech + SMS notification via Azure Communication Services</div><span class="task-tag b-purple">LangGraph</span></div>
+    <div class="task-row"><i class="ti ti-cpu task-icon" style="color:#5B21B6" aria-hidden="true"></i><div class="task-text">Predictive Maintenance Agent (LangGraph): Daily 5am batch → reads ax_Asset + ax_WorkOrder from Fabric → Azure ML risk model scores each unit → writes ax_AssetRiskScore → auto-creates PM work orders for Critical units in FieldBoss</div><span class="task-tag b-purple">LangGraph</span></div>
+    <div class="task-row"><i class="ti ti-activity task-icon" style="color:var(--color-text-danger)" aria-hidden="true"></i><div class="task-text">Azure ML model training: 6 months of clean ax_AssetRiskScore + ax_WorkOrder data → train first proper ML risk model. Replaces the heuristic baseline. Model retrains monthly as more data accumulates.</div><span class="task-tag b-red">Azure ML</span></div>
+  </div>
+</div>
+
+<div class="week-block">
+  <div class="wb-head" onclick="tog(this)">
+    <span class="wb-week b-purple">January–February 2027</span>
+    <span class="wb-title">Full agent suite · Modernisation Pipeline · Microsoft Foundry exploration</span>
+  </div>
+  <div class="wb-body">
+    <div class="task-row"><i class="ti ti-trending-up task-icon" style="color:#5B21B6" aria-hidden="true"></i><div class="task-text">Modernisation Pipeline Agent: Asset risk ≥70 for 30 days → GPT-4o generates ROI brief (repair cost YTD vs. modernisation value) → Dynamics Opportunity created → GHL upsell sequence fires. First revenue-generating AI automation.</div><span class="task-tag b-purple">Revenue AI</span></div>
+    <div class="task-row"><i class="ti ti-brand-azure task-icon" style="color:var(--color-text-info)" aria-hidden="true"></i><div class="task-text">Microsoft Foundry integration: Connect existing LangGraph agents to Foundry's orchestration layer. Begin building department-level agents (Marketing Intelligence, Ops Assistant, Compliance Advisor) using Foundry's no-code agent builder for non-technical department heads.</div><span class="task-tag b-blue">Foundry</span></div>
+    <div class="task-row"><i class="ti ti-users task-icon" style="color:var(--color-text-secondary)" aria-hidden="true"></i><div class="task-text">Claude Teams deployment: Configure Axxiom workspace with Master Context. Deploy department-specific skill libraries (6 departments). Train team leads on the 4C Framework. Each department has a prompt library available in Claude Teams.</div><span class="task-tag b-gray">Claude Teams</span></div>
+  </div>
+</div>
+
+<div class="week-block">
+  <div class="wb-head" onclick="tog(this)">
+    <span class="wb-week b-green">May 2027 — 1-year milestone</span>
+    <span class="wb-title">What Axxiom has built in 12 months</span>
+  </div>
+  <div class="wb-body">
+    <div class="task-row"><i class="ti ti-check task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">✓ 12 months of clean marketing data: campaign spend → leads → calls → pipeline → closed ARR. Full attribution in Power BI. Marketing team can answer any ROAS question in 30 seconds.</div></div>
+    <div class="task-row"><i class="ti ti-check task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">✓ 8+ months of clean ops data: work orders with structured fault codes, asset risk scores, tech performance. Azure ML model trained and in production for predictive maintenance.</div></div>
+    <div class="task-row"><i class="ti ti-check task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">✓ 6 LangGraph AI agents running: Dispatch, Predictive Maintenance, Compliance Tracker, Marketing Intelligence, Review & Reputation, Modernisation Pipeline.</div></div>
+    <div class="task-row"><i class="ti ti-check task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">✓ Microsoft Foundry department agents: Marketing, Ops, HR, Sales assistants available to all teams. No-code agent builder for department heads to create their own workflows.</div></div>
+    <div class="task-row"><i class="ti ti-check task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">✓ Claude Teams live: All departments using Claude with Axxiom context and department-specific prompt libraries. Measurable time savings across every team.</div></div>
+    <div class="task-row"><i class="ti ti-check task-icon" style="color:var(--color-text-success)" aria-hidden="true"></i><div class="task-text">✓ Axxiom's data is now a strategic asset: competitors cannot replicate the 12-month clean dataset used to train the maintenance ML model or the compliance AHJ rules database.</div></div>
+  </div>
+</div>
+</div>
+
+<!-- TECH STACK MAP -->
+<div id="p6" class="panel">
+<div class="phase-header" style="background:var(--color-background-secondary)">
+  <p class="ph-label">Complete tech stack</p>
+  <p class="ph-title">Every tool, its role, and when it becomes active</p>
+</div>
+
+<div class="stack-grid">
+  <div class="sg">
+    <p class="sg-label">Marketing tools (active Month 1)</p>
+    <div class="sg-items">
+      <span class="sg-item">GHL</span>
+      <span class="sg-item">Zapier</span>
+      <span class="sg-item">Apollo</span>
+      <span class="sg-item">AiSDR</span>
+      <span class="sg-item">CallRail</span>
+      <span class="sg-item">Google Ads</span>
+      <span class="sg-item">GA4</span>
+      <span class="sg-item">GBP</span>
+    </div>
+  </div>
+  <div class="sg">
+    <p class="sg-label">Ops tools (active Month 4+)</p>
+    <div class="sg-items">
+      <span class="sg-item">FieldBoss</span>
+      <span class="sg-item">Dynamics 365</span>
+      <span class="sg-item">Power Automate</span>
+      <span class="sg-item">Azure Maps</span>
+      <span class="sg-item">Azure Comms</span>
+    </div>
+  </div>
+  <div class="sg">
+    <p class="sg-label">Data layer (active Month 1)</p>
+    <div class="sg-items">
+      <span class="sg-item">Fabric OneLake</span>
+      <span class="sg-item">Staging Lakehouse</span>
+      <span class="sg-item">Delta tables</span>
+      <span class="sg-item">Power BI</span>
+      <span class="sg-item">Key Vault</span>
+    </div>
+  </div>
+  <div class="sg">
+    <p class="sg-label">AI / ML layer (Month 3–12)</p>
+    <div class="sg-items">
+      <span class="sg-item">LangChain</span>
+      <span class="sg-item">LangGraph</span>
+      <span class="sg-item">LangSmith</span>
+      <span class="sg-item">Voyage AI</span>
+      <span class="sg-item">MongoDB</span>
+      <span class="sg-item">Qdrant</span>
+      <span class="sg-item">Azure OpenAI</span>
+      <span class="sg-item">Azure ML</span>
+    </div>
+  </div>
+  <div class="sg">
+    <p class="sg-label">Deployment (Month 2–12)</p>
+    <div class="sg-items">
+      <span class="sg-item">Railway (dev)</span>
+      <span class="sg-item">Vercel (web)</span>
+      <span class="sg-item">Azure Container Apps</span>
+      <span class="sg-item">Azure Event Grid</span>
+    </div>
+  </div>
+  <div class="sg">
+    <p class="sg-label">Future AI (Month 9–12)</p>
+    <div class="sg-items">
+      <span class="sg-item">MS Foundry</span>
+      <span class="sg-item">Claude Teams</span>
+      <span class="sg-item">Copilot Studio</span>
+    </div>
+  </div>
+</div>
+
+<div class="oc">
+  <p class="ol">MongoDB + Voyage AI — how they fit in this stack</p>
+  <div class="fr"><span class="fk">MongoDB Atlas</span><span class="fv">Stores structured metadata alongside vector embeddings — lead profiles, campaign history, client interaction logs. Works alongside Qdrant, not instead of it.</span></div>
+  <div class="fr"><span class="fk">Voyage AI</span><span class="fv">Generates text embeddings for marketing content, review text, client communications. Better performance than OpenAI embeddings for retrieval tasks. Used for: review similarity search, lead context retrieval, campaign content RAG.</span></div>
+  <div class="fr"><span class="fk">Qdrant (on Railway → Azure)</span><span class="fv">Vector store for agent memory. Voyage AI creates the vectors, Qdrant stores and retrieves them. Agents retrieve past context during reasoning cycles.</span></div>
+  <div class="fr"><span class="fk">Vercel</span><span class="fv">Hosts any client-facing web interfaces (lead capture forms, reporting portals, dashboard embeds) connected to Fabric data via API routes.</span></div>
+  <div class="fr"><span class="fk">Railway (dev phase)</span><span class="fv">Hosts LangChain/LangGraph agents during development and testing. Cheaper and faster to iterate than Azure Container Apps. Migrate to Azure once agents are production-stable.</span></div>
+</div>
+</div>
+
+</div>
+
+<script>
+function go(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+function tog(h){h.closest('.week-block').classList.toggle('open')}
+</script>

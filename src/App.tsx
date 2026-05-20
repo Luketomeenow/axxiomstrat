@@ -1,6 +1,8 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from './components/AppLayout'
 import { BrandGuidelinesPage } from './pages/BrandGuidelinesPage'
+import { AiRoadmapPresentationPage } from './pages/AiRoadmapPresentationPage'
+import { AxxiomAiRoadmapPage } from './pages/AxxiomAiRoadmapPage'
 import { DocumentPage } from './pages/DocumentPage'
 import { HomePage } from './pages/HomePage'
 import { MarketingCampaignPage } from './pages/MarketingCampaignPage'
@@ -15,6 +17,8 @@ export default function App() {
         <Route path="/vectordbcomparison" element={<VectorDbComparisonPage />} />
         <Route path="/marketingvidsprompts" element={<MarketingVidsPromptsPage />} />
         <Route path="/marketingcampaign" element={<MarketingCampaignPage />} />
+        <Route path="/axxiomairoadmap" element={<AxxiomAiRoadmapPage />} />
+        <Route path="/airoadmap" element={<AiRoadmapPresentationPage />} />
         <Route element={<AppLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/doc/:slug" element={<DocumentPage />} />

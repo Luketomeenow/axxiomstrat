@@ -1,5 +1,14 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Clapperboard, Database, Layers, Megaphone, Palette } from 'lucide-react'
+import {
+  ArrowRight,
+  Clapperboard,
+  Database,
+  Layers,
+  Map,
+  Megaphone,
+  Palette,
+  Presentation,
+} from 'lucide-react'
 import {
   STRATEGY_DOCUMENTS,
   categoryLabel,
@@ -59,6 +68,22 @@ export function HomePage() {
           >
             <Megaphone className="h-4 w-4 text-amber-300" aria-hidden />
             Marketing campaign
+            <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
+          </Link>
+          <Link
+            to="/axxiomairoadmap"
+            className="inline-flex items-center gap-2 rounded-xl border border-indigo-800/30 bg-indigo-950/90 px-4 py-3 text-sm font-medium text-indigo-50 shadow-sm transition-colors hover:bg-indigo-950"
+          >
+            <Map className="h-4 w-4 text-indigo-300" aria-hidden />
+            AI roadmap 2026–27
+            <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
+          </Link>
+          <Link
+            to="/airoadmap"
+            className="inline-flex items-center gap-2 rounded-xl border border-violet-800/35 bg-violet-950/85 px-4 py-3 text-sm font-medium text-violet-50 shadow-sm transition-colors hover:bg-violet-950"
+          >
+            <Presentation className="h-4 w-4 text-violet-300" aria-hidden />
+            AI roadmap (presentation)
             <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
           </Link>
         </div>

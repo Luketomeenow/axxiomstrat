@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-Dedicated viewers: **`/brandguidelines`**, **`/vectordbcomparison`**, **`/marketingvidsprompts`**, **`/marketingcampaign`**.
+Dedicated viewers: **`/brandguidelines`**, **`/vectordbcomparison`**, **`/marketingvidsprompts`**, **`/marketingcampaign`**, **`/axxiomairoadmap`** (full HTML reference), **`/airoadmap`** (slide-style presentation of the same roadmap).
 
 ## Deploy (Netlify)
 
