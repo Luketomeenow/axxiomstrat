@@ -1,22 +1,29 @@
-import { useCallback, useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from 'react'
 import { createPortal } from 'react-dom'
 import type { RoadmapSlide } from '../../data/aiRoadmapSlides'
 
-/** Hover / focus tooltip for chart percentages (keyboard-accessible). Uses a portal so text is not clipped by scroll parents. */
-function DeckHoverPct({
-  pct,
+/** Hover / focus insight popover (portal). Trigger can be a % or a short text badge. */
+function DeckHoverInsightTrigger({
   insight,
   hint = 'Hover or focus for detail',
   buttonClassName,
+  children,
 }: {
-  pct: number
   insight: string
   hint?: string
-  /** Extra classes for the percentage control (e.g. larger closing gauge) */
   buttonClassName?: string
+  children: ReactNode
 }) {
   const rawId = useId()
-  const tipId = `deck-pct-${rawId.replace(/:/g, '')}`
+  const tipId = `deck-tip-${rawId.replace(/:/g, '')}`
   const btnRef = useRef<HTMLButtonElement>(null)
   const [open, setOpen] = useState(false)
   const [pos, setPos] = useState({ top: 0, left: 0, width: 320 })
@@ -54,12 +61,12 @@ function DeckHoverPct({
 
   return (
     <>
-      <span className="relative inline-flex shrink-0 flex-col items-end text-right">
+      <span className="relative inline-flex max-w-[13rem] shrink-0 flex-col items-end text-right">
         <button
           ref={btnRef}
           type="button"
           className={[
-            'rounded-md border border-transparent px-2 py-0.5 text-sm font-bold tabular-nums text-white outline-none ring-offset-2 ring-offset-[#060a14] transition-colors hover:border-white/15 hover:bg-white/[0.07] focus-visible:ring-2 focus-visible:ring-indigo-400/90',
+            'rounded-md border border-transparent px-2 py-0.5 text-left outline-none ring-offset-2 ring-offset-[#060a14] transition-colors hover:border-white/15 hover:bg-white/[0.07] focus-visible:ring-2 focus-visible:ring-indigo-400/90',
             buttonClassName ?? '',
           ].join(' ')}
           aria-describedby={open ? tipId : undefined}
@@ -69,7 +76,7 @@ function DeckHoverPct({
           onFocus={show}
           onBlur={hide}
         >
-          {pct}%
+          {children}
         </button>
         <span className="sr-only">{hint}</span>
       </span>
@@ -93,6 +100,31 @@ function DeckHoverPct({
           )
         : null}
     </>
+  )
+}
+
+function DeckHoverPct({
+  pct,
+  insight,
+  hint = 'Hover or focus for detail',
+  buttonClassName,
+}: {
+  pct: number
+  insight: string
+  hint?: string
+  buttonClassName?: string
+}) {
+  return (
+    <DeckHoverInsightTrigger
+      insight={insight}
+      hint={hint}
+      buttonClassName={[
+        'text-sm font-bold tabular-nums text-white',
+        buttonClassName ?? '',
+      ].join(' ')}
+    >
+      {pct}%
+    </DeckHoverInsightTrigger>
   )
 }
 
@@ -134,28 +166,45 @@ function BarRow({
   delayMs,
   glow = true,
   insight,
+  /** When set (with insight), replaces the numeric % on the right with this short label */
+  statusText,
 }: {
   label: string
   pct: number
   colorClass: string
   delayMs: number
   glow?: boolean
-  /** Shown in a tooltip when hovering or focusing the percentage */
   insight?: string
+  statusText?: string
 }) {
+  const right =
+    insight && statusText ? (
+      <DeckHoverInsightTrigger
+        insight={insight}
+        hint="What this label means"
+        buttonClassName="text-right text-[11px] font-semibold leading-snug text-indigo-100 sm:text-xs"
+      >
+        {statusText}
+      </DeckHoverInsightTrigger>
+    ) : insight ? (
+      <DeckHoverPct pct={pct} insight={insight} />
+    ) : statusText ? (
+      <span className="max-w-[13rem] shrink-0 text-right text-[11px] font-semibold leading-snug text-indigo-100/90 sm:text-xs">
+        {statusText}
+      </span>
+    ) : (
+      <span className="shrink-0 px-2 py-0.5 text-sm font-bold tabular-nums text-slate-300">
+        {pct}%
+      </span>
+    )
+
   return (
     <div className="group/bar space-y-2">
       <div className="flex items-start justify-between gap-3 sm:gap-4">
         <span className="min-w-0 max-w-[min(100%,28rem)] flex-1 text-sm font-medium leading-snug text-slate-200 sm:text-[15px]">
           {label}
         </span>
-        {insight ? (
-          <DeckHoverPct pct={pct} insight={insight} />
-        ) : (
-          <span className="shrink-0 px-2 py-0.5 text-sm font-bold tabular-nums text-slate-300">
-            {pct}%
-          </span>
-        )}
+        {right}
       </div>
       <div className="h-3 overflow-hidden rounded-full bg-black/50 ring-1 ring-inset ring-white/[0.07] sm:h-3.5">
         <div
@@ -405,42 +454,55 @@ function OutcomeMeters() {
     {
       label: 'Marketing → Fabric → BI',
       v: 92,
+      status: 'North star · Y1',
       insight:
-        'Illustrative “readiness” at year-end: eight marketing sources landed in Delta with live Power BI. High score because APIs are better bounded than internal ops objects.',
+        'This row is not “% complete.” It means: by year-end, the roadmap treats live marketing → Fabric → Power BI as a defining outcome — the spine other work hangs on.',
     },
     {
       label: 'Automations (GHL / Zapier)',
       v: 88,
+      status: 'North star · Y1',
       insight:
-        'Covers lead response, nurture, reviews, renewals, and outbound loops. Slightly below data layer because workflow edge cases and human approvals still matter.',
+        'Same idea: not a literal percent. It signals GHL/Zapier journeys (response, nurture, reviews, renewals, outbound) are co-equal priorities with the data plane in the year-one picture.',
     },
     {
       label: 'Ops data (FieldBoss / D365)',
       v: 78,
+      status: 'H2 build',
       insight:
-        'Starts in Phase 3: richer entities, more exceptions, and bidirectional writes. Lower than marketing until FieldBoss + Dynamics paths are stable in Fabric.',
+        'Shorter bar = later and heavier in the arc (Phase 3 onward): more entities, exceptions, and bidirectional sync — still a Y1 goal, but not a Month-1 finish line.',
     },
     {
       label: 'Agent-ready history',
       v: 72,
+      status: 'Depth gate',
       insight:
-        'Needs months of reconciled joins and labels — not just raw rows. Score reflects dependency on everything upstream staying clean for four quarters.',
+        'Emphasizes time-on-calendar: agents need months of reconciled joins and labels, not just raw rows. The bar encodes “depends on upstream staying clean,” not a dashboard metric.',
     },
     {
       label: 'Foundry on Fabric',
       v: 58,
+      status: 'Trust gate',
       insight:
-        'Later unlock: valuable once the lakehouse is trusted. Depends on governance, cost controls, and a clear “which workflows go to Foundry” boundary.',
+        'Lower emphasis in the narrative until the lakehouse and governance story are boringly reliable — then Foundry is worth the cost and policy overhead.',
     },
     {
       label: 'Claude Teams skills',
       v: 55,
+      status: 'Rollout',
       insight:
-        'Rollout and prompt-library work across departments. Lowest relative bar because it is organizational velocity as much as technical readiness.',
+        'Smallest bar: as much organizational rollout (libraries, permissions, change management) as engineering — so it reads as “last mile,” not “least important forever.”',
     },
   ]
   return (
     <div className="grid max-w-2xl gap-4">
+      <p className="text-[12px] leading-relaxed text-slate-400 sm:text-sm">
+        <span className="font-semibold text-slate-300">How to read this chart:</span> the{' '}
+        <span className="text-indigo-200/90">labels on the right</span> are story outcomes for May
+        ’27 — not measured completion. Bar length only shows{' '}
+        <span className="text-indigo-200/90">relative emphasis</span> in this deck (hover a label for
+        the full sentence).
+      </p>
       {rows.map((r, i) => (
         <BarRow
           key={r.label}
@@ -449,6 +511,7 @@ function OutcomeMeters() {
           colorClass="from-indigo-400 via-violet-500 to-fuchsia-500"
           delayMs={70 * i}
           insight={r.insight}
+          statusText={r.status}
         />
       ))}
     </div>
