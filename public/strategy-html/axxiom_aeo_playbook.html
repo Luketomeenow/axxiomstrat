@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Axxiom Elevator — AEO Execution Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f3ee;
+    --white: #ffffff;
+    --ink: #0f0f0d;
+    --ink2: #2a2a26;
+    --muted: #8a8a80;
+    --rule: rgba(0,0,0,0.08);
+    --accent: #1a3a5c;
+    --accent2: #c8410a;
+    --accent3: #1a7a4a;
+    --gold: #b8962e;
+    --blue-dim: rgba(26,58,92,0.07);
+    --red-dim: rgba(200,65,10,0.07);
+    --green-dim: rgba(26,122,74,0.07);
+    --gold-dim: rgba(184,150,46,0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--accent);
+    color: #fff;
+    padding: 72px 72px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: 'AEO';
+    position: absolute;
+    right: -20px; bottom: -40px;
+    font-family: 'Playfair Display', serif;
+    font-size: 220px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.04);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .h-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 20px;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 24px;
+    max-width: 700px;
+  }
+
+  .header h1 em {
+    font-style: normal;
+    color: #f0b44a;
+  }
+
+  .header-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,0.65);
+    max-width: 620px;
+    line-height: 1.7;
+    margin-bottom: 36px;
+  }
+
+  .stat-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px;
+    overflow: hidden;
+    max-width: 720px;
+  }
+
+  .stat-item {
+    flex: 1;
+    min-width: 140px;
+    padding: 18px 22px;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .stat-item:last-child { border-right: none; }
+
+  .stat-n {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #f0b44a;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-l {
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── NAV ── */
+  .nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--rule);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 0 var(--rule);
+  }
+
+  .nav-inner {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 72px;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+
+  .nav-btn {
+    flex-shrink: 0;
+    padding: 16px 20px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+  }
+
+  .nav-btn:hover { color: var(--ink); }
+  .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── SECTIONS ── */
+  .section { display: none; padding: 60px 72px; }
+  .section.active { display: block; }
+
+  /* ── TYPOGRAPHY ── */
+  .section-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 900;
+    color: var(--ink);
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  .section-lead {
+    font-size: 16px;
+    color: var(--ink2);
+    max-width: 700px;
+    line-height: 1.75;
+    margin-bottom: 52px;
+    border-left: 3px solid var(--accent);
+    padding-left: 20px;
+  }
+
+  .h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 20px;
+    margin-top: 48px;
+    letter-spacing: -0.01em;
+  }
+  .h2:first-of-type { margin-top: 0; }
+
+  .h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 28px 30px;
+  }
+
+  .card-blue { border-left: 3px solid var(--accent); }
+  .card-red { border-left: 3px solid var(--accent2); }
+  .card-green { border-left: 3px solid var(--accent3); }
+  .card-gold { border-left: 3px solid var(--gold); }
+
+  /* ── STEP CARDS ── */
+  .step {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .step-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 28px 30px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .step-num {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+
+  .step-meta { flex: 1; }
+
+  .step-phase {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+
+  .step-desc {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .step-chevron {
+    font-size: 18px;
+    color: var(--muted);
+    transition: transform 0.2s;
+    margin-top: 10px;
+    flex-shrink: 0;
+  }
+
+  .step.open .step-chevron { transform: rotate(90deg); }
+
+  .step-body {
+    display: none;
+    padding: 0 30px 30px 90px;
+    border-top: 1px solid var(--rule);
+  }
+  .step.open .step-body { display: block; }
+
+  /* ── GRIDS ── */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+  /* ── ACTION LIST ── */
+  .action-list { list-style: none; margin-top: 18px; }
+  .action-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14px;
+    color: var(--ink2);
+    line-height: 1.55;
+  }
+  .action-list li:last-child { border-bottom: none; }
+
+  .action-list li::before {
+    content: '→';
+    color: var(--accent2);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── CODE BLOCK ── */
+  .code-block {
+    background: #0f1117;
+    border-radius: 4px;
+    padding: 20px 22px;
+    margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #a8b3cf;
+    line-height: 1.8;
+    overflow-x: auto;
+    white-space: pre;
+    position: relative;
+  }
+
+  .code-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    margin-top: 20px;
+  }
+
+  .token-key { color: #79b8ff; }
+  .token-val { color: #9ecbff; }
+  .token-str { color: #f1e05a; }
+  .token-punc { color: #e1e4e8; }
+
+  /* ── QUERY TABLE ── */
+  .qtable { width: 100%; border-collapse: collapse; margin-top: 16px; }
+  .qtable th {
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 10px 14px;
+    border-bottom: 2px solid var(--rule);
+    font-weight: 500;
+  }
+  .qtable td {
+    padding: 12px 14px;
+    font-size: 13.5px;
+    color: var(--ink2);
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .qtable tr:last-child td { border-bottom: none; }
+  .qtable tr:hover td { background: var(--blue-dim); }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+  }
+  .badge-blue { background: var(--blue-dim); color: var(--accent); }
+  .badge-red { background: var(--red-dim); color: var(--accent2); }
+  .badge-green { background: var(--green-dim); color: var(--accent3); }
+  .badge-gold { background: var(--gold-dim); color: var(--gold); }
+
+  /* ── HIGHLIGHT BOX ── */
+  .highlight {
+    background: var(--blue-dim);
+    border: 1px solid rgba(26,58,92,0.15);
+    border-radius: 4px;
+    padding: 20px 22px;
+    margin: 20px 0;
+    font-size: 14px;
+    color: var(--accent);
+    line-height: 1.65;
+  }
+
+  .highlight strong { color: var(--accent); }
+
+  .warn-box {
+    background: var(--red-dim);
+    border: 1px solid rgba(200,65,10,0.15);
+    border-radius: 4px;
+    padding: 16px 20px;
+    font-size: 13.5px;
+    color: var(--accent2);
+    line-height: 1.65;
+    margin: 16px 0;
+  }
+
+  /* ── PRIORITY MATRIX ── */
+  .matrix {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+
+  .matrix-cell {
+    background: var(--white);
+    padding: 24px;
+  }
+
+  .matrix-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  .matrix-cell:nth-child(1) .matrix-label { color: var(--accent3); }
+  .matrix-cell:nth-child(2) .matrix-label { color: var(--accent); }
+  .matrix-cell:nth-child(3) .matrix-label { color: var(--muted); }
+  .matrix-cell:nth-child(4) .matrix-label { color: var(--accent2); }
+
+  /* ── DIVIDER ── */
+  .rule { height: 1px; background: var(--rule); margin: 40px 0; }
+
+  /* ── KPI TABLE ── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .kpi-cell {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .kpi-n {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .kpi-l {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline { margin-top: 8px; }
+  .tl { display: flex; gap: 0; margin-bottom: 12px; }
+  .tl-week {
+    flex-shrink: 0;
+    width: 80px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    padding-top: 3px;
+    letter-spacing: 0.04em;
+  }
+  .tl-bar {
+    flex: 1;
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 10px 16px;
+    font-size: 13px;
+    color: var(--ink2);
+    line-height: 1.5;
+  }
+  .tl-bar strong { color: var(--ink); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--accent);
+    color: rgba(255,255,255,0.5);
+    padding: 32px 72px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 60px;
+  }
+
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.02em;
+  }
+
+  .footer-mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .header, .section, .nav-inner, footer { padding-left: 20px; padding-right: 20px; }
+    .g2, .g3, .kpi-row, .matrix { grid-template-columns: 1fr; }
+    .step-body { padding-left: 20px; }
+    .stat-strip { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="h-label">Answer Engine Optimization · Execution Playbook · 2026</div>
+  <h1>How Axxiom Elevator Gets<br>Featured in <em>Every AI Answer</em></h1>
+  <p class="header-sub">A step-by-step AEO system built specifically for a 7-brand elevator service network — so when property managers, facility directors, and building owners ask Google, ChatGPT, or Perplexity "who's the best elevator company near me," Axxiom is the answer.</p>
+  <div class="stat-strip">
+    <div class="stat-item">
+      <div class="stat-n">55%</div>
+      <div class="stat-l">of Google searches now show AI Overviews</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">4.4×</div>
+      <div class="stat-l">AI visitors convert vs. organic traffic</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">89%</div>
+      <div class="stat-l">of B2B buyers use AI for vendor research</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-n">41%</div>
+      <div class="stat-l">AI citation rate with FAQ schema (vs 15% without)</div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-inner">
+    <button type="button" class="nav-btn active" data-aeo-tab="why" onclick="showTab('why', this)">Why AEO Now</button>
+    <button type="button" class="nav-btn" data-aeo-tab="targets" onclick="showTab('targets', this)">Target Queries</button>
+    <button type="button" class="nav-btn" data-aeo-tab="content" onclick="showTab('content', this)">Content Architecture</button>
+    <button type="button" class="nav-btn" data-aeo-tab="schema" onclick="showTab('schema', this)">Schema Markup</button>
+    <button type="button" class="nav-btn" data-aeo-tab="authority" onclick="showTab('authority', this)">Authority Signals</button>
+    <button type="button" class="nav-btn" data-aeo-tab="platforms" onclick="showTab('platforms', this)">Platform-by-Platform</button>
+    <button type="button" class="nav-btn" data-aeo-tab="execution" onclick="showTab('execution', this)">Execution Roadmap</button>
+    <button type="button" class="nav-btn" data-aeo-tab="measurement" onclick="showTab('measurement', this)">Measurement</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB 1 — WHY AEO NOW -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="why" class="section active">
+  <div class="section-kicker">The Shift Happening Right Now</div>
+  <div class="section-title">Why AEO Is No Longer Optional for Axxiom</div>
+  <p class="section-lead">Traditional SEO gets you into the top 10 links. AEO gets you into the single answer a potential client reads before they ever click anything. For elevator service — a high-stakes, urgent-need B2B purchase — being the AI's cited answer is worth more than ranking #1 organically.</p>
+
+  <div class="kpi-row">
+    <div class="kpi-cell">
+      <div class="kpi-n">55%</div>
+      <div class="kpi-l">of Google searches now feature AI Overviews — up from 7% in 2024</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-n">883M</div>
+      <div class="kpi-l">monthly users on ChatGPT searching for vendor recommendations</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-n">25%</div>
+      <div class="kpi-l">predicted drop in traditional search volume by end of 2026</div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-n">4.4×</div>
+      <div class="kpi-l">higher conversion rate from AI-referred visitors vs. organic</div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <div class="h2">What AEO Actually Means for Axxiom</div>
+  <div class="g2" style="margin-bottom:32px;">
+    <div class="card card-blue">
+      <div class="h3" style="color:var(--accent);">What Changes for Axxiom</div>
+      <ul class="action-list">
+        <li>When a property manager asks Google "best elevator maintenance company in Phoenix," the AI Overview will cite 1–3 sources — Axxiom's Arizona Elevator brand needs to be one of them</li>
+        <li>When a facility director uses ChatGPT to research "elevator modernization cost and timeline," Axxiom's content needs to be the authoritative source it pulls from</li>
+        <li>When Perplexity answers "who does elevator repair 24/7 in Texas," AmeriTex Elevator needs to appear with a direct citation</li>
+      </ul>
+    </div>
+    <div class="card card-red">
+      <div class="h3" style="color:var(--accent2);">The Risk of Not Acting</div>
+      <ul class="action-list">
+        <li>Competitors with better-structured content will be cited even if Axxiom ranks higher in traditional search — AI doesn't always pull from #1</li>
+        <li>Inaccurate or incomplete information about Axxiom could be surfaced by AI from third-party sources that misrepresent the brand</li>
+        <li>The first-mover advantage window for AEO is open right now — most elevator service companies have zero AEO strategy</li>
+        <li>B2B buyers using AI are further along in their decision journey — missing them at this stage means missing the sale</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <strong>The Axxiom Opportunity:</strong> Virtually no elevator service company in the U.S. is currently running a structured AEO strategy. This means Axxiom can establish dominant AI citation share across every market it operates in — before the competition even knows this game is being played.
+  </div>
+
+  <div class="rule"></div>
+
+  <div class="h2">AEO vs. SEO vs. GEO — What Axxiom Needs to Know</div>
+  <div class="g3">
+    <div class="card">
+      <div class="h3">Traditional SEO</div>
+      <p style="font-size:13.5px;color:var(--muted);line-height:1.65;">Gets Axxiom ranked on page 1 of Google. Still essential as the technical foundation. Focuses on links, authority, and crawlability. <strong style="color:var(--ink);">Still needed. Just not enough anymore.</strong></p>
+    </div>
+    <div class="card card-blue">
+      <div class="h3" style="color:var(--accent);">AEO (This Playbook)</div>
+      <p style="font-size:13.5px;color:var(--muted);line-height:1.65;">Gets Axxiom cited in AI Overviews, featured snippets, and "People Also Ask." Focuses on content structure, schema, and answer clarity. <strong style="color:var(--ink);">The highest-ROI move in 2026.</strong></p>
+    </div>
+    <div class="card">
+      <div class="h3">GEO (Advanced)</div>
+      <p style="font-size:13.5px;color:var(--muted);line-height:1.65;">Gets Axxiom cited in ChatGPT, Claude, Perplexity, and Gemini responses. Broader than AEO — includes entity building, brand mentions, and cross-platform authority. <strong style="color:var(--ink);">Layer 2 after AEO foundation.</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB 2 — TARGET QUERIES -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="targets" class="section">
+  <div class="section-kicker">Step 1 of 7 · Query Mapping</div>
+  <div class="section-title">The Exact Questions Axxiom Must Own</div>
+  <p class="section-lead">AEO starts with mapping every question a potential client could ask an AI about elevator services — then building content that directly answers each one with Axxiom as the source. These fall into four intent categories.</p>
+
+  <div class="h2">Category 1 — Urgent / Emergency Intent</div>
+  <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;">Highest commercial value. Person is in distress RIGHT NOW. AI will cite whichever brand has the clearest, most direct answer plus proven emergency response capability.</p>
+  <table class="qtable" style="margin-bottom:40px;">
+    <thead><tr><th>Query</th><th>Intent</th><th>Axxiom Brand to Feature</th><th>Priority</th></tr></thead>
+    <tbody>
+      <tr><td>"elevator out of service what to do"</td><td>Immediate help</td><td>All brands — include 24/7 phone CTA</td><td><span class="badge badge-red">CRITICAL</span></td></tr>
+      <tr><td>"emergency elevator repair [city]"</td><td>Vendor needed now</td><td>Regional brand for that city</td><td><span class="badge badge-red">CRITICAL</span></td></tr>
+      <tr><td>"elevator stuck between floors who to call"</td><td>Safety emergency</td><td>All brands — safety-first content</td><td><span class="badge badge-red">CRITICAL</span></td></tr>
+      <tr><td>"how fast can elevator be repaired"</td><td>Timeline urgency</td><td>All brands — SLA content page</td><td><span class="badge badge-red">CRITICAL</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="h2">Category 2 — Research / Evaluation Intent</div>
+  <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;">Buyer is comparing vendors or educating themselves. This is where Axxiom's content depth and expertise signals matter most. AI cites the most thorough, accurate answer.</p>
+  <table class="qtable" style="margin-bottom:40px;">
+    <thead><tr><th>Query</th><th>Angle to Own</th><th>Content Type</th><th>Priority</th></tr></thead>
+    <tbody>
+      <tr><td>"best elevator maintenance company [city/state]"</td><td>Local authority + reviews</td><td>Local landing page + GBP</td><td><span class="badge badge-red">CRITICAL</span></td></tr>
+      <tr><td>"how much does elevator maintenance cost"</td><td>Transparent pricing education</td><td>Pricing guide page</td><td><span class="badge badge-blue">HIGH</span></td></tr>
+      <tr><td>"how often should elevators be inspected"</td><td>Compliance expertise</td><td>FAQ + inspection guide blog</td><td><span class="badge badge-blue">HIGH</span></td></tr>
+      <tr><td>"elevator modernization vs replacement cost"</td><td>Financial decision guide</td><td>Comparison article</td><td><span class="badge badge-blue">HIGH</span></td></tr>
+      <tr><td>"what is included in elevator maintenance contract"</td><td>Transparency + trust</td><td>Service page + FAQ</td><td><span class="badge badge-blue">HIGH</span></td></tr>
+      <tr><td>"elevator service company vs OEM manufacturer"</td><td>Independent expertise angle</td><td>Comparison blog</td><td><span class="badge badge-gold">MEDIUM</span></td></tr>
+      <tr><td>"how to switch elevator maintenance company"</td><td>Switching guide</td><td>Guide page with CTA</td><td><span class="badge badge-gold">MEDIUM</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="h2">Category 3 — Compliance / Regulatory Intent</div>
+  <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;">High anxiety, high stakes. Property managers are afraid of violations. AI citations here = massive trust. Axxiom's technicians know local codes — this is a key differentiator to publish.</p>
+  <table class="qtable" style="margin-bottom:40px;">
+    <thead><tr><th>Query</th><th>Angle</th><th>Priority</th></tr></thead>
+    <tbody>
+      <tr><td>"elevator inspection requirements [state]"</td><td>State-by-state compliance pages</td><td><span class="badge badge-red">CRITICAL</span></td></tr>
+      <tr><td>"ADA elevator requirements for buildings"</td><td>ADA compliance guide</td><td><span class="badge badge-blue">HIGH</span></td></tr>
+      <tr><td>"elevator code violation penalties"</td><td>Risk + urgency content</td><td><span class="badge badge-blue">HIGH</span></td></tr>
+      <tr><td>"how to pass elevator inspection"</td><td>Practical checklist</td><td><span class="badge badge-blue">HIGH</span></td></tr>
+      <tr><td>"ASME A17.1 elevator code explained"</td><td>Technical authority</td><td><span class="badge badge-gold">MEDIUM</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="h2">Category 4 — Vertical-Specific Intent</div>
+  <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;">Each vertical market has unique concerns. Owning these queries makes Axxiom the go-to answer for each industry segment.</p>
+  <table class="qtable">
+    <thead><tr><th>Query</th><th>Vertical</th><th>Priority</th></tr></thead>
+    <tbody>
+      <tr><td>"hospital elevator requirements and maintenance"</td><td>Healthcare</td><td><span class="badge badge-red">CRITICAL</span></td></tr>
+      <tr><td>"hotel elevator maintenance best practices"</td><td>Hospitality</td><td><span class="badge badge-blue">HIGH</span></td></tr>
+      <tr><td>"apartment building elevator maintenance requirements"</td><td>Multifamily</td><td><span class="badge badge-blue">HIGH</span></td></tr>
+      <tr><td>"commercial building elevator service contract"</td><td>Office / Commercial</td><td><span class="badge badge-blue">HIGH</span></td></tr>
+      <tr><td>"university elevator ADA compliance"</td><td>Education</td><td><span class="badge badge-gold">MEDIUM</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB 3 — CONTENT ARCHITECTURE -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="content" class="section">
+  <div class="section-kicker">Step 2 of 7 · Content System</div>
+  <div class="section-title">Build Content AI Actually Wants to Cite</div>
+  <p class="section-lead">AI engines don't cite the most popular page — they cite the most extractable, accurate, and well-structured answer. Axxiom needs a content architecture specifically engineered for AI retrieval, not just human readers.</p>
+
+  <div class="step open">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-num">A</div>
+      <div class="step-meta">
+        <div class="step-phase">Rule #1 — The Most Important Change</div>
+        <div class="step-title">Answer First. Always.</div>
+        <div class="step-desc">Every page, every blog post, every FAQ must lead with a direct 40–60 word answer to the question it targets — before any context, intro, or explanation.</div>
+      </div>
+      <div class="step-chevron">›</div>
+    </div>
+    <div class="step-body">
+      <div class="warn-box">⚠️ The #1 reason Axxiom's content won't get cited: burying the answer. AI systems extract the first clear, complete answer to the query. If your first paragraph is "Great question, elevator maintenance is important for many reasons…" — the AI skips you.</div>
+      <div class="highlight">
+        <strong>The 40–60 Word Rule:</strong> Open every H2 section with a paragraph that directly answers the section heading as a question. No warm-up. No transitional phrases. State the answer, then support it. This is the single highest-leverage content change for AEO.
+      </div>
+      <div class="code-label">❌ WRONG — How Axxiom might be writing content now</div>
+      <div class="code-block">"Elevator maintenance is a critical part of managing any commercial property. Building owners 
+and property managers often wonder about the best approach to keeping their elevators running. 
+There are many factors to consider, including the age of the equipment, the building type..."</div>
+      <div class="code-label">✅ RIGHT — Answer-first format for AI citation</div>
+      <div class="code-block">"Commercial elevators should be serviced by a certified technician every 1–3 months, depending 
+on usage volume and equipment age. Buildings with more than 10 floors or high daily traffic 
+(over 200 trips/day) require monthly preventive maintenance to stay code-compliant and avoid 
+costly breakdowns. Most states require annual inspections by a licensed elevator inspector."</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-num">B</div>
+      <div class="step-meta">
+        <div class="step-phase">Rule #2 — Content Structure</div>
+        <div class="step-title">The 5 Content Types Axxiom Must Create</div>
+        <div class="step-desc">Each type serves a different AI retrieval pattern. Together, they cover every query category identified in Step 1.</div>
+      </div>
+      <div class="step-chevron">›</div>
+    </div>
+    <div class="step-body" style="padding-top:20px;">
+      <div class="g2">
+        <div class="card card-blue">
+          <div class="h3" style="color:var(--accent);">Type 1 — FAQ Hub Pages</div>
+          <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;">One comprehensive page per major topic with 15–25 Q&A pairs. These get FAQPage schema and become the primary source for AI citation across dozens of queries.</p>
+          <ul class="action-list">
+            <li>Create: "Complete Guide to Elevator Maintenance" (corporate)</li>
+            <li>Create: "Elevator Inspection Requirements by State" (Axxiom site)</li>
+            <li>Create: "Elevator Modernization: Everything You Need to Know"</li>
+            <li>Create: "Elevator Service Contracts Explained"</li>
+          </ul>
+        </div>
+        <div class="card card-green">
+          <div class="h3" style="color:var(--accent3);">Type 2 — Local Authority Pages</div>
+          <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;">City and state-specific pages for each brand's service area. These capture local AI Overviews and Google local pack citations simultaneously.</p>
+          <ul class="action-list">
+            <li>AmeriTex: "Elevator Service in Houston TX," "Dallas," "Austin," "San Antonio," "Los Angeles," "San Diego"</li>
+            <li>Arizona ES: "Phoenix," "Tucson," "Scottsdale," "Mesa"</li>
+            <li>Quality Elevator: "Baltimore," "Washington DC," "Philadelphia," "Richmond"</li>
+            <li>Each page includes local code info, response times, technician count</li>
+          </ul>
+        </div>
+        <div class="card card-red">
+          <div class="h3" style="color:var(--accent2);">Type 3 — Vertical Solution Pages</div>
+          <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;">Deep pages for each vertical market (Healthcare, Hotels, Office, Multifamily, Education) that address the specific pain points, compliance needs, and solutions for that industry.</p>
+          <ul class="action-list">
+            <li>Must include vertical-specific stats and regulations</li>
+            <li>Feature vertical-specific FAQs (minimum 8 Q&As per page)</li>
+            <li>Include case study or outcome data where possible</li>
+            <li>Add a "Questions Your Inspector Will Ask" section for compliance verticals</li>
+          </ul>
+        </div>
+        <div class="card card-gold">
+          <div class="h3" style="color:var(--gold);">Type 4 — Comparison & Decision Content</div>
+          <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;">Pages that answer "should I do X or Y" type questions. AI cites these heavily for middle-funnel queries where buyers are evaluating options.</p>
+          <ul class="action-list">
+            <li>"Elevator Modernization vs. Full Replacement: Cost & ROI Comparison"</li>
+            <li>"OEM vs. Independent Elevator Service Company: Pros and Cons"</li>
+            <li>"Full Maintenance vs. Oil & Grease Contract: Which Is Right for You?"</li>
+            <li>"How to Evaluate and Switch Your Elevator Service Vendor"</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px; border-left: 3px solid var(--accent);">
+        <div class="h3" style="color:var(--accent);">Type 5 — Data & Statistics Pages</div>
+        <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;">AI engines are heavily biased toward citing content that contains specific data, statistics, and cited references. A Princeton GEO study found statistics boost AI citation likelihood by ~30%.</p>
+        <ul class="action-list">
+          <li>Create: "Elevator Industry Statistics 2025–2026" (keep updated annually)</li>
+          <li>Include: Average elevator downtime costs per vertical, maintenance frequency benchmarks, modernization ROI averages, ADA violation statistics</li>
+          <li>Always cite the data source within the page itself — this is a trust signal for AI</li>
+          <li>Use tables and structured lists — these extract cleanly into AI responses</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-num">C</div>
+      <div class="step-meta">
+        <div class="step-phase">Rule #3 — Content Formatting</div>
+        <div class="step-title">Format Everything for Machine Extraction</div>
+        <div class="step-desc">How content is formatted matters as much as what it says. These structural rules make Axxiom's content far more likely to be extracted and cited by AI systems.</div>
+      </div>
+      <div class="step-chevron">›</div>
+    </div>
+    <div class="step-body" style="padding-top:20px;">
+      <div class="g2">
+        <div>
+          <div class="h3">Heading Structure</div>
+          <ul class="action-list">
+            <li>Every H2 must be phrased as a question: "How often should elevators be inspected?" not "Inspection Frequency"</li>
+            <li>H3s should contain the direct short answer: "Every 1–3 months depending on usage"</li>
+            <li>Never put important answers inside long paragraphs buried in the middle of content</li>
+          </ul>
+
+          <div class="h3" style="margin-top:24px;">Definition Blocks</div>
+          <ul class="action-list">
+            <li>For any industry term (elevator modernization, full maintenance contract, AHJ, ASME A17.1), create a formatted definition block: <strong>[Term]:</strong> one clear sentence definition + supporting paragraph</li>
+            <li>Wrap in DefinedTerm schema (covered in Schema tab)</li>
+            <li>These answer standalone AI queries like "what is elevator modernization"</li>
+          </ul>
+        </div>
+        <div>
+          <div class="h3">Tables & Lists</div>
+          <ul class="action-list">
+            <li>Use comparison tables wherever a "what's the difference between X and Y" question exists</li>
+            <li>Use numbered lists for processes: "How to prepare for an elevator inspection: 1. 2. 3…"</li>
+            <li>Tables extract cleanly into AI-generated answers and are preferred citation format</li>
+          </ul>
+
+          <div class="h3" style="margin-top:24px;">Content Freshness</div>
+          <ul class="action-list">
+            <li>Update key pages every 90 days — add the date at the top: "Last updated: [Month Year]"</li>
+            <li>AI systems favor recently updated content for compliance/regulatory queries</li>
+            <li>Set a quarterly content refresh calendar across all 7 brand sites</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB 4 — SCHEMA MARKUP -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="schema" class="section">
+  <div class="section-kicker">Step 3 of 7 · Technical Foundation</div>
+  <div class="section-title">Schema Markup — The Language AI Uses to Cite You</div>
+  <p class="section-lead">Schema markup is structured data code added to each webpage that tells AI systems exactly what your content means. Pages with proper schema are 40% more likely to be cited by AI engines. FAQPage schema alone gives a 41% AI citation rate vs. 15% without it. This is non-negotiable.</p>
+
+  <div class="highlight">
+    <strong>Priority for Axxiom:</strong> Implement these 5 schema types across all 8 websites (Axxiom corporate + 7 brands). JSON-LD format, validated through Google's Rich Results Test before publishing. This is a one-time build with ongoing maintenance — the ROI is compounding.
+  </div>
+
+  <div class="step open">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-num">1</div>
+      <div class="step-meta">
+        <div class="step-phase">Schema Type 1 · Homepage of all 8 sites</div>
+        <div class="step-title">Organization Schema — Your Brand's Machine-Readable Identity</div>
+        <div class="step-desc">Tells AI systems who Axxiom is, what it does, where it operates, and why it should be trusted. This is the foundational entity signal that every other schema builds on.</div>
+      </div>
+      <div class="step-chevron">›</div>
+    </div>
+    <div class="step-body">
+      <div class="code-label">JSON-LD — Axxiom Elevator Corporate (add to &lt;head&gt;)</div>
+      <div class="code-block"><span class="token-punc">{</span>
+  <span class="token-key">"@context"</span><span class="token-punc">:</span> <span class="token-str">"https://schema.org"</span><span class="token-punc">,</span>
+  <span class="token-key">"@type"</span><span class="token-punc">:</span> <span class="token-str">"Organization"</span><span class="token-punc">,</span>
+  <span class="token-key">"name"</span><span class="token-punc">:</span> <span class="token-str">"Axxiom Elevator"</span><span class="token-punc">,</span>
+  <span class="token-key">"alternateName"</span><span class="token-punc">:</span> <span class="token-str">"Axxiom Elevator LLC"</span><span class="token-punc">,</span>
+  <span class="token-key">"url"</span><span class="token-punc">:</span> <span class="token-str">"https://axxiomelevator.com"</span><span class="token-punc">,</span>
+  <span class="token-key">"logo"</span><span class="token-punc">:</span> <span class="token-str">"https://axxiomelevator.com/wp-content/uploads/2023/10/Axxiom_Color_NoTag.png"</span><span class="token-punc">,</span>
+  <span class="token-key">"description"</span><span class="token-punc">:</span> <span class="token-str">"Axxiom Elevator powers a national network of trusted regional elevator service companies providing maintenance, repair, modernization, inspection, and new installation across the United States."</span><span class="token-punc">,</span>
+  <span class="token-key">"slogan"</span><span class="token-punc">:</span> <span class="token-str">"Reliability In Motion"</span><span class="token-punc">,</span>
+  <span class="token-key">"telephone"</span><span class="token-punc">:</span> <span class="token-str">"[INSERT MAIN PHONE]"</span><span class="token-punc">,</span>
+  <span class="token-key">"email"</span><span class="token-punc">:</span> <span class="token-str">"[INSERT CONTACT EMAIL]"</span><span class="token-punc">,</span>
+  <span class="token-key">"address"</span><span class="token-punc">:</span> <span class="token-punc">{</span>
+    <span class="token-key">"@type"</span><span class="token-punc">:</span> <span class="token-str">"PostalAddress"</span><span class="token-punc">,</span>
+    <span class="token-key">"streetAddress"</span><span class="token-punc">:</span> <span class="token-str">"2101 W Atlantic Blvd, Unit 104"</span><span class="token-punc">,</span>
+    <span class="token-key">"addressLocality"</span><span class="token-punc">:</span> <span class="token-str">"Pompano Beach"</span><span class="token-punc">,</span>
+    <span class="token-key">"addressRegion"</span><span class="token-punc">:</span> <span class="token-str">"FL"</span><span class="token-punc">,</span>
+    <span class="token-key">"postalCode"</span><span class="token-punc">:</span> <span class="token-str">"33069"</span>
+  <span class="token-punc">}</span><span class="token-punc">,</span>
+  <span class="token-key">"knowsAbout"</span><span class="token-punc">:</span> <span class="token-punc">[</span>
+    <span class="token-str">"elevator maintenance"</span><span class="token-punc">,</span> <span class="token-str">"elevator repair"</span><span class="token-punc">,</span>
+    <span class="token-str">"elevator modernization"</span><span class="token-punc">,</span> <span class="token-str">"elevator inspection"</span><span class="token-punc">,</span>
+    <span class="token-str">"elevator installation"</span><span class="token-punc">,</span> <span class="token-str">"vertical transportation"</span><span class="token-punc">,</span>
+    <span class="token-str">"elevator code compliance"</span><span class="token-punc">,</span> <span class="token-str">"ASME A17.1"</span>
+  <span class="token-punc">]</span><span class="token-punc">,</span>
+  <span class="token-key">"sameAs"</span><span class="token-punc">:</span> <span class="token-punc">[</span>
+    <span class="token-str">"https://www.linkedin.com/company/axxiom-elevator/"</span><span class="token-punc">,</span>
+    <span class="token-str">"[Add Google Business Profile URL]"</span><span class="token-punc">,</span>
+    <span class="token-str">"[Add any other directory listing URLs]"</span>
+  <span class="token-punc">]</span><span class="token-punc">,</span>
+  <span class="token-key">"subOrganization"</span><span class="token-punc">:</span> <span class="token-punc">[</span>
+    <span class="token-punc">{</span> <span class="token-key">"@type"</span><span class="token-punc">:</span> <span class="token-str">"Organization"</span><span class="token-punc">,</span> <span class="token-key">"name"</span><span class="token-punc">:</span> <span class="token-str">"AmeriTex Elevator Services"</span><span class="token-punc">,</span> <span class="token-key">"url"</span><span class="token-punc">:</span> <span class="token-str">"https://ameritexelevator.com"</span> <span class="token-punc">}</span><span class="token-punc">,</span>
+    <span class="token-punc">{</span> <span class="token-key">"@type"</span><span class="token-punc">:</span> <span class="token-str">"Organization"</span><span class="token-punc">,</span> <span class="token-key">"name"</span><span class="token-punc">:</span> <span class="token-str">"Arizona Elevator Solutions"</span><span class="token-punc">,</span> <span class="token-key">"url"</span><span class="token-punc">:</span> <span class="token-str">"https://azelevatorsolutions.com"</span> <span class="token-punc">}</span><span class="token-punc">,</span>
+    <span class="token-punc">{</span> <span class="token-key">"@type"</span><span class="token-punc">:</span> <span class="token-str">"Organization"</span><span class="token-punc">,</span> <span class="token-key">"name"</span><span class="token-punc">:</span> <span class="token-str">"Liftech Elevator"</span><span class="token-punc">,</span> <span class="token-key">"url"</span><span class="token-punc">:</span> <span class="token-str">"https://liftechelevator.com"</span> <span class="token-punc">}</span><span class="token-punc">,</span>
+    <span class="token-punc">{</span> <span class="token-key">"@type"</span><span class="token-punc">:</span> <span class="token-str">"Organization"</span><span class="token-punc">,</span> <span class="token-key">"name"</span><span class="token-punc">:</span> <span class="token-str">"Motion Elevator Services"</span><span class="token-punc">,</span> <span class="token-key">"url"</span><span class="token-punc">:</span> <span class="token-str">"https://motionelevator.com"</span> <span class="token-punc">}</span><span class="token-punc">,</span>
+    <span class="token-punc">{</span> <span class="token-key">"@type"</span><span class="token-punc">:</span> <span class="token-str">"Organization"</span><span class="token-punc">,</span> <span class="token-key">"name"</span><span class="token-punc">:</span> <span class="token-str">"Quality Elevator Company"</span><span class="token-punc">,</span> <span class="token-key">"url"</span><span class="token-punc">:</span> <span class="token-str">"https://qualityelevator.com"</span> <span class="token-punc">}</span>
+  <span class="token-punc">]</span>
+<span class="token-punc">}</span></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-num">2</div>
+      <div class="step-meta">
+        <div class="step-phase">Schema Type 2 · All FAQ pages and blog posts</div>
+        <div class="step-title">FAQPage Schema — Highest AI Citation Impact</div>
+        <div class="step-desc">FAQPage schema is the single highest-ROI schema type for AEO. It maps questions to answers in exactly the format AI systems extract. 41% citation rate vs. 15% without it.</div>
+      </div>
+      <div class="step-chevron">›</div>
+    </div>
+    <div class="step-body">
+      <div class="warn-box">⚠️ Critical rule: The question and answer text in the schema must EXACTLY match the visible text on the page. Any mismatch will invalidate the markup and may trigger a Google penalty.</div>
+      <div class="code-label">JSON-LD — FAQPage Schema Example (Maintenance page)</div>
+      <div class="code-block"><span class="token-punc">{</span>
+  <span class="token-key">"@context"</span><span class="token-punc">:</span> <span class="token-str">"https://schema.org"</span><span class="token-punc">,</span>
+  <span class="token-key">"@type"</span><span class="token-punc">:</span> <span class="token-str">"FAQPage"</span><span class="token-punc">,</span>
+  <span class="token-key">"mainEntity"</span><span class="token-punc">:</span> <span class="token-punc">[</span>
+    <span class="token-punc">{</span>
+      <span class="token-key">"@type"</span><span class="token-punc">:</span> <span class="token-str">"Question"</span><span class="token-punc">,</span>
+      <span class="token-key">"name"</span><span class="token-punc">:</span> <span class="token-str">"How often should a commercial elevator be serviced?"</span><span class="token-punc">,</span>
+      <span class="token-key">"acceptedAnswer"</span><span class="token-punc">:</span> <span class="token-punc">{</span>
+        <span class="token-key">"@type"</span><span class="token-punc">:</span> <span class="token-str">"Answer"</span><span class="token-punc">,</span>
+        <span class="token-key">"text"</span><span class="token-punc">:</span> <span class="token-str">"Commercial elevators should be inspected and serviced monthly to quarterly depending on usage volume. High-traffic elevators in office buildings or hospitals require monthly preventive maintenance, while lower-usage residential or light commercial elevators may be serviced quarterly. Annual inspections by a licensed elevator inspector are required by law in most U.S. states."</span>
+      <span class="token-punc">}</span>
+    <span class="token-punc">}</span><span class="token-punc">,</span>
+    <span class="token-punc">{</span>
+      <span class="token-key">"@type"</span><span class="token-punc">:</span> <span class="token-str">"Question"</span><span class="token-punc">,</span>
+      <span class="token-key">"name"</span><span class="token-punc">:</span> <span class="token-str">"What is included in an elevator maintenance contract?"</span><span class="token-punc">,</span>
+      <span class="token-key">"acceptedAnswer"</span><span class="token-punc">:</span> <span class="token-punc">{</span>
+        <span class="token-key">"@type"</span><span class="token-punc">:</span> <span class="token-str">"Answer"</span><span class="token-punc">,</span>
+        <span class="token-key">"text"</span><span class="token-punc">:</span> <span class="token-str">"A full elevator maintenance contract typically includes monthly or quarterly preventive maintenance visits, lubrication and adjustment of all mechanical components, 24/7 emergency repair response, code compliance monitoring, and detailed service reports after each visit. Some contracts also include parts replacement and modernization planning services."</span>
+      <span class="token-punc">}</span>
+    <span class="token-punc">}</span>
+  <span class="token-punc">]</span>
+<span class="token-punc">}</span></div>
+      <div class="highlight" style="margin-top:16px;">Add 8–15 Q&A pairs per page. Each answer should be 40–80 words — long enough to be comprehensive, short enough to extract cleanly. Cover every query from Step 1 that relates to this page's topic.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-num">3</div>
+      <div class="step-meta">
+        <div class="step-phase">Schema Type 3 · All service pages</div>
+        <div class="step-title">Service + LocalBusiness Schema — Tell AI What You Do &amp; Where</div>
+        <div class="step-desc">Service schema describes each of Axxiom's 5 service lines in machine-readable format. LocalBusiness schema anchors each regional brand to its geographic service area.</div>
+      </div>
+      <div class="step-chevron">›</div>
+    </div>
+    <div class="step-body">
+      <div class="code-label">JSON-LD — Service Schema (Emergency Repair page)</div>
+      <div class="code-block"><span class="token-punc">{</span>
+  <span class="token-key">"@context"</span><span class="token-punc">:</span> <span class="token-str">"https://schema.org"</span><span class="token-punc">,</span>
+  <span class="token-key">"@type"</span><span class="token-punc">:</span> <span class="token-str">"Service"</span><span class="token-punc">,</span>
+  <span class="token-key">"name"</span><span class="token-punc">:</span> <span class="token-str">"Emergency Elevator Repair"</span><span class="token-punc">,</span>
+  <span class="token-key">"description"</span><span class="token-punc">:</span> <span class="token-str">"24/7 emergency elevator repair service for commercial and residential buildings. Certified technicians dispatch within hours for elevator outages, stuck elevators, door malfunctions, and safety system failures."</span><span class="token-punc">,</span>
+  <span class="token-key">"provider"</span><span class="token-punc">:</span> <span class="token-punc">{</span> <span class="token-key">"@type"</span><span class="token-punc">:</span> <span class="token-str">"Organization"</span><span class="token-punc">,</span> <span class="token-key">"name"</span><span class="token-punc">:</span> <span class="token-str">"Axxiom Elevator"</span> <span class="token-punc">}</span><span class="token-punc">,</span>
+  <span class="token-key">"serviceType"</span><span class="token-punc">:</span> <span class="token-str">"Elevator Repair"</span><span class="token-punc">,</span>
+  <span class="token-key">"availableChannel"</span><span class="token-punc">:</span> <span class="token-punc">{</span>
+    <span class="token-key">"@type"</span><span class="token-punc">:</span> <span class="token-str">"ServiceChannel"</span><span class="token-punc">,</span>
+    <span class="token-key">"servicePhone"</span><span class="token-punc">:</span> <span class="token-str">"[PHONE]"</span><span class="token-punc">,</span>
+    <span class="token-key">"availableLanguage"</span><span class="token-punc">:</span> <span class="token-str">"English"</span><span class="token-punc">,</span>
+    <span class="token-key">"hoursAvailable"</span><span class="token-punc">:</span> <span class="token-str">"Mo-Su 00:00-24:00"</span>
+  <span class="token-punc">}</span>
+<span class="token-punc">}</span></div>
+      <p style="font-size:13.5px;color:var(--muted);margin-top:16px;">Deploy Service schema on all 5 service pages (Maintenance, Repair, Modernization, New Installation, Inspection & Testing). Each regional brand site also gets LocalBusiness schema with its specific service area cities, phone number, and hours.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-num">4</div>
+      <div class="step-meta">
+        <div class="step-phase">Schema Type 4 · All blog posts &amp; guides</div>
+        <div class="step-title">Article + HowTo Schema — Claim Authorship & Process Authority</div>
+        <div class="step-desc">Article schema tells AI systems who wrote the content, when it was updated, and that it's expert-authored. HowTo schema structures any step-by-step content for direct AI extraction.</div>
+      </div>
+      <div class="step-chevron">›</div>
+    </div>
+    <div class="step-body">
+      <ul class="action-list" style="margin-top:12px;">
+        <li>Every blog post gets Article schema with: <code style="background:#f0f0f0;padding:2px 6px;border-radius:2px;font-size:12px;">author</code>, <code style="background:#f0f0f0;padding:2px 6px;border-radius:2px;font-size:12px;">datePublished</code>, <code style="background:#f0f0f0;padding:2px 6px;border-radius:2px;font-size:12px;">dateModified</code>, <code style="background:#f0f0f0;padding:2px 6px;border-radius:2px;font-size:12px;">publisher</code>, <code style="background:#f0f0f0;padding:2px 6px;border-radius:2px;font-size:12px;">wordCount</code></li>
+        <li>Author must link to a real person's bio page — create technician/expert author profiles on each brand site (name, credentials, years of experience, photo)</li>
+        <li>Any page with numbered steps (inspection prep, modernization planning) gets HowTo schema — these extract directly as step-by-step AI answers</li>
+        <li>Always include <code style="background:#f0f0f0;padding:2px 6px;border-radius:2px;font-size:12px;">dateModified</code> set to the last update date — freshness is a citation signal</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB 5 — AUTHORITY SIGNALS -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="authority" class="section">
+  <div class="section-kicker">Step 4 of 7 · Trust & E-E-A-T</div>
+  <div class="section-title">Build the Authority Signals AI Needs to Trust You</div>
+  <p class="section-lead">AI engines don't just look at content — they evaluate whether the brand behind it is a credible, expert, trustworthy source. For Axxiom, this means building real-world signals of expertise and authority that AI can detect and cite.</p>
+
+  <div class="g2" style="margin-bottom:32px;">
+    <div class="step open">
+      <div class="step-header" onclick="toggleStep(this)" style="cursor:default;">
+        <div class="step-num" style="background:var(--accent2);">E</div>
+        <div class="step-meta">
+          <div class="step-phase">Expert Authorship</div>
+          <div class="step-title">Real Technicians as Content Authors</div>
+        </div>
+      </div>
+      <div class="step-body" style="padding-top:16px;display:block;">
+        <ul class="action-list">
+          <li>Create author bio pages for 2–3 senior technicians per brand — name, certifications (NAEC, state license numbers), years of experience, specialization</li>
+          <li>All blog posts and guides attributed to a real named technician, not "Axxiom Team"</li>
+          <li>Add a credentials callout box at the top of each article: "Written by [Name], Certified Elevator Technician with 15 years experience in Texas code compliance"</li>
+          <li>Princeton GEO study: expert quotes boost AI citation visibility by 41%</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step open">
+      <div class="step-header" onclick="toggleStep(this)" style="cursor:default;">
+        <div class="step-num" style="background:var(--accent3);">R</div>
+        <div class="step-meta">
+          <div class="step-phase">Reviews & Reputation</div>
+          <div class="step-title">Google Reviews as AI Citation Fuel</div>
+        </div>
+      </div>
+      <div class="step-body" style="padding-top:16px;display:block;">
+        <ul class="action-list">
+          <li>Target 4.7+ star rating and 50+ reviews on Google Business Profile per brand — AI specifically weights review sentiment when recommending local service companies</li>
+          <li>Deploy automated post-service email: "How did we do? Your review helps other building managers find reliable service." Direct link to GBP review page</li>
+          <li>Respond to every Google review within 24 hours — AI picks up response patterns as engagement signals</li>
+          <li>Add Review schema to the website to surface star ratings in search results</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:32px;">
+    <div class="step open">
+      <div class="step-header" onclick="toggleStep(this)" style="cursor:default;">
+        <div class="step-num" style="background:var(--gold);">C</div>
+        <div class="step-meta">
+          <div class="step-phase">Citations & References</div>
+          <div class="step-title">Get Named in Other Sources</div>
+        </div>
+      </div>
+      <div class="step-body" style="padding-top:16px;display:block;">
+        <ul class="action-list">
+          <li>List all brands in: iGX, Elevator World Magazine directory, NAEC member directory, local Better Business Bureau, Angi, Houzz, Yelp (with consistent NAP)</li>
+          <li>Get featured in at least 2 industry publication articles per year — Elevator World, Buildings Magazine, Facility Executive. Even a quote counts as an AI-visible citation</li>
+          <li>Issue press releases for each new brand acquisition — distributed via PR Newswire. These get indexed and AI systems read press coverage as authority signals</li>
+          <li>Target BOMA blog, IREM blog, or ACHE (healthcare facilities) for guest article placement — each one is a citation that boosts AI trust</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step open">
+      <div class="step-header" onclick="toggleStep(this)" style="cursor:default;">
+        <div class="step-num" style="background:var(--accent);">D</div>
+        <div class="step-meta">
+          <div class="step-phase">Data & Statistics</div>
+          <div class="step-title">Publish Data AI Will Cite</div>
+        </div>
+      </div>
+      <div class="step-body" style="padding-top:16px;display:block;">
+        <ul class="action-list">
+          <li>Publish an annual "State of Elevator Safety" report — even a 1-page PDF with aggregated service data from Axxiom's network (anonymized) becomes a citable source</li>
+          <li>Create a "Downtime Cost Calculator" tool — interactive tools are heavily cited by AI as utility resources</li>
+          <li>Publish state-by-state elevator inspection fee tables and code update summaries — these become reference sources for compliance queries</li>
+          <li>Statistics from your own data are the most powerful — "In 2025, Axxiom's network serviced X elevators across Y states with an average response time of Z hours"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+  <div class="h2">The Wikipedia / Wikidata Play</div>
+  <div class="highlight">AI systems heavily weight entities that exist in Wikidata and Wikipedia. Axxiom is building a national brand — it should pursue a Wikipedia article and a Wikidata entity entry. Requirements: verifiable third-party coverage (news articles, industry press), notable scale (7 brands qualifies), and a neutral-tone Wikipedia draft. This is a medium-term project but has an outsized impact on AI citation trust.</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB 6 — PLATFORM BY PLATFORM -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="platforms" class="section">
+  <div class="section-kicker">Step 5 of 7 · Platform Targeting</div>
+  <div class="section-title">Platform-by-Platform Optimization</div>
+  <p class="section-lead">Each AI platform has slightly different citation behavior. The foundation (content + schema + authority) works across all of them, but there are platform-specific tactics that improve citation rates on each.</p>
+
+  <div class="g2">
+    <div class="card card-blue" style="margin-bottom:16px;">
+      <div class="h3" style="color:var(--accent);">Google AI Overviews (Highest Priority)</div>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px;">Appears in 55% of Google searches. Most likely where property managers encounter Axxiom first. Feeds from Google's index — traditional SEO foundation matters most here.</p>
+      <ul class="action-list">
+        <li><strong>Rank first on Google</strong> — AI Overviews heavily (not exclusively) pull from top-ranking pages. SEO and AEO must work together here</li>
+        <li><strong>Featured Snippet optimization</strong> — use the exact question as an H2, follow immediately with a 40–55 word direct answer paragraph</li>
+        <li><strong>People Also Ask domination</strong> — target every PAA question in your FAQ pages. These feed directly into AI Overviews</li>
+        <li><strong>Google Business Profile</strong> — fully optimized GBP is cited directly in local AI Overviews for service queries</li>
+        <li><strong>Core Web Vitals</strong> — page load speed and mobile performance affect AI Overview eligibility</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid #00a67e; margin-bottom:16px;">
+      <div class="h3" style="color:#00a67e;">ChatGPT Search (Rising Fast)</div>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px;">883M monthly users. ChatGPT now browses the web and cites sources. Its citation behavior differs from Google — it favors comprehensive, well-organized content with clear entity signals.</p>
+      <ul class="action-list">
+        <li><strong>Bing indexing</strong> — ChatGPT's web search uses Bing. Submit all 8 sitemaps to Bing Webmaster Tools immediately</li>
+        <li><strong>Comprehensive pages win</strong> — ChatGPT tends to cite longer, more thorough pages over short ones. Target 1,500–3,000 words on pillar pages</li>
+        <li><strong>Brand mentions matter</strong> — get "Axxiom Elevator" mentioned by name on third-party sites (directories, press, partners)</li>
+        <li><strong>Clear entity structure</strong> — Organization schema + consistent NAP across all directories helps ChatGPT identify Axxiom as a trustworthy entity</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid #6366f1; margin-bottom:16px;">
+      <div class="h3" style="color:#6366f1;">Perplexity AI (Research-Stage Buyers)</div>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px;">Heavy usage among researchers and B2B buyers doing vendor due diligence. Cites sources visibly and aggressively. A Perplexity citation is a direct link the buyer can click.</p>
+      <ul class="action-list">
+        <li><strong>Data-rich pages get cited most</strong> — include statistics, benchmarks, and sourced facts. Perplexity trusts pages that cite their own sources</li>
+        <li><strong>Authority domain links</strong> — get linked from .gov, .edu, or industry association (.naec.org) pages — Perplexity weights these domains heavily</li>
+        <li><strong>Fresh content signal</strong> — Perplexity favors recently updated content. Add "Last Updated" dates and refresh quarterly</li>
+        <li><strong>Target "best elevator company in [city]" queries</strong> — Perplexity is commonly used for vendor comparison research</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid #ea4335; margin-bottom:16px;">
+      <div class="h3" style="color:#ea4335;">Google Gemini + AI Mode</div>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:14px;">Google's AI Mode (now separate from AI Overviews) provides deeper, more conversational answers. It's used by more research-intensive searchers — ideal for catching building owners in evaluation mode.</p>
+      <ul class="action-list">
+        <li><strong>Topical authority clusters</strong> — Gemini favors sites that are comprehensive on a topic, not just good on individual pages. Build interconnected content across all elevator topics</li>
+        <li><strong>Structured data is amplified</strong> — Gemini's retrieval is particularly schema-sensitive. All schema from Step 3 applies doubly here</li>
+        <li><strong>YouTube content</strong> — Gemini (being Google) incorporates YouTube video content. Short educational videos on Axxiom's YouTube channel feed Gemini citations</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+  <div class="h2">Voice Search — The Silent AEO Channel</div>
+  <div class="card card-gold">
+    <p style="font-size:14px;color:var(--ink2);line-height:1.7;">Voice assistants (Siri, Alexa, Google Assistant) pull from the same AI Overview and featured snippet sources. For elevator service, voice searches happen when someone is physically standing in a building lobby, phone in hand, frustrated. Target queries like: <strong>"Hey Google, who repairs elevators near me"</strong> and <strong>"What do I do if my elevator breaks"</strong> — these need direct, 1–2 sentence answers at the top of relevant pages.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB 7 — EXECUTION ROADMAP -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="execution" class="section">
+  <div class="section-kicker">Step 6 of 7 · Execution Plan</div>
+  <div class="section-title">The 90-Day AEO Execution Roadmap</div>
+  <p class="section-lead">Structured as 4 sprints. Each sprint builds on the last. By Day 90, Axxiom has a complete AEO system running across all 8 sites with measurable AI citation share growing week over week.</p>
+
+  <div class="step open">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-num">1</div>
+      <div class="step-meta">
+        <div class="step-phase">Days 1–21 · Foundation Sprint</div>
+        <div class="step-title">Technical Setup & Schema Deployment</div>
+        <div class="step-desc">Get all the invisible infrastructure in place. This sprint does not produce visible content yet — it prepares every site to be AI-readable. Critical to do first.</div>
+      </div>
+      <div class="step-chevron">›</div>
+    </div>
+    <div class="step-body" style="padding-top:16px;">
+      <div class="timeline">
+        <div class="tl"><div class="tl-week">Week 1</div><div class="tl-bar"><strong>Technical Audit:</strong> Run all 8 sites through Google Search Console, Screaming Frog, and PageSpeed Insights. Document every missing schema, broken structured data, and slow-loading page. Submit all sitemaps to Bing Webmaster Tools.</div></div>
+        <div class="tl"><div class="tl-week">Week 2</div><div class="tl-bar"><strong>Schema Build:</strong> Deploy Organization schema on all 8 homepages. Deploy Service schema on all 5 service pages across all brand sites. Add LocalBusiness schema to all regional brand homepages with service area markup.</div></div>
+        <div class="tl"><div class="tl-week">Week 3</div><div class="tl-bar"><strong>Schema Validation & GBP:</strong> Validate all schema in Google Rich Results Test. Fix any errors. Fully optimize all Google Business Profiles — photos, services, Q&A section, posts. Create author bio pages on each brand site with expert credentials.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-num">2</div>
+      <div class="step-meta">
+        <div class="step-phase">Days 22–45 · Content Sprint</div>
+        <div class="step-title">Answer-First Content Creation</div>
+        <div class="step-desc">Build the content library AI will pull from. Focus on the 5 content types — FAQ hubs, local pages, vertical pages, comparison guides, and data pages. Prioritize by query volume and brand market.</div>
+      </div>
+      <div class="step-chevron">›</div>
+    </div>
+    <div class="step-body" style="padding-top:16px;">
+      <div class="timeline">
+        <div class="tl"><div class="tl-week">Week 4</div><div class="tl-bar"><strong>Priority Content 1:</strong> Write and publish the "Complete Guide to Elevator Maintenance" on Axxiom.com (3,000 words, answer-first format, 15 Q&As with FAQPage schema). Simultaneously, write 3 city pages per brand site for top markets.</div></div>
+        <div class="tl"><div class="tl-week">Week 5</div><div class="tl-bar"><strong>Priority Content 2:</strong> Publish "Elevator Inspection Requirements by State" (compliance authority page). Publish emergency repair FAQ page on each brand site with 24/7 contact prominently placed. Add HowTo schema to inspection prep guide.</div></div>
+        <div class="tl"><div class="tl-week">Week 6</div><div class="tl-bar"><strong>Vertical Pages:</strong> Publish Healthcare and Office vertical solution pages on Axxiom.com. Reformat existing service pages to answer-first structure. Add FAQPage schema to all existing pages that have FAQ content already on them.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-num">3</div>
+      <div class="step-meta">
+        <div class="step-phase">Days 46–70 · Authority Sprint</div>
+        <div class="step-title">External Signals & Brand Mentions</div>
+        <div class="step-desc">Drive third-party citations, earn directory listings, pursue media placements. The goal is getting Axxiom mentioned by name on authoritative external sources AI can reference.</div>
+      </div>
+      <div class="step-chevron">›</div>
+    </div>
+    <div class="step-body" style="padding-top:16px;">
+      <div class="timeline">
+        <div class="tl"><div class="tl-week">Week 7</div><div class="tl-bar"><strong>Directory Blitz:</strong> Submit all 8 brands to: NAEC directory, Elevator World vendor listings, Angi, BBB, Houzz, Apple Maps, Bing Places, Yelp Business, and all major local directories. Verify consistent NAP on all listings.</div></div>
+        <div class="tl"><div class="tl-week">Week 8</div><div class="tl-bar"><strong>PR Outreach:</strong> Write and distribute press releases for any recent brand additions or milestones via PR Newswire. Pitch Elevator World Magazine for a feature on Axxiom's national network model. Reach out to BOMA blog for a guest article on elevator modernization ROI.</div></div>
+        <div class="tl"><div class="tl-week">Week 9-10</div><div class="tl-bar"><strong>Review Campaign & Data Page:</strong> Launch automated post-service review request emails across all brands. Publish "Elevator Downtime Cost Calculator" interactive tool. Publish "2026 Elevator Compliance Guide" PDF available for free download in exchange for email.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-num">4</div>
+      <div class="step-meta">
+        <div class="step-phase">Days 71–90 · Measurement & Optimization</div>
+        <div class="step-title">Track AI Citations & Double Down on What Works</div>
+        <div class="step-desc">Measure AI citation share, identify which content is being pulled by AI systems, and optimize the top-performing pages to capture even more citation volume.</div>
+      </div>
+      <div class="step-chevron">›</div>
+    </div>
+    <div class="step-body" style="padding-top:16px;">
+      <div class="timeline">
+        <div class="tl"><div class="tl-week">Week 11</div><div class="tl-bar"><strong>Citation Audit:</strong> Manually test 50 target queries in Google AI Overviews, ChatGPT, and Perplexity. Document which Axxiom pages are being cited, which queries Axxiom is absent from, and which competitors are being cited instead.</div></div>
+        <div class="tl"><div class="tl-week">Week 12</div><div class="tl-bar"><strong>Optimization:</strong> For every query where a competitor is cited instead of Axxiom: analyze what their content does differently (length, structure, answer clarity, schema). Update Axxiom's equivalent page to outperform it. Publish remaining vertical pages (Hotel, Multifamily, Education).</div></div>
+        <div class="tl"><div class="tl-week">Day 90</div><div class="tl-bar"><strong>Full Reporting:</strong> Present AI citation share by query category and platform. Set Q2 targets. Build ongoing monthly AEO rhythm: 2 new content pieces, 1 refreshed old page, citation monitoring every 2 weeks.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- TAB 8 — MEASUREMENT -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="measurement" class="section">
+  <div class="section-kicker">Step 7 of 7 · Track What Matters</div>
+  <div class="section-title">How to Measure AEO Success for Axxiom</div>
+  <p class="section-lead">AEO success isn't measured the same way as SEO. The metrics that matter are citation share, AI referral traffic, and ultimately — qualified consultation requests attributable to AI-sourced discovery.</p>
+
+  <div class="h2">The 4 AEO Metrics Axxiom Must Track</div>
+  <div class="g2" style="margin-bottom:40px;">
+    <div class="card card-blue">
+      <div class="h3" style="color:var(--accent);">Metric 1 — AI Citation Share</div>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;"><strong style="color:var(--ink);">What it is:</strong> % of target queries (from Step 1) where Axxiom or its brands are cited in AI Overviews, ChatGPT, or Perplexity responses.</p>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;"><strong style="color:var(--ink);">How to track:</strong> Manual testing — run each target query in each AI platform and record whether Axxiom is cited. Use a spreadsheet. Do this monthly for all 50+ priority queries.</p>
+      <p style="font-size:13.5px;color:var(--muted);"><strong style="color:var(--ink);">Tools:</strong> Peec.ai, Brandwatch AI Monitor, or Semrush AI Overview tracking</p>
+    </div>
+    <div class="card card-red">
+      <div class="h3" style="color:var(--accent2);">Metric 2 — AI-Referred Traffic</div>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;"><strong style="color:var(--ink);">What it is:</strong> Visitors arriving from ChatGPT, Perplexity, or Google AI Overviews. These visitors convert at 4.4× the rate of organic search visitors.</p>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;"><strong style="color:var(--ink);">How to track:</strong> In Google Analytics 4 — create a segment for referrals from chat.openai.com, perplexity.ai, and claude.ai. Also monitor for "direct" traffic spikes that correlate with AI coverage.</p>
+      <p style="font-size:13.5px;color:var(--muted);"><strong style="color:var(--ink);">Target:</strong> Track month-over-month growth. Even 20 AI-referred visitors/month who convert at 4.4× is worth more than 88 organic visitors.</p>
+    </div>
+    <div class="card card-green">
+      <div class="h3" style="color:var(--accent3);">Metric 3 — Featured Snippet Capture Rate</div>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;"><strong style="color:var(--ink);">What it is:</strong> % of target queries where Axxiom owns the featured snippet (Position 0) — the box at the top of Google. Featured snippets are the primary feed for Google AI Overviews.</p>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;"><strong style="color:var(--ink);">How to track:</strong> Google Search Console — filter by query, look for featured snippet annotations. Tools: SEMrush, Ahrefs.</p>
+      <p style="font-size:13.5px;color:var(--muted);"><strong style="color:var(--ink);">Target:</strong> Win featured snippets on at least 10 priority queries within 90 days of content launch.</p>
+    </div>
+    <div class="card card-gold">
+      <div class="h3" style="color:var(--gold);">Metric 4 — Consultation Requests from AI Traffic</div>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;"><strong style="color:var(--ink);">What it is:</strong> The bottom line — how many free consultation requests or calls originated from AI-sourced visitors. This ties AEO directly to revenue.</p>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:12px;"><strong style="color:var(--ink);">How to track:</strong> UTM parameters on all internal CTAs, call tracking numbers on each brand site, GA4 goal conversions filtered by AI referral source.</p>
+      <p style="font-size:13.5px;color:var(--muted);"><strong style="color:var(--ink);">Target:</strong> Attribute at least 5–10 consultation requests/month per brand to AI traffic by Month 3.</p>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+  <div class="h2">Recommended Tools Stack</div>
+  <table class="qtable">
+    <thead><tr><th>Tool</th><th>Purpose</th><th>Cost Range</th><th>Priority</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Google Search Console</strong></td><td>Track featured snippets, impressions, clicks by query</td><td>Free</td><td><span class="badge badge-red">MUST HAVE</span></td></tr>
+      <tr><td><strong>Google Analytics 4</strong></td><td>Track AI-referred traffic and conversions</td><td>Free</td><td><span class="badge badge-red">MUST HAVE</span></td></tr>
+      <tr><td><strong>Google Rich Results Test</strong></td><td>Validate all schema markup before publishing</td><td>Free</td><td><span class="badge badge-red">MUST HAVE</span></td></tr>
+      <tr><td><strong>Bing Webmaster Tools</strong></td><td>Ensure ChatGPT's search index includes all pages</td><td>Free</td><td><span class="badge badge-red">MUST HAVE</span></td></tr>
+      <tr><td><strong>Peec.ai or Semrush AI Toolkit</strong></td><td>Track AI citation share across platforms automatically</td><td>$99–$299/mo</td><td><span class="badge badge-blue">HIGH VALUE</span></td></tr>
+      <tr><td><strong>CallRail</strong></td><td>Call tracking — attribute phone calls to AI traffic source</td><td>$45+/mo</td><td><span class="badge badge-blue">HIGH VALUE</span></td></tr>
+      <tr><td><strong>Screaming Frog SEO Spider</strong></td><td>Full technical site audit for schema and structure issues</td><td>$259/yr</td><td><span class="badge badge-gold">USEFUL</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="rule"></div>
+  <div class="h2">The Monthly AEO Rhythm (Ongoing)</div>
+  <div class="card card-blue" style="margin-top:8px;">
+    <ul class="action-list">
+      <li><strong>Week 1:</strong> Run citation audit on 20 priority queries across Google AI, ChatGPT, Perplexity. Update the citation tracking spreadsheet.</li>
+      <li><strong>Week 2:</strong> Publish 1 new answer-first content piece targeting an uncaptured query. Refresh 1 existing page (update stats, improve answer clarity, update dateModified).</li>
+      <li><strong>Week 3:</strong> Review GA4 for AI referral traffic trends. Check review counts per brand — respond to all new reviews. Send post-service review request emails.</li>
+      <li><strong>Week 4:</strong> Review schema health — run key pages through Rich Results Test, fix any errors. Report on month's citation gains. Plan next month's content targets.</li>
+    </ul>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand">Axxiom Elevator · AEO Execution Playbook</div>
+  <div class="footer-mono">Answer Engine Optimization · 2026 · Reliability In Motion™</div>
+</footer>
+
+<script>
+  function showTab(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleStep(el) {
+    const step = el.closest('.step');
+    step.classList.toggle('open');
+  }
+</script>
+</body>
+</html>

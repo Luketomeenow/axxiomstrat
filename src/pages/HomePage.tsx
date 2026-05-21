@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
 import {
   ArrowRight,
+  BookOpenCheck,
   Clapperboard,
   Database,
   Layers,
+  LayoutGrid,
   Map,
   Megaphone,
   Palette,
@@ -71,6 +73,14 @@ export function HomePage() {
             <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
           </Link>
           <Link
+            to="/axxiom4campaign"
+            className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-[#141210] px-4 py-3 text-sm font-medium text-[#f7f5f0] shadow-sm ring-1 ring-white/10 transition-colors hover:bg-[#1c1c18]"
+          >
+            <LayoutGrid className="h-4 w-4 text-[#7eb8ff]" aria-hidden />
+            4-campaign system
+            <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
+          </Link>
+          <Link
             to="/axxiomairoadmap"
             className="inline-flex items-center gap-2 rounded-xl border border-indigo-800/30 bg-indigo-950/90 px-4 py-3 text-sm font-medium text-indigo-50 shadow-sm transition-colors hover:bg-indigo-950"
           >
@@ -84,6 +94,14 @@ export function HomePage() {
           >
             <Presentation className="h-4 w-4 text-violet-300" aria-hidden />
             AI roadmap (presentation)
+            <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
+          </Link>
+          <Link
+            to="/aeogeoplaybook"
+            className="inline-flex items-center gap-2 rounded-xl border border-[#1a3a5c]/50 bg-gradient-to-br from-[#0f2847] to-[#1a3a5c] px-4 py-3 text-sm font-medium text-amber-50 shadow-sm ring-1 ring-amber-500/25 transition-colors hover:from-[#132f4f] hover:to-[#1e4570]"
+          >
+            <BookOpenCheck className="h-4 w-4 text-amber-300" aria-hidden />
+            AEO execution playbook
             <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
           </Link>
         </div>

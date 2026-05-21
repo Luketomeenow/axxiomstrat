@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import {
+  BookOpenCheck,
   Clapperboard,
   Database,
   ExternalLink,
+  LayoutGrid,
   Map,
   Megaphone,
   PanelLeft,
@@ -102,6 +104,13 @@ export function AppLayout() {
             </span>
           </NavLink>
 
+          <NavLink to="/axxiom4campaign" className={navClass}>
+            <span className="flex items-center gap-2">
+              <LayoutGrid className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+              4-campaign system
+            </span>
+          </NavLink>
+
           <NavLink to="/axxiomairoadmap" className={navClass}>
             <span className="flex items-center gap-2">
               <Map className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
@@ -113,6 +122,13 @@ export function AppLayout() {
             <span className="flex items-center gap-2">
               <Presentation className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
               AI roadmap (presentation)
+            </span>
+          </NavLink>
+
+          <NavLink to="/aeogeoplaybook" className={navClass}>
+            <span className="flex items-center gap-2">
+              <BookOpenCheck className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+              AEO playbook
             </span>
           </NavLink>
 

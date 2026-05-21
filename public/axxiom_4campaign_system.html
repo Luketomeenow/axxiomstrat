@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Axxiom Elevator — 4-Service Marketing Campaign</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=Mulish:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:     #0d0d0b;
+    --off:     #f7f5f0;
+    --canvas:  #faf9f6;
+    --white:   #ffffff;
+    --rule:    rgba(0,0,0,0.08);
+    --muted:   #888880;
+
+    /* Campaign brand colors */
+    --c1:      #1c4a8a;   /* Maintenance — Navy */
+    --c1d:     rgba(28,74,138,0.09);
+    --c2:      #7a3000;   /* Modernization — Burnt Sienna */
+    --c2d:     rgba(122,48,0,0.09);
+    --c3:      #8b1c1c;   /* Repair — Deep Red */
+    --c3d:     rgba(139,28,28,0.09);
+    --c4:      #1a6640;   /* Code Compliance — Forest Green */
+    --c4d:     rgba(26,102,64,0.09);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: 'Mulish', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ──────────── MASTHEAD ──────────── */
+  .masthead {
+    background: var(--ink);
+    color: var(--white);
+    padding: 72px 72px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .masthead::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -55deg,
+      rgba(255,255,255,0.015) 0px,
+      rgba(255,255,255,0.015) 1px,
+      transparent 1px,
+      transparent 40px
+    );
+    pointer-events: none;
+  }
+
+  .mast-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 24px;
+  }
+
+  .mast-h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(44px, 6vw, 80px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 28px;
+    max-width: 800px;
+  }
+
+  .mast-h1 em { font-style: italic; }
+  .mast-h1 span { color: rgba(255,255,255,0.25); }
+
+  .mast-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.55);
+    max-width: 580px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+
+  /* Campaign selector pills */
+  .camp-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .camp-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+  }
+
+  .camp-pill:hover { background: rgba(255,255,255,0.12); }
+  .camp-pill.active-c1 { background: var(--c1); border-color: var(--c1); }
+  .camp-pill.active-c2 { background: var(--c2); border-color: var(--c2); }
+  .camp-pill.active-c3 { background: var(--c3); border-color: var(--c3); }
+  .camp-pill.active-c4 { background: var(--c4); border-color: var(--c4); }
+
+  .pill-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .pill-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.02em;
+  }
+
+  /* ──────────── NAV ──────────── */
+  .subnav {
+    background: var(--white);
+    border-bottom: 1px solid var(--rule);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+
+  .subnav-inner {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 72px;
+  }
+  .subnav-inner::-webkit-scrollbar { display: none; }
+
+  .snav-btn {
+    flex-shrink: 0;
+    padding: 15px 20px;
+    background: none;
+    border: none;
+    border-bottom: 2.5px solid transparent;
+    font-family: 'Mulish', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+
+  .snav-btn:hover { color: var(--ink); }
+  .snav-btn.a1 { color: var(--c1); border-bottom-color: var(--c1); }
+  .snav-btn.a2 { color: var(--c2); border-bottom-color: var(--c2); }
+  .snav-btn.a3 { color: var(--c3); border-bottom-color: var(--c3); }
+  .snav-btn.a4 { color: var(--c4); border-bottom-color: var(--c4); }
+
+  /* ──────────── SECTIONS ──────────── */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ──────────── CAMPAIGN HEADER STRIP ──────────── */
+  .camp-strip {
+    padding: 52px 72px 44px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .camp-strip::before {
+    content: attr(data-label);
+    position: absolute;
+    right: 40px; top: -20px;
+    font-family: 'Fraunces', serif;
+    font-size: 160px;
+    font-weight: 900;
+    opacity: 0.04;
+    color: var(--ink);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .camp-kicker {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .camp-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 18px;
+    max-width: 700px;
+  }
+
+  .camp-tagline {
+    font-size: 17px;
+    font-style: italic;
+    font-weight: 300;
+    margin-bottom: 28px;
+    max-width: 620px;
+    line-height: 1.6;
+  }
+
+  .camp-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .meta-chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 2px;
+    border: 1px solid;
+    letter-spacing: 0.06em;
+  }
+
+  /* ──────────── INNER NAV ──────────── */
+  .inner-nav {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--rule);
+    background: var(--off);
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 72px;
+  }
+  .inner-nav::-webkit-scrollbar { display: none; }
+
+  .in-btn {
+    flex-shrink: 0;
+    padding: 12px 18px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-family: 'Mulish', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .in-btn.in-active { color: var(--ink); border-bottom-color: var(--ink); }
+
+  /* ──────────── INNER PANELS ──────────── */
+  .inner-panel { display: none; padding: 52px 72px 60px; }
+  .inner-panel.active { display: block; }
+
+  /* ──────────── TYPOGRAPHY ──────────── */
+  .ph2 {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+    margin-top: 40px;
+    line-height: 1.2;
+  }
+
+  .ph2:first-child { margin-top: 0; }
+
+  .ph3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 16px;
+    margin-top: 32px;
+  }
+
+  .plead {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 680px;
+    line-height: 1.75;
+    margin-bottom: 32px;
+  }
+
+  /* ──────────── LAYOUT ──────────── */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  .g1_2 { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; }
+
+  /* ──────────── CARDS ──────────── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 26px 28px;
+  }
+
+  .card-h { font-family:'Fraunces',serif; font-size:18px; font-weight:700; margin-bottom:10px; letter-spacing:-0.01em; }
+  .card-p { font-size:13.5px; color:var(--muted); line-height:1.7; }
+
+  /* ──────────── FUNNEL ──────────── */
+  .funnel {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+
+  .funnel-stage {
+    background: var(--white);
+    padding: 28px 24px;
+    border-right: 1px solid var(--rule);
+    position: relative;
+  }
+  .funnel-stage:last-child { border-right: none; }
+
+  .fs-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  .fs-name {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+
+  .fs-items { list-style: none; }
+  .fs-items li {
+    font-size: 13px;
+    color: var(--muted);
+    padding: 6px 0;
+    border-bottom: 1px solid var(--rule);
+    line-height: 1.5;
+    display: flex;
+    gap: 8px;
+  }
+  .fs-items li:last-child { border-bottom: none; }
+  .fs-items li::before { content: '↳'; opacity: 0.3; flex-shrink: 0; }
+
+  .fs-cta {
+    margin-top: 16px;
+    padding: 10px 14px;
+    border-radius: 2px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* ──────────── COPY BLOCKS ──────────── */
+  .copy-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+
+  .cc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--off);
+  }
+
+  .cc-type {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  .cc-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.06em;
+    color: var(--white);
+  }
+
+  .cc-body {
+    padding: 18px 20px;
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+
+  .cc-body strong { font-weight: 700; }
+  .cc-body em { font-style: italic; color: var(--muted); }
+  .cc-note {
+    font-size: 11.5px;
+    color: var(--muted);
+    font-style: italic;
+    padding: 10px 20px 14px;
+    border-top: 1px solid var(--rule);
+    background: var(--off);
+  }
+
+  /* ──────────── SEQUENCE ──────────── */
+  .email-seq { position: relative; padding-left: 0; }
+
+  .email-step {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .es-num {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  .es-content { flex: 1; }
+  .es-day {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .es-subject {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .es-body {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 14px 16px;
+  }
+
+  .es-cta {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 7px 14px;
+    border-radius: 2px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+    color: var(--white);
+  }
+
+  /* ──────────── TARGETING TABLE ──────────── */
+  .ttable { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+  .ttable th {
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 10px 14px;
+    border-bottom: 2px solid var(--rule);
+    font-weight: 500;
+  }
+  .ttable td {
+    padding: 12px 14px;
+    font-size: 13.5px;
+    color: var(--ink);
+    border-bottom: 1px solid var(--rule);
+    line-height: 1.5;
+    vertical-align: top;
+  }
+  .ttable tr:last-child td { border-bottom: none; }
+  .ttable tr:hover td { background: var(--off); }
+
+  /* ──────────── KEYWORD CHIPS ──────────── */
+  .kw-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .kw {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 2px;
+    border: 1px solid var(--rule);
+    background: var(--white);
+    color: var(--ink);
+    letter-spacing: 0.03em;
+  }
+
+  /* ──────────── PAIN-TO-MESSAGE MAP ──────────── */
+  .ptm-row {
+    display: grid;
+    grid-template-columns: 1fr 10px 1fr;
+    align-items: start;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .ptm-pain {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 14px 16px;
+    font-size: 13.5px;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  .ptm-arrow {
+    text-align: center;
+    font-size: 16px;
+    color: var(--muted);
+    padding-top: 14px;
+  }
+
+  .ptm-msg {
+    border-radius: 3px;
+    padding: 14px 16px;
+    font-size: 13.5px;
+    color: var(--white);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  /* ──────────── BUDGET ──────────── */
+  .bud-item { margin-bottom: 16px; }
+  .bud-hdr { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .bud-name { font-size: 13.5px; color: var(--ink); font-weight: 600; }
+  .bud-val { font-family: 'IBM Plex Mono', monospace; font-size: 12px; }
+  .bud-bar-wrap { background: var(--rule); border-radius: 2px; height: 5px; }
+  .bud-bar { height: 5px; border-radius: 2px; }
+
+  /* ──────────── HIGHLIGHT BOX ──────────── */
+  .hbox {
+    border-radius: 3px;
+    padding: 18px 22px;
+    margin: 20px 0;
+    font-size: 14px;
+    line-height: 1.7;
+    border: 1px solid;
+  }
+
+  /* ──────────── LANDING PAGE WIREFRAME ──────────── */
+  .lp-wire {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .lp-top {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--off);
+  }
+
+  .lp-section { padding: 20px 24px; border-bottom: 1px solid var(--rule); }
+  .lp-section:last-child { border-bottom: none; }
+
+  .lp-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .lp-content {
+    font-size: 13.5px;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+
+  .rule { height: 1px; background: var(--rule); margin: 40px 0; }
+
+  /* ──────────── FOOTER ──────────── */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.4);
+    padding: 36px 72px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .foot-brand {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .foot-mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+
+  /* ──────────── RESPONSIVE ──────────── */
+  @media (max-width: 860px) {
+    .masthead, .camp-strip, .inner-panel, .inner-nav, footer, .subnav-inner { padding-left: 20px; padding-right: 20px; }
+    .g2, .g3, .g1_2, .funnel, .ptm-row { grid-template-columns: 1fr; }
+    .ptm-arrow { display: none; }
+    .mast-h1 { font-size: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════ MASTHEAD ════════════ -->
+<div class="masthead">
+  <div class="mast-label">Axxiom Elevator · 4-Service High-Converting Campaign System</div>
+  <div class="mast-h1">Four Campaigns.<br><em>One Network.</em><br><span>Zero Guesswork.</span></div>
+  <p class="mast-sub">Full-funnel marketing campaigns for Maintenance contracts, Modernization projects, Repair requests, and Code Compliance leads — each with its own funnel, copy, targeting, email sequences, and landing page blueprint.</p>
+  <div class="camp-pills">
+    <div class="camp-pill active-c1" onclick="showCamp(1)"><span class="pill-num">01</span><span class="pill-label">Maintenance Contracts</span></div>
+    <div class="camp-pill active-c2" onclick="showCamp(2)"><span class="pill-num">02</span><span class="pill-label">Modernization</span></div>
+    <div class="camp-pill active-c3" onclick="showCamp(3)"><span class="pill-num">03</span><span class="pill-label">Repair Requests</span></div>
+    <div class="camp-pill active-c4" onclick="showCamp(4)"><span class="pill-num">04</span><span class="pill-label">Code Compliance</span></div>
+  </div>
+</div>
+
+<!-- ════════════ SUBNAV ════════════ -->
+<div class="subnav">
+  <div class="subnav-inner">
+    <button class="snav-btn a1" onclick="showCamp(1)">01 · Maintenance</button>
+    <button class="snav-btn" onclick="showCamp(2)">02 · Modernization</button>
+    <button class="snav-btn" onclick="showCamp(3)">03 · Repair</button>
+    <button class="snav-btn" onclick="showCamp(4)">04 · Code Compliance</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- CAMPAIGN 1 — MAINTENANCE -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div id="camp1" class="section active">
+  <div class="camp-strip" data-label="MAINT." style="border-left: 5px solid var(--c1);">
+    <div class="camp-kicker" style="color:var(--c1);">Campaign 01 · Recurring Revenue Engine</div>
+    <div class="camp-title">Elevator Maintenance<br>Contract Campaign</div>
+    <div class="camp-tagline" style="color:var(--muted);">"Stop reacting to breakdowns. Start preventing them."</div>
+    <div class="camp-meta-row">
+      <div class="meta-chip" style="color:var(--c1); border-color:rgba(28,74,138,0.3); background:var(--c1d);">Highest LTV Campaign</div>
+      <div class="meta-chip" style="color:var(--muted); border-color:var(--rule);">Recurring Revenue</div>
+      <div class="meta-chip" style="color:var(--muted); border-color:var(--rule);">B2B · Property Managers</div>
+      <div class="meta-chip" style="color:var(--muted); border-color:var(--rule);">12–18 Month Contracts</div>
+    </div>
+  </div>
+
+  <div class="inner-nav" id="nav1">
+    <button class="in-btn in-active" onclick="showInner('c1',1,'s')">Strategy</button>
+    <button class="in-btn" onclick="showInner('c1',2,'s')">Funnel</button>
+    <button class="in-btn" onclick="showInner('c1',3,'s')">Ad Copy</button>
+    <button class="in-btn" onclick="showInner('c1',4,'s')">Email Sequence</button>
+    <button class="in-btn" onclick="showInner('c1',5,'s')">Landing Page</button>
+    <button class="in-btn" onclick="showInner('c1',6,'s')">Targeting & Budget</button>
+  </div>
+
+  <!-- C1 STRATEGY -->
+  <div id="c1-1" class="inner-panel active">
+    <div class="ph2">Campaign Strategy</div>
+    <p class="plead">Maintenance contracts are Axxiom's highest-LTV offer — a signed contract means 12–36 months of guaranteed recurring revenue. The campaign goal is not awareness. It is getting a property manager to replace their current elevator vendor with Axxiom. Every element of this campaign must make switching feel safe, easy, and obviously right.</p>
+
+    <div class="ph3">Core Insight</div>
+    <div class="hbox" style="background:var(--c1d); border-color:rgba(28,74,138,0.2); color:var(--c1);">
+      <strong>Property managers don't hate their elevator company — they just hate being ignored.</strong> The #1 reason buildings switch maintenance vendors is not price. It's communication failures: missed calls, late technicians, no service reports, vague invoices. Axxiom's campaign must weaponize these frustrations — not by attacking competitors, but by making Axxiom's responsiveness and transparency feel like a relief.
+    </div>
+
+    <div class="ph3">Pain → Message Map</div>
+    <div class="ptm-row">
+      <div class="ptm-pain">😤 "My current company takes 3 days to call back after I report an issue."</div>
+      <div class="ptm-arrow">→</div>
+      <div class="ptm-msg" style="background:var(--c1);">"Every call answered. Every service confirmed. Every issue tracked. That's not a promise — it's our standard."</div>
+    </div>
+    <div class="ptm-row">
+      <div class="ptm-pain">😤 "I never know what they actually did during their maintenance visit."</div>
+      <div class="ptm-arrow">→</div>
+      <div class="ptm-msg" style="background:var(--c1);">"After every visit, you get a full digital service report — what was checked, what was adjusted, what's coming next."</div>
+    </div>
+    <div class="ptm-row">
+      <div class="ptm-pain">😤 "My elevator breaks down constantly even though I have a maintenance contract."</div>
+      <div class="ptm-arrow">→</div>
+      <div class="ptm-msg" style="background:var(--c1);">"A maintenance contract should mean fewer breakdowns — not just faster repairs after them. Our preventive care tracks every major failure point before it fails."</div>
+    </div>
+    <div class="ptm-row">
+      <div class="ptm-pain">😤 "I'm locked into my current contract and don't know how to switch."</div>
+      <div class="ptm-arrow">→</div>
+      <div class="ptm-msg" style="background:var(--c1);">"Switching is easier than you think. We handle the transition — including reviewing your existing contract terms — at no cost."</div>
+    </div>
+
+    <div class="rule"></div>
+    <div class="ph3">Contract Types to Lead With</div>
+    <div class="g3">
+      <div class="card">
+        <div class="card-h" style="color:var(--c1);">Full Maintenance</div>
+        <div class="card-p">Lead with this. Most repairs included. Highest monthly value. Best LTV for Axxiom. Position it as the "we handle everything" package — zero surprises on repair bills.</div>
+      </div>
+      <div class="card">
+        <div class="card-h">Partial Maintenance</div>
+        <div class="card-p">Present as the middle option. Maintenance covered + selected repairs. Good upsell path. Use for properties with newer equipment that don't need full coverage yet.</div>
+      </div>
+      <div class="card">
+        <div class="card-h">Oil & Grease</div>
+        <div class="card-p">Entry-level. Never lead with this — it's the door opener for "non-contract" buildings. Goal: sign O&G first, then upgrade after first repair event.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C1 FUNNEL -->
+  <div id="c1-2" class="inner-panel">
+    <div class="ph2">Full-Funnel Map</div>
+    <p class="plead">Three stages — Awareness, Consideration, Conversion — each with specific tactics, content, and CTAs. Every touchpoint must move the property manager one step closer to a consultation call.</p>
+    <div class="funnel">
+      <div class="funnel-stage">
+        <div class="fs-label">Stage 1 — Awareness</div>
+        <div class="fs-name" style="color:var(--c1);">They Have a Problem</div>
+        <ul class="fs-items">
+          <li>LinkedIn ad targeting Facility Managers + Property Managers with pain-point creative</li>
+          <li>Google Display to BOMA/IREM event attendee lists</li>
+          <li>Blog: "5 Signs Your Elevator Maintenance Company Is Failing You"</li>
+          <li>LinkedIn post: "What should a good service report look like?" (engagement bait)</li>
+          <li>Google Search: "elevator maintenance company [city]" — broad match</li>
+        </ul>
+        <div class="fs-cta" style="background:var(--c1);">CTA: Download Free Audit Checklist</div>
+      </div>
+      <div class="funnel-stage">
+        <div class="fs-label">Stage 2 — Consideration</div>
+        <div class="fs-name" style="color:var(--c1);">They're Evaluating Axxiom</div>
+        <ul class="fs-items">
+          <li>Retargeting: "Here's what our maintenance contract actually includes" — compare Full vs. Partial</li>
+          <li>Email: Free elevator health assessment offer</li>
+          <li>Case study: "How [Brand] reduced [property type] downtime by X% in [city]"</li>
+          <li>Google Search: "elevator maintenance contract [city]" — exact match</li>
+          <li>Review showcase ad: 4.8 stars + response time highlight</li>
+        </ul>
+        <div class="fs-cta" style="background:var(--c1);">CTA: Book Free 30-Min Assessment</div>
+      </div>
+      <div class="funnel-stage">
+        <div class="fs-label">Stage 3 — Conversion</div>
+        <div class="fs-name" style="color:var(--c1);">They're Ready to Switch</div>
+        <ul class="fs-items">
+          <li>Retargeting: "Switching vendors is simpler than you think — we handle everything"</li>
+          <li>Direct outreach sequence to consultation request leads (3-touch within 48 hrs)</li>
+          <li>Sales email: Personalized contract proposal within 24 hours of assessment</li>
+          <li>Urgency: "Lock in [city] availability for Q[X] contract start"</li>
+          <li>Objection-handling: "What happens to my current contract?" FAQ page</li>
+        </ul>
+        <div class="fs-cta" style="background:var(--c1);">CTA: Sign Contract / Start Date Confirmation</div>
+      </div>
+    </div>
+
+    <div class="ph3">Lead Magnet Strategy</div>
+    <div class="g2">
+      <div class="card" style="border-left:3px solid var(--c1);">
+        <div class="card-h">Primary Lead Magnet: "Elevator Maintenance Audit Checklist"</div>
+        <div class="card-p">A 1-page PDF that property managers can use to evaluate their CURRENT vendor. It subtly exposes every gap a poor vendor has. Every item they check "no" on is an Axxiom talking point. Gate behind email capture on landing page. This generates warm leads who are already diagnosing a problem.</div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--c1);">
+        <div class="card-h">Secondary Lead Magnet: "Free Elevator Health Assessment"</div>
+        <div class="card-p">Offer a no-cost on-site assessment by a certified Axxiom technician. This is your foot-in-the-door. The assessment surfaces real issues that your proposal then solves. Positions Axxiom as the expert before the contract conversation begins. High-commitment offer — only promote to bottom-funnel leads.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C1 AD COPY -->
+  <div id="c1-3" class="inner-panel">
+    <div class="ph2">Ad Copy Library</div>
+    <p class="plead">Ready-to-deploy copy across Google Search, LinkedIn, and retargeting. All written from the property manager's perspective — their language, their fears, their relief.</p>
+
+    <div class="ph3">Google Search Ads</div>
+
+    <div class="copy-card">
+      <div class="cc-header"><div class="cc-type">Search Ad · Emergency Frustration Angle</div><div class="cc-badge" style="background:var(--c1);">LEAD AD</div></div>
+      <div class="cc-body">
+        <strong>H1:</strong> Tired of Your Elevator Company?<br>
+        <strong>H2:</strong> Local Experts. 24/7 Response. Full Reports.<br>
+        <strong>H3:</strong> [City] Elevator Maintenance — Free Assessment<br><br>
+        <strong>Description 1:</strong> When your elevator breaks down, your tenants notice — and so does your reputation. [Brand Name] provides certified local technicians, transparent service reports, and real 24/7 emergency response. No excuses.<br>
+        <strong>Description 2:</strong> Switch maintenance providers with zero hassle. We review your current contract terms and handle the transition. Free building assessment — no commitment required. Call today.
+      </div>
+      <div class="cc-note">Target: "elevator maintenance company [city]", "elevator service contract [city]", "elevator maintenance near me"</div>
+    </div>
+
+    <div class="copy-card">
+      <div class="cc-header"><div class="cc-type">Search Ad · Reliability Angle</div><div class="cc-badge" style="background:var(--c1);">HIGH INTENT</div></div>
+      <div class="cc-body">
+        <strong>H1:</strong> Elevator Maintenance Done Right<br>
+        <strong>H2:</strong> Full Maintenance Contracts — [City]<br>
+        <strong>H3:</strong> Fewer Breakdowns. Full Transparency.<br><br>
+        <strong>Description 1:</strong> [Brand Name]'s full maintenance contracts cover monthly preventive visits, machine room, hoistway, cab, and pit — plus most repairs. One contract. Zero surprises.<br>
+        <strong>Description 2:</strong> Trusted by property managers across [state]. Certified technicians who know your building, your codes, and your schedule. Book a free elevator assessment this week.
+      </div>
+      <div class="cc-note">Target: "full elevator maintenance contract", "elevator preventive maintenance", "elevator maintenance plan"</div>
+    </div>
+
+    <div class="ph3">LinkedIn Ads</div>
+
+    <div class="copy-card">
+      <div class="cc-header"><div class="cc-type">LinkedIn Sponsored Content · Pain Point</div><div class="cc-badge" style="background:var(--c1);">AWARENESS</div></div>
+      <div class="cc-body">
+        <strong>Hook line:</strong> "Your elevator maintenance company should be the last thing you think about."<br><br>
+        If you're getting calls from tenants about elevator issues, chasing down service reports, or wondering if your technician even showed up — something's wrong. Not with your elevator. With your vendor.<br><br>
+        At [Brand Name], every maintenance visit includes: a full written service report, technician sign-in confirmation, and a forward-looking list of components we're monitoring.<br><br>
+        Because "we came, we looked, everything's fine" isn't a service report. It's a liability.<br><br>
+        📋 Download our free Elevator Maintenance Audit Checklist — 12 questions to ask your current provider. [Link]
+      </div>
+      <div class="cc-note">Visual: Split image — frustrated property manager vs. confident PM holding clean service report. LinkedIn carousel format performs well here.</div>
+    </div>
+
+    <div class="copy-card">
+      <div class="cc-header"><div class="cc-type">LinkedIn Sponsored Content · Trust Build</div><div class="cc-badge" style="background:var(--c1);">CONSIDERATION</div></div>
+      <div class="cc-body">
+        <strong>Hook line:</strong> "What's actually in our Full Maintenance Contract? Here's the exact list."<br><br>
+        We've had property managers tell us they didn't know what their current maintenance contract covered until something broke.<br><br>
+        So here's exactly what [Brand Name]'s Full Maintenance Contract includes:<br>
+        ✔ Monthly preventive maintenance visits<br>
+        ✔ Machine room, hoistway, cab, and pit inspection every visit<br>
+        ✔ Written digital service report after every visit<br>
+        ✔ 24/7 emergency response — live technician dispatch, not a voicemail<br>
+        ✔ Most repairs covered — no surprise invoices<br>
+        ✔ Proactive code compliance monitoring<br><br>
+        No fine print. No "additional charges may apply" surprises.<br><br>
+        👉 Book a free 30-minute assessment for your building. [Link]
+      </div>
+      <div class="cc-note">Format: Use a graphic checklist visual. This post type gets high saves — each save is a warm lead signal.</div>
+    </div>
+
+    <div class="ph3">Retargeting Ad Copy</div>
+
+    <div class="copy-card">
+      <div class="cc-header"><div class="cc-type">Google Display / Meta Retargeting</div><div class="cc-badge" style="background:var(--c3);">BOTTOM FUNNEL</div></div>
+      <div class="cc-body">
+        <strong>Headline:</strong> Still thinking about it? Here's what switching looks like.<br>
+        <strong>Body:</strong> Most property managers we work with were hesitant to switch — worried about contract lock-ins, transition headaches, or service gaps. Here's the truth: we handle everything. We review your existing contract, coordinate the transition, and ensure zero service interruption. Most switches are complete within 2 weeks. And your first 3 months are backed by our Reliability Guarantee. Let's talk. [CTA: Book Your Free Assessment]
+      </div>
+      <div class="cc-note">Audience: Website visitors who viewed /maintenance or /services pages but did not convert. Frequency cap: 3x/week.</div>
+    </div>
+  </div>
+
+  <!-- C1 EMAIL -->
+  <div id="c1-4" class="inner-panel">
+    <div class="ph2">Email Nurture Sequence</div>
+    <p class="plead">A 6-email sequence triggered when a lead downloads the audit checklist or books a free assessment. Goal: move them from "interested" to "ready to switch" within 14 days.</p>
+
+    <div class="email-seq">
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c1);">1</div>
+        <div class="es-content">
+          <div class="es-day">Immediate (0 min after download)</div>
+          <div class="es-subject">📋 Your Elevator Maintenance Audit Checklist is here</div>
+          <div class="es-body">Hi [Name],<br><br>Here's your free Elevator Maintenance Audit Checklist. [Download Link]<br><br>Run through these 12 questions with your current provider in mind. If you're checking "no" on more than 3, we need to talk — not because something's broken, but because something could be.<br><br>[Brand Name] has been serving [city] property managers for [X] years. We're not the biggest elevator company in the country — we're the most responsive one in your market.<br><br>Reply to this email if you have questions about what you find in the checklist. I personally read every reply.<br><br>— [Technician/Rep Name], [Brand Name]</div>
+          <div class="es-cta" style="background:var(--c1);">CTA: View Full Contract Options →</div>
+        </div>
+      </div>
+
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c1);">2</div>
+        <div class="es-content">
+          <div class="es-day">Day 3</div>
+          <div class="es-subject">What your next elevator breakdown will cost you (a real number)</div>
+          <div class="es-body">Most property managers don't think about elevator downtime costs until it happens.<br><br>Here's the math:<br>• 1 elevator out of service in a mid-rise = 10–30 tenant complaints per day<br>• Average repair cost without a full maintenance contract: $800–$4,500 per event<br>• Lease renewals directly impacted by building quality perception<br>• ADA violation risk: up to $150,000 in fines for inaccessible buildings<br><br>A [Brand Name] Full Maintenance Contract typically pays for itself after just ONE major repair prevention. We'd love to show you the math for your specific building.<br><br>15-minute call. No sales pitch. Just numbers.</div>
+          <div class="es-cta" style="background:var(--c1);">CTA: Book Free 15-Min Call →</div>
+        </div>
+      </div>
+
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c1);">3</div>
+        <div class="es-content">
+          <div class="es-day">Day 6</div>
+          <div class="es-subject">The question we get asked most: "What does switching actually involve?"</div>
+          <div class="es-body">Fair question. Here's the honest answer:<br><br>1. We review your current contract for early termination clauses (at no charge)<br>2. We schedule your first visit to coincide with your current contract end date — or we negotiate earlier<br>3. Your new technician visits, does a full baseline assessment, and files it in your building's digital profile<br>4. From that point: monthly visits, digital reports, 24/7 emergency line<br><br>Total transition time: typically 7–14 days. Service interruption: zero.<br><br>The hardest part is making the decision. We've made the rest easy.</div>
+          <div class="es-cta" style="background:var(--c1);">CTA: Start Your Free Assessment →</div>
+        </div>
+      </div>
+
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c1);">4</div>
+        <div class="es-content">
+          <div class="es-day">Day 9</div>
+          <div class="es-subject">A property manager in [city] switched 6 months ago. Here's what changed.</div>
+          <div class="es-body">[Property type] in [city] switched to [Brand Name] from a national elevator company in [month].<br><br>In the first 6 months:<br>• 0 emergency callbacks (vs. 4 in the previous 6 months)<br>• Service reports filed after every visit — she can pull any date's report in 30 seconds<br>• Response time on one non-emergency call: 2 hours<br><br>"I didn't realize how much mental energy I was spending on the elevator situation until it wasn't a situation anymore." — [Name or role], [Property type]<br><br>This is what a good maintenance relationship looks like. You deserve this.</div>
+          <div class="es-cta" style="background:var(--c1);">CTA: Get This For Your Building →</div>
+        </div>
+      </div>
+
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c1);">5</div>
+        <div class="es-content">
+          <div class="es-day">Day 12</div>
+          <div class="es-subject">Quick check — still looking for better elevator service in [city]?</div>
+          <div class="es-body">Just checking in, [Name].<br><br>I know switching vendors feels like a project, and you've got a hundred other projects. I get it.<br><br>So let me make this as easy as possible: send me your building address and I'll send you back a custom maintenance proposal — contract type options, pricing range, and what your building specifically needs — within 24 hours.<br><br>No call required. No commitment. Just information so you can make a good decision.<br><br>Reply with your address or just say "yes" and I'll reach out to confirm the details.</div>
+          <div class="es-cta" style="background:var(--c1);">CTA: Reply "Yes" →</div>
+        </div>
+      </div>
+
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c1);">6</div>
+        <div class="es-content">
+          <div class="es-day">Day 14</div>
+          <div class="es-subject">Last note from me — and a different kind of offer</div>
+          <div class="es-body">I've reached out a few times and I don't want to be a pest. So this is my last note.<br><br>If you're not ready to switch vendors right now, that's completely okay. People switch when it's the right time — usually after one frustrating incident too many.<br><br>When that moment comes, I hope you'll remember [Brand Name].<br><br>In the meantime: if you'd like a free one-time inspection of your elevator — no strings, no maintenance contract, just a certified technician's report on the condition of your equipment — it's yours. Just say the word.<br><br>Take care, [Name]. And keep your elevators moving.</div>
+          <div class="es-cta" style="background:var(--c1);">CTA: Claim Free One-Time Inspection →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C1 LANDING PAGE -->
+  <div id="c1-5" class="inner-panel">
+    <div class="ph2">Landing Page Blueprint</div>
+    <p class="plead">One dedicated landing page per brand per market. No nav menu. No distractions. One goal: get the form fill. Here's the exact structure, section by section.</p>
+
+    <div class="lp-wire">
+      <div class="lp-top">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);">LANDING PAGE STRUCTURE</div>
+        <div class="meta-chip" style="color:var(--c1);border-color:rgba(28,74,138,0.3);background:var(--c1d);">Maintenance Campaign</div>
+      </div>
+      <div class="lp-section">
+        <div class="lp-tag">Section 1 — Hero (Above Fold)</div>
+        <div class="lp-content">
+          <strong>Headline:</strong> "Finally — An Elevator Maintenance Company That Shows Up, Reports Back, and Answers the Phone."<br>
+          <strong>Subheadline:</strong> "[Brand Name] provides certified local elevator maintenance in [City] — with monthly preventive visits, written digital service reports, and real 24/7 emergency response."<br>
+          <strong>Primary CTA button:</strong> "Book My Free Building Assessment"<br>
+          <strong>Trust strip:</strong> [Star rating] · [X] buildings served · Licensed in [state] · 24/7 Emergency Response<br>
+          <strong>Visual:</strong> Clean technician in uniform + building exterior. No stock photo energy.
+        </div>
+      </div>
+      <div class="lp-section">
+        <div class="lp-tag">Section 2 — Pain Acknowledgment</div>
+        <div class="lp-content">
+          <strong>Header:</strong> "Sound familiar?"<br>
+          Bullet list of pain points in plain language:<br>
+          ✗ Maintenance visits that produce no documentation<br>
+          ✗ Service calls that take days to get a callback<br>
+          ✗ Surprise repair bills outside your "maintenance contract"<br>
+          ✗ Technicians who don't know your building's history<br>
+          <strong>Transition line:</strong> "You shouldn't have to manage your elevator company. Here's what it looks like when you don't have to."
+        </div>
+      </div>
+      <div class="lp-section">
+        <div class="lp-tag">Section 3 — What's Included (Specificity = Trust)</div>
+        <div class="lp-content">
+          <strong>Header:</strong> "What [Brand Name]'s Full Maintenance Contract Includes"<br>
+          Two-column checklist: Machine Room → Hoistway → Cab → Pit items from the rundown document. Be specific. "Check motor brushes and verify proper brake adjustment" beats "Motor inspection."<br>
+          <strong>Sidebar:</strong> 3 Contract types with pricing range indicators. Default highlight: Full Maintenance.
+        </div>
+      </div>
+      <div class="lp-section">
+        <div class="lp-tag">Section 4 — Social Proof</div>
+        <div class="lp-content">
+          2 testimonials from property managers (real names, property type, city).<br>
+          Google rating widget.<br>
+          Logos of building types served: [Office] [Healthcare] [Hotel] [Multifamily] [Education]
+        </div>
+      </div>
+      <div class="lp-section">
+        <div class="lp-tag">Section 5 — Lead Form (Repeated CTA)</div>
+        <div class="lp-content">
+          <strong>Form Header:</strong> "Get Your Free Building Assessment"<br>
+          Fields: First Name / Last Name / Email / Phone / Building Address / Number of Elevators / Current Provider (optional)<br>
+          <strong>Submit button:</strong> "Request My Free Assessment →"<br>
+          <strong>Microcopy below:</strong> "We'll review your building details and respond within 4 business hours. No contracts. No pressure."<br>
+          Privacy line + phone number alternative for immediate callers.
+        </div>
+      </div>
+      <div class="lp-section">
+        <div class="lp-tag">Section 6 — Objection Handling FAQ</div>
+        <div class="lp-content">
+          Q: "I'm already in a contract with my current provider — can I still switch?"<br>
+          Q: "How long does it take to get a new contract started?"<br>
+          Q: "Do you service [brand of elevator] equipment?"<br>
+          Q: "What makes you different from Otis or Schindler?"<br>
+          Each answer: 2–3 sentences, direct, honest.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C1 TARGETING -->
+  <div id="c1-6" class="inner-panel">
+    <div class="ph2">Targeting & Budget</div>
+
+    <div class="ph3">Google Ads Targeting</div>
+    <div class="ph3" style="margin-top:8px;">Priority Keywords</div>
+    <div class="kw-grid">
+      <span class="kw">elevator maintenance contract [city]</span>
+      <span class="kw">elevator maintenance company near me</span>
+      <span class="kw">commercial elevator service [state]</span>
+      <span class="kw">elevator preventive maintenance</span>
+      <span class="kw">elevator service contract</span>
+      <span class="kw">elevator maintenance plan</span>
+      <span class="kw">full maintenance elevator contract</span>
+      <span class="kw">switch elevator maintenance company</span>
+      <span class="kw">elevator technician [city]</span>
+      <span class="kw">elevator inspection [city]</span>
+    </div>
+
+    <div class="ph3">LinkedIn Targeting</div>
+    <table class="ttable">
+      <thead><tr><th>Parameter</th><th>Targeting Spec</th></tr></thead>
+      <tbody>
+        <tr><td>Job Titles</td><td>Property Manager, Facility Manager, Director of Facilities, Building Manager, Facilities Director, VP of Real Estate, Director of Operations, Chief Engineer</td></tr>
+        <tr><td>Industries</td><td>Real Estate, Facilities Management, Healthcare, Hospitality, Education, Government</td></tr>
+        <tr><td>Company Size</td><td>11–5,000 employees</td></tr>
+        <tr><td>Geography</td><td>Radius targeting around each brand's service area (25–50 miles)</td></tr>
+        <tr><td>Exclusions</td><td>Exclude: elevator industry job titles (don't advertise to competitors)</td></tr>
+        <tr><td>Ad Format</td><td>Sponsored Content (lead-gen form) + Message Ads for warm retargeting</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ph3">Budget Allocation</div>
+    <div class="bud-item"><div class="bud-hdr"><div class="bud-name">Google Search PPC</div><div class="bud-val" style="color:var(--c1);">50% · $1,250/mo</div></div><div class="bud-bar-wrap"><div class="bud-bar" style="width:50%;background:var(--c1);"></div></div></div>
+    <div class="bud-item"><div class="bud-hdr"><div class="bud-name">LinkedIn Ads</div><div class="bud-val" style="color:var(--c1);">25% · $625/mo</div></div><div class="bud-bar-wrap"><div class="bud-bar" style="width:25%;background:var(--c1);"></div></div></div>
+    <div class="bud-item"><div class="bud-hdr"><div class="bud-name">Google Display / Retargeting</div><div class="bud-val" style="color:var(--c1);">15% · $375/mo</div></div><div class="bud-bar-wrap"><div class="bud-bar" style="width:15%;background:var(--c1);"></div></div></div>
+    <div class="bud-item"><div class="bud-hdr"><div class="bud-name">Email Tools / Automation</div><div class="bud-val" style="color:var(--c1);">10% · $250/mo</div></div><div class="bud-bar-wrap"><div class="bud-bar" style="width:10%;background:var(--c1);"></div></div></div>
+
+    <div class="hbox" style="background:var(--c1d);border-color:rgba(28,74,138,0.2);color:var(--c1);margin-top:24px;">
+      <strong>Target KPIs:</strong> CPL (Cost Per Lead): $80–$180 | Lead-to-Consultation Rate: 30–40% | Consultation-to-Contract Rate: 25–35% | Average Contract Value: $4,800–$18,000/yr | Payback period on ad spend: typically 1–2 signed contracts
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- CAMPAIGN 2 — MODERNIZATION -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div id="camp2" class="section">
+  <div class="camp-strip" data-label="MOD." style="border-left: 5px solid var(--c2);">
+    <div class="camp-kicker" style="color:var(--c2);">Campaign 02 · Highest Ticket Value</div>
+    <div class="camp-title">Elevator Modernization<br>Campaign</div>
+    <div class="camp-tagline" style="color:var(--muted);">"Your elevator isn't broken. But it will be — and the cost of waiting is higher than you think."</div>
+    <div class="camp-meta-row">
+      <div class="meta-chip" style="color:var(--c2); border-color:rgba(122,48,0,0.3); background:var(--c2d);">Highest Ticket Offer</div>
+      <div class="meta-chip" style="color:var(--muted); border-color:var(--rule);">$15K–$200K+ Projects</div>
+      <div class="meta-chip" style="color:var(--muted); border-color:var(--rule);">Long Sales Cycle · 60–120 Days</div>
+      <div class="meta-chip" style="color:var(--muted); border-color:var(--rule);">Property Owners & Asset Managers</div>
+    </div>
+  </div>
+
+  <div class="inner-nav" id="nav2">
+    <button class="in-btn in-active" onclick="showInner('c2',1,'s')">Strategy</button>
+    <button class="in-btn" onclick="showInner('c2',2,'s')">Funnel</button>
+    <button class="in-btn" onclick="showInner('c2',3,'s')">Ad Copy</button>
+    <button class="in-btn" onclick="showInner('c2',4,'s')">Email Sequence</button>
+    <button class="in-btn" onclick="showInner('c2',5,'s')">Landing Page</button>
+    <button class="in-btn" onclick="showInner('c2',6,'s')">Targeting & Budget</button>
+  </div>
+
+  <div id="c2-1" class="inner-panel active">
+    <div class="ph2">Campaign Strategy</div>
+    <p class="plead">Modernization is a capital expenditure decision — building owners and asset managers make it, not day-to-day property managers. The sales cycle is 60–120 days. The campaign must educate, build trust, and make the ROI case long before anyone asks for a price. Position modernization as a proactive investment with measurable returns — not a reactive fix.</p>
+
+    <div class="hbox" style="background:var(--c2d); border-color:rgba(122,48,0,0.2); color:var(--c2);">
+      <strong>Core Insight:</strong> Building owners delay modernization because they don't know when the right time is. They think of it as a cost, not an investment. Axxiom's campaign must reframe modernization as: (1) protection against escalating repair costs, (2) a property value multiplier, and (3) a tenant retention strategy. The numbers do the selling — Axxiom's job is to get the numbers in front of the right people.
+    </div>
+
+    <div class="ph3">Modernization Trigger Events (When to Target)</div>
+    <div class="g3">
+      <div class="card"><div class="card-h" style="color:var(--c2);">Equipment Age</div><div class="card-p">Elevators 20+ years old = prime modernization window. Controller/drive systems from early 2000s are now obsolete — parts availability is declining fast. Target buildings with known older equipment.</div></div>
+      <div class="card"><div class="card-h" style="color:var(--c2);">Rising Repair Costs</div><div class="card-p">If a building has had 3+ major repair events in 12 months, modernization ROI is almost always positive within 3–5 years. Use this math in all content.</div></div>
+      <div class="card"><div class="card-h" style="color:var(--c2);">Building Sale / Refinancing</div><div class="card-p">Modernized elevators increase asset valuation. Target property transactions — LOOPNET listings, CBRE/JLL newsletters, commercial real estate groups on LinkedIn.</div></div>
+      <div class="card"><div class="card-h" style="color:var(--c2);">Tenant Complaints</div><div class="card-p">Ride quality, slow doors, outdated interiors = lease renewal risk. Position cab and door modernization as a tenant experience investment — directly tied to NOI.</div></div>
+      <div class="card"><div class="card-h" style="color:var(--c2);">Code Requirements</div><div class="card-p">New code mandates (DLM, SPB upgrades) often open a conversation about full modernization. Compliance work is the door-opener to a larger project conversation.</div></div>
+      <div class="card"><div class="card-h" style="color:var(--c2);">Budget Planning Season</div><div class="card-p">Most capital budget decisions made in Q4 for the following year. Run highest-spend modernization campaigns Sept–Nov to be in the room during budget allocation.</div></div>
+    </div>
+
+    <div class="ph3">Pain → Message Map</div>
+    <div class="ptm-row">
+      <div class="ptm-pain">"My repair bills keep going up every year and I don't know when to stop patching and start replacing."</div>
+      <div class="ptm-arrow">→</div>
+      <div class="ptm-msg" style="background:var(--c2);">"We'll show you exactly when modernization becomes cheaper than maintenance — with real numbers from your building."</div>
+    </div>
+    <div class="ptm-row">
+      <div class="ptm-pain">"My tenants keep complaining about the slow elevator and the worn-out interior."</div>
+      <div class="ptm-arrow">→</div>
+      <div class="ptm-msg" style="background:var(--c2);">"A cab and door modernization typically adds $50–200/month in perceived lease value. Your elevator is a tenant retention asset."</div>
+    </div>
+    <div class="ptm-row">
+      <div class="ptm-pain">"I don't have budget for a full replacement — the elevator still runs."</div>
+      <div class="ptm-arrow">→</div>
+      <div class="ptm-msg" style="background:var(--c2);">"Modernization isn't replacement. It's targeted upgrades — controller, drive, doors, or cab — at a fraction of full replacement cost. We build it around your budget."</div>
+    </div>
+
+    <div class="ph3">Lead Magnet</div>
+    <div class="card" style="border-left:3px solid var(--c2);">
+      <div class="card-h">"The Elevator Modernization ROI Calculator" — Free Interactive Tool</div>
+      <div class="card-p">A web-based or PDF calculator where a building owner inputs: elevator age, annual repair spend, number of units/floors, current tenant complaints. Output: estimated modernization cost range, payback period, and 5-year cost comparison (repair-as-usual vs. modernize now). This tool does the selling automatically — every building owner who runs the numbers sees the case for modernization. Gate behind form fill. This is your highest-quality lead generator for this campaign.</div>
+    </div>
+  </div>
+
+  <div id="c2-2" class="inner-panel">
+    <div class="ph2">Full-Funnel Map</div>
+    <div class="funnel">
+      <div class="funnel-stage">
+        <div class="fs-label">Stage 1 — Awareness</div>
+        <div class="fs-name" style="color:var(--c2);">Plant the Seed</div>
+        <ul class="fs-items">
+          <li>LinkedIn: "5 Signs Your Elevator Is Past Its Modernization Window" — educational content</li>
+          <li>Google Search: "elevator modernization cost", "when to modernize elevator"</li>
+          <li>YouTube/Video: Before/after modernization case study — 60 second</li>
+          <li>Blog: "Elevator Modernization vs. Replacement: Full Cost Comparison"</li>
+          <li>Q4 targeted push to property owner/asset manager email lists</li>
+        </ul>
+        <div class="fs-cta" style="background:var(--c2);">CTA: Access Free ROI Calculator</div>
+      </div>
+      <div class="funnel-stage">
+        <div class="fs-label">Stage 2 — Consideration</div>
+        <div class="fs-name" style="color:var(--c2);">Build the Case</div>
+        <ul class="fs-items">
+          <li>Email sequence: 5 emails educating on each modernization component (controller, drive, doors, fixtures, cab)</li>
+          <li>Retargeting: "See what a controller modernization looks like — before and after"</li>
+          <li>Webinar/Lunch & Learn invite: "Elevator Modernization 101 for Building Owners"</li>
+          <li>Case study PDF: "How [property type] reduced elevator OpEx by 40% with targeted modernization"</li>
+          <li>Personalized outreach: "Your building's elevator profile suggests a modernization assessment would save you [X]"</li>
+        </ul>
+        <div class="fs-cta" style="background:var(--c2);">CTA: Book Free Modernization Assessment</div>
+      </div>
+      <div class="funnel-stage">
+        <div class="fs-label">Stage 3 — Conversion</div>
+        <div class="fs-name" style="color:var(--c2);">Close the Project</div>
+        <ul class="fs-items">
+          <li>Proposal delivered within 5 business days of assessment — itemized by component</li>
+          <li>Multi-year plan option: Phase modernization over 2–3 years for budget flexibility</li>
+          <li>Financing options or vendor financing introduction (if available)</li>
+          <li>Urgency: Parts availability for older controllers declining — time-sensitive positioning</li>
+          <li>Q4 budget deadline: "Submit your assessment before [date] to include in this year's capital plan"</li>
+        </ul>
+        <div class="fs-cta" style="background:var(--c2);">CTA: Approve Proposal / Schedule Start Date</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="c2-3" class="inner-panel">
+    <div class="ph2">Ad Copy Library</div>
+
+    <div class="copy-card">
+      <div class="cc-header"><div class="cc-type">Google Search Ad · Cost Urgency</div><div class="cc-badge" style="background:var(--c2);">LEAD AD</div></div>
+      <div class="cc-body">
+        <strong>H1:</strong> Is Your Elevator Past Its Modernization Window?<br>
+        <strong>H2:</strong> Free Assessment — See Your ROI in 48 Hours<br>
+        <strong>H3:</strong> Controller · Drive · Cab · Door Upgrades Available<br><br>
+        <strong>Description 1:</strong> Elevators 15+ years old cost 3–5× more to maintain than modernized units. [Brand Name] helps [city] building owners modernize smarter — not more expensively. Get a free component-by-component assessment.<br>
+        <strong>Description 2:</strong> We modernize without full replacement. Target the components that matter most for your building type and budget. Manufacturers serviced: Otis, KONE, Schindler, TK Elevator, and more.
+      </div>
+      <div class="cc-note">Keywords: "elevator modernization [city]", "elevator upgrade cost", "elevator controller replacement", "when to modernize elevator"</div>
+    </div>
+
+    <div class="copy-card">
+      <div class="cc-header"><div class="cc-type">LinkedIn Ad · Asset Manager Angle</div><div class="cc-badge" style="background:var(--c2);">HIGH VALUE</div></div>
+      <div class="cc-body">
+        <strong>Hook:</strong> "Your elevator is either adding to your building's value — or quietly subtracting from it."<br><br>
+        For building owners and asset managers: elevator condition directly affects NOI. Tenants notice slow doors, rough rides, and outdated interiors.<br><br>
+        But here's what most owners don't realize: you don't need a full replacement. A targeted controller or drive modernization can extend equipment life 15–20 years at a fraction of full replacement cost.<br><br>
+        [Brand Name] has modernized [X] elevators across [state]. Our free modernization assessment tells you:<br>
+        → Which components are approaching failure risk<br>
+        → What a phased modernization would cost<br>
+        → Your estimated ROI timeline<br><br>
+        No commitment. Just a clear picture of where you stand.
+      </div>
+      <div class="cc-note">Format: LinkedIn Document Ad (slide deck format performs 3–5x better than static images for asset manager audience). Include a 5-slide "Modernization ROI Snapshot" as the document.</div>
+    </div>
+
+    <div class="copy-card">
+      <div class="cc-header"><div class="cc-type">Email Cold Outreach · Building Owner (direct)</div><div class="cc-badge" style="background:var(--c2);">OUTBOUND</div></div>
+      <div class="cc-body">
+        <strong>Subject:</strong> [Building Address] — quick question about your elevator<br><br>
+        Hi [Name],<br><br>
+        I'm reaching out because [Brand Name] works with a number of [office/residential/medical] buildings in [city], and I noticed [building name] has elevators that appear to be in the [equipment age range] — based on [public permit records / our service history in the area].<br><br>
+        Buildings with equipment in that range typically spend [X%] more on repairs annually than they would if they modernized. Not always — but often enough that it's worth a quick look.<br><br>
+        Would it make sense to schedule a 20-minute walkthrough? We'll tell you exactly where you stand and what, if anything, makes sense. No proposal unless you ask for one.<br><br>
+        — [Name], [Brand Name]<br>
+        [Phone] · [Email]
+      </div>
+      <div class="cc-note">Personalize with actual building data where possible. Public permit records and prior inspection reports are often accessible. This email has shown 30–45% open rates when properly personalized.</div>
+    </div>
+  </div>
+
+  <div id="c2-4" class="inner-panel">
+    <div class="ph2">Email Nurture Sequence</div>
+    <p class="plead">5-email educational sequence for ROI Calculator completers. Each email covers one modernization component — showing real costs, real benefits, and real buildings. By email 5, the reader has a clear picture of their elevator's future and Axxiom's expertise.</p>
+
+    <div class="email-seq">
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c2);">1</div>
+        <div class="es-content">
+          <div class="es-day">Day 0 — Immediate</div>
+          <div class="es-subject">Your Elevator Modernization ROI estimate is ready</div>
+          <div class="es-body">Based on your inputs, we've put together your personalized estimate. [Download or inline display]. The number that usually surprises building owners: the average repair cost in years 3–5 post-modernization drops by 60–80%. I'd love to walk you through what this looks like for your specific building. 20-minute call — I'll show you exactly what we'd recommend and why.</div>
+          <div class="es-cta" style="background:var(--c2);">Book a 20-Minute Assessment Call →</div>
+        </div>
+      </div>
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c2);">2</div>
+        <div class="es-content">
+          <div class="es-day">Day 4 — Controller Deep Dive</div>
+          <div class="es-subject">The component failing in most 20-year-old elevators (and what it costs to wait)</div>
+          <div class="es-body">The elevator controller is the brain of the system. When relay-based controllers fail — and they do fail, often without warning — the repair cost is $8,000–$25,000. When they're modernized proactively, the cost is similar but you get: better diagnostics, faster maintenance, improved performance, and 15–20 more years of reliable operation. We explain the full cost math here: [link to blog post/guide]. Is your building's controller in this risk window? We can tell you in one visit.</div>
+          <div class="es-cta" style="background:var(--c2);">See If Your Controller Is at Risk →</div>
+        </div>
+      </div>
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c2);">3</div>
+        <div class="es-content">
+          <div class="es-day">Day 8 — Door & Ride Quality</div>
+          <div class="es-subject">Your tenants notice this. You might not.</div>
+          <div class="es-body">Door malfunctions are the #1 elevator complaint in commercial and residential buildings. Slow closing doors, door reversals, jerky rides — tenants register all of it, even when they don't say it. A door operator and drive modernization eliminates most of these issues permanently. Cost range: $12,000–$45,000 depending on equipment. Result: significantly fewer service calls, improved tenant satisfaction, and one less thing on your radar. Here's a before/after example from a property similar to yours: [link].</div>
+          <div class="es-cta" style="background:var(--c2);">Get a Door & Drive Assessment →</div>
+        </div>
+      </div>
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c2);">4</div>
+        <div class="es-content">
+          <div class="es-day">Day 12 — Cab & Property Value</div>
+          <div class="es-subject">The elevator interior is worth more than you think</div>
+          <div class="es-body">Property managers often tell us their tenants "don't care" about the elevator interior. Then we ask: "When did you last hear a tenant comment on the elevator?" Cab modernization — new interiors, flooring, lighting, fixtures — typically costs $8,000–$30,000. In competitive leasing markets, it's a direct tenant retention asset. Investors and appraisers also notice it: a modernized elevator interior is a line item in due diligence reports. If you're planning a refinancing or sale in the next 2–4 years, now is the time.</div>
+          <div class="es-cta" style="background:var(--c2);">Schedule a Modernization Consultation →</div>
+        </div>
+      </div>
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c2);">5</div>
+        <div class="es-content">
+          <div class="es-day">Day 18 — Phased Plan Offer</div>
+          <div class="es-subject">You don't have to do it all at once</div>
+          <div class="es-body">The most common thing we hear: "I want to modernize but the budget isn't there this year." We built a solution for exactly that. Our phased modernization planning breaks the project into 2–3 year stages — prioritizing the highest-risk components first, spreading the capital outlay over budget cycles, and giving you a multi-year roadmap with locked pricing. You get the benefit now, without the full capital hit at once. Want to see what a phased plan looks like for your building? We'll put it together — no charge, no commitment.</div>
+          <div class="es-cta" style="background:var(--c2);">Request a Phased Modernization Plan →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="c2-5" class="inner-panel">
+    <div class="ph2">Landing Page Blueprint</div>
+    <div class="lp-wire">
+      <div class="lp-top">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);">LANDING PAGE STRUCTURE</div>
+        <div class="meta-chip" style="color:var(--c2);border-color:rgba(122,48,0,0.3);background:var(--c2d);">Modernization Campaign</div>
+      </div>
+      <div class="lp-section"><div class="lp-tag">Hero</div><div class="lp-content"><strong>H1:</strong> "Your Elevator Is Either Growing in Value — Or Growing in Risk." <strong>Sub:</strong> Free modernization assessment for [city] building owners. We show you exactly where your elevator stands and what, if anything, makes sense to do. <strong>CTA:</strong> "Get My Free Assessment" | Trust strip: Licensed in [state] · [X] elevators modernized · All major manufacturers</div></div>
+      <div class="lp-section"><div class="lp-tag">ROI Calculator Widget</div><div class="lp-content">Interactive: Input elevator age + annual repair spend + building type → instant output of estimated modernization payback period. This is the main lead generation tool. All calculator completions trigger the email sequence above.</div></div>
+      <div class="lp-section"><div class="lp-tag">What We Modernize</div><div class="lp-content">Visual card grid: Controller · Drive · Door Equipment · Fixtures · Cab Interior. Each card: what it includes, typical cost range, life extension estimate, and key benefit. Specificity = trust.</div></div>
+      <div class="lp-section"><div class="lp-tag">Case Study</div><div class="lp-content">Before/after: A real building in [city]. Equipment age, previous annual repair costs, modernization scope, total investment, and outcome: repair cost reduction %, tenant complaint reduction, years of extended life. Quote from property owner.</div></div>
+      <div class="lp-section"><div class="lp-tag">Phased Plan CTA</div><div class="lp-content">"Don't have budget for the full project this year? Ask about our phased modernization plans — spread over 2–3 budget cycles with locked pricing." → Second form or calendar link.</div></div>
+    </div>
+  </div>
+
+  <div id="c2-6" class="inner-panel">
+    <div class="ph2">Targeting & Budget</div>
+    <div class="ph3">Priority Keywords</div>
+    <div class="kw-grid">
+      <span class="kw">elevator modernization [city]</span>
+      <span class="kw">elevator controller replacement cost</span>
+      <span class="kw">elevator upgrade cost</span>
+      <span class="kw">when to modernize elevator</span>
+      <span class="kw">elevator drive modernization</span>
+      <span class="kw">elevator cab renovation</span>
+      <span class="kw">elevator parts obsolete</span>
+      <span class="kw">commercial elevator upgrade [state]</span>
+      <span class="kw">elevator door operator replacement</span>
+      <span class="kw">elevator modernization vs replacement</span>
+    </div>
+    <div class="ph3">Budget</div>
+    <div class="bud-item"><div class="bud-hdr"><div class="bud-name">Google Search + Display</div><div class="bud-val" style="color:var(--c2);">45% · $1,125/mo</div></div><div class="bud-bar-wrap"><div class="bud-bar" style="width:45%;background:var(--c2);"></div></div></div>
+    <div class="bud-item"><div class="bud-hdr"><div class="bud-name">LinkedIn Ads (Asset Manager targeting)</div><div class="bud-val" style="color:var(--c2);">35% · $875/mo</div></div><div class="bud-bar-wrap"><div class="bud-bar" style="width:35%;background:var(--c2);"></div></div></div>
+    <div class="bud-item"><div class="bud-hdr"><div class="bud-name">Content Production (case studies, calculator)</div><div class="bud-val" style="color:var(--c2);">20% · $500/mo</div></div><div class="bud-bar-wrap"><div class="bud-bar" style="width:20%;background:var(--c2);"></div></div></div>
+    <div class="hbox" style="background:var(--c2d);border-color:rgba(122,48,0,0.2);color:var(--c2);margin-top:24px;">
+      <strong>Target KPIs:</strong> CPL: $200–$500 (justified by $15K–$200K project value) | Lead-to-Assessment Rate: 20–30% | Assessment-to-Proposal Rate: 60–70% | Proposal-to-Close Rate: 25–40% | Peak season: Sept–Nov (Q4 budget planning)
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- CAMPAIGN 3 — REPAIR -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div id="camp3" class="section">
+  <div class="camp-strip" data-label="REPAIR" style="border-left: 5px solid var(--c3);">
+    <div class="camp-kicker" style="color:var(--c3);">Campaign 03 · Speed = Revenue</div>
+    <div class="camp-title">Emergency Repair<br>Request Campaign</div>
+    <div class="camp-tagline" style="color:var(--muted);">"Your elevator is down. Every hour it stays down costs you money. We pick up on the first ring."</div>
+    <div class="camp-meta-row">
+      <div class="meta-chip" style="color:var(--c3); border-color:rgba(139,28,28,0.3); background:var(--c3d);">Highest Urgency</div>
+      <div class="meta-chip" style="color:var(--muted); border-color:var(--rule);">24/7 Response</div>
+      <div class="meta-chip" style="color:var(--muted); border-color:var(--rule);">Immediate Conversion</div>
+      <div class="meta-chip" style="color:var(--muted); border-color:var(--rule);">Repair → Contract Pipeline</div>
+    </div>
+  </div>
+
+  <div class="inner-nav" id="nav3">
+    <button class="in-btn in-active" onclick="showInner('c3',1,'s')">Strategy</button>
+    <button class="in-btn" onclick="showInner('c3',2,'s')">Funnel</button>
+    <button class="in-btn" onclick="showInner('c3',3,'s')">Ad Copy</button>
+    <button class="in-btn" onclick="showInner('c3',4,'s')">Post-Repair Sequence</button>
+    <button class="in-btn" onclick="showInner('c3',5,'s')">Landing Page</button>
+    <button class="in-btn" onclick="showInner('c3',6,'s')">Targeting & Budget</button>
+  </div>
+
+  <div id="c3-1" class="inner-panel active">
+    <div class="ph2">Campaign Strategy</div>
+    <p class="plead">Repair campaigns have a different conversion dynamic than any other service. The lead is already in crisis. They are not comparison shopping — they are looking for someone who can come NOW. Axxiom's entire competitive advantage here is speed + confidence. The campaign must make Axxiom feel like the only option the moment someone's elevator goes down.</p>
+
+    <div class="hbox" style="background:var(--c3d); border-color:rgba(139,28,28,0.2); color:var(--c3);">
+      <strong>Core Insight:</strong> The repair campaign has two phases. Phase 1: capture the emergency call (speed wins). Phase 2: convert the one-time repair caller into a long-term maintenance contract. 85% of first repair calls from non-contract buildings are an opportunity to open a maintenance contract conversation. This is Axxiom's primary revenue growth engine for repair campaigns — not the repair itself, but what it leads to.
+    </div>
+
+    <div class="ph3">Common Repair Types to Target by Query</div>
+    <table class="ttable">
+      <thead><tr><th>Issue</th><th>Search Query</th><th>Urgency Level</th><th>Conversion Path</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Door malfunction</strong> (most common)</td><td>"elevator doors won't open/close [city]"</td><td>🔴 Extreme</td><td>Emergency dispatch → repair → maintenance contract pitch</td></tr>
+        <tr><td><strong>Entrapment</strong></td><td>"elevator stuck between floors", "people trapped in elevator"</td><td>🔴 Extreme</td><td>Emergency dispatch only — post-event follow-up for contract</td></tr>
+        <tr><td><strong>Complete shutdown</strong></td><td>"elevator out of service [city]", "elevator won't run"</td><td>🔴 Extreme</td><td>Emergency dispatch → repair → assessment → contract</td></tr>
+        <tr><td><strong>Controller failure</strong></td><td>"elevator controller failure repair"</td><td>🟠 High</td><td>Repair → modernization conversation</td></tr>
+        <tr><td><strong>Hydraulic issue</strong></td><td>"hydraulic elevator leaking", "hydraulic elevator won't move"</td><td>🟠 High</td><td>Repair → SPB upgrade conversation → contract</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ph3">The Repair-to-Contract Pipeline (Critical Revenue Strategy)</div>
+    <div class="g2">
+      <div class="card" style="border-left:3px solid var(--c3);">
+        <div class="card-h">During the Repair Visit</div>
+        <div class="card-p">Technician delivers: (1) Full written assessment of all elevator systems, not just the failed component. (2) A verbal observation about 1–2 additional risk areas. (3) Leaves behind a one-page "Building Elevator Health Report." This primes the maintenance contract conversation without being pushy.</div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--c3);">
+        <div class="card-h">Post-Repair Follow-Up (72 Hours)</div>
+        <div class="card-p">A follow-up call or email: "We wanted to make sure the elevator is still running smoothly. Based on what our technician observed, here's our recommendation for your building going forward." Transition naturally into a maintenance contract proposal. Hit rate: 20–35% of one-time repair callers convert to maintenance contract within 90 days.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="c3-2" class="inner-panel">
+    <div class="ph2">Full-Funnel Map</div>
+    <div class="funnel">
+      <div class="funnel-stage">
+        <div class="fs-label">Stage 1 — Emergency Capture</div>
+        <div class="fs-name" style="color:var(--c3);">They Need Help NOW</div>
+        <ul class="fs-items">
+          <li>Google Search: "elevator repair near me" — top-position ads with call extension</li>
+          <li>Google LSA (Local Services Ads): appear above all PPC results for repair queries</li>
+          <li>Google Business Profile: "24/7 Emergency Repair" prominently listed + phone clickable</li>
+          <li>Landing page phone number: Click-to-call, above the fold, every page</li>
+          <li>Response time guarantee: "Live technician in [X] hours" in all ad copy</li>
+        </ul>
+        <div class="fs-cta" style="background:var(--c3);">CTA: CALL NOW — 24/7 Dispatch</div>
+      </div>
+      <div class="funnel-stage">
+        <div class="fs-label">Stage 2 — Repair Delivery</div>
+        <div class="fs-name" style="color:var(--c3);">They Experience Axxiom</div>
+        <ul class="fs-items">
+          <li>Technician arrives → fixes issue → delivers written health report</li>
+          <li>Invoice is clear, itemized, and fair — no surprise charges</li>
+          <li>Technician plants maintenance contract seed: "Would it help to know what a regular maintenance plan for this building looks like?"</li>
+          <li>Digital service report sent within 2 hours of job completion</li>
+          <li>Post-job NPS text: "How did we do today?" (1–5 rating)</li>
+        </ul>
+        <div class="fs-cta" style="background:var(--c3);">Goal: Outstanding service experience</div>
+      </div>
+      <div class="funnel-stage">
+        <div class="fs-label">Stage 3 — Contract Conversion</div>
+        <div class="fs-name" style="color:var(--c3);">Turn Repair Into Revenue</div>
+        <ul class="fs-items">
+          <li>72-hour follow-up call: "How's the elevator running? Based on what we saw, here's what we'd recommend..."</li>
+          <li>Email: "Your [Brand Name] Building Report" — summarizes technician observations + maintenance plan options</li>
+          <li>Offer: "First month of maintenance free when you sign within 30 days of your repair"</li>
+          <li>Retargeting: Display ads targeting one-time repair clients with maintenance messaging</li>
+          <li>Google review request: 5-star reviews from repair clients are highly trusted by future searchers</li>
+        </ul>
+        <div class="fs-cta" style="background:var(--c3);">CTA: Sign Maintenance Contract</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="c3-3" class="inner-panel">
+    <div class="ph2">Ad Copy Library</div>
+
+    <div class="copy-card">
+      <div class="cc-header"><div class="cc-type">Google Search Ad · Emergency Urgent</div><div class="cc-badge" style="background:var(--c3);">24/7 CAPTURE</div></div>
+      <div class="cc-body">
+        <strong>H1:</strong> Elevator Down? We Dispatch Now — 24/7<br>
+        <strong>H2:</strong> Certified Technicians in [City] · Call [Phone]<br>
+        <strong>H3:</strong> Door Issues · Entrapments · Full Shutdowns<br><br>
+        <strong>Description 1:</strong> [Brand Name] provides emergency elevator repair across [city] — doors, controllers, motors, hydraulic systems. Certified local technicians available around the clock. Call now for immediate dispatch.<br>
+        <strong>Description 2:</strong> Every hour your elevator is down affects your building. Don't wait for voicemail. [Brand Name] answers every call — day, night, weekend. Service report provided after every repair. [Phone]
+      </div>
+      <div class="cc-note">Enable: Call extensions (must show phone number) · Location extensions · Callout: "24/7 Live Dispatch" "Same-Day Response" "Certified Technicians" · Bid strategy: Max Conversions with target CPA</div>
+    </div>
+
+    <div class="copy-card">
+      <div class="cc-header"><div class="cc-type">Google Local Services Ad (LSA) Setup</div><div class="cc-badge" style="background:var(--c3);">PRIORITY</div></div>
+      <div class="cc-body">
+        <strong>Business category:</strong> Elevator Repair Service<br>
+        <strong>Services highlighted:</strong> Emergency Elevator Repair, Door Repair, Hydraulic Elevator Repair, Controller Repair<br>
+        <strong>Hours:</strong> 24 hours, 7 days a week<br>
+        <strong>Service area:</strong> [City] + [25-mile radius]<br>
+        <strong>Google Guarantee badge:</strong> Must complete Google's background check verification — this badge dramatically increases call rates<br><br>
+        <em>Note: LSAs appear above all PPC ads for service-based queries. For repair, this is mandatory — not optional. The Google Guarantee badge makes Axxiom the safest choice in the moment of highest anxiety.</em>
+      </div>
+      <div class="cc-note">LSA Cost: Pay-per-lead, not per-click. Typically $30–$80/lead for elevator repair. Much higher ROI than PPC for emergency captures.</div>
+    </div>
+
+    <div class="copy-card">
+      <div class="cc-header"><div class="cc-type">Post-Repair Retargeting Ad</div><div class="cc-badge" style="background:var(--c3);">PIPELINE</div></div>
+      <div class="cc-body">
+        <strong>Headline:</strong> "One repair call isn't enough protection."<br>
+        <strong>Body:</strong> You called us when your elevator broke. We fixed it fast — and we're glad we could help. But here's the truth: buildings without maintenance contracts have 3–5× more emergency repair events per year than buildings with them. Our maintenance plan isn't about selling you something extra. It's about making sure you never need to make that emergency call again. [CTA: See Your Maintenance Options]
+      </div>
+      <div class="cc-note">Audience: Past repair clients (CRM list uploaded to Google/Meta). Show 2–4 weeks after service. Never show during an active repair event.</div>
+    </div>
+  </div>
+
+  <div id="c3-4" class="inner-panel">
+    <div class="ph2">Post-Repair Email Sequence</div>
+    <p class="plead">4 emails sent after a one-time repair call. Goal: convert the repair relationship into a long-term maintenance contract. Tone is consultative, not salesy — the technician already earned trust. Now we deepen it.</p>
+
+    <div class="email-seq">
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c3);">1</div>
+        <div class="es-content">
+          <div class="es-day">2 hours after repair completion</div>
+          <div class="es-subject">Your elevator repair summary from [Brand Name]</div>
+          <div class="es-body">Hi [Name], here's the digital service report from today's visit. [Report link or attachment]. What our technician repaired: [specific items]. What our technician also observed: [additional notes from building health report]. Your elevator is running well. We'll keep an eye on [noted risk area] — if you'd like a maintenance plan that monitors that proactively, we can put one together for you. Reach out anytime.</div>
+          <div class="es-cta" style="background:var(--c3);">View Full Service Report →</div>
+        </div>
+      </div>
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c3);">2</div>
+        <div class="es-content">
+          <div class="es-day">Day 3</div>
+          <div class="es-subject">Quick follow-up — how's the elevator running?</div>
+          <div class="es-body">Just wanted to check in after our repair earlier this week. Is everything running smoothly? If anything feels off — noise, leveling, door response — don't hesitate to call us. Also, based on what our technician noted, I wanted to share what a basic maintenance plan for your building would look like. [Attach one-page plan summary]. Zero obligation — just information in case it's useful for your planning.</div>
+          <div class="es-cta" style="background:var(--c3);">See Maintenance Plan Options →</div>
+        </div>
+      </div>
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c3);">3</div>
+        <div class="es-content">
+          <div class="es-day">Day 14</div>
+          <div class="es-subject">Buildings without maintenance contracts spend 3× more on repairs — here's why</div>
+          <div class="es-body">Reactive elevator service is expensive. Not because repairs themselves cost more — it's the frequency. Without monthly preventive visits, small issues become big ones. The wear patterns our technician catches in a 45-minute maintenance visit would have become a $3,000–$6,000 repair in 6 months. We're offering [Name] a first-month-free maintenance trial to show you what proactive service feels like. No contract commitment required for the trial. Want to try it?</div>
+          <div class="es-cta" style="background:var(--c3);">Claim First Month Free →</div>
+        </div>
+      </div>
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c3);">4</div>
+        <div class="es-content">
+          <div class="es-day">Day 30</div>
+          <div class="es-subject">One month since your repair — a note from [Brand Name]</div>
+          <div class="es-body">It's been about a month since we serviced your elevator. I hope it's been running without issues. If you've had even one hiccup — or just want peace of mind — we'd love to be your elevator partner year-round, not just in emergencies. When you're ready, we're here. And if you ever need emergency service again — day or night — you already know our number.</div>
+          <div class="es-cta" style="background:var(--c3);">Start a Maintenance Conversation →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="c3-5" class="inner-panel">
+    <div class="ph2">Landing Page Blueprint</div>
+    <div class="lp-wire">
+      <div class="lp-top"><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);">LANDING PAGE STRUCTURE</div><div class="meta-chip" style="color:var(--c3);border-color:rgba(139,28,28,0.3);background:var(--c3d);">Repair Campaign</div></div>
+      <div class="lp-section"><div class="lp-tag">Hero — Above Fold</div><div class="lp-content"><strong>H1:</strong> "Elevator Down? We're On Our Way." <strong>Phone number: GIANT. First thing seen.</strong> Sub: Certified elevator repair technicians in [city]. 24/7 emergency response. Same-day service available. <strong>Secondary CTA:</strong> "Request Emergency Service Online" (form for non-phone leads). Trust strip: Google rating · Licensed · Insured · Available Now</div></div>
+      <div class="lp-section"><div class="lp-tag">Issue Selector</div><div class="lp-content">Visual grid of repair types: Door Won't Open | Door Won't Close | Elevator Stuck | Won't Run | Unusual Noise | Hydraulic Leak. Each links to a relevant FAQ section. This UX move shows expertise and keeps the user on the page longer.</div></div>
+      <div class="lp-section"><div class="lp-tag">Speed Promise</div><div class="lp-content">"We answer on the first ring. We dispatch the same call. Our technicians are in [city] — not 3 cities away." Response time commitment: [X hours]. Real numbers only — never promise what you can't deliver.</div></div>
+      <div class="lp-section"><div class="lp-tag">Repair Coverage</div><div class="lp-content">All repair types listed: Door systems · Controllers · Motors & Brakes · Hydraulic systems · Safety devices · Emergency lighting · Communication systems. Manufacturer-neutral list: Otis, KONE, Schindler, TK, Mitsubishi, Dover, and more.</div></div>
+      <div class="lp-section"><div class="lp-tag">Emergency Form</div><div class="lp-content">Name / Phone / Building Address / Issue Description (text field) / Best time to be reached. <strong>Submit:</strong> "Request Emergency Service Now →". Promise: "We call you back within 15 minutes during business hours. After hours: live technician answers directly."</div></div>
+    </div>
+  </div>
+
+  <div id="c3-6" class="inner-panel">
+    <div class="ph2">Targeting & Budget</div>
+    <div class="ph3">Priority Keywords</div>
+    <div class="kw-grid">
+      <span class="kw">elevator repair near me</span>
+      <span class="kw">emergency elevator repair [city]</span>
+      <span class="kw">elevator out of service repair</span>
+      <span class="kw">elevator door repair [city]</span>
+      <span class="kw">elevator stuck repair</span>
+      <span class="kw">hydraulic elevator repair [city]</span>
+      <span class="kw">elevator won't move</span>
+      <span class="kw">elevator technician near me</span>
+      <span class="kw">24 hour elevator repair</span>
+      <span class="kw">elevator entrapment [city]</span>
+    </div>
+    <div class="ph3">Budget Split</div>
+    <div class="bud-item"><div class="bud-hdr"><div class="bud-name">Google Local Services Ads (LSA)</div><div class="bud-val" style="color:var(--c3);">40% · $1,000/mo</div></div><div class="bud-bar-wrap"><div class="bud-bar" style="width:40%;background:var(--c3);"></div></div></div>
+    <div class="bud-item"><div class="bud-hdr"><div class="bud-name">Google Search PPC (exact match repair terms)</div><div class="bud-val" style="color:var(--c3);">40% · $1,000/mo</div></div><div class="bud-bar-wrap"><div class="bud-bar" style="width:40%;background:var(--c3);"></div></div></div>
+    <div class="bud-item"><div class="bud-hdr"><div class="bud-name">Retargeting (repair-to-contract pipeline)</div><div class="bud-val" style="color:var(--c3);">20% · $500/mo</div></div><div class="bud-bar-wrap"><div class="bud-bar" style="width:20%;background:var(--c3);"></div></div></div>
+    <div class="hbox" style="background:var(--c3d);border-color:rgba(139,28,28,0.2);color:var(--c3);margin-top:24px;">
+      <strong>Target KPIs:</strong> CPL via LSA: $30–$80 | Response time from call to technician dispatch: &lt;2 hours | Repair-to-contract conversion rate: 20–35% (within 90 days) | Google review capture rate: 40%+ of all completed repairs
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- CAMPAIGN 4 — CODE COMPLIANCE -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div id="camp4" class="section">
+  <div class="camp-strip" data-label="CODE" style="border-left: 5px solid var(--c4);">
+    <div class="camp-kicker" style="color:var(--c4);">Campaign 04 · Fear + Authority = Leads</div>
+    <div class="camp-title">Code Compliance<br>Lead Campaign</div>
+    <div class="camp-tagline" style="color:var(--muted);">"Your inspector is coming. Is your elevator ready — or is it a liability waiting to happen?"</div>
+    <div class="camp-meta-row">
+      <div class="meta-chip" style="color:var(--c4); border-color:rgba(26,102,64,0.3); background:var(--c4d);">High Anxiety = High Intent</div>
+      <div class="meta-chip" style="color:var(--muted); border-color:var(--rule);">Regulation-Driven</div>
+      <div class="meta-chip" style="color:var(--muted); border-color:var(--rule);">DLM + SPB + Cat 1 & 5</div>
+      <div class="meta-chip" style="color:var(--muted); border-color:var(--rule);">Opens Repair & Modernization</div>
+    </div>
+  </div>
+
+  <div class="inner-nav" id="nav4">
+    <button class="in-btn in-active" onclick="showInner('c4',1,'s')">Strategy</button>
+    <button class="in-btn" onclick="showInner('c4',2,'s')">Funnel</button>
+    <button class="in-btn" onclick="showInner('c4',3,'s')">Ad Copy</button>
+    <button class="in-btn" onclick="showInner('c4',4,'s')">Email Sequence</button>
+    <button class="in-btn" onclick="showInner('c4',5,'s')">Landing Page</button>
+    <button class="in-btn" onclick="showInner('c4',6,'s')">Targeting & Budget</button>
+  </div>
+
+  <div id="c4-1" class="inner-panel active">
+    <div class="ph2">Campaign Strategy</div>
+    <p class="plead">Code compliance leads are driven by anxiety — the fear of violations, fines, lawsuits, and reputational damage. Axxiom's role in this campaign is not fear-mongering but expert guidance. Be the calm, authoritative voice that helps building owners navigate a confusing regulatory landscape before an inspector does it for them — less favorably.</p>
+
+    <div class="hbox" style="background:var(--c4d); border-color:rgba(26,102,64,0.2); color:var(--c4);">
+      <strong>Core Insight:</strong> Most building owners don't know their compliance status until an inspector tells them — and by then, it's a violation, not a question. Axxiom can own this space by being the brand that educates first, positions compliance work as protection (not just a checkbox), and — critically — uses compliance conversations as the entry point for DLM upgrades, SPB upgrades, Cat 1 & 5 testing, and ultimately, maintenance contracts.
+    </div>
+
+    <div class="ph3">Compliance Trigger Events — Target These Moments</div>
+    <div class="g3">
+      <div class="card"><div class="card-h" style="color:var(--c4);">Annual Inspection Window</div><div class="card-p">Most states require annual elevator inspections. Target buildings 30–60 days before their typical inspection window. "Is your elevator inspection-ready?" campaigns run in the 2 months prior to peak inspection seasons in each state.</div></div>
+      <div class="card"><div class="card-h" style="color:var(--c4);">Category 5 Deadline</div><div class="card-p">5-year full-load safety test required by most jurisdictions. Buildings that haven't done one in 4+ years need urgent outreach. This test requires advance scheduling and often surfaces components needing repair before the test can pass.</div></div>
+      <div class="card"><div class="card-h" style="color:var(--c4);">DLM Enforcement Expansion</div><div class="card-p">Door Lock Monitoring requirements are expanding state by state. Arizona is ahead — other markets are catching up. Target older buildings in DLM-enforcement states before violations are issued. "Do you know if your elevator needs DLM compliance work?"</div></div>
+      <div class="card"><div class="card-h" style="color:var(--c4);">SPB Upgrade Wave</div><div class="card-p">Single Plunger Brake enforcement is creating a large pool of non-compliant hydraulic elevators. Target apartments, condos, churches, schools, medical offices — all common hydraulic elevator users who may not know they have an SPB issue.</div></div>
+      <div class="card"><div class="card-h" style="color:var(--c4);">Violation Notice Received</div><div class="card-p">Target via LinkedIn + Google the audience of property managers who searched for "elevator violation" or "elevator code citation." These are the hottest possible leads — they have a problem and need it solved immediately.</div></div>
+      <div class="card"><div class="card-h" style="color:var(--c4);">Building Acquisition Due Diligence</div><div class="card-p">Investors acquiring buildings want elevator compliance assessments before closing. Position Axxiom's consulting/inspection service as the pre-acquisition due diligence provider. Target: commercial real estate attorneys, CBRE/JLL brokers, property investors.</div></div>
+    </div>
+
+    <div class="ph3">Pain → Message Map</div>
+    <div class="ptm-row">
+      <div class="ptm-pain">"I got a violation notice after my last inspection and don't know what it means or what to do."</div>
+      <div class="ptm-arrow">→</div>
+      <div class="ptm-msg" style="background:var(--c4);">"We interpret every violation, tell you what's required and what it costs to fix, and handle all the documentation with the inspector."</div>
+    </div>
+    <div class="ptm-row">
+      <div class="ptm-pain">"I don't know if my hydraulic elevator needs an SPB upgrade or not."</div>
+      <div class="ptm-arrow">→</div>
+      <div class="ptm-msg" style="background:var(--c4);">"Free site survey: we'll tell you in one visit whether your system requires an SPB upgrade, what it entails, and what it costs. No surprises."</div>
+    </div>
+    <div class="ptm-row">
+      <div class="ptm-pain">"My Category 5 test is coming up and I've been told I might not pass."</div>
+      <div class="ptm-arrow">→</div>
+      <div class="ptm-msg" style="background:var(--c4);">"We pre-test before your official Category 5 test — identify any issues, fix them, and ensure you pass on the first attempt. No re-test fees."</div>
+    </div>
+  </div>
+
+  <div id="c4-2" class="inner-panel">
+    <div class="ph2">Full-Funnel Map</div>
+    <div class="funnel">
+      <div class="funnel-stage">
+        <div class="fs-label">Stage 1 — Awareness</div>
+        <div class="fs-name" style="color:var(--c4);">Educate Before Inspect</div>
+        <ul class="fs-items">
+          <li>Blog: "Elevator Code Compliance in [State]: What Every Building Owner Must Know in 2026"</li>
+          <li>LinkedIn: "3 elevator violations inspectors write up most often — and how to avoid them"</li>
+          <li>Google Search: "elevator inspection requirements [state]", "elevator code compliance [city]"</li>
+          <li>State-specific landing pages: "Arizona Elevator Code Compliance" / "Texas Elevator Inspection Requirements"</li>
+          <li>DLM-specific campaign: "Does your building need Door Lock Monitoring? Find out in one visit"</li>
+        </ul>
+        <div class="fs-cta" style="background:var(--c4);">CTA: Download Free Compliance Checklist</div>
+      </div>
+      <div class="funnel-stage">
+        <div class="fs-label">Stage 2 — Consideration</div>
+        <div class="fs-name" style="color:var(--c4);">Axxiom as the Expert</div>
+        <ul class="fs-items">
+          <li>Email: State-specific compliance guide + what's changing in 2026</li>
+          <li>Retargeting: "Does your elevator need a Category 5 test? We'll tell you — free."</li>
+          <li>SPB campaign: "Has your elevator contractor discussed SPB compliance with you?"</li>
+          <li>Webinar invite: "What Building Owners Need to Know About Elevator Code Changes in [State] — 2026"</li>
+          <li>LinkedIn ad: "Elevator inspection coming up? Here's the pre-inspection checklist our technicians use"</li>
+        </ul>
+        <div class="fs-cta" style="background:var(--c4);">CTA: Book Free Compliance Assessment</div>
+      </div>
+      <div class="funnel-stage">
+        <div class="fs-label">Stage 3 — Conversion</div>
+        <div class="fs-name" style="color:var(--c4);">Fix It Before It's a Violation</div>
+        <ul class="fs-items">
+          <li>Assessment reveals issues → immediate repair/upgrade proposal</li>
+          <li>DLM or SPB upgrade scope + cost presented with timeline</li>
+          <li>Category 1 or 5 testing scheduled and conducted</li>
+          <li>All documentation handled: inspection coordination, violation correction proof</li>
+          <li>Post-compliance: maintenance contract proposal ("We'll keep you compliant year-round")</li>
+        </ul>
+        <div class="fs-cta" style="background:var(--c4);">CTA: Approve Compliance Work / Sign Contract</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="c4-3" class="inner-panel">
+    <div class="ph2">Ad Copy Library</div>
+
+    <div class="copy-card">
+      <div class="cc-header"><div class="cc-type">Google Search · Inspection Urgency</div><div class="cc-badge" style="background:var(--c4);">LEAD AD</div></div>
+      <div class="cc-body">
+        <strong>H1:</strong> Elevator Inspection Coming? Are You Compliant?<br>
+        <strong>H2:</strong> Free Compliance Assessment — [City] Buildings<br>
+        <strong>H3:</strong> Category 1 & 5 Testing · DLM · SPB Upgrades<br><br>
+        <strong>Description 1:</strong> [Brand Name] provides full elevator code compliance services in [city] — violation corrections, fire recall testing, Category 1 and Category 5 safety tests, DLM installation, and SPB upgrades. Don't wait for a violation notice.<br>
+        <strong>Description 2:</strong> Our compliance team knows [state] elevator codes inside and out. We assess your building, identify every deficiency, and correct it before your inspector does. Free compliance assessment for qualifying buildings. Book now.
+      </div>
+      <div class="cc-note">Keywords: "elevator code compliance [city]", "elevator inspection [state]", "elevator violation correction", "Category 5 elevator test", "elevator DLM requirements [state]"</div>
+    </div>
+
+    <div class="copy-card">
+      <div class="cc-header"><div class="cc-type">LinkedIn · SPB Campaign (High-Value Segment)</div><div class="cc-badge" style="background:var(--c4);">TARGETED</div></div>
+      <div class="cc-body">
+        <strong>Hook:</strong> "Has your elevator contractor discussed Single Plunger Brake compliance with you?"<br><br>
+        If they haven't, this post is important.<br><br>
+        Many older hydraulic elevators — common in apartment buildings, condos, schools, churches, and medical offices — contain Single Plunger Brake systems that no longer meet current safety standards.<br><br>
+        The issue: if a hydraulic component fails, the elevator can descend without control. Modern code requires additional protection to prevent this.<br><br>
+        Building owners who don't know their compliance status are one inspection away from:<br>
+        → A violation notice<br>
+        → An out-of-service order<br>
+        → Potential liability exposure<br><br>
+        [Brand Name] offers free SPB compliance surveys for buildings in [state/city]. One visit. Clear answer. No obligation.<br><br>
+        👉 Schedule your free survey: [Link]
+      </div>
+      <div class="cc-note">Target: Property managers and owners of buildings built between 1985–2005 (most likely to have hydraulic elevators with SPB systems). Industries: Residential/Multifamily, Healthcare, Education, Religious organizations.</div>
+    </div>
+
+    <div class="copy-card">
+      <div class="cc-header"><div class="cc-type">Cold Outreach Email · Violation-Risk Angle</div><div class="cc-badge" style="background:var(--c4);">OUTBOUND</div></div>
+      <div class="cc-body">
+        <strong>Subject:</strong> Your elevator may not be ready for its next inspection — quick note<br><br>
+        Hi [Name],<br><br>
+        I'm reaching out because [Brand Name] has been working closely with building owners in [city] on elevator code compliance — and I wanted to flag something that affects a lot of buildings like [property name].<br><br>
+        [State] updated its elevator code requirements in [year/recent], and many buildings haven't completed the required [DLM / SPB / Category 5] work yet. Inspectors in [city] have been active in citing these deficiencies.<br><br>
+        We offer a free compliance site survey — no cost, no pressure. We tell you exactly where you stand before your inspector does.<br><br>
+        Worth a 20-minute visit?<br><br>
+        — [Name], [Brand Name]
+      </div>
+      <div class="cc-note">Personalize with the specific compliance issue most relevant to the building type (hydraulic = SPB, older building = DLM, 5-year window = Category 5). Open rate improves 40%+ with personalization.</div>
+    </div>
+  </div>
+
+  <div id="c4-4" class="inner-panel">
+    <div class="ph2">Email Nurture Sequence</div>
+    <p class="plead">4-email sequence for compliance checklist downloaders. Educational, specific, and state-relevant. Each email establishes Axxiom as the compliance authority in the market.</p>
+
+    <div class="email-seq">
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c4);">1</div>
+        <div class="es-content">
+          <div class="es-day">Day 0 — Immediate</div>
+          <div class="es-subject">Your [State] Elevator Compliance Checklist + what's changing in 2026</div>
+          <div class="es-body">Here's your free checklist. [Download link]. Quick summary of what to know in [state] right now: [2–3 state-specific bullet points about recent or upcoming code changes]. Run through the checklist and reply if any item raises a flag — we're happy to explain what it means and what action, if any, is required. We've handled compliance work for [X] buildings in [state] and know the code in and out.</div>
+          <div class="es-cta" style="background:var(--c4);">View Compliance Resources →</div>
+        </div>
+      </div>
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c4);">2</div>
+        <div class="es-content">
+          <div class="es-day">Day 4</div>
+          <div class="es-subject">The elevator violation that catches most [state] building owners off guard</div>
+          <div class="es-body">The most common elevator violation we see in [state] isn't a broken part. It's documentation. Specifically: missing or out-of-date Category 1 test records. State inspectors are required to verify annual test documentation. If yours is missing or more than 13 months old, it's a violation — regardless of how well your elevator is running. We can schedule your Category 1 test and handle all documentation. If you haven't had one in the last year, let's fix that before your next inspection.</div>
+          <div class="es-cta" style="background:var(--c4);">Schedule Category 1 Test →</div>
+        </div>
+      </div>
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c4);">3</div>
+        <div class="es-content">
+          <div class="es-day">Day 8</div>
+          <div class="es-subject">Does your hydraulic elevator need an SPB upgrade? Here's how to find out in one visit</div>
+          <div class="es-body">Many building owners are surprised to learn their hydraulic elevator may require a Single Plunger Brake upgrade under current code. The buildings most likely affected: built between 1980–2005, with hydraulic elevators that haven't had a full safety system review. An SPB issue isn't always obvious until an inspector flags it — and by then, you may face an out-of-service order. Our free SPB compliance survey takes 45 minutes and tells you exactly where you stand. Would that be useful for your building?</div>
+          <div class="es-cta" style="background:var(--c4);">Book Free SPB Survey →</div>
+        </div>
+      </div>
+      <div class="email-step">
+        <div class="es-num" style="background:var(--c4);">4</div>
+        <div class="es-content">
+          <div class="es-day">Day 14</div>
+          <div class="es-subject">The best time to fix an elevator compliance issue is before your inspector finds it</div>
+          <div class="es-body">A compliance violation caught proactively: a scheduled service visit, a correction, documentation filed. Cost: reasonable. Timeline: manageable.<br><br>A compliance violation caught by an inspector: a formal citation, a deadline, potential out-of-service order, ADA liability exposure if the elevator is inaccessible.<br><br>We've helped [X] buildings in [state] resolve compliance issues before they became violations. We'd be glad to do the same for yours. The free assessment takes one visit. Would you like to schedule it?</div>
+          <div class="es-cta" style="background:var(--c4);">Book Free Compliance Assessment →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="c4-5" class="inner-panel">
+    <div class="ph2">Landing Page Blueprint</div>
+    <div class="lp-wire">
+      <div class="lp-top"><div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);">LANDING PAGE STRUCTURE</div><div class="meta-chip" style="color:var(--c4);border-color:rgba(26,102,64,0.3);background:var(--c4d);">Code Compliance Campaign</div></div>
+      <div class="lp-section"><div class="lp-tag">Hero</div><div class="lp-content"><strong>H1:</strong> "Is Your Elevator Ready for Its Next Inspection?" <strong>Sub:</strong> [Brand Name] provides free elevator compliance assessments for [state] buildings — we tell you exactly what's required, what's missing, and what it costs to fix before your inspector does. <strong>CTA:</strong> "Book My Free Compliance Assessment" | Trust: Licensed Inspector · [State] Code Certified · [X] violations resolved</div></div>
+      <div class="lp-section"><div class="lp-tag">Compliance Work We Cover</div><div class="lp-content">Card grid: Annual Inspection Prep · Category 1 Testing · Category 5 Testing · Fire Recall Testing · Violation Corrections · DLM Installation · SPB Upgrades · ADA Compliance Review. Each with a one-line description of what it means and when it's required.</div></div>
+      <div class="lp-section"><div class="lp-tag">State Code Callout</div><div class="lp-content">Dedicated section: "What [State] Requires in 2026" — bullet list of current mandatory tests, deadlines, and recent code changes. This page becomes an AEO/SEO asset for state-specific compliance queries.</div></div>
+      <div class="lp-section"><div class="lp-tag">SPB Feature Section</div><div class="lp-content">"Does Your Hydraulic Elevator Need an SPB Upgrade?" — Explain the issue in plain language. List the building types most affected. Offer: Free SPB site survey. This converts the high-anxiety building owner who found this page via an SPB-specific search.</div></div>
+      <div class="lp-section"><div class="lp-tag">Assessment Form</div><div class="lp-content">Fields: Name / Email / Phone / Building Address / Elevator Type (Hydraulic/Traction) / Last Inspection Date / Primary Concern (dropdown: Annual Inspection / Category 5 / DLM / SPB / Violation Notice / General Assessment). <strong>Submit:</strong> "Request My Free Assessment →". Confirmation: "We'll contact you within 1 business day to schedule your free on-site assessment."</div></div>
+    </div>
+  </div>
+
+  <div id="c4-6" class="inner-panel">
+    <div class="ph2">Targeting & Budget</div>
+    <div class="ph3">Priority Keywords</div>
+    <div class="kw-grid">
+      <span class="kw">elevator code compliance [city]</span>
+      <span class="kw">elevator inspection requirements [state]</span>
+      <span class="kw">elevator violation correction [city]</span>
+      <span class="kw">Category 5 elevator test [state]</span>
+      <span class="kw">elevator DLM requirements</span>
+      <span class="kw">door lock monitoring elevator</span>
+      <span class="kw">single plunger brake elevator upgrade</span>
+      <span class="kw">elevator ADA compliance</span>
+      <span class="kw">elevator fire recall test</span>
+      <span class="kw">elevator inspection failed what to do</span>
+    </div>
+    <div class="ph3">Budget Split</div>
+    <div class="bud-item"><div class="bud-hdr"><div class="bud-name">Google Search (compliance terms)</div><div class="bud-val" style="color:var(--c4);">40% · $1,000/mo</div></div><div class="bud-bar-wrap"><div class="bud-bar" style="width:40%;background:var(--c4);"></div></div></div>
+    <div class="bud-item"><div class="bud-hdr"><div class="bud-name">LinkedIn (SPB & DLM outreach)</div><div class="bud-val" style="color:var(--c4);">30% · $750/mo</div></div><div class="bud-bar-wrap"><div class="bud-bar" style="width:30%;background:var(--c4);"></div></div></div>
+    <div class="bud-item"><div class="bud-hdr"><div class="bud-name">Content / AEO (state compliance pages)</div><div class="bud-val" style="color:var(--c4);">20% · $500/mo</div></div><div class="bud-bar-wrap"><div class="bud-bar" style="width:20%;background:var(--c4);"></div></div></div>
+    <div class="bud-item"><div class="bud-hdr"><div class="bud-name">Cold Outreach Tools + Email</div><div class="bud-val" style="color:var(--c4);">10% · $250/mo</div></div><div class="bud-bar-wrap"><div class="bud-bar" style="width:10%;background:var(--c4);"></div></div></div>
+    <div class="hbox" style="background:var(--c4d);border-color:rgba(26,102,64,0.2);color:var(--c4);margin-top:24px;">
+      <strong>Target KPIs:</strong> CPL: $60–$150 | Assessment-to-Project Conversion: 40–60% (compliance work is non-negotiable once identified) | Average project value: $2,500–$45,000 (DLM/SPB upgrades + testing) | Downstream value: 35–50% of compliance clients sign maintenance contracts within 6 months
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-brand">Axxiom Elevator · 4-Campaign System</div>
+  <div class="foot-mono">Maintenance · Modernization · Repair · Code Compliance · 2025–2026</div>
+</footer>
+
+<script>
+  function showCamp(n) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.snav-btn').forEach(b => { b.classList.remove('a1','a2','a3','a4'); });
+    document.getElementById('camp'+n).classList.add('active');
+    const btn = document.querySelectorAll('.snav-btn')[n-1];
+    btn.classList.add('a'+n);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showInner(camp, num, type) {
+    const panels = document.querySelectorAll(`[id^="${camp}-"]`);
+    panels.forEach(p => p.classList.remove('active'));
+    document.getElementById(`${camp}-${num}`).classList.add('active');
+    const navId = camp.replace('c','nav');
+    const btns = document.getElementById(navId).querySelectorAll('.in-btn');
+    btns.forEach(b => b.classList.remove('in-active'));
+    btns[num-1].classList.add('in-active');
+  }
+</script>
+</body>
+</html>
