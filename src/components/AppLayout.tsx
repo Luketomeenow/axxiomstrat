@@ -5,6 +5,7 @@ import {
   Clapperboard,
   Database,
   ExternalLink,
+  Gauge,
   LayoutGrid,
   Map,
   Megaphone,
@@ -122,6 +123,13 @@ export function AppLayout() {
             <span className="flex items-center gap-2">
               <Presentation className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
               AI roadmap (presentation)
+            </span>
+          </NavLink>
+
+          <NavLink to="/airoadmapdashboard" className={navClass}>
+            <span className="flex items-center gap-2">
+              <Gauge className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+              AI roadmap dashboard
             </span>
           </NavLink>
 

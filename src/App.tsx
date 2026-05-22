@@ -3,6 +3,7 @@ import { AppLayout } from './components/AppLayout'
 import { BrandGuidelinesPage } from './pages/BrandGuidelinesPage'
 import { AeoPlaybookPage } from './pages/AeoPlaybookPage'
 import { Axxiom4CampaignPage } from './pages/Axxiom4CampaignPage'
+import { AiRoadmapDashboardPage } from './pages/AiRoadmapDashboardPage'
 import { AiRoadmapPresentationPage } from './pages/AiRoadmapPresentationPage'
 import { AxxiomAiRoadmapPage } from './pages/AxxiomAiRoadmapPage'
 import { DocumentPage } from './pages/DocumentPage'
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/marketingcampaign" element={<MarketingCampaignPage />} />
         <Route path="/axxiomairoadmap" element={<AxxiomAiRoadmapPage />} />
         <Route path="/airoadmap" element={<AiRoadmapPresentationPage />} />
+        <Route path="/airoadmapdashboard" element={<AiRoadmapDashboardPage />} />
         <Route path="/aeogeoplaybook" element={<AeoPlaybookPage />} />
         <Route path="/axxiom4campaign" element={<Axxiom4CampaignPage />} />
         <Route element={<AppLayout />}>

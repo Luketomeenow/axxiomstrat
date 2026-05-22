@@ -4,6 +4,7 @@ import {
   BookOpenCheck,
   Clapperboard,
   Database,
+  Gauge,
   Layers,
   LayoutGrid,
   Map,
@@ -94,6 +95,14 @@ export function HomePage() {
           >
             <Presentation className="h-4 w-4 text-violet-300" aria-hidden />
             AI roadmap (presentation)
+            <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
+          </Link>
+          <Link
+            to="/airoadmapdashboard"
+            className="inline-flex items-center gap-2 rounded-xl border border-teal-800/35 bg-teal-950/90 px-4 py-3 text-sm font-medium text-teal-50 shadow-sm transition-colors hover:bg-teal-950"
+          >
+            <Gauge className="h-4 w-4 text-teal-300" aria-hidden />
+            AI roadmap dashboard
             <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
           </Link>
           <Link

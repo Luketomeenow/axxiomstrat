@@ -22,7 +22,7 @@ On **Netlify**, add the same variable under **Site configuration → Environment
 
 **Note:** Vite inlines `VITE_*` at **build** time, so the password string can appear in published JavaScript — use this as a **deterrent** only, and add Netlify access control / SSO if you need real protection.
 
-Dedicated viewers: **`/brandguidelines`**, **`/vectordbcomparison`**, **`/marketingvidsprompts`**, **`/marketingcampaign`**, **`/axxiom4campaign`** (4-service marketing campaign HTML), **`/axxiomairoadmap`** (full HTML reference), **`/airoadmap`** (slide-style presentation of the same roadmap), **`/aeogeoplaybook`** (AEO execution playbook HTML).
+Dedicated viewers: **`/brandguidelines`**, **`/vectordbcomparison`**, **`/marketingvidsprompts`**, **`/marketingcampaign`**, **`/axxiom4campaign`** (4-service marketing campaign HTML), **`/axxiomairoadmap`** (full HTML reference), **`/airoadmap`** (slide-style presentation of the same roadmap), **`/airoadmapdashboard`** (live progress tracker for marketing, data architecture, and ops workstreams), **`/aeogeoplaybook`** (AEO execution playbook HTML).
 
 ## Deploy (Netlify)
 
