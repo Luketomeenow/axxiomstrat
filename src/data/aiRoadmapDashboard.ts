@@ -5,11 +5,20 @@
 
 export type RoadmapItemStatus = 'not_started' | 'in_progress' | 'done'
 
+/** Automation or sub-task inside a workstream block (e.g. under Lead & inbound). */
+export type RoadmapSubItem = {
+  id: string
+  label: string
+  status: RoadmapItemStatus
+  notes?: string
+}
+
 export type RoadmapDashboardItem = {
   id: string
   label: string
   status: RoadmapItemStatus
   notes?: string
+  subItems: RoadmapSubItem[]
 }
 
 export type RoadmapDashboardCategory = {
@@ -19,7 +28,10 @@ export type RoadmapDashboardCategory = {
   items: RoadmapDashboardItem[]
 }
 
-export const ROADMAP_DASHBOARD_STORAGE_KEY = 'axxiom-ai-roadmap-dashboard-v1'
+export const ROADMAP_DASHBOARD_STORAGE_KEY = 'axxiom-ai-roadmap-dashboard-v2'
+
+/** @deprecated — migrated into v2 on load */
+const LEGACY_STORAGE_KEY = 'axxiom-ai-roadmap-dashboard-v1'
 
 export const STATUS_ORDER: RoadmapItemStatus[] = ['not_started', 'in_progress', 'done']
 
@@ -52,27 +64,63 @@ export const STATUS_META: Record<
 
 export const CATEGORY_ACCENT: Record<
   string,
-  { gradient: string; icon: string; border: string }
+  { gradient: string; icon: string; border: string; panel: string }
 > = {
   marketing: {
     gradient: 'from-rose-500/20 via-orange-500/10 to-transparent',
     icon: 'text-rose-300',
     border: 'border-rose-500/25',
+    panel: 'from-rose-500/15 to-orange-500/5',
   },
   'data-architecture': {
     gradient: 'from-sky-500/20 via-cyan-500/10 to-transparent',
     icon: 'text-sky-300',
     border: 'border-sky-500/25',
+    panel: 'from-sky-500/15 to-cyan-500/5',
   },
   operations: {
     gradient: 'from-violet-500/20 via-indigo-500/10 to-transparent',
     icon: 'text-violet-300',
     border: 'border-violet-500/25',
+    panel: 'from-violet-500/15 to-indigo-500/5',
   },
 }
 
+function normalizeStatus(status: unknown): RoadmapItemStatus {
+  return STATUS_ORDER.includes(status as RoadmapItemStatus)
+    ? (status as RoadmapItemStatus)
+    : 'not_started'
+}
+
+function normalizeSubItem(raw: Partial<RoadmapSubItem> & { id: string; label: string }): RoadmapSubItem {
+  return {
+    id: raw.id,
+    label: raw.label,
+    status: normalizeStatus(raw.status),
+    notes: typeof raw.notes === 'string' ? raw.notes : undefined,
+  }
+}
+
+export function normalizeDashboardItem(
+  raw: Partial<RoadmapDashboardItem> & { id: string; label: string },
+): RoadmapDashboardItem {
+  const subItems = Array.isArray(raw.subItems)
+    ? raw.subItems
+        .filter((s): s is RoadmapSubItem => Boolean(s?.id && s?.label))
+        .map((s) => normalizeSubItem(s))
+    : []
+
+  return {
+    id: raw.id,
+    label: raw.label,
+    status: normalizeStatus(raw.status),
+    notes: typeof raw.notes === 'string' ? raw.notes : undefined,
+    subItems,
+  }
+}
+
 function item(id: string, label: string, status: RoadmapItemStatus = 'not_started'): RoadmapDashboardItem {
-  return { id, label, status }
+  return { id, label, status, subItems: [] }
 }
 
 export const AI_ROADMAP_DASHBOARD_DEFAULT: RoadmapDashboardCategory[] = [
@@ -131,7 +179,7 @@ export function slugifyRoadmapLabel(label: string): string {
     .replace(/^-|-$/g, '')
 }
 
-export function countByStatus(items: RoadmapDashboardItem[]) {
+export function countByStatus(items: { status: RoadmapItemStatus }[]) {
   return items.reduce(
     (acc, i) => {
       acc[i.status] += 1
@@ -141,14 +189,32 @@ export function countByStatus(items: RoadmapDashboardItem[]) {
   )
 }
 
-export function progressPercent(items: RoadmapDashboardItem[]): number {
+export function progressPercent(items: { status: RoadmapItemStatus }[]): number {
   if (items.length === 0) return 0
   const sum = items.reduce((n, i) => n + STATUS_META[i.status].progressWeight, 0)
   return Math.round((sum / items.length) * 100)
 }
 
-export function allDashboardItems(categories: RoadmapDashboardCategory[]): RoadmapDashboardItem[] {
-  return categories.flatMap((c) => c.items)
+/** Flatten block + nested automations for accurate progress. */
+export function trackableUnitsForItem(item: RoadmapDashboardItem): { status: RoadmapItemStatus }[] {
+  if (item.subItems.length > 0) return item.subItems
+  return [item]
+}
+
+export function trackableUnitsForCategory(category: RoadmapDashboardCategory) {
+  return category.items.flatMap(trackableUnitsForItem)
+}
+
+export function allDashboardTrackableUnits(categories: RoadmapDashboardCategory[]) {
+  return categories.flatMap(trackableUnitsForCategory)
+}
+
+export function effectiveItemStatus(item: RoadmapDashboardItem): RoadmapItemStatus {
+  if (item.subItems.length === 0) return item.status
+  const counts = countByStatus(item.subItems)
+  if (counts.done === item.subItems.length) return 'done'
+  if (counts.not_started === item.subItems.length) return 'not_started'
+  return 'in_progress'
 }
 
 export function mergeDashboardWithDefaults(
@@ -161,7 +227,7 @@ export function mergeDashboardWithDefaults(
     if (!storedCat) return structuredClone(defaultCat)
 
     const storedById = new Map(storedCat.items.map((i) => [i.id, i]))
-    const merged: RoadmapDashboardItem[] = [...storedCat.items]
+    const merged: RoadmapDashboardItem[] = [...storedCat.items.map((i) => normalizeDashboardItem(i))]
 
     for (const defaultItem of defaultCat.items) {
       if (!storedById.has(defaultItem.id)) {
@@ -171,10 +237,19 @@ export function mergeDashboardWithDefaults(
 
     return {
       ...defaultCat,
-      items: merged.map((i) => ({
-        ...i,
-        status: STATUS_ORDER.includes(i.status) ? i.status : 'not_started',
-      })),
+      items: merged.map((i) => normalizeDashboardItem(i)),
     }
   })
+}
+
+export function readLegacyDashboardStorage(): RoadmapDashboardCategory[] | null {
+  try {
+    const raw = localStorage.getItem(LEGACY_STORAGE_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw) as unknown
+    if (!Array.isArray(parsed)) return null
+    return parsed as RoadmapDashboardCategory[]
+  } catch {
+    return null
+  }
 }

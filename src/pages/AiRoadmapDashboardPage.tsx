@@ -2,27 +2,32 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   ArrowLeft,
-  CheckCircle2,
-  Circle,
+  ChevronRight,
   Gauge,
-  LoaderCircle,
+  ListTree,
   Map,
   Plus,
   Presentation,
   RotateCcw,
   Trash2,
 } from 'lucide-react'
+import { ItemDetailPanel } from '../components/ai-roadmap-dashboard/ItemDetailPanel'
+import { StatusControls } from '../components/ai-roadmap-dashboard/StatusControls'
 import {
-  allDashboardItems,
+  allDashboardTrackableUnits,
   CATEGORY_ACCENT,
   countByStatus,
+  effectiveItemStatus,
   progressPercent,
   STATUS_META,
-  STATUS_ORDER,
+  trackableUnitsForCategory,
   type RoadmapDashboardCategory,
+  type RoadmapDashboardItem,
   type RoadmapItemStatus,
 } from '../data/aiRoadmapDashboard'
 import { useAiRoadmapDashboard } from '../hooks/useAiRoadmapDashboard'
+
+type DetailTarget = { categoryId: string; itemId: string }
 
 function OverallProgressRing({ percent }: { percent: number }) {
   const r = 52
@@ -86,73 +91,71 @@ function StatusPill({ status }: { status: RoadmapItemStatus }) {
 }
 
 function RoadmapItemCard({
-  label,
-  status,
+  item,
   onStatusChange,
   onRemove,
+  onViewDetails,
 }: {
-  label: string
-  status: RoadmapItemStatus
+  item: RoadmapDashboardItem
   onStatusChange: (status: RoadmapItemStatus) => void
   onRemove: () => void
+  onViewDetails: () => void
 }) {
+  const displayStatus = effectiveItemStatus(item)
+  const subCount = item.subItems.length
+  const subDone = item.subItems.filter((s) => s.status === 'done').length
+  const statusDrivenBySubs = subCount > 0
+
   return (
     <article
       className={[
         'group flex flex-col gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.03] p-4 shadow-[0_12px_40px_-20px_rgba(0,0,0,0.8)] ring-1 ring-inset transition-colors',
-        STATUS_META[status].ring,
+        STATUS_META[displayStatus].ring,
       ].join(' ')}
     >
       <div className="flex items-start justify-between gap-2">
-        <h3 className="text-sm font-semibold leading-snug text-white">{label}</h3>
+        <h3 className="text-sm font-semibold leading-snug text-white">{item.label}</h3>
         <button
           type="button"
           onClick={onRemove}
           className="shrink-0 rounded-lg p-1.5 text-slate-500 opacity-0 transition-all hover:bg-red-500/10 hover:text-red-300 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/50"
-          aria-label={`Remove ${label}`}
+          aria-label={`Remove ${item.label}`}
         >
           <Trash2 className="h-3.5 w-3.5" aria-hidden />
         </button>
       </div>
 
-      <StatusPill status={status} />
+      <StatusPill status={displayStatus} />
 
-      <div
-        className="grid grid-cols-3 gap-1 rounded-xl bg-black/25 p-1 ring-1 ring-inset ring-white/[0.05]"
-        role="group"
-        aria-label={`Status for ${label}`}
+      {subCount > 0 ? (
+        <p className="flex items-center gap-1.5 text-xs text-slate-500">
+          <ListTree className="h-3.5 w-3.5 shrink-0 text-indigo-400/80" aria-hidden />
+          {subCount} automation{subCount === 1 ? '' : 's'} · {subDone} done
+        </p>
+      ) : (
+        <p className="text-xs text-slate-600">No automations added yet</p>
+      )}
+
+      {!statusDrivenBySubs ? (
+        <StatusControls
+          status={item.status}
+          onChange={onStatusChange}
+          label={item.label}
+        />
+      ) : (
+        <p className="text-[10px] leading-snug text-slate-500">
+          Status rolls up from automations. Open details to update.
+        </p>
+      )}
+
+      <button
+        type="button"
+        onClick={onViewDetails}
+        className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] py-2.5 text-sm font-medium text-slate-200 transition-colors hover:border-indigo-400/35 hover:bg-indigo-500/10 hover:text-white"
       >
-        {STATUS_ORDER.map((s) => {
-          const active = status === s
-          const Icon =
-            s === 'done' ? CheckCircle2 : s === 'in_progress' ? LoaderCircle : Circle
-          return (
-            <button
-              key={s}
-              type="button"
-              onClick={() => onStatusChange(s)}
-              aria-pressed={active}
-              className={[
-                'flex flex-col items-center gap-1 rounded-lg px-1 py-2 text-[10px] font-medium transition-colors',
-                active
-                  ? 'bg-white/10 text-white shadow-sm'
-                  : 'text-slate-500 hover:bg-white/[0.04] hover:text-slate-300',
-              ].join(' ')}
-            >
-              <Icon
-                className={[
-                  'h-3.5 w-3.5',
-                  s === 'in_progress' && active ? 'animate-spin' : '',
-                ].join(' ')}
-                aria-hidden
-              />
-              <span className="leading-none">
-                {s === 'not_started' ? 'Queued' : s === 'in_progress' ? 'Active' : 'Done'}
-              </span>
-            </button>
-          )
-        })}
-      </div>
+        View details
+        <ChevronRight className="h-4 w-4 opacity-70" aria-hidden />
+      </button>
     </article>
   )
 }
@@ -162,16 +165,19 @@ function CategorySection({
   onStatusChange,
   onAddItem,
   onRemoveItem,
+  onViewDetails,
 }: {
   category: RoadmapDashboardCategory
   onStatusChange: (itemId: string, status: RoadmapItemStatus) => void
   onAddItem: (label: string) => boolean
   onRemoveItem: (itemId: string) => void
+  onViewDetails: (itemId: string) => void
 }) {
   const [draft, setDraft] = useState('')
   const accent = CATEGORY_ACCENT[category.id] ?? CATEGORY_ACCENT.marketing
-  const counts = countByStatus(category.items)
-  const pct = progressPercent(category.items)
+  const units = trackableUnitsForCategory(category)
+  const counts = countByStatus(units)
+  const pct = progressPercent(units)
 
   const handleAdd = () => {
     if (onAddItem(draft)) setDraft('')
@@ -227,10 +233,10 @@ function CategorySection({
         {category.items.map((item) => (
           <li key={item.id}>
             <RoadmapItemCard
-              label={item.label}
-              status={item.status}
+              item={item}
               onStatusChange={(status) => onStatusChange(item.id, status)}
               onRemove={() => onRemoveItem(item.id)}
+              onViewDetails={() => onViewDetails(item.id)}
             />
           </li>
         ))}
@@ -238,7 +244,7 @@ function CategorySection({
 
       <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:items-center">
         <label className="sr-only" htmlFor={`add-${category.id}`}>
-          Add item to {category.title}
+          Add block to {category.title}
         </label>
         <input
           id={`add-${category.id}`}
@@ -248,7 +254,7 @@ function CategorySection({
           onKeyDown={(e) => {
             if (e.key === 'Enter') handleAdd()
           }}
-          placeholder="Add a work item…"
+          placeholder="Add a workstream block…"
           className="min-w-0 flex-1 rounded-xl border border-white/10 bg-black/30 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-indigo-400/50 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
         />
         <button
@@ -258,7 +264,7 @@ function CategorySection({
           className="inline-flex items-center justify-center gap-2 rounded-xl border border-indigo-400/40 bg-indigo-500/20 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-indigo-500/30 disabled:cursor-not-allowed disabled:opacity-40"
         >
           <Plus className="h-4 w-4" aria-hidden />
-          Add item
+          Add block
         </button>
       </div>
     </section>
@@ -266,19 +272,38 @@ function CategorySection({
 }
 
 export function AiRoadmapDashboardPage() {
-  const { categories, setItemStatus, addItem, removeItem, resetToDefaults } =
-    useAiRoadmapDashboard()
+  const {
+    categories,
+    setItemStatus,
+    setSubItemStatus,
+    addItem,
+    addSubItem,
+    removeItem,
+    removeSubItem,
+    resetToDefaults,
+  } = useAiRoadmapDashboard()
 
-  const allItems = useMemo(() => allDashboardItems(categories), [categories])
-  const overallPct = progressPercent(allItems)
-  const totals = countByStatus(allItems)
+  const [detail, setDetail] = useState<DetailTarget | null>(null)
+
+  const allUnits = useMemo(() => allDashboardTrackableUnits(categories), [categories])
+  const overallPct = progressPercent(allUnits)
+  const totals = countByStatus(allUnits)
+
+  const detailContext = useMemo(() => {
+    if (!detail) return null
+    const category = categories.find((c) => c.id === detail.categoryId)
+    const item = category?.items.find((i) => i.id === detail.itemId)
+    if (!category || !item) return null
+    return { category, item }
+  }, [categories, detail])
 
   const handleReset = () => {
     if (
       window.confirm(
-        'Reset all items to the default roadmap list? Your status changes and custom items will be cleared.',
+        'Reset all blocks and automations to defaults? Status changes and custom items will be cleared.',
       )
     ) {
+      setDetail(null)
       resetToDefaults()
     }
   }
@@ -347,9 +372,9 @@ export function AiRoadmapDashboardPage() {
               </p>
             </div>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-400">
-              Track what is queued, in progress, and done across marketing, data
-              architecture, and operations. Progress saves automatically in this
-              browser — add items or adjust status as the roadmap evolves.
+              Track workstream blocks and the automations inside each one. Open{' '}
+              <strong className="font-medium text-slate-300">View details</strong> on any card
+              to add sub-tasks — progress includes automations when they exist.
             </p>
             <dl className="mt-6 grid grid-cols-3 gap-3 sm:max-w-md">
               <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3">
@@ -378,7 +403,7 @@ export function AiRoadmapDashboardPage() {
               </div>
             </dl>
             <p className="mt-4 text-xs text-slate-500">
-              Overall % weights in-progress items at 50% — done counts as 100%.
+              Counts include nested automations. In-progress weights at 50% for % complete.
             </p>
           </div>
         </section>
@@ -393,10 +418,42 @@ export function AiRoadmapDashboardPage() {
               }
               onAddItem={(label) => addItem(category.id, label)}
               onRemoveItem={(itemId) => removeItem(category.id, itemId)}
+              onViewDetails={(itemId) =>
+                setDetail({ categoryId: category.id, itemId })
+              }
             />
           ))}
         </div>
       </main>
+
+      {detailContext ? (
+        <ItemDetailPanel
+          category={detailContext.category}
+          item={detailContext.item}
+          onClose={() => setDetail(null)}
+          onItemStatusChange={(status) =>
+            setItemStatus(detailContext.category.id, detailContext.item.id, status)
+          }
+          onSubItemStatusChange={(subItemId, status) =>
+            setSubItemStatus(
+              detailContext.category.id,
+              detailContext.item.id,
+              subItemId,
+              status,
+            )
+          }
+          onAddSubItem={(label) =>
+            addSubItem(detailContext.category.id, detailContext.item.id, label)
+          }
+          onRemoveSubItem={(subItemId) =>
+            removeSubItem(
+              detailContext.category.id,
+              detailContext.item.id,
+              subItemId,
+            )
+          }
+        />
+      ) : null}
     </div>
   )
 }

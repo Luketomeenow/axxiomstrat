@@ -22,6 +22,17 @@ body {
 }
 
 /* AI roadmap presentation deck — chart / motion primitives */
+@keyframes roadmap-panel-slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0.6;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 @keyframes deck-fade-up {
   from {
     opacity: 0;
