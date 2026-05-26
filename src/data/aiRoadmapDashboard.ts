@@ -167,6 +167,7 @@ export const AI_ROADMAP_DASHBOARD_DEFAULT: RoadmapDashboardCategory[] = [
       item('compliance-inspection-tracker', 'Compliance & inspection tracker'),
       item('client-communication-ai', 'Client communication AI'),
       item('proposal-quoting-ai', 'Proposal & quoting AI'),
+      item('elevator-copilot', 'Elevator Copilot'),
     ],
   },
 ]
