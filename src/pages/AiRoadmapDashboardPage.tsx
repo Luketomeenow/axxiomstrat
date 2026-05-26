@@ -5,6 +5,7 @@ import {
   ChevronRight,
   Gauge,
   ListTree,
+  LoaderCircle,
   Map,
   Plus,
   Presentation,
@@ -13,6 +14,7 @@ import {
 } from 'lucide-react'
 import { ItemDetailPanel } from '../components/ai-roadmap-dashboard/ItemDetailPanel'
 import { StatusControls } from '../components/ai-roadmap-dashboard/StatusControls'
+import { SyncStatusBar } from '../components/ai-roadmap-dashboard/SyncStatusBar'
 import {
   allDashboardTrackableUnits,
   CATEGORY_ACCENT,
@@ -274,6 +276,11 @@ function CategorySection({
 export function AiRoadmapDashboardPage() {
   const {
     categories,
+    hydrated,
+    syncStatus,
+    syncError,
+    lastSyncedAt,
+    supabaseEnabled,
     setItemStatus,
     setSubItemStatus,
     addItem,
@@ -281,6 +288,7 @@ export function AiRoadmapDashboardPage() {
     removeItem,
     removeSubItem,
     resetToDefaults,
+    retrySync,
   } = useAiRoadmapDashboard()
 
   const [detail, setDetail] = useState<DetailTarget | null>(null)
@@ -362,6 +370,23 @@ export function AiRoadmapDashboardPage() {
       </header>
 
       <main className="relative z-10 mx-auto max-w-6xl px-4 py-8 sm:px-8 sm:py-10">
+        <div className="mb-6">
+          <SyncStatusBar
+            supabaseEnabled={supabaseEnabled}
+            syncStatus={syncStatus}
+            syncError={syncError}
+            lastSyncedAt={lastSyncedAt}
+            onRetry={retrySync}
+          />
+        </div>
+
+        {!hydrated ? (
+          <div className="flex min-h-[40vh] flex-col items-center justify-center gap-3 text-slate-400">
+            <LoaderCircle className="h-8 w-8 animate-spin text-indigo-400" aria-hidden />
+            <p className="text-sm">Loading roadmap…</p>
+          </div>
+        ) : (
+          <>
         <section className="mb-10 rounded-3xl border border-white/[0.08] bg-white/[0.02] p-6 sm:flex sm:items-center sm:gap-10 sm:p-8">
           <OverallProgressRing percent={overallPct} />
           <div className="mt-6 flex-1 sm:mt-0">
@@ -375,6 +400,9 @@ export function AiRoadmapDashboardPage() {
               Track workstream blocks and the automations inside each one. Open{' '}
               <strong className="font-medium text-slate-300">View details</strong> on any card
               to add sub-tasks — progress includes automations when they exist.
+              {supabaseEnabled
+                ? ' Changes sync to Supabase for everyone on this dashboard.'
+                : ' Configure Supabase env vars for team-wide live sync.'}
             </p>
             <dl className="mt-6 grid grid-cols-3 gap-3 sm:max-w-md">
               <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 px-4 py-3">
@@ -424,6 +452,8 @@ export function AiRoadmapDashboardPage() {
             />
           ))}
         </div>
+          </>
+        )}
       </main>
 
       {detailContext ? (

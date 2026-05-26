@@ -24,6 +24,19 @@ On **Netlify**, add the same variable under **Site configuration → Environment
 
 Dedicated viewers: **`/brandguidelines`**, **`/vectordbcomparison`**, **`/marketingvidsprompts`**, **`/marketingcampaign`**, **`/axxiom4campaign`** (4-service marketing campaign HTML), **`/axxiomairoadmap`** (full HTML reference), **`/airoadmap`** (slide-style presentation of the same roadmap), **`/airoadmapdashboard`** (live progress tracker for marketing, data architecture, and ops workstreams), **`/aeogeoplaybook`** (AEO execution playbook HTML).
 
+### AI roadmap dashboard + Supabase (optional)
+
+For **team-wide live sync** on `/airoadmapdashboard`, configure Supabase and run the SQL migration. Full checklist: **[docs/SUPABASE_AI_ROADMAP.md](docs/SUPABASE_AI_ROADMAP.md)**.
+
+Quick env (`.env.local`):
+
+```env
+VITE_SUPABASE_URL=https://xxxx.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJ...
+```
+
+Without these vars the dashboard still works using **localStorage** only.
+
 ## Deploy (Netlify)
 
 Connect this repository; Netlify reads `netlify.toml` here:
