@@ -1,11 +1,18 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { ExternalLink, ImagePlus, LoaderCircle, Trash2, X } from 'lucide-react'
+import { ExternalLink, Eye, EyeOff, ImagePlus, LoaderCircle } from 'lucide-react'
 import {
   removeAutomationImageByUrl,
   uploadAutomationImage,
 } from '../../lib/aiRoadmapStorage'
 import { isSupabaseConfigured } from '../../lib/supabaseClient'
-import { STATUS_META, type RoadmapSubItem, type RoadmapItemStatus } from '../../data/aiRoadmapDashboard'
+import {
+  getSubItemImageUrls,
+  STATUS_META,
+  type RoadmapSubItem,
+  type RoadmapItemStatus,
+} from '../../data/aiRoadmapDashboard'
+import { AutomationImageGallery } from './AutomationImageGallery'
+import { PasswordGatedDeleteButton } from './PasswordGatedDeleteButton'
 import { StatusControls } from './StatusControls'
 
 function StatusPill({ status }: { status: RoadmapItemStatus }) {
@@ -41,11 +48,16 @@ export function AutomationSubItemCard({
   const detailsId = useId()
   const linkId = useId()
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [showDetails, setShowDetails] = useState(false)
   const [detailsDraft, setDetailsDraft] = useState(sub.details ?? '')
   const [linkDraft, setLinkDraft] = useState(sub.linkUrl ?? '')
   const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState<string | null>(null)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const supabaseImages = isSupabaseConfigured()
+
+  const imageUrls = getSubItemImageUrls(sub)
+  const hasMeta = Boolean(sub.details?.trim() || sub.linkUrl || imageUrls.length > 0)
 
   useEffect(() => {
     setDetailsDraft(sub.details ?? '')
@@ -66,66 +78,96 @@ export function AutomationSubItemCard({
     }
   }
 
-  const handleFile = async (file: File | null) => {
-    if (!file) return
+  const handleFiles = async (fileList: FileList | null) => {
+    if (!fileList?.length) return
+    const files = [...fileList]
     setUploadError(null)
     setUploading(true)
-    const { publicUrl, error } = await uploadAutomationImage(file, {
-      categoryId,
-      blockId,
-      subItemId: sub.id,
-    })
-    setUploading(false)
-    if (error) {
-      setUploadError(error)
-      return
-    }
-    if (publicUrl) {
-      if (sub.imageUrl && sub.imageUrl !== publicUrl) {
-        void removeAutomationImageByUrl(sub.imageUrl)
+
+    const existing = getSubItemImageUrls(sub)
+    const added: string[] = []
+    let lastError: string | null = null
+
+    for (let i = 0; i < files.length; i += 1) {
+      setUploadProgress(files.length > 1 ? `Uploading ${i + 1} of ${files.length}…` : 'Uploading…')
+      const { publicUrl, error } = await uploadAutomationImage(files[i], {
+        categoryId,
+        blockId,
+        subItemId: sub.id,
+      })
+      if (error) {
+        lastError = error
+        continue
       }
-      onUpdate({ imageUrl: publicUrl })
+      if (publicUrl) added.push(publicUrl)
+    }
+
+    setUploading(false)
+    setUploadProgress(null)
+
+    if (added.length > 0) {
+      onUpdate({ imageUrls: [...existing, ...added] })
+      setShowDetails(true)
+    }
+    if (lastError) {
+      setUploadError(
+        added.length > 0
+          ? `${lastError} (${added.length} image${added.length === 1 ? '' : 's'} uploaded.)`
+          : lastError,
+      )
     }
   }
 
-  const handleRemoveImage = () => {
-    if (sub.imageUrl) void removeAutomationImageByUrl(sub.imageUrl)
-    onUpdate({ imageUrl: undefined })
+  const handleRemoveImageAt = (index: number) => {
+    const url = imageUrls[index]
+    if (url) void removeAutomationImageByUrl(url)
+    const next = imageUrls.filter((_, i) => i !== index)
+    onUpdate({ imageUrls: next.length > 0 ? next : undefined })
     setUploadError(null)
   }
-
-  const hasMeta = Boolean(sub.details?.trim() || sub.linkUrl || sub.imageUrl)
 
   return (
     <li
       className={[
-        'rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 ring-1 ring-inset',
+        'rounded-2xl border border-white/[0.06] bg-white/[0.02] p-3 ring-1 ring-inset sm:p-4',
         STATUS_META[sub.status].ring,
       ].join(' ')}
     >
       <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="text-sm font-medium text-white">{sub.label}</p>
-          <div className="mt-2 flex flex-wrap items-center gap-2">
+          <div className="mt-1.5">
             <StatusPill status={sub.status} />
-            {hasMeta ? (
-              <span className="text-[10px] font-medium uppercase tracking-wider text-indigo-300/70">
-                Has details
-              </span>
-            ) : null}
           </div>
         </div>
-        <button
-          type="button"
-          onClick={onRemove}
-          className="shrink-0 rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-red-500/10 hover:text-red-300"
-          aria-label={`Remove ${sub.label}`}
-        >
-          <Trash2 className="h-3.5 w-3.5" aria-hidden />
-        </button>
+        <div className="flex shrink-0 items-center gap-0.5">
+          <button
+            type="button"
+            onClick={() => setShowDetails((v) => !v)}
+            className={[
+              'rounded-lg p-1.5 transition-colors',
+              showDetails
+                ? 'bg-indigo-500/20 text-indigo-200'
+                : 'text-slate-500 hover:bg-white/10 hover:text-indigo-200',
+            ].join(' ')}
+            aria-label={showDetails ? 'Hide details' : 'View details'}
+            aria-expanded={showDetails}
+          >
+            {showDetails ? (
+              <EyeOff className="h-3.5 w-3.5" aria-hidden />
+            ) : (
+              <Eye className="h-3.5 w-3.5" aria-hidden />
+            )}
+          </button>
+          <PasswordGatedDeleteButton
+            label={sub.label}
+            message={`Remove automation “${sub.label}” for everyone? Enter the hub password to confirm.`}
+            onDelete={onRemove}
+          />
+        </div>
       </div>
 
-      <div className="mt-3">
+      <div className="mt-2.5">
         <StatusControls
           status={sub.status}
           onChange={onStatusChange}
@@ -134,118 +176,108 @@ export function AutomationSubItemCard({
         />
       </div>
 
-      <div className="mt-4 space-y-3 border-t border-white/[0.06] pt-4">
-        <div>
-          <label htmlFor={detailsId} className="text-xs font-semibold text-slate-300">
-            Details
-          </label>
-          <p className="mt-0.5 text-[11px] text-slate-500">
-            What was built, tools used, or notes for the team.
-          </p>
-          <textarea
-            id={detailsId}
-            value={detailsDraft}
-            onChange={(e) => setDetailsDraft(e.target.value)}
-            onBlur={flushDetails}
-            rows={3}
-            placeholder="e.g. 3-email Apollo sequence; triggers on tag “nurture-hot”…"
-            className="mt-2 w-full resize-y rounded-xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-white placeholder:text-slate-600 focus:border-indigo-400/50 focus:outline-none focus:ring-2 focus:ring-indigo-500/25"
-          />
-        </div>
+      {!showDetails && hasMeta ? (
+        <p className="mt-2 text-[11px] text-indigo-300/70">
+          Has saved details
+          {imageUrls.length > 0 ? ` · ${imageUrls.length} image${imageUrls.length === 1 ? '' : 's'}` : ''}
+          {' — tap '}
+          <Eye className="inline h-3 w-3 align-text-bottom opacity-80" aria-hidden /> to view.
+        </p>
+      ) : null}
 
-        <div>
-          <label htmlFor={linkId} className="text-xs font-semibold text-slate-300">
-            Link
-          </label>
-          <p className="mt-0.5 text-[11px] text-slate-500">Workflow, Zap, or doc URL (optional).</p>
-          <div className="mt-2 flex gap-2">
-            <input
-              id={linkId}
-              type="url"
-              value={linkDraft}
-              onChange={(e) => setLinkDraft(e.target.value)}
-              onBlur={flushLink}
-              placeholder="https://…"
-              className="min-w-0 flex-1 rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:border-indigo-400/50 focus:outline-none focus:ring-2 focus:ring-indigo-500/25"
+      {showDetails ? (
+        <div className="mt-3 space-y-3 border-t border-white/[0.06] pt-3">
+          <div>
+            <label htmlFor={detailsId} className="text-xs font-semibold text-slate-300">
+              Details
+            </label>
+            <textarea
+              id={detailsId}
+              value={detailsDraft}
+              onChange={(e) => setDetailsDraft(e.target.value)}
+              onBlur={flushDetails}
+              rows={2}
+              placeholder="What was built, tools used, notes…"
+              className="mt-1.5 w-full resize-y rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:border-indigo-400/50 focus:outline-none focus:ring-2 focus:ring-indigo-500/25"
             />
-            {sub.linkUrl ? (
-              <a
-                href={sub.linkUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex shrink-0 items-center justify-center rounded-xl border border-white/10 px-3 text-slate-300 transition-colors hover:text-white"
-                aria-label="Open link"
-              >
-                <ExternalLink className="h-4 w-4" aria-hidden />
-              </a>
+          </div>
+
+          <div>
+            <label htmlFor={linkId} className="text-xs font-semibold text-slate-300">
+              Link
+            </label>
+            <div className="mt-1.5 flex gap-2">
+              <input
+                id={linkId}
+                type="url"
+                value={linkDraft}
+                onChange={(e) => setLinkDraft(e.target.value)}
+                onBlur={flushLink}
+                placeholder="https://…"
+                className="min-w-0 flex-1 rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:border-indigo-400/50 focus:outline-none focus:ring-2 focus:ring-indigo-500/25"
+              />
+              {sub.linkUrl ? (
+                <a
+                  href={sub.linkUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex shrink-0 items-center justify-center rounded-xl border border-white/10 px-3 text-slate-300 hover:text-white"
+                  aria-label="Open link"
+                >
+                  <ExternalLink className="h-4 w-4" aria-hidden />
+                </a>
+              ) : null}
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold text-slate-300">Reference images</p>
+            <p className="mt-0.5 text-[11px] text-slate-500">
+              Click a thumbnail to zoom in-app. Add multiple screenshots.
+            </p>
+
+            <AutomationImageGallery
+              images={imageUrls}
+              title={sub.label}
+              onRemoveAt={handleRemoveImageAt}
+            />
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              multiple
+              className="sr-only"
+              onChange={(e) => {
+                void handleFiles(e.target.files)
+                e.target.value = ''
+              }}
+            />
+
+            <button
+              type="button"
+              disabled={uploading || !supabaseImages}
+              onClick={() => fileInputRef.current?.click()}
+              className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-white/15 bg-black/20 px-3 py-2 text-sm text-slate-300 hover:border-indigo-400/35 hover:bg-indigo-500/10 hover:text-white disabled:opacity-50"
+            >
+              {uploading ? (
+                <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden />
+              ) : (
+                <ImagePlus className="h-4 w-4" aria-hidden />
+              )}
+              {uploadProgress ?? (imageUrls.length > 0 ? 'Add more images' : 'Upload images')}
+            </button>
+            {!supabaseImages ? (
+              <p className="mt-1 text-[11px] text-amber-200/80">Supabase required for image uploads.</p>
+            ) : null}
+            {uploadError ? (
+              <p className="mt-1 text-[11px] font-medium text-rose-300" role="alert">
+                {uploadError}
+              </p>
             ) : null}
           </div>
         </div>
-
-        <div>
-          <p className="text-xs font-semibold text-slate-300">Reference image</p>
-          <p className="mt-0.5 text-[11px] text-slate-500">
-            Screenshot or diagram others can open from this automation.
-          </p>
-
-          {sub.imageUrl ? (
-            <div className="relative mt-2 overflow-hidden rounded-xl border border-white/10 bg-black/40">
-              <a href={sub.imageUrl} target="_blank" rel="noopener noreferrer">
-                <img
-                  src={sub.imageUrl}
-                  alt={`Reference for ${sub.label}`}
-                  className="max-h-56 w-full object-contain"
-                />
-              </a>
-              <button
-                type="button"
-                onClick={handleRemoveImage}
-                className="absolute right-2 top-2 rounded-lg border border-white/15 bg-black/70 p-1.5 text-slate-300 transition-colors hover:bg-red-500/20 hover:text-red-200"
-                aria-label="Remove image"
-              >
-                <X className="h-4 w-4" aria-hidden />
-              </button>
-            </div>
-          ) : null}
-
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/gif"
-            className="sr-only"
-            onChange={(e) => {
-              const file = e.target.files?.[0] ?? null
-              e.target.value = ''
-              void handleFile(file)
-            }}
-          />
-
-          <button
-            type="button"
-            disabled={uploading || !supabaseImages}
-            onClick={() => fileInputRef.current?.click()}
-            className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-white/15 bg-black/20 px-3 py-2.5 text-sm text-slate-300 transition-colors hover:border-indigo-400/35 hover:bg-indigo-500/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {uploading ? (
-              <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden />
-            ) : (
-              <ImagePlus className="h-4 w-4" aria-hidden />
-            )}
-            {uploading ? 'Uploading…' : sub.imageUrl ? 'Replace image' : 'Upload image'}
-          </button>
-
-          {!supabaseImages ? (
-            <p className="mt-1.5 text-[11px] text-amber-200/80">
-              Add Supabase env vars to enable team image uploads.
-            </p>
-          ) : null}
-          {uploadError ? (
-            <p className="mt-1.5 text-[11px] font-medium text-rose-300" role="alert">
-              {uploadError}
-            </p>
-          ) : null}
-        </div>
-      </div>
+      ) : null}
     </li>
   )
 }

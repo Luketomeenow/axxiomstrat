@@ -10,9 +10,9 @@ import {
   Plus,
   Presentation,
   RotateCcw,
-  Trash2,
 } from 'lucide-react'
 import { ItemDetailPanel } from '../components/ai-roadmap-dashboard/ItemDetailPanel'
+import { PasswordGatedDeleteButton } from '../components/ai-roadmap-dashboard/PasswordGatedDeleteButton'
 import { StatusControls } from '../components/ai-roadmap-dashboard/StatusControls'
 import { SyncStatusBar } from '../components/ai-roadmap-dashboard/SyncStatusBar'
 import {
@@ -117,14 +117,12 @@ function RoadmapItemCard({
     >
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-sm font-semibold leading-snug text-white">{item.label}</h3>
-        <button
-          type="button"
-          onClick={onRemove}
+        <PasswordGatedDeleteButton
+          label={item.label}
+          message={`Remove block “${item.label}” for everyone? Enter the hub password to confirm.`}
+          onDelete={onRemove}
           className="shrink-0 rounded-lg p-1.5 text-slate-500 opacity-0 transition-all hover:bg-red-500/10 hover:text-red-300 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400/50"
-          aria-label={`Remove ${item.label}`}
-        >
-          <Trash2 className="h-3.5 w-3.5" aria-hidden />
-        </button>
+        />
       </div>
 
       <StatusPill status={displayStatus} />

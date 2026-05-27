@@ -49,7 +49,13 @@ export async function uploadAutomationImage(
     })
 
   if (uploadError) {
-    return { publicUrl: null, error: uploadError.message }
+    const msg = uploadError.message
+    const rlsHint =
+      msg.toLowerCase().includes('row-level security') ||
+      msg.toLowerCase().includes('policy')
+        ? ' Run supabase/migrations/20260524120000_fix_ai_roadmap_storage_rls.sql in the Supabase SQL Editor.'
+        : ''
+    return { publicUrl: null, error: msg + rlsHint }
   }
 
   const { data } = supabase.storage.from(AI_ROADMAP_IMAGES_BUCKET).getPublicUrl(objectPath)

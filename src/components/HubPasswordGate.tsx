@@ -1,11 +1,11 @@
 import { useCallback, useId, useMemo, useState, type FormEvent } from 'react'
 import { Eye, EyeOff, Lock, Sparkles } from 'lucide-react'
+import { getExpectedHubPassword, verifyHubPassword } from '../lib/hubPassword'
 
 const SESSION_KEY = 'axxiom-hub-session'
 
 function readGateEnabled(): boolean {
-  const p = import.meta.env.VITE_HUB_PASSWORD
-  return typeof p === 'string' && p.length > 0
+  return getExpectedHubPassword() !== undefined
 }
 
 function readAuthed(gateEnabled: boolean): boolean {
@@ -33,17 +33,15 @@ export function HubPasswordGate({ children }: { children: React.ReactNode }) {
   const [show, setShow] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const expected = import.meta.env.VITE_HUB_PASSWORD as string | undefined
-
   const onSubmit = useCallback(
     (e: FormEvent) => {
       e.preventDefault()
       setError(null)
-      if (!expected) {
+      if (!getExpectedHubPassword()) {
         setError('Hub password is not configured.')
         return
       }
-      if (password === expected) {
+      if (verifyHubPassword(password)) {
         setAuthed()
         setAuthedState(true)
         setPassword('')
@@ -52,7 +50,7 @@ export function HubPasswordGate({ children }: { children: React.ReactNode }) {
       setError('Incorrect password. Try again.')
       setPassword('')
     },
-    [expected, password],
+    [password],
   )
 
   if (!gateEnabled) {

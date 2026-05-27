@@ -3,6 +3,8 @@
 interface ImportMetaEnv {
   /** When set, the strategy hub shows a password screen until unlocked (sessionStorage). */
   readonly VITE_HUB_PASSWORD?: string
+  /** Alternative to VITE_HUB_PASSWORD — base64-encoded password (build-time only). */
+  readonly VITE_HUB_PASSWORD_B64?: string
   /** Supabase project URL (Settings → API). Enables live roadmap dashboard sync. */
   readonly VITE_SUPABASE_URL?: string
   /** Supabase anon/public key (Settings → API). Safe for browser with RLS enabled. */

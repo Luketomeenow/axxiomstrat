@@ -14,10 +14,27 @@ export type RoadmapSubItem = {
   details?: string
   /** Optional link to GHL workflow, Zap, doc, etc. */
   linkUrl?: string
-  /** Public URL (Supabase Storage) for screenshot or reference image. */
+  /** Public URLs (Supabase Storage) for screenshots / reference images. */
+  imageUrls?: string[]
+  /** @deprecated — merged into imageUrls on load */
   imageUrl?: string
   /** @deprecated use details */
   notes?: string
+}
+
+export function getSubItemImageUrls(sub: Pick<RoadmapSubItem, 'imageUrls' | 'imageUrl'>): string[] {
+  const urls: string[] = []
+  if (Array.isArray(sub.imageUrls)) {
+    for (const u of sub.imageUrls) {
+      if (typeof u === 'string' && u.trim() && !urls.includes(u.trim())) {
+        urls.push(u.trim())
+      }
+    }
+  }
+  if (typeof sub.imageUrl === 'string' && sub.imageUrl.trim() && !urls.includes(sub.imageUrl.trim())) {
+    urls.unshift(sub.imageUrl.trim())
+  }
+  return urls
 }
 
 export type RoadmapDashboardItem = {
@@ -107,14 +124,15 @@ function normalizeSubItem(raw: Partial<RoadmapSubItem> & { id: string; label: st
         ? raw.notes
         : undefined
 
+  const imageUrls = getSubItemImageUrls(raw)
+
   return {
     id: raw.id,
     label: raw.label,
     status: normalizeStatus(raw.status),
     details: details || undefined,
     linkUrl: typeof raw.linkUrl === 'string' && raw.linkUrl.trim() ? raw.linkUrl.trim() : undefined,
-    imageUrl:
-      typeof raw.imageUrl === 'string' && raw.imageUrl.trim() ? raw.imageUrl.trim() : undefined,
+    imageUrls: imageUrls.length > 0 ? imageUrls : undefined,
   }
 }
 

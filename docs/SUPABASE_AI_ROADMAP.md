@@ -47,6 +47,10 @@ Then run the **image storage** migration (automation screenshots in the detail p
 
 This creates public bucket `ai-roadmap-automations` (5 MB max, JPEG/PNG/WebP/GIF).
 
+If upload shows **“new row violates row-level security policy”**, run:
+
+`supabase/migrations/20260524120000_fix_ai_roadmap_storage_rls.sql`
+
 **Option B — Supabase CLI**
 
 ```bash

@@ -103,8 +103,8 @@ export function ItemDetailPanel({
               </p>
               <h2 className="mt-1 font-display text-xl font-semibold text-white">{item.label}</h2>
               <p className="mt-2 text-sm text-slate-400">
-                Add automations with details, links, and screenshots so the team can see what was
-                built.
+                Use the <span className="text-indigo-300">view icon</span> on each automation to
+                open details, links, and images. Deleting requires the hub password.
               </p>
             </div>
             <button
