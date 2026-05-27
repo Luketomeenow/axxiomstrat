@@ -285,6 +285,7 @@ export function AiRoadmapDashboardPage() {
     setSubItemStatus,
     addItem,
     addSubItem,
+    updateSubItem,
     removeItem,
     removeSubItem,
     resetToDefaults,
@@ -470,6 +471,14 @@ export function AiRoadmapDashboardPage() {
               detailContext.item.id,
               subItemId,
               status,
+            )
+          }
+          onSubItemUpdate={(subItemId, patch) =>
+            updateSubItem(
+              detailContext.category.id,
+              detailContext.item.id,
+              subItemId,
+              patch,
             )
           }
           onAddSubItem={(label) =>

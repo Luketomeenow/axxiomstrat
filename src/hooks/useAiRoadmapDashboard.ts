@@ -274,6 +274,25 @@ export function useAiRoadmapDashboard() {
     )
   }, [])
 
+  const updateSubItem = useCallback(
+    (
+      categoryId: string,
+      itemId: string,
+      subItemId: string,
+      patch: Partial<RoadmapSubItem>,
+    ) => {
+      setCategories((prev) =>
+        updateItem(prev, categoryId, itemId, (item) => ({
+          ...item,
+          subItems: item.subItems.map((sub) =>
+            sub.id === subItemId ? { ...sub, ...patch } : sub,
+          ),
+        })),
+      )
+    },
+    [],
+  )
+
   const removeSubItem = useCallback(
     (categoryId: string, itemId: string, subItemId: string) => {
       setCategories((prev) =>
@@ -305,6 +324,7 @@ export function useAiRoadmapDashboard() {
     setSubItemStatus,
     addItem,
     addSubItem,
+    updateSubItem,
     removeItem,
     removeSubItem,
     resetToDefaults,

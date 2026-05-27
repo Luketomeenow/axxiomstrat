@@ -10,6 +10,13 @@ export type RoadmapSubItem = {
   id: string
   label: string
   status: RoadmapItemStatus
+  /** Longer description, setup notes, or context for the team. */
+  details?: string
+  /** Optional link to GHL workflow, Zap, doc, etc. */
+  linkUrl?: string
+  /** Public URL (Supabase Storage) for screenshot or reference image. */
+  imageUrl?: string
+  /** @deprecated use details */
   notes?: string
 }
 
@@ -93,11 +100,21 @@ function normalizeStatus(status: unknown): RoadmapItemStatus {
 }
 
 function normalizeSubItem(raw: Partial<RoadmapSubItem> & { id: string; label: string }): RoadmapSubItem {
+  const details =
+    typeof raw.details === 'string'
+      ? raw.details
+      : typeof raw.notes === 'string'
+        ? raw.notes
+        : undefined
+
   return {
     id: raw.id,
     label: raw.label,
     status: normalizeStatus(raw.status),
-    notes: typeof raw.notes === 'string' ? raw.notes : undefined,
+    details: details || undefined,
+    linkUrl: typeof raw.linkUrl === 'string' && raw.linkUrl.trim() ? raw.linkUrl.trim() : undefined,
+    imageUrl:
+      typeof raw.imageUrl === 'string' && raw.imageUrl.trim() ? raw.imageUrl.trim() : undefined,
   }
 }
 

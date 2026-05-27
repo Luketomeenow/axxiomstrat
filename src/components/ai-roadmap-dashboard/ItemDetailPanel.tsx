@@ -1,5 +1,5 @@
 import { useEffect, useId, useState } from 'react'
-import { Plus, Trash2, X } from 'lucide-react'
+import { Plus, X } from 'lucide-react'
 import {
   CATEGORY_ACCENT,
   countByStatus,
@@ -9,7 +9,9 @@ import {
   type RoadmapDashboardCategory,
   type RoadmapDashboardItem,
   type RoadmapItemStatus,
+  type RoadmapSubItem,
 } from '../../data/aiRoadmapDashboard'
+import { AutomationSubItemCard } from './AutomationSubItemCard'
 import { StatusControls } from './StatusControls'
 
 function StatusPill({ status }: { status: RoadmapItemStatus }) {
@@ -33,6 +35,7 @@ export function ItemDetailPanel({
   onClose,
   onItemStatusChange,
   onSubItemStatusChange,
+  onSubItemUpdate,
   onAddSubItem,
   onRemoveSubItem,
 }: {
@@ -41,6 +44,7 @@ export function ItemDetailPanel({
   onClose: () => void
   onItemStatusChange: (status: RoadmapItemStatus) => void
   onSubItemStatusChange: (subItemId: string, status: RoadmapItemStatus) => void
+  onSubItemUpdate: (subItemId: string, patch: Partial<RoadmapSubItem>) => void
   onAddSubItem: (label: string) => boolean
   onRemoveSubItem: (subItemId: string) => void
 }) {
@@ -82,7 +86,7 @@ export function ItemDetailPanel({
 
       <aside
         className={[
-          'relative flex h-full w-full max-w-lg flex-col border-l border-white/[0.08] bg-slate-950 shadow-2xl',
+          'relative flex h-full w-full max-w-xl flex-col border-l border-white/[0.08] bg-slate-950 shadow-2xl',
           'animate-[roadmap-panel-slide-in_0.25s_ease-out]',
         ].join(' ')}
       >
@@ -99,8 +103,8 @@ export function ItemDetailPanel({
               </p>
               <h2 className="mt-1 font-display text-xl font-semibold text-white">{item.label}</h2>
               <p className="mt-2 text-sm text-slate-400">
-                Automations and sub-tasks for this block. Progress here rolls up to the card
-                when automations exist.
+                Add automations with details, links, and screenshots so the team can see what was
+                built.
               </p>
             </div>
             <button
@@ -160,40 +164,17 @@ export function ItemDetailPanel({
             </p>
 
             {hasAutomations ? (
-              <ul className="mt-4 space-y-3">
+              <ul className="mt-4 space-y-4">
                 {item.subItems.map((sub) => (
-                  <li
+                  <AutomationSubItemCard
                     key={sub.id}
-                    className={[
-                      'rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 ring-1 ring-inset',
-                      STATUS_META[sub.status].ring,
-                    ].join(' ')}
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="min-w-0">
-                        <p className="text-sm font-medium text-white">{sub.label}</p>
-                        <div className="mt-2">
-                          <StatusPill status={sub.status} />
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => onRemoveSubItem(sub.id)}
-                        className="shrink-0 rounded-lg p-1.5 text-slate-500 transition-colors hover:bg-red-500/10 hover:text-red-300"
-                        aria-label={`Remove ${sub.label}`}
-                      >
-                        <Trash2 className="h-3.5 w-3.5" aria-hidden />
-                      </button>
-                    </div>
-                    <div className="mt-3">
-                      <StatusControls
-                        status={sub.status}
-                        onChange={(status) => onSubItemStatusChange(sub.id, status)}
-                        label={sub.label}
-                        compact
-                      />
-                    </div>
-                  </li>
+                    sub={sub}
+                    categoryId={category.id}
+                    blockId={item.id}
+                    onStatusChange={(status) => onSubItemStatusChange(sub.id, status)}
+                    onUpdate={(patch) => onSubItemUpdate(sub.id, patch)}
+                    onRemove={() => onRemoveSubItem(sub.id)}
+                  />
                 ))}
               </ul>
             ) : (

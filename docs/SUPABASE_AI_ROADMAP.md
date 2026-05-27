@@ -41,6 +41,12 @@ Optional later (not required for v1):
 
 You should get table `public.ai_roadmap_snapshot` with one row `workspace_id = 'axxiom'`.
 
+Then run the **image storage** migration (automation screenshots in the detail panel):
+
+`supabase/migrations/20260523120000_ai_roadmap_automation_images.sql`
+
+This creates public bucket `ai-roadmap-automations` (5 MB max, JPEG/PNG/WebP/GIF).
+
 **Option B — Supabase CLI**
 
 ```bash
