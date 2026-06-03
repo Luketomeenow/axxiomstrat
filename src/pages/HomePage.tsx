@@ -11,6 +11,7 @@ import {
   Megaphone,
   Palette,
   Presentation,
+  Radar,
 } from 'lucide-react'
 import {
   STRATEGY_DOCUMENTS,
@@ -89,31 +90,100 @@ export function HomePage() {
             AI roadmap 2026–27
             <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
           </Link>
-          <Link
-            to="/airoadmap"
-            className="inline-flex items-center gap-2 rounded-xl border border-violet-800/35 bg-violet-950/85 px-4 py-3 text-sm font-medium text-violet-50 shadow-sm transition-colors hover:bg-violet-950"
-          >
-            <Presentation className="h-4 w-4 text-violet-300" aria-hidden />
-            AI roadmap (presentation)
-            <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
-          </Link>
-          <Link
-            to="/airoadmapdashboard"
-            className="inline-flex items-center gap-2 rounded-xl border border-teal-800/35 bg-teal-950/90 px-4 py-3 text-sm font-medium text-teal-50 shadow-sm transition-colors hover:bg-teal-950"
-          >
-            <Gauge className="h-4 w-4 text-teal-300" aria-hidden />
-            AI roadmap dashboard
-            <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
-          </Link>
-          <Link
-            to="/aeogeoplaybook"
-            className="inline-flex items-center gap-2 rounded-xl border border-[#1a3a5c]/50 bg-gradient-to-br from-[#0f2847] to-[#1a3a5c] px-4 py-3 text-sm font-medium text-amber-50 shadow-sm ring-1 ring-amber-500/25 transition-colors hover:from-[#132f4f] hover:to-[#1e4570]"
-          >
-            <BookOpenCheck className="h-4 w-4 text-amber-300" aria-hidden />
-            AEO execution playbook
-            <ArrowRight className="h-4 w-4 opacity-80" aria-hidden />
-          </Link>
         </div>
+      </section>
+
+      <section className="mb-14">
+        <div className="mb-5 flex items-center gap-3">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-[#0f2847] to-[#1a3a5c] text-amber-300 ring-1 ring-amber-500/30">
+            <Radar className="h-4 w-4" aria-hidden />
+          </span>
+          <div>
+            <h2 className="font-display text-xl font-semibold text-slate-900">AI Intelligence</h2>
+            <p className="mt-0.5 text-sm text-slate-600">
+              Roadmap progress, answer-engine automation, and the AEO playbook.
+            </p>
+          </div>
+        </div>
+        <ul className="grid gap-4 sm:grid-cols-2">
+          <li className="sm:col-span-2">
+            <Link
+              to="/aeo"
+              className="group flex h-full flex-col rounded-xl border border-[#1a3a5c]/40 bg-gradient-to-br from-[#0a1522] via-[#102338] to-[#1a3a5c]/80 p-6 text-white shadow-md ring-1 ring-amber-500/25 transition-all hover:-translate-y-0.5 hover:shadow-lg sm:flex-row sm:items-center sm:gap-6"
+            >
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-amber-400/35 bg-amber-500/15 text-amber-300">
+                <Radar className="h-6 w-6" aria-hidden />
+              </span>
+              <div className="mt-4 flex-1 sm:mt-0">
+                <h3 className="font-display text-lg font-semibold text-amber-50 group-hover:text-white">
+                  AEO Automation
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                  Six playbook pillars — data, content, keywords, technical, schema, and measurement.
+                  Track progress now; Python jobs in Phase 2.
+                </p>
+              </div>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-amber-200 sm:mt-0">
+                Open hub
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/airoadmap"
+              className="group flex h-full flex-col rounded-xl border border-violet-200/80 bg-gradient-to-br from-violet-50 to-white p-5 shadow-sm ring-1 ring-violet-500/15 transition-all hover:-translate-y-0.5 hover:shadow-md"
+            >
+              <Presentation className="h-5 w-5 text-violet-600" aria-hidden />
+              <h3 className="mt-3 font-display text-lg font-semibold text-slate-900">
+                AI roadmap (presentation)
+              </h3>
+              <p className="mt-2 flex-1 text-sm text-slate-600">
+                Slide-style walkthrough of the 2026–27 automation roadmap.
+              </p>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-violet-800">
+                Open
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/airoadmapdashboard"
+              className="group flex h-full flex-col rounded-xl border border-teal-200/80 bg-gradient-to-br from-teal-50 to-white p-5 shadow-sm ring-1 ring-teal-500/15 transition-all hover:-translate-y-0.5 hover:shadow-md"
+            >
+              <Gauge className="h-5 w-5 text-teal-600" aria-hidden />
+              <h3 className="mt-3 font-display text-lg font-semibold text-slate-900">
+                AI roadmap dashboard
+              </h3>
+              <p className="mt-2 flex-1 text-sm text-slate-600">
+                Live workstream tracker for marketing, data architecture, and operations.
+              </p>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-teal-800">
+                Open
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            </Link>
+          </li>
+          <li className="sm:col-span-2 lg:col-span-1">
+            <Link
+              to="/aeogeoplaybook"
+              className="group flex h-full flex-col rounded-xl border border-[#1a3a5c]/30 bg-gradient-to-br from-[#0f2847]/5 to-slate-50 p-5 shadow-sm ring-1 ring-amber-500/20 transition-all hover:-translate-y-0.5 hover:shadow-md"
+            >
+              <BookOpenCheck className="h-5 w-5 text-amber-700" aria-hidden />
+              <h3 className="mt-3 font-display text-lg font-semibold text-slate-900">
+                AEO execution playbook
+              </h3>
+              <p className="mt-2 flex-1 text-sm text-slate-600">
+                Reference HTML playbook — targets, schema, authority, and measurement.
+              </p>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-amber-900">
+                Open
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            </Link>
+          </li>
+        </ul>
       </section>
 
       {catOrder.map((cat) => (

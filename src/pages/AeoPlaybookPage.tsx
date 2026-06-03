@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
+import type { AeoPlaybookTabId } from '../data/aeoAutomation'
 import { ArrowLeft, BookOpenCheck, Printer, Sparkles } from 'lucide-react'
 import { buildAeoPlaybookIframeSrcDoc } from '../lib/aeoPlaybookIframeDocument'
 
@@ -16,11 +17,22 @@ const TABS = [
   { id: 'measurement', label: 'Measurement' },
 ] as const
 
+const TAB_IDS = new Set<string>(TABS.map((t) => t.id))
+
+function tabFromSearchParams(params: URLSearchParams): (typeof TABS)[number]['id'] {
+  const tab = params.get('tab')
+  if (tab && TAB_IDS.has(tab)) return tab as AeoPlaybookTabId
+  return 'why'
+}
+
 export function AeoPlaybookPage() {
+  const [searchParams] = useSearchParams()
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const [srcDoc, setSrcDoc] = useState<string | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
-  const [activeId, setActiveId] = useState<(typeof TABS)[number]['id']>('why')
+  const [activeId, setActiveId] = useState<(typeof TABS)[number]['id']>(() =>
+    tabFromSearchParams(searchParams),
+  )
 
   useEffect(() => {
     let cancelled = false
@@ -48,6 +60,17 @@ export function AeoPlaybookPage() {
     setActiveId(id)
     iframeRef.current?.contentWindow?.postMessage({ type: 'AEO_TAB', id }, '*')
   }, [])
+
+  useEffect(() => {
+    const id = tabFromSearchParams(searchParams)
+    setActiveId(id)
+  }, [searchParams])
+
+  useEffect(() => {
+    if (!srcDoc) return
+    const id = tabFromSearchParams(searchParams)
+    iframeRef.current?.contentWindow?.postMessage({ type: 'AEO_TAB', id }, '*')
+  }, [srcDoc, searchParams])
 
   const handlePrint = useCallback(() => {
     iframeRef.current?.contentWindow?.print()

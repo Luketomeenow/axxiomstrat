@@ -12,6 +12,7 @@ import {
   PanelLeft,
   Palette,
   Presentation,
+  Radar,
   Sparkles,
 } from 'lucide-react'
 import {
@@ -119,26 +120,45 @@ export function AppLayout() {
             </span>
           </NavLink>
 
-          <NavLink to="/airoadmap" className={navClass}>
-            <span className="flex items-center gap-2">
-              <Presentation className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
-              AI roadmap (presentation)
-            </span>
-          </NavLink>
-
-          <NavLink to="/airoadmapdashboard" className={navClass}>
-            <span className="flex items-center gap-2">
-              <Gauge className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
-              AI roadmap dashboard
-            </span>
-          </NavLink>
-
-          <NavLink to="/aeogeoplaybook" className={navClass}>
-            <span className="flex items-center gap-2">
-              <BookOpenCheck className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
-              AEO playbook
-            </span>
-          </NavLink>
+          <div>
+            <p className="mb-2 px-2 text-[10px] font-semibold uppercase tracking-wider text-amber-500/80">
+              AI Intelligence
+            </p>
+            <ul className="space-y-0.5">
+              <li>
+                <NavLink to="/aeo" className={navClass}>
+                  <span className="flex items-center gap-2">
+                    <Radar className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+                    AEO Automation
+                  </span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/airoadmap" className={navClass}>
+                  <span className="flex items-center gap-2">
+                    <Presentation className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+                    AI roadmap (presentation)
+                  </span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/airoadmapdashboard" className={navClass}>
+                  <span className="flex items-center gap-2">
+                    <Gauge className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+                    AI roadmap dashboard
+                  </span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/aeogeoplaybook" className={navClass}>
+                  <span className="flex items-center gap-2">
+                    <BookOpenCheck className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+                    AEO playbook
+                  </span>
+                </NavLink>
+              </li>
+            </ul>
+          </div>
 
           {(['automation', 'strategy', 'research'] as const).map((cat) => (
             <div key={cat}>

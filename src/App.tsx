@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from './components/AppLayout'
 import { BrandGuidelinesPage } from './pages/BrandGuidelinesPage'
+import { AeoAutomationPage } from './pages/AeoAutomationPage'
 import { AeoPlaybookPage } from './pages/AeoPlaybookPage'
 import { Axxiom4CampaignPage } from './pages/Axxiom4CampaignPage'
 import { AiRoadmapDashboardPage } from './pages/AiRoadmapDashboardPage'
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="/axxiomairoadmap" element={<AxxiomAiRoadmapPage />} />
         <Route path="/airoadmap" element={<AiRoadmapPresentationPage />} />
         <Route path="/airoadmapdashboard" element={<AiRoadmapDashboardPage />} />
+        <Route path="/aeo" element={<AeoAutomationPage />} />
         <Route path="/aeogeoplaybook" element={<AeoPlaybookPage />} />
         <Route path="/axxiom4campaign" element={<Axxiom4CampaignPage />} />
         <Route element={<AppLayout />}>

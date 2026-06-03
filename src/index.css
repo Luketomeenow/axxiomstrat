@@ -258,3 +258,140 @@ body {
     transform: none !important;
   }
 }
+
+/* AI roadmap presentation — Print / PDF (all slides, dark deck colors) */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 10mm;
+  }
+
+  html,
+  body,
+  #root {
+    background: #050810 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .ai-roadmap-deck-screen {
+    display: none !important;
+  }
+
+  .ai-roadmap-deck-root {
+    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: #050810 !important;
+  }
+
+  .ai-roadmap-deck-print {
+    display: block !important;
+  }
+
+  .deck-print-page {
+    position: relative;
+    display: block !important;
+    box-sizing: border-box;
+    min-height: 100vh;
+    padding: 0;
+    break-after: page;
+    page-break-after: always;
+    background: #050810 !important;
+    color: #f8fafc !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .deck-print-page:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  .deck-print-page-inner {
+    max-width: 100%;
+    padding: 4mm 2mm;
+  }
+
+  .deck-print-badge {
+    margin: 0 0 6mm;
+    font-size: 9pt;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #a5b4fc !important;
+  }
+
+  .deck-print-page .text-white,
+  .deck-print-page h1 {
+    color: #ffffff !important;
+  }
+
+  .deck-print-page .text-slate-200,
+  .deck-print-page .text-slate-300,
+  .deck-print-page li span:last-child {
+    color: #e2e8f0 !important;
+  }
+
+  .deck-print-page .text-slate-400,
+  .deck-print-page .text-slate-500 {
+    color: #94a3b8 !important;
+  }
+
+  .deck-print-page .text-indigo-200,
+  .deck-print-page .text-indigo-300 {
+    color: #c7d2fe !important;
+  }
+
+  /* Charts & visuals: show final frame, preserve fills */
+  .deck-print-page .deck-slide-stage,
+  .deck-print-page .deck-gantt-inner,
+  .deck-print-page .deck-gantt-seg,
+  .deck-print-page .deck-milestone-row,
+  .deck-print-page .deck-node-pop,
+  .deck-print-page .deck-edge-draw,
+  .deck-print-page .deck-flow-box,
+  .deck-print-page .deck-orbit,
+  .deck-print-page .deck-node-fade,
+  .deck-print-page .deck-fill-fade {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .deck-print-page .deck-bar-fill {
+    animation: none !important;
+    width: var(--deck-bar-pct, 75%) !important;
+  }
+
+  .deck-print-page .deck-pulse-bar {
+    animation: none !important;
+    transform: scaleX(1) !important;
+  }
+
+  .deck-print-page .deck-path-draw {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+
+  .deck-print-page .deck-ring-spin {
+    animation: none !important;
+    stroke-dashoffset: var(--deck-ring-target, 0) !important;
+  }
+
+  .deck-print-page .deck-dot-pulse {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .deck-print-page .deck-bar-fill-glow {
+    box-shadow: none !important;
+  }
+
+  /* Insight hover buttons: hide “hover for detail” chrome in PDF */
+  .deck-print-page button[title] {
+    pointer-events: none;
+  }
+}
