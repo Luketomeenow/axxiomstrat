@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import {
   BookOpenCheck,
+  Bot,
   Clapperboard,
   Database,
   ExternalLink,
@@ -13,8 +14,8 @@ import {
   Palette,
   Presentation,
   Radar,
-  Sparkles,
 } from 'lucide-react'
+import { AppIcon } from './AppIcon'
 import {
   STRATEGY_DOCUMENTS,
   categoryLabel,
@@ -57,9 +58,7 @@ export function AppLayout() {
           to="/"
           className="mb-8 flex items-start gap-2 border-b border-slate-700/80 px-2 pb-6"
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/20 text-amber-400">
-            <Sparkles className="h-5 w-5" aria-hidden />
-          </span>
+          <AppIcon className="h-10 w-10 shrink-0 rounded-lg shadow-sm ring-1 ring-amber-500/25" />
           <span className="min-w-0">
             <span className="font-display text-base font-semibold leading-tight tracking-tight text-white">
               Axxiom
@@ -146,6 +145,14 @@ export function AppLayout() {
                   <span className="flex items-center gap-2">
                     <Gauge className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
                     AI roadmap dashboard
+                  </span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/techassistantarchitecture" className={navClass}>
+                  <span className="flex items-center gap-2">
+                    <Bot className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+                    Tech assistant architecture
                   </span>
                 </NavLink>
               </li>

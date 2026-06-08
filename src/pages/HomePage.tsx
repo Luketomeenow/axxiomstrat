@@ -11,6 +11,7 @@ import {
   Megaphone,
   Palette,
   Presentation,
+  Bot,
   Radar,
 } from 'lucide-react'
 import {
@@ -101,7 +102,7 @@ export function HomePage() {
           <div>
             <h2 className="font-display text-xl font-semibold text-slate-900">AI Intelligence</h2>
             <p className="mt-0.5 text-sm text-slate-600">
-              Roadmap progress, answer-engine automation, and the AEO playbook.
+              Roadmap progress, field tech assistant architecture, AEO automation, and playbooks.
             </p>
           </div>
         </div>
@@ -165,7 +166,25 @@ export function HomePage() {
               </span>
             </Link>
           </li>
-          <li className="sm:col-span-2 lg:col-span-1">
+          <li>
+            <Link
+              to="/techassistantarchitecture"
+              className="group flex h-full flex-col rounded-xl border border-violet-200/80 bg-gradient-to-br from-violet-50 to-white p-5 shadow-sm ring-1 ring-violet-500/15 transition-all hover:-translate-y-0.5 hover:shadow-md"
+            >
+              <Bot className="h-5 w-5 text-violet-600" aria-hidden />
+              <h3 className="mt-3 font-display text-lg font-semibold text-slate-900">
+                Tech assistant architecture
+              </h3>
+              <p className="mt-2 flex-1 text-sm text-slate-600">
+                700GB multi-modal RAG, knowledge graph, LangGraph agent, and rollout phases.
+              </p>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-violet-800">
+                Open
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            </Link>
+          </li>
+          <li>
             <Link
               to="/aeogeoplaybook"
               className="group flex h-full flex-col rounded-xl border border-[#1a3a5c]/30 bg-gradient-to-br from-[#0f2847]/5 to-slate-50 p-5 shadow-sm ring-1 ring-amber-500/20 transition-all hover:-translate-y-0.5 hover:shadow-md"

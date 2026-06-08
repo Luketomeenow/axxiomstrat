@@ -1,5 +1,6 @@
 import { useCallback, useId, useMemo, useState, type FormEvent } from 'react'
-import { Eye, EyeOff, Lock, Sparkles } from 'lucide-react'
+import { Eye, EyeOff, Lock } from 'lucide-react'
+import { AppIcon } from './AppIcon'
 import { getExpectedHubPassword, verifyHubPassword } from '../lib/hubPassword'
 
 const SESSION_KEY = 'axxiom-hub-session'
@@ -64,7 +65,7 @@ export function HubPasswordGate({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center bg-[#050810] px-4 py-12 text-white">
       <div
-        className="pointer-events-none fixed inset-0 bg-[radial-gradient(85%_55%_at_50%_-18%,rgba(99,102,241,0.28),transparent_55%)]"
+        className="pointer-events-none fixed inset-0 bg-[radial-gradient(85%_55%_at_50%_-18%,rgba(212,175,55,0.18),transparent_55%)]"
         aria-hidden
       />
       <div
@@ -74,9 +75,10 @@ export function HubPasswordGate({ children }: { children: React.ReactNode }) {
 
       <div className="relative z-[1] w-full max-w-md">
         <div className="mb-8 flex flex-col items-center text-center">
-          <span className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-indigo-400/30 bg-indigo-500/15 shadow-[0_0_40px_rgba(99,102,241,0.25)]">
-            <Sparkles className="h-7 w-7 text-indigo-300" aria-hidden />
-          </span>
+          <AppIcon
+            className="mb-4 h-14 w-14 rounded-2xl shadow-[0_0_40px_rgba(212,175,55,0.22)] ring-1 ring-amber-500/35"
+            label="Axxiom"
+          />
           <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">Axxiom strategy hub</h1>
           <p className="mt-2 flex items-center justify-center gap-2 text-sm text-slate-400">
             <Lock className="h-4 w-4 shrink-0 text-slate-500" aria-hidden />

@@ -1,0 +1,977 @@
+
+<style>
+*{box-sizing:border-box}
+.wrap{font-family:var(--font-sans);padding:.75rem 0}
+.tab-row{display:flex;gap:5px;margin-bottom:16px;flex-wrap:wrap}
+.tab{font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s;white-space:nowrap}
+.tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+.panel{display:none}.panel.active{display:block}
+.intro{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 18px;margin-bottom:14px}
+.i-lbl{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 4px}
+.i-ttl{font-size:14px;font-weight:500;color:var(--color-text-primary);margin:0 0 5px}
+.i-dsc{font-size:12px;color:var(--color-text-secondary);margin:0;line-height:1.65}
+.step-block{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:10px;overflow:hidden}
+.sb-head{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer}
+.sb-head:hover,.step-block.open .sb-head{background:var(--color-background-secondary)}
+.sb-num{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.sb-title{font-size:12px;font-weight:500;color:var(--color-text-primary);flex:1}
+.sb-tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;flex-shrink:0}
+.sb-body{display:none;border-top:0.5px solid var(--color-border-tertiary);padding:13px 14px}
+.step-block.open .sb-body{display:block}
+.code-wrap{background:#0D1117;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden;margin:8px 0}
+.cw-head{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;background:rgba(255,255,255,0.04);border-bottom:0.5px solid rgba(255,255,255,0.08)}
+.cw-file{font-size:10px;font-weight:500;color:#8B949E;font-family:var(--font-mono)}
+.cc{font-size:10px;font-weight:500;padding:2px 9px;border-radius:12px;border:0.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);color:#8B949E;cursor:pointer;transition:all .15s}
+.cc:hover,.cc.copied{background:rgba(0,184,124,0.15);color:#00B87C;border-color:rgba(0,184,124,0.3)}
+.cw-body{padding:12px 14px;font-size:11px;font-family:var(--font-mono);color:#E6EDF3;line-height:1.85;overflow-x:auto;white-space:pre;max-height:480px;overflow-y:auto}
+.cm{color:#8B949E}.kw{color:#FF7B72}.fn{color:#D2A8FF}.st{color:#A5D6FF}.nu{color:#79C0FF}.va{color:#FFA657}.de{color:#3FB950}
+.oc{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:10px}
+.ol{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px}
+.fr{display:flex;justify-content:space-between;align-items:flex-start;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px;gap:8px}
+.fr:last-child{border-bottom:none}
+.fk{color:var(--color-text-secondary);flex:1;line-height:1.5}
+.fv{font-weight:500;color:var(--color-text-primary);text-align:right;flex-shrink:0}
+.badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.b-green{background:var(--color-background-success);color:var(--color-text-success)}
+.b-blue{background:var(--color-background-info);color:var(--color-text-info)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-red{background:var(--color-background-danger);color:var(--color-text-danger)}
+.b-purple{background:#EDE9FE;color:#5B21B6}
+.b-teal{background:#CCFBF1;color:#0F766E}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.info-box{background:var(--color-background-info);border-left:3px solid var(--color-text-info);border-radius:var(--border-radius-md);padding:10px 14px;margin:8px 0;font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.warn-box{background:var(--color-background-warning);border-left:3px solid var(--color-text-warning);border-radius:var(--border-radius-md);padding:10px 14px;margin:8px 0;font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.decision-box{background:var(--color-background-success);border-left:3px solid var(--color-text-success);border-radius:var(--border-radius-md);padding:10px 14px;margin:8px 0;font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.layer{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);margin-bottom:8px;overflow:hidden}
+.layer-head{display:flex;align-items:center;gap:8px;padding:9px 13px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.layer-num{font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;flex-shrink:0}
+.layer-name{font-size:12px;font-weight:500;color:var(--color-text-primary);flex:1}
+.layer-nodes{display:flex;gap:6px;flex-wrap:wrap;padding:10px 13px}
+.node{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:7px 10px;flex:1;min-width:100px}
+.node-name{font-size:11px;font-weight:600;color:var(--color-text-primary);margin-bottom:2px}
+.node-desc{font-size:10px;color:var(--color-text-tertiary);line-height:1.4}
+.flow{display:flex;align-items:center;gap:6px;margin:8px 0;flex-wrap:wrap}
+.flow-box{padding:8px 12px;border-radius:8px;font-size:11px;font-weight:600;border:0.5px solid;flex:1;min-width:100px;text-align:center}
+.flow-arr{color:var(--color-text-tertiary);font-size:16px;flex-shrink:0}
+.phase-block{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:10px;overflow:hidden}
+.ph-head{padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+.ph-title{font-size:12px;font-weight:600;color:var(--color-text-primary)}
+.ph-body{padding:12px 14px;border-top:0.5px solid var(--color-border-tertiary)}
+.ph-task{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.ph-task:last-child{border-bottom:none}
+.ph-task::before{content:'—';color:var(--color-text-info);flex-shrink:0}
+.ph-text{color:var(--color-text-secondary);flex:1;line-height:1.5}
+</style>
+<div class="wrap">
+<div class="doc-hero">
+  <p class="doc-hero-kicker">Operations · AI platform</p>
+  <h1 class="doc-hero-title">AI Tech Assistant — complete architecture</h1>
+  <p class="doc-hero-lead">700GB multi-modal document retrieval with knowledge graph, continuous learning, and Axxiom-owned document generation for field technicians.</p>
+  <div class="doc-hero-pills">
+    <span class="badge b-purple">Knowledge graph + RAG</span>
+    <span class="badge b-blue">Qdrant · Neo4j · LangGraph</span>
+    <span class="badge b-teal">3 rollout phases</span>
+  </div>
+</div>
+<div class="tab-row" role="tablist" aria-label="Architecture sections">
+  <button type="button" class="tab active" role="tab" aria-selected="true" onclick="go(0)">Architecture</button>
+  <button type="button" class="tab" role="tab" aria-selected="false" onclick="go(1)">Doc processing</button>
+  <button type="button" class="tab" role="tab" aria-selected="false" onclick="go(2)">Knowledge graph</button>
+  <button type="button" class="tab" role="tab" aria-selected="false" onclick="go(3)">Retrieval engine</button>
+  <button type="button" class="tab" role="tab" aria-selected="false" onclick="go(4)">Tech agent</button>
+  <button type="button" class="tab" role="tab" aria-selected="false" onclick="go(5)">Learning + Gen</button>
+  <button type="button" class="tab" role="tab" aria-selected="false" onclick="go(6)">Phases</button>
+</div>
+
+<!-- ARCHITECTURE OVERVIEW -->
+<div id="p0" class="panel active">
+<div class="intro">
+  <p class="i-lbl">Core decision</p>
+  <p class="i-ttl">Knowledge Graph + Multi-Modal RAG — NOT fine-tuning as foundation</p>
+  <p class="i-dsc">At 700GB with complex wiring schematics, cross-referenced OEM manuals, and hundreds of concurrent technicians, the architecture must be: (1) hierarchical — document → section → chunk, (2) multi-modal — text + image understanding together, (3) graph-aware — relationships between documents captured, (4) continuously improvable — feedback loop from day one.</p>
+</div>
+
+<div class="warn-box">
+  <strong style="color:var(--color-text-warning)">Why NOT fine-tuning as the foundation:</strong> Fine-tuning teaches style and patterns — it does not give reliable factual recall from 700GB of documents. A fine-tuned model will confidently hallucinate a wiring procedure it partially saw during training. For safety-critical repair instructions, that is catastrophic. Fine-tuning belongs in Phase 3 only, on validated Q&A pairs, to reduce latency on common queries — not to replace document-grounded retrieval.
+</div>
+
+<div class="oc" style="margin-bottom:12px">
+  <p class="ol">7-layer architecture — full system</p>
+  <div class="layer">
+    <div class="layer-head">
+      <div class="layer-num" style="background:rgba(239,68,68,0.15);color:var(--color-text-danger)">L0</div>
+      <div class="layer-name">Document Ingestion — 700GB multi-modal processing pipeline</div>
+      <span class="badge b-red">Process first</span>
+    </div>
+    <div class="layer-nodes">
+      <div class="node"><div class="node-name">Azure Doc Intelligence</div><div class="node-desc">OCR for scanned PDFs, table extraction, layout preservation</div></div>
+      <div class="node"><div class="node-name">PyMuPDF extractor</div><div class="node-desc">Text-searchable PDFs, figure references, page structure</div></div>
+      <div class="node"><div class="node-name">GPT-4o Vision</div><div class="node-desc">Describes every diagram, schematic, image in natural language</div></div>
+      <div class="node"><div class="node-name">CAD → Image converter</div><div class="node-desc">DWG/DXF → PNG then vision pipeline</div></div>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="layer-head">
+      <div class="layer-num" style="background:rgba(245,158,11,0.15);color:var(--color-text-warning)">L1</div>
+      <div class="layer-name">Knowledge Graph — document relationships and entity linking</div>
+      <span class="badge b-warn">The secret ingredient</span>
+    </div>
+    <div class="layer-nodes">
+      <div class="node"><div class="node-name">Neo4j / CosmosDB Graph</div><div class="node-desc">Equipment models, fault codes, procedures, parts — all linked</div></div>
+      <div class="node"><div class="node-name">Entity extractor</div><div class="node-desc">LLM extracts structured entities from every chunk automatically</div></div>
+      <div class="node"><div class="node-name">Cross-reference linker</div><div class="node-desc">Detects "see Figure 3-4" and links text to image chunks</div></div>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="layer-head">
+      <div class="layer-num" style="background:rgba(91,33,182,0.15);color:#5B21B6">L2</div>
+      <div class="layer-name">Hierarchical Vector Index — 3 levels of granularity</div>
+      <span class="badge b-purple">Qdrant</span>
+    </div>
+    <div class="layer-nodes">
+      <div class="node"><div class="node-name">Document-level index</div><div class="node-desc">Summary embedding of each full document — first pass filter</div></div>
+      <div class="node"><div class="node-name">Section-level index</div><div class="node-desc">Section/chapter embeddings — narrows to right document area</div></div>
+      <div class="node"><div class="node-name">Chunk-level index</div><div class="node-desc">Final precise chunks — text + image descriptions both embedded</div></div>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="layer-head">
+      <div class="layer-num" style="background:rgba(0,131,245,0.15);color:var(--color-text-info)">L3</div>
+      <div class="layer-name">Multi-Stage Retrieval Engine</div>
+      <span class="badge b-blue">Hybrid</span>
+    </div>
+    <div class="layer-nodes">
+      <div class="node"><div class="node-name">Query understanding</div><div class="node-desc">Extracts fault codes, equipment type, manufacturer from query</div></div>
+      <div class="node"><div class="node-name">Hierarchical search</div><div class="node-desc">Doc → section → chunk — each level narrows the search space</div></div>
+      <div class="node"><div class="node-name">Graph traversal</div><div class="node-desc">Follows entity relationships to retrieve related docs automatically</div></div>
+      <div class="node"><div class="node-name">Voyage reranking</div><div class="node-desc">rerank-2 picks best final chunks from merged results</div></div>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="layer-head">
+      <div class="layer-num" style="background:rgba(0,184,124,0.15);color:var(--color-text-success)">L4</div>
+      <div class="layer-name">LangGraph Tech Assistant Agent</div>
+      <span class="badge b-green">The product</span>
+    </div>
+    <div class="layer-nodes">
+      <div class="node"><div class="node-name">Intent classifier</div><div class="node-desc">Fault code? Troubleshooting? Spec? Procedure? Different retrieval per type</div></div>
+      <div class="node"><div class="node-name">Answer synthesiser</div><div class="node-desc">GPT-4o generates step-by-step answer with mandatory source citations</div></div>
+      <div class="node"><div class="node-name">Confidence scorer</div><div class="node-desc">Low confidence → flags for expert review before delivering</div></div>
+      <div class="node"><div class="node-name">Diagram retriever</div><div class="node-desc">Returns original image alongside text answer when relevant</div></div>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="layer-head">
+      <div class="layer-num" style="background:rgba(0,131,245,0.15);color:var(--color-text-info)">L5</div>
+      <div class="layer-name">Continuous Learning Loop</div>
+      <span class="badge b-blue">Gets smarter over time</span>
+    </div>
+    <div class="layer-nodes">
+      <div class="node"><div class="node-name">Feedback capture</div><div class="node-desc">Was this helpful? Tech notes. Wrong path detection.</div></div>
+      <div class="node"><div class="node-name">SME review queue</div><div class="node-desc">Low-confidence + negative feedback → expert validation</div></div>
+      <div class="node"><div class="node-name">Validated Q&A store</div><div class="node-desc">Growing dataset of verified answers — future fine-tune training data</div></div>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="layer-head">
+      <div class="layer-num" style="background:rgba(0,184,124,0.15);color:var(--color-text-success)">L6</div>
+      <div class="layer-name">Document + Image Generation (Phase 2+)</div>
+      <span class="badge b-green">Phase 2</span>
+    </div>
+    <div class="layer-nodes">
+      <div class="node"><div class="node-name">Axxiom doc generator</div><div class="node-desc">RAG-backed generation of Axxiom-branded SOPs from OEM sources</div></div>
+      <div class="node"><div class="node-name">Schematic generator</div><div class="node-desc">GPT-4o Vision + SVG generation + human-in-loop validation</div></div>
+      <div class="node"><div class="node-name">Maintenance programme builder</div><div class="node-desc">ASME + OEM manual → unique PM programme per elevator type</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="oc">
+  <p class="ol">Fine-tuning decision — when and why</p>
+  <div class="fr"><span class="fk"><span class="badge b-red">Phase 1–2</span> &nbsp;No fine-tuning at all</span><span class="fv">RAG + Knowledge Graph + better retrieval outperforms fine-tuning for factual accuracy</span></div>
+  <div class="fr"><span class="fk"><span class="badge b-warn">Phase 3</span> &nbsp;Fine-tune on validated Q&A pairs</span><span class="fv">12+ months of verified answers → teaches style, reduces latency on common queries</span></div>
+  <div class="fr"><span class="fk"><span class="badge b-purple">Phase 4</span> &nbsp;Fine-tune for document generation</span><div class="fv">Teaches the Axxiom writing style so generated docs match company standards</div></div>
+</div>
+</div>
+
+<!-- DOC PROCESSING -->
+<div id="p1" class="panel">
+<div class="intro">
+  <p class="i-lbl">Layer 0 — The hardest part</p>
+  <p class="i-ttl">700GB processing pipeline — four document types, four different pipelines</p>
+  <p class="i-dsc">The quality of everything downstream depends entirely on how well you process the raw documents. This is where most RAG systems fail at scale. You need a different pipeline for each document type, and every image must be converted to searchable text before it can be retrieved.</p>
+</div>
+
+<div class="step-block open">
+  <div class="sb-head" onclick="tog(this)">
+    <span class="sb-num" style="background:var(--color-background-danger);color:var(--color-text-danger)">1</span>
+    <span class="sb-title">Scanned PDFs (20% of corpus) — Azure Document Intelligence</span>
+    <span class="sb-tag b-red">OCR pipeline</span>
+  </div>
+  <div class="sb-body">
+    <div class="info-box">Azure Document Intelligence (formerly Form Recognizer) is the right tool here — not Tesseract. It handles complex multi-column layouts, preserves table structure, understands reading order on technical diagrams, and outputs structured JSON with bounding boxes. This matters when a wiring diagram has callouts that need to be associated with the correct component.</div>
+    <div class="code-wrap">
+      <div class="cw-head"><span class="cw-file">pipeline/scanned_pdf_processor.py</span><button class="cc" onclick="cp(this)">Copy</button></div>
+      <div class="cw-body"><span class="kw">from</span> azure.ai.documentintelligence <span class="kw">import</span> DocumentIntelligenceClient
+<span class="kw">from</span> azure.ai.documentintelligence.models <span class="kw">import</span> AnalyzeDocumentRequest
+<span class="kw">from</span> azure.core.credentials <span class="kw">import</span> AzureKeyCredential
+<span class="kw">import</span> json
+
+<span class="kw">def</span> <span class="fn">process_scanned_pdf</span>(pdf_path: str, doc_metadata: dict) -> dict:
+    <span class="st">"""
+    Process scanned PDF with Azure Document Intelligence.
+    Returns structured extraction with:
+    - Full text with preserved reading order
+    - Tables as structured JSON
+    - Figures with bounding boxes and captions
+    - Page-level structure preserved
+    """</span>
+    client = DocumentIntelligenceClient(
+        endpoint=os.getenv(<span class="st">"AZURE_DOC_INTEL_ENDPOINT"</span>),
+        credential=AzureKeyCredential(os.getenv(<span class="st">"AZURE_DOC_INTEL_KEY"</span>))
+    )
+    <span class="kw">with</span> <span class="fn">open</span>(pdf_path, <span class="st">"rb"</span>) <span class="kw">as</span> f:
+        poller = client.begin_analyze_document(
+            <span class="st">"prebuilt-layout"</span>,   <span class="cm"># preserves tables, figures, structure</span>
+            analyze_request=AnalyzeDocumentRequest(bytes_source=f.read()),
+            output_content_format=<span class="st">"markdown"</span>  <span class="cm"># preserves structure in output</span>
+        )
+    result = poller.result()
+
+    pages_data = []
+    <span class="kw">for</span> page <span class="kw">in</span> result.pages:
+        <span class="cm"># Extract figures from this page for vision processing</span>
+        figures = [f <span class="kw">for</span> f <span class="kw">in</span> result.figures
+                   <span class="kw">if</span> <span class="fn">any</span>(r.page_number == page.page_number
+                          <span class="kw">for</span> r <span class="kw">in</span> f.bounding_regions)]
+        pages_data.append({
+            <span class="st">"page_number"</span>: page.page_number,
+            <span class="st">"text"</span>: result.content,
+            <span class="st">"tables"</span>: [t <span class="kw">for</span> t <span class="kw">in</span> result.tables
+                         <span class="kw">if</span> t.bounding_regions[<span class="nu">0</span>].page_number == page.page_number],
+            <span class="st">"figures"</span>: figures,
+            <span class="st">"doc_metadata"</span>: doc_metadata
+        })
+    <span class="kw">return</span> pages_data</div>
+    </div>
+  </div>
+</div>
+
+<div class="step-block">
+  <div class="sb-head" onclick="tog(this)">
+    <span class="sb-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">2</span>
+    <span class="sb-title">Wiring schematics + diagrams — GPT-4o Vision description pipeline</span>
+    <span class="sb-tag b-warn">Multi-modal — most critical</span>
+  </div>
+  <div class="sb-body">
+    <div class="warn-box">
+      <strong style="color:var(--color-text-warning)">This is the hardest part of the entire system.</strong> A wiring schematic cannot be retrieved by text search unless it has been converted to a detailed text description. GPT-4o Vision reads each diagram and generates a structured description that captures: what type of circuit, which components, what the fault indicators mean, what the labels say, and how components connect. This description is what gets embedded and retrieved.
+    </div>
+    <div class="code-wrap">
+      <div class="cw-head"><span class="cw-file">pipeline/diagram_vision_processor.py</span><button class="cc" onclick="cp(this)">Copy</button></div>
+      <div class="cw-body"><span class="kw">import</span> base64, anthropic
+<span class="kw">from</span> pathlib <span class="kw">import</span> Path
+
+<span class="va">client</span> = anthropic.Anthropic()
+
+<span class="kw">def</span> <span class="fn">describe_technical_diagram</span>(
+    image_path: str,
+    parent_doc: str,
+    page_number: int,
+    surrounding_text: str = <span class="st">""</span>
+) -> dict:
+    <span class="st">"""
+    Uses Claude to generate a detailed searchable description
+    of a wiring schematic or technical diagram.
+    The description IS what gets embedded into Qdrant — 
+    not the image itself (images cannot be vector-searched).
+    
+    Returns:
+    - description: full structured text description
+    - entities: extracted components, fault codes, part numbers
+    - diagram_type: wiring | hydraulic | exploded_view | flowchart
+    - original_image_path: preserved for display to technician
+    """</span>
+    <span class="kw">with</span> <span class="fn">open</span>(image_path, <span class="st">"rb"</span>) <span class="kw">as</span> f:
+        image_b64 = base64.standard_b64encode(f.read()).decode(<span class="st">"utf-8"</span>)
+    ext = Path(image_path).suffix.lower().lstrip(<span class="st">"."</span>)
+    media_type = {<span class="st">"jpg"</span>:<span class="st">"image/jpeg"</span>,<span class="st">"jpeg"</span>:<span class="st">"image/jpeg"</span>,
+                  <span class="st">"png"</span>:<span class="st">"image/png"</span>,<span class="st">"gif"</span>:<span class="st">"image/gif"</span>}.get(ext,<span class="st">"image/png"</span>)
+
+    response = client.messages.create(
+        model=<span class="st">"claude-opus-4-20250514"</span>,  <span class="cm"># best vision model for technical diagrams</span>
+        max_tokens=<span class="nu">2000</span>,
+        messages=[{
+            <span class="st">"role"</span>: <span class="st">"user"</span>,
+            <span class="st">"content"</span>: [
+                {<span class="st">"type"</span>: <span class="st">"image"</span>,
+                 <span class="st">"source"</span>: {<span class="st">"type"</span>: <span class="st">"base64"</span>,
+                             <span class="st">"media_type"</span>: media_type,
+                             <span class="st">"data"</span>: image_b64}},
+                {<span class="st">"type"</span>: <span class="st">"text"</span>,
+                 <span class="st">"text"</span>: f<span class="st">"""You are analyzing a technical diagram from an elevator
+maintenance manual. Document: {parent_doc}, Page {page_number}.
+{f'Context from surrounding text: {surrounding_text}' if surrounding_text else ''}
+
+Provide a detailed structured description covering:
+1. DIAGRAM TYPE: (wiring schematic / hydraulic / exploded parts view / troubleshooting flowchart)
+2. COMPONENTS: List every labelled component with its identifier/code
+3. CONNECTIONS: Describe how components connect or relate
+4. FAULT INDICATORS: Any fault codes, warning labels, or error states shown
+5. MEASUREMENTS: Any voltage, pressure, torque, or dimension values visible
+6. LABELS & CALLOUTS: Every text label in the diagram verbatim
+7. PURPOSE: What procedure or system does this diagram support?
+8. KEYWORDS: 10-15 search keywords a field technician would use to find this
+
+Be extremely specific. A technician in the field needs to find this diagram
+by describing a symptom in plain language."""}
+            ]
+        }]
+    )
+    description = response.content[<span class="nu">0</span>].text
+
+    <span class="cm"># Extract entities for knowledge graph</span>
+    entities = <span class="fn">_extract_entities_from_description</span>(description)
+
+    <span class="kw">return</span> {
+        <span class="st">"description"</span>:        description,
+        <span class="st">"entities"</span>:           entities,
+        <span class="st">"source_doc"</span>:         parent_doc,
+        <span class="st">"page_number"</span>:        page_number,
+        <span class="st">"original_image_path"</span>: image_path,  <span class="cm"># stored — shown to tech at query time</span>
+        <span class="st">"chunk_type"</span>:         <span class="st">"diagram_description"</span>
+    }</div>
+    </div>
+  </div>
+</div>
+
+<div class="step-block">
+  <div class="sb-head" onclick="tog(this)">
+    <span class="sb-num" style="background:var(--color-background-info);color:var(--color-text-info)">3</span>
+    <span class="sb-title">Hierarchical chunking — 3 levels of granularity</span>
+    <span class="sb-tag b-blue">Critical for 700GB scale</span>
+  </div>
+  <div class="sb-body">
+    <div class="info-box">
+      At 700GB you cannot do flat chunking. You need three levels. A query about "E14 fault on KONE MonoSpace" should find the right DOCUMENT first, then the right SECTION, then the right CHUNK — not scan 2 million chunks blindly. This is the single most important scaling decision.
+    </div>
+    <div class="code-wrap">
+      <div class="cw-head"><span class="cw-file">pipeline/hierarchical_chunker.py — three-level structure</span><button class="cc" onclick="cp(this)">Copy</button></div>
+      <div class="cw-body"><span class="kw">from</span> dataclasses <span class="kw">import</span> dataclass
+<span class="kw">from</span> typing <span class="kw">import</span> List
+
+<span class="de">@dataclass</span>
+<span class="kw">class</span> <span class="fn">DocumentChunk</span>:
+    <span class="cm"># Level 0 — Document summary (one per document)</span>
+    doc_id:             str   <span class="cm"># unique document identifier</span>
+    doc_summary:        str   <span class="cm"># GPT-4o generated 200-word summary</span>
+    equipment_types:    list  <span class="cm"># ["hydraulic", "traction", "MRL"]</span>
+    manufacturers:      list  <span class="cm"># ["KONE", "Otis", "Schindler"]</span>
+    model_numbers:      list  <span class="cm"># ["MonoSpace", "Gen2", "MicroDrive"]</span>
+    document_type:      str   <span class="cm"># OEM_MANUAL | ASME_CODE | AHJ | AXXIOM_SOP</span>
+    doc_title:          str
+
+<span class="de">@dataclass</span>
+<span class="kw">class</span> <span class="fn">SectionChunk</span>:
+    <span class="cm"># Level 1 — Section (one per section/chapter)</span>
+    section_id:         str
+    doc_id:             str   <span class="cm"># parent document</span>
+    section_title:      str   <span class="cm"># "Chapter 4: Door Operator System"</span>
+    section_summary:    str   <span class="cm"># 100-word GPT-4o summary</span>
+    section_path:       str   <span class="cm"># "4 > 4.2 > 4.2.1"</span>
+    fault_codes:        list  <span class="cm"># fault codes found in this section</span>
+    page_range:         tuple <span class="cm"># (start_page, end_page)</span>
+
+<span class="de">@dataclass</span>
+<span class="kw">class</span> <span class="fn">ContentChunk</span>:
+    <span class="cm"># Level 2 — Actual content chunk (text or diagram description)</span>
+    chunk_id:           str
+    section_id:         str   <span class="cm"># parent section</span>
+    doc_id:             str   <span class="cm"># grandparent document</span>
+    text:               str   <span class="cm"># raw chunk text</span>
+    contextual_text:    str   <span class="cm"># text with contextual prefix for embedding</span>
+    chunk_type:         str   <span class="cm"># "text" | "table" | "diagram_description"</span>
+    page_number:        int
+    image_path:         str   <span class="cm"># if diagram — path to original image</span>
+    related_chunk_ids:  list  <span class="cm"># "see Figure 3-4" → links to that diagram chunk</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- KNOWLEDGE GRAPH -->
+<div id="p2" class="panel">
+<div class="intro">
+  <p class="i-lbl">Layer 1 — The secret ingredient</p>
+  <p class="i-ttl">Knowledge Graph — capturing relationships pure vector search cannot</p>
+  <p class="i-dsc">When a technician asks "elevator door won't close on Unit 47" — pure vector search returns relevant text. But the knowledge graph knows that fault code E14 is associated with door operator systems, that door operator docs reference wiring schematic W-14-D, and that the KONE MonoSpace model has a specific door motor variant. That traversal is what produces a genuinely useful answer.</p>
+</div>
+
+<div class="step-block open">
+  <div class="sb-head" onclick="tog(this)">
+    <span class="sb-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">1</span>
+    <span class="sb-title">Graph schema — the entities and relationships Axxiom needs</span>
+    <span class="sb-tag b-warn">Neo4j</span>
+  </div>
+  <div class="sb-body">
+    <div class="code-wrap">
+      <div class="cw-head"><span class="cw-file">knowledge_graph/schema.cypher — Neo4j schema</span><button class="cc" onclick="cp(this)">Copy</button></div>
+      <div class="cw-body"><span class="cm">// ── NODES ────────────────────────────────────────────────────</span>
+
+<span class="cm">// Equipment model</span>
+CREATE (m:ElevatorModel {
+  id: <span class="st">"KONE_MONOSPACE_2008"</span>,
+  manufacturer: <span class="st">"KONE"</span>,
+  model_name: <span class="st">"MonoSpace"</span>,
+  drive_type: <span class="st">"MRL traction"</span>,
+  year_range: <span class="st">"2005-2012"</span>
+})
+
+<span class="cm">// Fault code</span>
+CREATE (f:FaultCode {
+  id: <span class="st">"KONE_E14"</span>,
+  code: <span class="st">"E14"</span>,
+  manufacturer: <span class="st">"KONE"</span>,
+  category: <span class="st">"door_operator"</span>,
+  severity: <span class="st">"CRITICAL"</span>,
+  plain_description: <span class="st">"Door open timeout — door failed to open within 8 seconds"</span>
+})
+
+<span class="cm">// Document</span>
+CREATE (d:Document {
+  id: <span class="st">"KONE_MONOSPACE_SERVICE_2008"</span>,
+  title: <span class="st">"KONE MonoSpace Service Manual 2008"</span>,
+  doc_type: <span class="st">"OEM_MANUAL"</span>,
+  manufacturer: <span class="st">"KONE"</span>,
+  authority_level: <span class="st">"PRIMARY"</span>
+})
+
+<span class="cm">// Document section</span>
+CREATE (s:Section {
+  id: <span class="st">"KONE_MONO_S4.2.1"</span>,
+  title: <span class="st">"4.2.1 Door Operator Fault Codes"</span>,
+  section_path: <span class="st">"4 > 4.2 > 4.2.1"</span>
+})
+
+<span class="cm">// Component</span>
+CREATE (c:Component {
+  id: <span class="st">"VVVF_DOOR_DRIVE_KM12"</span>,
+  name: <span class="st">"VVVF Door Drive Unit"</span>,
+  part_number: <span class="st">"KM51000000"</span>,
+  manufacturer: <span class="st">"KONE"</span>
+})
+
+<span class="cm">// Troubleshooting procedure</span>
+CREATE (p:Procedure {
+  id: <span class="st">"PROC_E14_DOOR_TIMEOUT"</span>,
+  title: <span class="st">"E14 Door Timeout — Troubleshooting Procedure"</span>,
+  estimated_minutes: <span class="nu">30</span>,
+  skill_level: <span class="st">"JOURNEYMAN"</span>
+})
+
+<span class="cm">// ── RELATIONSHIPS ─────────────────────────────────────────────</span>
+
+<span class="cm">// Fault code belongs to equipment model</span>
+MATCH (m:ElevatorModel {id:<span class="st">"KONE_MONOSPACE_2008"</span>}),
+      (f:FaultCode {id:<span class="st">"KONE_E14"</span>})
+CREATE (m)-[:HAS_FAULT_CODE {context: <span class="st">"door_system"</span>}]->(f)
+
+<span class="cm">// Fault code documented in section</span>
+MATCH (f:FaultCode {id:<span class="st">"KONE_E14"</span>}),
+      (s:Section {id:<span class="st">"KONE_MONO_S4.2.1"</span>})
+CREATE (f)-[:DOCUMENTED_IN {page:<span class="nu">47</span>, confidence:<span class="nu">1.0</span>}]->(s)
+
+<span class="cm">// Section belongs to document</span>
+MATCH (s:Section {id:<span class="st">"KONE_MONO_S4.2.1"</span>}),
+      (d:Document {id:<span class="st">"KONE_MONOSPACE_SERVICE_2008"</span>})
+CREATE (s)-[:PART_OF]->(d)
+
+<span class="cm">// Fault code triggers procedure</span>
+MATCH (f:FaultCode {id:<span class="st">"KONE_E14"</span>}),
+      (p:Procedure {id:<span class="st">"PROC_E14_DOOR_TIMEOUT"</span>})
+CREATE (f)-[:RESOLVED_BY {primary: <span class="kw">true</span>}]->(p)
+
+<span class="cm">// Procedure involves component</span>
+MATCH (p:Procedure {id:<span class="st">"PROC_E14_DOOR_TIMEOUT"</span>}),
+      (c:Component {id:<span class="st">"VVVF_DOOR_DRIVE_KM12"</span>})
+CREATE (p)-[:INVOLVES {action: <span class="st">"inspect_and_replace"</span>}]->(c)
+
+<span class="cm">// Documents reference each other</span>
+MATCH (d1:Document {id:<span class="st">"KONE_MONOSPACE_SERVICE_2008"</span>}),
+      (d2:Document {id:<span class="st">"ASME_A17_1_2022"</span>})
+CREATE (d1)-[:REFERENCES {reason: <span class="st">"safety_code_compliance"</span>}]->(d2)</div>
+    </div>
+  </div>
+</div>
+
+<div class="step-block">
+  <div class="sb-head" onclick="tog(this)">
+    <span class="sb-num" style="background:var(--color-background-warning);color:var(--color-text-warning)">2</span>
+    <span class="sb-title">Auto-entity extractor — builds the graph automatically from documents</span>
+    <span class="sb-tag b-warn">Automated</span>
+  </div>
+  <div class="sb-body">
+    <div class="code-wrap">
+      <div class="cw-head"><span class="cw-file">knowledge_graph/entity_extractor.py</span><button class="cc" onclick="cp(this)">Copy</button></div>
+      <div class="cw-body"><span class="kw">import</span> anthropic, json
+
+<span class="va">client</span> = anthropic.Anthropic()
+
+<span class="kw">def</span> <span class="fn">extract_entities_from_chunk</span>(chunk_text: str, doc_metadata: dict) -> dict:
+    <span class="st">"""
+    Automatically extract structured entities from every chunk.
+    These entities populate the knowledge graph relationships.
+    Run once during ingestion — not at query time.
+    """</span>
+    response = client.messages.create(
+        model=<span class="st">"claude-sonnet-4-20250514"</span>,
+        max_tokens=<span class="nu">1500</span>,
+        messages=[{
+            <span class="st">"role"</span>: <span class="st">"user"</span>,
+            <span class="st">"content"</span>: f<span class="st">"""Extract structured entities from this elevator technical document chunk.
+Document: {doc_metadata.get('title')} | Type: {doc_metadata.get('doc_type')}
+
+CHUNK TEXT:
+{chunk_text}
+
+Return ONLY valid JSON:
+{{
+  "fault_codes": ["E14", "F-02"],
+  "equipment_models": ["KONE MonoSpace", "Otis Gen2"],
+  "manufacturers": ["KONE", "Otis"],
+  "part_numbers": ["KM51000000"],
+  "component_names": ["VVVF door drive", "door interlock"],
+  "procedures": ["door timeout reset procedure"],
+  "cross_references": ["see Section 4.2", "refer to Figure 3-4", "wiring diagram W-14"],
+  "measurements": ["24V DC", "8 second timeout", "±2mm tolerance"],
+  "asme_codes": ["ASME A17.1 2.13.4"],
+  "equipment_types": ["hydraulic", "traction", "MRL"],
+  "symptoms": ["door won't close", "blinking light", "error on controller"]
+}}"""
+        }]
+    )
+    <span class="kw">try</span>:
+        <span class="kw">return</span> json.loads(response.content[<span class="nu">0</span>].text)
+    <span class="kw">except</span>:
+        <span class="kw">return</span> {}</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- RETRIEVAL ENGINE -->
+<div id="p3" class="panel">
+<div class="intro">
+  <p class="i-lbl">Layer 2–3 — Multi-stage retrieval</p>
+  <p class="i-ttl">Five-stage retrieval pipeline — narrows from 2M+ chunks to 5 perfect ones</p>
+  <p class="i-dsc">The query "I'm seeing a blinking light on E14 — what does that mean?" needs to go through structured entity extraction (fault code: E14), hierarchical vector search (find the right document first), knowledge graph traversal (related procedures, diagrams, components), cross-modal retrieval (get the wiring diagram), and Voyage reranking. Not a single vector search.</p>
+</div>
+
+<div class="step-block open">
+  <div class="sb-head" onclick="tog(this)">
+    <span class="sb-num" style="background:var(--color-background-info);color:var(--color-text-info)">1</span>
+    <span class="sb-title">Full retrieval pipeline — all 5 stages</span>
+    <span class="sb-tag b-blue">Core retrieval</span>
+  </div>
+  <div class="sb-body">
+    <div class="code-wrap">
+      <div class="cw-head"><span class="cw-file">retrieval/multi_stage_retriever.py</span><button class="cc" onclick="cp(this)">Copy</button></div>
+      <div class="cw-body"><span class="kw">import</span> anthropic, voyageai, json
+<span class="kw">from</span> qdrant_client <span class="kw">import</span> QdrantClient
+<span class="kw">from</span> neo4j <span class="kw">import</span> GraphDatabase
+
+<span class="va">claude</span>  = anthropic.Anthropic()
+<span class="va">voyage</span>  = voyageai.Client()
+<span class="va">qdrant</span>  = QdrantClient(url=..., api_key=...)
+<span class="va">neo4j</span>   = GraphDatabase.driver(...)
+
+<span class="kw">def</span> <span class="fn">retrieve</span>(query: str, equipment_context: dict = <span class="kw">None</span>) -> dict:
+    <span class="st">"""
+    5-stage retrieval pipeline.
+    Returns: relevant chunks + original images + confidence score.
+    """</span>
+
+    <span class="cm"># ── STAGE 1: Query Understanding ──────────────────────────</span>
+    <span class="cm"># Extract structured entities BEFORE searching</span>
+    <span class="cm"># "blinking light on E14" → fault_codes:["E14"], symptom:"blinking light"</span>
+    entities = <span class="fn">_extract_query_entities</span>(query)
+
+    <span class="cm"># ── STAGE 2: Knowledge Graph Traversal ───────────────────</span>
+    <span class="cm"># Jump directly to fault code E14 in the graph</span>
+    <span class="cm"># → get associated equipment models, sections, procedures</span>
+    graph_context = <span class="kw">None</span>
+    <span class="kw">if</span> entities.get(<span class="st">"fault_codes"</span>):
+        graph_context = <span class="fn">_graph_lookup</span>(entities[<span class="st">"fault_codes"</span>][<span class="nu">0</span>])
+
+    <span class="cm"># ── STAGE 3: Hierarchical Vector Search ──────────────────</span>
+    <span class="cm"># Level 0: Find matching DOCUMENTS first (not chunks)</span>
+    <span class="va">doc_filter</span> = <span class="fn">_build_qdrant_filter</span>(entities, equipment_context)
+    <span class="va">doc_hits</span> = qdrant.search(
+        collection_name=<span class="st">"documents_index"</span>,    <span class="cm"># document-level summaries</span>
+        query_vector=voyage.<span class="fn">embed</span>([query], model=<span class="st">"voyage-3"</span>,
+                                   input_type=<span class="st">"query"</span>).embeddings[<span class="nu">0</span>],
+        query_filter=doc_filter,
+        limit=<span class="nu">5</span>, with_payload=<span class="kw">True</span>
+    )
+    top_doc_ids = [h.payload[<span class="st">"doc_id"</span>] <span class="kw">for</span> h <span class="kw">in</span> doc_hits]
+
+    <span class="cm"># Level 1: Find matching SECTIONS within those documents</span>
+    <span class="va">section_hits</span> = qdrant.search(
+        collection_name=<span class="st">"sections_index"</span>,
+        query_vector=voyage.<span class="fn">embed</span>([query], model=<span class="st">"voyage-3"</span>,
+                                   input_type=<span class="st">"query"</span>).embeddings[<span class="nu">0</span>],
+        query_filter=<span class="fn">_filter_by_doc_ids</span>(top_doc_ids),
+        limit=<span class="nu">10</span>, with_payload=<span class="kw">True</span>
+    )
+    top_section_ids = [h.payload[<span class="st">"section_id"</span>] <span class="kw">for</span> h <span class="kw">in</span> section_hits]
+
+    <span class="cm"># Level 2: Find precise CHUNKS within those sections</span>
+    <span class="cm"># Dense search</span>
+    <span class="va">dense_hits</span> = qdrant.search(
+        collection_name=<span class="st">"chunks_index"</span>,
+        query_vector=voyage.<span class="fn">embed</span>([query], model=<span class="st">"voyage-3"</span>,
+                                   input_type=<span class="st">"query"</span>).embeddings[<span class="nu">0</span>],
+        query_filter=<span class="fn">_filter_by_section_ids</span>(top_section_ids),
+        limit=<span class="nu">20</span>, with_payload=<span class="kw">True</span>
+    )
+    <span class="cm"># BM25 sparse search (catches exact fault codes, part numbers)</span>
+    <span class="va">sparse_hits</span> = qdrant.search(
+        collection_name=<span class="st">"chunks_index"</span>,
+        query_vector=<span class="fn">_build_bm25_vector</span>(query),
+        query_filter=<span class="fn">_filter_by_section_ids</span>(top_section_ids),
+        limit=<span class="nu">20</span>, with_payload=<span class="kw">True</span>
+    )
+    <span class="cm"># RRF merge</span>
+    <span class="va">fused</span> = <span class="fn">_reciprocal_rank_fusion</span>(dense_hits, sparse_hits)
+
+    <span class="cm"># ── STAGE 4: Cross-Modal Retrieval ───────────────────────</span>
+    <span class="cm"># If any text chunk says "see Figure X" or "refer to diagram",</span>
+    <span class="cm"># fetch those linked diagram description chunks too</span>
+    <span class="va">linked_image_chunks</span> = []
+    <span class="kw">for</span> chunk <span class="kw">in</span> fused[:5]:
+        <span class="kw">for</span> linked_id <span class="kw">in</span> chunk.payload.get(<span class="st">"related_chunk_ids"</span>, []):
+            linked = <span class="fn">_fetch_chunk_by_id</span>(linked_id)
+            <span class="kw">if</span> linked <span class="kw">and</span> linked.payload[<span class="st">"chunk_type"</span>] == <span class="st">"diagram_description"</span>:
+                linked_image_chunks.append(linked)
+
+    <span class="cm"># ── STAGE 5: Voyage AI Reranking ─────────────────────────</span>
+    all_candidates = fused[:15] + linked_image_chunks
+    texts = [h.payload[<span class="st">"contextual_text"</span>] <span class="kw">for</span> h <span class="kw">in</span> all_candidates]
+    reranked_idx = voyage.rerank(query=query, documents=texts,
+                                 model=<span class="st">"rerank-2"</span>, top_k=<span class="nu">6</span>).results
+    final = [all_candidates[r.index] <span class="kw">for</span> r <span class="kw">in</span> reranked_idx]
+
+    <span class="kw">return</span> {
+        <span class="st">"chunks"</span>:      final,
+        <span class="st">"graph_context"</span>: graph_context,
+        <span class="st">"entities"</span>:    entities,
+        <span class="st">"images"</span>: [c.payload[<span class="st">"original_image_path"</span>]
+                   <span class="kw">for</span> c <span class="kw">in</span> final
+                   <span class="kw">if</span> c.payload.get(<span class="st">"original_image_path"</span>)]
+    }</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- TECH AGENT -->
+<div id="p4" class="panel">
+<div class="intro">
+  <p class="i-lbl">Layer 4 — The product</p>
+  <p class="i-ttl">LangGraph Tech Assistant — intent-aware, citation-mandatory, confidence-scored</p>
+  <p class="i-dsc">The agent is not just a RAG wrapper. It classifies what the technician is asking, uses a different retrieval strategy per intent type, generates a structured step-by-step answer with mandatory citations, scores its own confidence, and flags low-confidence answers before they reach the technician.</p>
+</div>
+
+<div class="step-block open">
+  <div class="sb-head" onclick="tog(this)">
+    <span class="sb-num" style="background:var(--color-background-success);color:var(--color-text-success)">1</span>
+    <span class="sb-title">Intent types and how the agent handles each one differently</span>
+    <span class="sb-tag b-green">Agent logic</span>
+  </div>
+  <div class="sb-body">
+    <div class="oc">
+      <p class="ol">The 5 intent types — different retrieval strategy per type</p>
+      <div class="fr"><span class="fk"><span class="badge b-red">FAULT_CODE</span> &nbsp;"I'm seeing E14"</span><span class="fv">Graph lookup first → jump directly to fault code node → get procedure, documents, diagrams</span></div>
+      <div class="fr"><span class="fk"><span class="badge b-warn">TROUBLESHOOT</span> &nbsp;"Door won't close"</span><span class="fv">Symptom-based retrieval → semantic search on symptom language → generate step-by-step diagnostic tree</span></div>
+      <div class="fr"><span class="fk"><span class="badge b-blue">SPECIFICATION</span> &nbsp;"What oil does this take?"</span><span class="fv">Model-specific filter → retrieve from manufacturer documents first → return exact spec with source</span></div>
+      <div class="fr"><span class="fk"><span class="badge b-purple">PROCEDURE</span> &nbsp;"How do I adjust the door speed?"</span><span class="fv">Procedure retrieval → return numbered steps → always include safety precautions first</span></div>
+      <div class="fr"><span class="fk"><span class="badge b-teal">COMPLIANCE</span> &nbsp;"What does ASME require for this?"</span><span class="fv">Filter to ASME_CODE + AHJ documents only → retrieval from regulatory sources with exact code citations</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="step-block">
+  <div class="sb-head" onclick="tog(this)">
+    <span class="sb-num" style="background:var(--color-background-success);color:var(--color-text-success)">2</span>
+    <span class="sb-title">Answer generation — structured, cited, confidence-scored</span>
+    <span class="sb-tag b-green">Output format</span>
+  </div>
+  <div class="sb-body">
+    <div class="code-wrap">
+      <div class="cw-head"><span class="cw-file">agents/tech_assistant_agent.py — answer generation</span><button class="cc" onclick="cp(this)">Copy</button></div>
+      <div class="cw-body"><span class="kw">def</span> <span class="fn">generate_answer</span>(state: TechAssistantState) -> TechAssistantState:
+    <span class="va">context</span> = <span class="st">"\n\n"</span>.join([
+        f<span class="st">"[SOURCE: {c.payload['doc_title']} | {c.payload['section_path']} | Page {c.payload['page_number']}]\n{c.payload['text']}"</span>
+        <span class="kw">for</span> c <span class="kw">in</span> state[<span class="st">"retrieved_chunks"</span>]
+    ])
+
+    prompt = f<span class="st">"""You are Axxiom Elevator's AI technical assistant.
+A field technician needs help. Answer ONLY from the provided source documents.
+
+TECHNICIAN QUERY: {state['query']}
+QUERY TYPE: {state['intent']}
+EQUIPMENT CONTEXT: {state.get('equipment_context', 'Not specified')}
+
+SOURCE DOCUMENTS:
+{context}
+
+RESPONSE FORMAT — always follow this exact structure:
+
+## ⚠️ SAFETY FIRST
+[Any safety precautions relevant to this task]
+
+## Answer
+[Direct answer to the question in plain language]
+
+## Step-by-Step
+1. [Step with specific action]
+2. [Step with specific action]
+...
+
+## Relevant Diagrams
+[Reference any diagram from the sources that applies]
+
+## Sources
+- [Document title, Section, Page number] for each claim
+
+## Confidence: [HIGH / MEDIUM / LOW]
+[One sentence explaining confidence level.
+LOW = conflicting information in sources, or query exceeds what documents cover]
+
+RULES:
+- Never answer from your own training knowledge — only from the provided sources
+- Every factual claim must have a source citation
+- If the documents do not contain the answer, say exactly that
+- If safety is involved, always mention it first
+- Use plain language a field technician understands"""</span>
+
+    response = claude.messages.create(
+        model=<span class="st">"claude-sonnet-4-20250514"</span>,
+        max_tokens=<span class="nu">2500</span>,
+        messages=[{<span class="st">"role"</span>:<span class="st">"user"</span>,<span class="st">"content"</span>:prompt}]
+    )
+    state[<span class="st">"answer"</span>] = response.content[<span class="nu">0</span>].text
+
+    <span class="cm"># Parse confidence for flagging pipeline</span>
+    <span class="va">confidence</span> = <span class="st">"HIGH"</span>
+    <span class="kw">if</span> <span class="st">"Confidence: LOW"</span> <span class="kw">in</span> state[<span class="st">"answer"</span>]:
+        confidence = <span class="st">"LOW"</span>
+        state[<span class="st">"flag_for_review"</span>] = <span class="kw">True</span>   <span class="cm"># → SME review queue</span>
+    <span class="kw">elif</span> <span class="st">"Confidence: MEDIUM"</span> <span class="kw">in</span> state[<span class="st">"answer"</span>]:
+        confidence = <span class="st">"MEDIUM"</span>
+
+    state[<span class="st">"confidence"</span>] = confidence
+    <span class="kw">return</span> state</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- CONTINUOUS LEARNING + GENERATION -->
+<div id="p5" class="panel">
+<div class="intro">
+  <p class="i-lbl">Layers 5–6 — Getting smarter + creating Axxiom IP</p>
+  <p class="i-ttl">Continuous learning loop + document and image generation</p>
+</div>
+
+<div class="step-block open">
+  <div class="sb-head" onclick="tog(this)">
+    <span class="sb-num" style="background:var(--color-background-info);color:var(--color-text-info)">1</span>
+    <span class="sb-title">Continuous learning — feedback → validation → knowledge improvement</span>
+    <span class="sb-tag b-blue">Gets smarter</span>
+  </div>
+  <div class="sb-body">
+    <div class="oc">
+      <p class="ol">The learning pipeline — four stages</p>
+      <div class="fr"><span class="fk">Stage 1 — Feedback capture</span><span class="fv">Thumbs up/down after every answer. Tech notes: "this worked" or "this missed X". Logged to Fabric rag_feedback_log.</span></div>
+      <div class="fr"><span class="fk">Stage 2 — Automatic flagging</span><span class="fv">LOW confidence answers + negative feedback → SME review queue automatically. Not manually curated.</span></div>
+      <div class="fr"><span class="fk">Stage 3 — SME validation</span><span class="fv">Expert technician or compliance officer reviews flagged answers. Marks correct/incorrect. Adds notes. This creates labelled training data.</span></div>
+      <div class="fr"><span class="fk">Stage 4 — Knowledge base update</span><span class="fk" style="color:var(--color-text-info)">Validated correct answers stored as new internal Axxiom knowledge chunks. These are TRUSTED above OEM manuals in future retrievals.</span></div>
+    </div>
+    <div class="info-box">
+      <strong style="color:var(--color-text-info)">The compounding effect:</strong> Month 1 the system answers from OEM documents. Month 6 it has 2,000 validated Axxiom Q&A pairs. Month 12 it has 10,000+ and those validated pairs are retrieved with higher trust weight than raw OEM text. By Phase 3, you have enough labelled data to fine-tune a domain-specific model.
+    </div>
+  </div>
+</div>
+
+<div class="step-block">
+  <div class="sb-head" onclick="tog(this)">
+    <span class="sb-num" style="background:var(--color-background-info);color:var(--color-text-info)">2</span>
+    <span class="sb-title">Document generation — Axxiom-branded SOPs from OEM source material</span>
+    <span class="sb-tag b-blue">Phase 2</span>
+  </div>
+  <div class="sb-body">
+    <div class="code-wrap">
+      <div class="cw-head"><span class="cw-file">generation/axxiom_doc_generator.py — generate Axxiom SOPs from OEM sources</span><button class="cc" onclick="cp(this)">Copy</button></div>
+      <div class="cw-body"><span class="kw">def</span> <span class="fn">generate_axxiom_sop</span>(
+    equipment_model: str,
+    procedure_type: str,   <span class="cm"># "annual_pm" | "fault_response" | "modernisation"</span>
+    asme_version: str = <span class="st">"A17.1-2022"</span>
+) -> dict:
+    <span class="st">"""
+    Generate an Axxiom-branded maintenance procedure by:
+    1. Retrieving all relevant OEM content from the knowledge base
+    2. Retrieving the ASME code requirements for this procedure type
+    3. Synthesising into a single Axxiom-owned document
+    4. Human review step before the document is published
+    """</span>
+    <span class="cm"># Retrieve all relevant source material</span>
+    oem_content  = retriever.<span class="fn">retrieve</span>(
+        query=f<span class="st">"maintenance procedure {procedure_type} {equipment_model}"</span>,
+        doc_type_filter=[<span class="st">"OEM_MANUAL"</span>]
+    )
+    asme_content = retriever.<span class="fn">retrieve</span>(
+        query=f<span class="st">"ASME {asme_version} requirements {procedure_type}"</span>,
+        doc_type_filter=[<span class="st">"ASME_CODE"</span>]
+    )
+    validated_knowledge = retriever.<span class="fn">retrieve</span>(
+        query=f<span class="st">"{equipment_model} {procedure_type}"</span>,
+        doc_type_filter=[<span class="st">"AXXIOM_VALIDATED"</span>]  <span class="cm"># highest trust weight</span>
+    )
+
+    <span class="cm"># Generate the Axxiom-branded document</span>
+    response = claude.messages.create(
+        model=<span class="st">"claude-opus-4-20250514"</span>,
+        max_tokens=<span class="nu">5000</span>,
+        messages=[{<span class="st">"role"</span>:<span class="st">"user"</span>,<span class="st">"content"</span>:f<span class="st">"""
+Create an Axxiom Elevator official {procedure_type} procedure document
+for {equipment_model}.
+
+SOURCES TO SYNTHESISE:
+OEM Manual Content: {oem_content}
+ASME {asme_version} Requirements: {asme_content}
+Axxiom Validated Knowledge: {validated_knowledge}
+
+Generate a professional Axxiom-branded document:
+1. Where OEM content conflicts with ASME requirements, ASME takes precedence
+2. Where Axxiom validated knowledge conflicts with OEM, flag for human review
+3. All steps must be specific, numbered, and include tool/part requirements
+4. Include a compliance sign-off section referencing the ASME code
+
+Format: Structured Markdown ready for conversion to Axxiom PDF template.
+This document will be reviewed by a licensed elevator mechanic before publishing."""</span>}]
+    )
+    <span class="kw">return</span> {
+        <span class="st">"content"</span>: response.content[<span class="nu">0</span>].text,
+        <span class="st">"sources"</span>: [oem_content, asme_content, validated_knowledge],
+        <span class="st">"status"</span>:  <span class="st">"PENDING_HUMAN_REVIEW"</span>,   <span class="cm"># ALWAYS requires review</span>
+        <span class="st">"equipment"</span>: equipment_model,
+        <span class="st">"procedure_type"</span>: procedure_type
+    }</div>
+    </div>
+  </div>
+</div>
+
+<div class="step-block">
+  <div class="sb-head" onclick="tog(this)">
+    <span class="sb-num" style="background:var(--color-background-info);color:var(--color-text-info)">3</span>
+    <span class="sb-title">Schematic generation — GPT-4o Vision understands + SVG generates new diagrams</span>
+    <span class="sb-tag b-blue">Phase 2 — Human in loop</span>
+  </div>
+  <div class="sb-body">
+    <div class="warn-box">
+      <strong style="color:var(--color-text-warning)">Do not use image generation models (DALL-E, Midjourney) for technical schematics.</strong> They cannot produce accurate wiring diagrams with precise electrical symbols. The correct approach is: GPT-4o Vision reads the original → Claude generates structured SVG code representing the schematic → human expert validates → SVG is stored as an Axxiom asset.
+    </div>
+    <div class="oc">
+      <p class="ol">Schematic generation pipeline — human always in the loop</p>
+      <div class="fr"><span class="fk">Step 1</span><span class="fv">GPT-4o Vision reads original schematic → generates structured description of all components and connections</span></div>
+      <div class="fr"><span class="fk">Step 2</span><span class="fv">Claude generates SVG code representing the schematic using correct electrical/hydraulic symbols</span></div>
+      <div class="fr"><span class="fk">Step 3</span><span class="fv">SVG renders in browser for expert review — can be edited like code before approval</span></div>
+      <div class="fr"><span class="fk">Step 4</span><span class="fv">Approved SVG stored as Axxiom asset in Fabric — linked to original in knowledge graph</span></div>
+      <div class="fr"><span class="fk">Step 5</span><span class="fv">New diagram gets embedded and added to Qdrant — now retrievable for future tech queries</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PHASES -->
+<div id="p6" class="panel">
+<div class="intro">
+  <p class="i-lbl">Implementation phases</p>
+  <p class="i-ttl">Four phases — each one delivers immediate value while building toward the full system</p>
+</div>
+
+<div class="phase-block" style="border-color:rgba(239,68,68,0.3)">
+  <div class="ph-head" style="background:rgba(239,68,68,0.06)">
+    <div class="ph-title" style="color:var(--color-text-danger)">Phase 1 — Months 1–3: Working Tech Assistant from documents</div>
+    <span class="badge b-red">Start here</span>
+  </div>
+  <div class="ph-body">
+    <div class="ph-task"><div class="ph-text">Azure Document Intelligence pipeline for scanned PDFs — process the 20% scanned first since they are currently unsearchable</div></div>
+    <div class="ph-task"><div class="ph-text">PyMuPDF pipeline for text PDFs — extract with structure preservation</div></div>
+    <div class="ph-task"><div class="ph-text">GPT-4o Vision description of every diagram and wiring schematic — this is the most time-intensive step and must run first</div></div>
+    <div class="ph-task"><div class="ph-text">Hierarchical chunking — document → section → chunk across all 700GB</div></div>
+    <div class="ph-task"><div class="ph-text">Voyage AI contextual embeddings into Qdrant — three collections (docs, sections, chunks)</div></div>
+    <div class="ph-task"><div class="ph-text">Knowledge graph in Neo4j — entity extractor populates automatically during ingestion</div></div>
+    <div class="ph-task"><div class="ph-text">LangGraph tech assistant agent live — web interface for phones</div></div>
+    <div class="ph-task"><div class="ph-text">Feedback capture in Fabric — thumbs up/down + notes from day one</div></div>
+    <div class="ph-task"><div class="ph-text"><strong>Deliverable:</strong> Tech assistant that answers fault code + troubleshooting queries from real documents with citations and diagram display</div></div>
+  </div>
+</div>
+
+<div class="phase-block" style="border-color:rgba(245,158,11,0.3)">
+  <div class="ph-head" style="background:rgba(245,158,11,0.06)">
+    <div class="ph-title" style="color:var(--color-text-warning)">Phase 2 — Months 4–8: Continuous learning + Axxiom document generation</div>
+    <span class="badge b-warn">Builds IP</span>
+  </div>
+  <div class="ph-body">
+    <div class="ph-task"><div class="ph-text">SME review queue — validated Q&A pairs stored as AXXIOM_VALIDATED chunks with highest retrieval trust weight</div></div>
+    <div class="ph-task"><div class="ph-text">Axxiom SOP generator — first 10 equipment-type SOPs generated from OEM + ASME sources, human reviewed, published</div></div>
+    <div class="ph-task"><div class="ph-text">Schematic generation pipeline — SVG-based with expert validation workflow</div></div>
+    <div class="ph-task"><div class="ph-text">Cross-reference detection — auto-linking "see Figure X" references between text and diagram chunks</div></div>
+    <div class="ph-task"><div class="ph-text">Redis caching — common fault code lookups cached (same 50 codes account for 80% of queries)</div></div>
+    <div class="ph-task"><div class="ph-text"><strong>Deliverable:</strong> First Axxiom-owned technical documents. System is learning from tech feedback. Answer quality measurably improving.</div></div>
+  </div>
+</div>
+
+<div class="phase-block" style="border-color:rgba(91,33,182,0.3)">
+  <div class="ph-head" style="background:rgba(91,33,182,0.06)">
+    <div class="ph-title" style="color:#5B21B6">Phase 3 — Months 9–18: Fine-tuning + offline + voice</div>
+    <span class="badge b-purple">Advanced</span>
+  </div>
+  <div class="ph-body">
+    <div class="ph-task"><div class="ph-text">Fine-tune a smaller model (Mistral 7B or Llama 3.1 8B) on 10,000+ validated Q&A pairs — improves response style and reduces latency for common queries</div></div>
+    <div class="ph-task"><div class="ph-text">Offline mode — download top 5,000 most-retrieved chunks to device for no-signal job sites</div></div>
+    <div class="ph-task"><div class="ph-text">Voice input — Whisper transcription → same retrieval pipeline</div></div>
+    <div class="ph-task"><div class="ph-text">Equipment-specific maintenance programme generator — ASME + OEM manual → unique PM programme per elevator type</div></div>
+    <div class="ph-task"><div class="ph-text"><strong>Deliverable:</strong> Sub-second responses for common queries. Works offline. Voice-enabled. Axxiom has a growing library of proprietary technical documents.</div></div>
+  </div>
+</div>
+
+<div class="oc" style="margin-top:12px">
+  <p class="ol">The one thing that must not be skipped</p>
+  <div class="fr"><span class="fk">GPT-4o Vision processing every diagram before launch</span><span class="fv">If diagrams are not described in text form, they are invisible to the retrieval system. A tech asking about a wiring issue gets text-only answers with no diagram. This step takes time — budget 4–8 weeks for 700GB.</span></div>
+  <div class="fr"><span class="fk">Hierarchical index — not flat chunks</span><span class="fv">Flat chunking 700GB creates 2M+ chunks. Searching all of them for every query is slow and noisy. The three-level index is not optional at this scale.</span></div>
+  <div class="fr"><span class="fk">Human review before any generated document is trusted</span><span class="fv">Every Axxiom-generated SOP, procedure, or schematic must be reviewed by a licensed mechanic or compliance officer before it enters the AXXIOM_VALIDATED tier. No exceptions.</span></div>
+</div>
+</div>
+
+</div>
+<script>
+function go(n){
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    t.classList.toggle('active',i===n);
+    t.setAttribute('aria-selected', i===n ? 'true' : 'false');
+  });
+}
+function tog(h){h.closest('.step-block').classList.toggle('open')}
+function cp(btn){
+  const text=btn.closest('.code-wrap').querySelector('.cw-body').innerText.trim();
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Copied';btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},2000);
+  });
+}
+</script>
+</div>

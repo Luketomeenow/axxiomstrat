@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" role="img" aria-label="Axxiom Strategy Hub">
+  <defs>
+    <linearGradient id="bg" x1="64" y1="48" x2="448" y2="464" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#141c2e"/>
+      <stop offset="1" stop-color="#0a0f1a"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="156" y1="120" x2="356" y2="392" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f5d06a"/>
+      <stop offset="0.55" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#a68b2d"/>
+    </linearGradient>
+    <linearGradient id="goldDim" x1="320" y1="96" x2="400" y2="176" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f0c14a"/>
+      <stop offset="1" stop-color="#c9a227"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect
+    x="12"
+    y="12"
+    width="488"
+    height="488"
+    rx="100"
+    stroke="url(#gold)"
+    stroke-opacity="0.28"
+    stroke-width="6"
+    fill="none"
+  />
+  <!-- Hub layers -->
+  <rect x="148" y="300" width="216" height="52" rx="14" fill="#1e293b" stroke="#334155" stroke-width="3"/>
+  <rect x="168" y="248" width="176" height="44" rx="12" fill="#243044" stroke="#475569" stroke-width="2.5" opacity="0.95"/>
+  <rect x="188" y="200" width="136" height="36" rx="10" fill="#2d3a52" stroke="#64748b" stroke-width="2" opacity="0.9"/>
+  <!-- A monogram -->
+  <path
+    d="M256 108 L176 388 H224 L248 312 H264 L288 388 H336 L256 108ZM256 188 L268 276 H244 L256 188Z"
+    fill="url(#gold)"
+    filter="url(#glow)"
+  />
+  <!-- Intelligence spark -->
+  <g transform="translate(348 108)" fill="url(#goldDim)">
+    <path d="M28 0 L32 20 L52 24 L32 28 L28 48 L24 28 L4 24 L24 20 Z"/>
+  </g>
+</svg>
